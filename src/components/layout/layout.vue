@@ -50,10 +50,14 @@
 
 <style lang="scss">
 .sider{
-  width: 14%;
-  height: 100%;
+  width: 300px;
+  height: calc(100% - 90px);
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
-  z-index: 1;
+  z-index: 10;
+  position: fixed;
+  background: #fff;
+  -webkit-transition: width 0.28s linear 0s;
+  transition: width 0.28s linear 0s;
   .sider-ul{
     width: 100%;
     margin: 0;

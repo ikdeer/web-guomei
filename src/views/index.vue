@@ -24,18 +24,21 @@
 <style lang="scss">
 .content{
   width: 100%;
-  height: 100%;
   .content-main{
     width: 100%;
-    height: 100%;
     display: flex;
     display: -webkit-flex;
+    position: absolute;
+    top: 90px;
+    left: 0;
     .content-right{
-      width: 86%;
+      width: auto;
+      margin-left: 300px;
+      box-sizing: border-box;
       padding-left: 32px;
       padding-right: 30px;
       background: #F8F8F8;
-      overflow: hidden;
+      overflow-y: auto;
     }
   }
 }
