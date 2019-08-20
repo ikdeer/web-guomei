@@ -1,5 +1,8 @@
 <template>
     <div class="userlist">
+        <nav class="overIew-nav">
+            <layout-breadcrumb></layout-breadcrumb>
+        </nav>
         <h3>用户列表</h3>
         <div class="content">
             <div class="user_list_form">
@@ -152,6 +155,20 @@
 
 <style lang="scss" scoped>
 .userlist{
+    .overIew-nav{
+        width: 100%;
+        height: 70px;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        border-bottom: 1px dashed #979797;
+        .el-breadcrumb{
+            font-size: 20px;
+        }
+        .el-breadcrumb__inner{
+            color: #333333;
+        }
+    }
     h3{
         width:80px;
         height:20px;

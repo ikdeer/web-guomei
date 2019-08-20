@@ -1,5 +1,8 @@
 <template>
     <div class="userInfo">
+        <nav class="overIew-nav">
+            <layout-breadcrumb></layout-breadcrumb>
+        </nav>
         <h3>用户基本信息</h3>
         <div class="info">
             <div class="info_title">
@@ -72,6 +75,19 @@
 
 <style lang="scss" scoped>
     .userInfo{
-
+        .overIew-nav{
+            width: 100%;
+            height: 70px;
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            border-bottom: 1px dashed #979797;
+            .el-breadcrumb{
+                font-size: 20px;
+            }
+            .el-breadcrumb__inner{
+                color: #333333;
+            }
+        }
     }
 </style>

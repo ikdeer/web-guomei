@@ -33,7 +33,7 @@
                 iconText:'用户列表',
                 iconImgShow:'/static/images/list_selected_icon@2x.png',
                 iconImgHide:'/static/images/list_unselected_icon@2x.png',
-                iconRouter:'',
+                iconRouter:'/Index/userInfo',
                 code:3,
               },
               {

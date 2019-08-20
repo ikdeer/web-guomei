@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Index from '@/views/index'
 import overview from '@/views/overview/overview'
 import userList from '@/views/user/userList'
+import userInfo from '@/views/user/userInfo'
 
 Vue.use(Router)
 
@@ -30,6 +31,14 @@ const router = new Router({
           meta: {
             title:'',
             code:2
+          },
+        },{
+          path: '/Index/userInfo',
+          name: '用户管理',
+          component: userInfo,
+          meta: {
+              title:'',
+              code:3
           },
         },
       ],
