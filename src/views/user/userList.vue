@@ -166,6 +166,7 @@
         box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
         border-radius:10px;
         padding: 30px;
+        box-sizing: border-box;
         .user_list_form{
             position: relative;
             .el-form{
