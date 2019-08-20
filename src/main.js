@@ -9,12 +9,14 @@ import './style/common.css'
 //头部组件
 import Header from '@/components/header/header.vue'
 import layout from '@/components/layout/layout.vue'
+import breadcrumb from '@/components/header/BoxHeader.vue'
 
 Vue.use(ElementUI)
 
 //注册全局组件
 Vue.component('layout-Header',Header)
 Vue.component('layout-Sider',layout)
+Vue.component('layout-breadcrumb',breadcrumb)
 
 Vue.config.productionTip = false
 
