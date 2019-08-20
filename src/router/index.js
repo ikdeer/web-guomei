@@ -20,6 +20,10 @@ const router = new Router({
           meta: {title:''},
         }
       ],
+    },
+    {
+      path: '*',
+      redirect: '/Index'
     }
   ]
 })
