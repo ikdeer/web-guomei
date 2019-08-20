@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/views/index'
 import overview from '@/views/overview/overview'
+import userList from '@/views/user/userList'
 
 Vue.use(Router)
 
@@ -21,7 +22,16 @@ const router = new Router({
             title:'',
             code:1
           },
-        }
+        },
+        {
+          path: '/Index/userList',
+          title: '用户管理',
+          component: userList,
+          meta: {
+            title:'',
+            code:2
+          },
+        },
       ],
     },
     {

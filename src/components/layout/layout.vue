@@ -26,7 +26,7 @@
                 iconText:'用户管理',
                 iconImgShow:'/static/images/Combined Shape@2x.png',
                 iconImgHide:'/static/images/yonghuguanli_unselected_icon@2x.png',
-                iconRouter:'/Index/overvies',
+                iconRouter:'/Index/userList',
                 code:2,
               },
               {
@@ -92,10 +92,9 @@
   height: calc(100% - 90px);
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
   z-index: 10;
-  position: fixed;
   background: #fff;
-  -webkit-transition: width 0.28s linear 0s;
-  transition: width 0.28s linear 0s;
+  position: fixed;
+  overflow-y: auto;
   .sider-ul{
     width: 100%;
     margin: 0;

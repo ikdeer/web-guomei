@@ -6,7 +6,7 @@
         <!-- 侧边导航栏 -->
         <layout-Sider></layout-Sider>
         <!-- 主体内容区域 -->
-        <div class="content-right">
+        <div class="content-right" :style="contentStyleObj">
           <transition name="slide-fade">
             <router-view class="view"></router-view>
           </transition>
@@ -17,7 +17,30 @@
 
 <script>
     export default {
-        name: "index"
+        name: "index",
+        data(){
+          return {
+            contentStyleObj:{
+              height:''
+            }
+          }
+        },
+        created(){
+          this.getHeight();
+          window.addEventListener('resize', this.getHeight);
+
+        },
+        methods:{
+          getHeight(){
+            this.contentStyleObj.height = window.innerHeight - 90+'px';
+          }
+        },
+        mounted(){
+
+        },
+        destroyed() {
+          window.removeEventListener('resize', this.getHeight)
+        }
     }
 </script>
 
@@ -26,15 +49,10 @@
   width: 100%;
   .content-main{
     width: 100%;
-    display: flex;
-    display: -webkit-flex;
-    position: absolute;
-    top: 90px;
-    left: 0;
     .content-right{
       width: auto;
-      margin-left: 300px;
       box-sizing: border-box;
+      margin-left: 260px;
       padding-left: 32px;
       padding-right: 30px;
       background: #F8F8F8;
