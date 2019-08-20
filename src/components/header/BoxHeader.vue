@@ -1,17 +1,26 @@
 <template>
-    <section class="g-box-header">
-        <el-breadcrumb separator="/">
-            <el-breadcrumb-item v-for="item in topBar" :to="{ path: item.link }" :key="item.name">{{item.name}}</el-breadcrumb-item>
-        </el-breadcrumb>
-    </section>
+  <el-breadcrumb separator="/">
+    <el-breadcrumb-item v-for="(item,index) in routerList" :to="item.path" :key="item.name">{{item.name}}</el-breadcrumb-item>
+  </el-breadcrumb>
 </template>
 
 <script>
   export default {
     name: "BoxHeader",
-    props:{
-      topBar:Object
+    data(){
+      return {
+        routerList:[],
+      }
     },
+    created(){
+      this.routerList = this.$route.meta.routeList;
+      console.log(this.routerList);
+    },
+    watch:{
+      $route(newVal){
+        this.routerList = newVal.meta.routeList
+      }
+    }
   }
 </script>
 
