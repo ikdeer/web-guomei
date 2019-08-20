@@ -17,7 +17,10 @@ const router = new Router({
           path: '/Index/overview',
           title: '概览',
           component: overview,
-          meta: {title:''},
+          meta: {
+            title:'',
+            code:1
+          },
         }
       ],
     },
