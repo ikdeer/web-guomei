@@ -12,14 +12,14 @@
         routerList:[],
       }
     },
-    created(){
-      this.routerList = this.$route.meta.routeList;
-      console.log(this.routerList);
-    },
-    watch:{
-      $route(newVal){
-        this.routerList = newVal.meta.routeList
+    watch: {
+      $route:function(newVal,oldVal){
+        console.log(newVal);
+        this.routerList = newVal.meta.routeList;
       }
+    },
+    mounted(){
+      this.routerList = this.$route.meta.routeList;
     }
   }
 </script>
