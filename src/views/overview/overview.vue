@@ -187,16 +187,16 @@
 <style lang="scss">
 .overIew{
   width: 100%;
-  padding-bottom: 30px;
+  padding-bottom: 0.3rem;
   .overIew-nav{
     width: 100%;
-    height: 55px;
+    height: 0.55rem;
     display: flex;
     display: -webkit-flex;
     align-items: center;
     border-bottom: 1px dashed #979797;
     .el-breadcrumb{
-      font-size: 16px;
+      font-size: 0.16rem;
     }
     .el-breadcrumb__inner{
       color: #333333;
@@ -206,102 +206,102 @@
     width: 100%;
     .overIew-use{
       width: auto;
-      height: 418px;
+      height: 4.18rem;
       overflow: hidden;
       display: flex;
       display: -webkit-flex;
       justify-content: space-between;
       .overIew-use_left{
-        width:780px;
-        height: 418px;
+        width:7.8rem;
+        height: 4.18rem;
         .overIew-use_text{
-          font-size: 16px;
+          font-size: 0.16rem;
           color: #333333;
           font-weight: 600;
           margin: 0;
-          line-height: 40px;
-          padding-top: 5px;
-          padding-bottom: 5px;
+          line-height: 0.4rem;
+          padding-top: 0.05rem;
+          padding-bottom: 0.05rem;
         }
         .use-content{
-          height: 325px;
+          height: 3.25rem;
           background: #ffffff;
           box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
-          border-radius:10px;
+          border-radius:0.1rem;
           display: flex;
           display: -webkit-flex;
           justify-content: space-between;
-          padding-left: 30px;
-          padding-right: 30px;
-          padding-top: 28px;
+          padding-left: 0.3rem;
+          padding-right: 0.3rem;
+          padding-top: 0.28rem;
           .use-content_left{
             .use-content_left_pad{
-              width:350px;
-              height:228px;
+              width:3.5rem;
+              height:2.28rem;
               background:linear-gradient(133deg,rgba(255,191,151,1) 0%,rgba(250,118,135,1) 100%);
-              box-shadow:0px 2px 30px 0px rgba(255,255,255,0.33);
-              border-radius:20px;
+              box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
+              border-radius:0.2rem;
               >span{
-                font-size: 24px;
+                font-size: 0.24rem;
                 color: #ffffff;
                 font-weight: 600;
                 display: block;
-                padding-top: 39px;
-                margin-left: 30px;
+                padding-top: 0.39rem;
+                margin-left: 0.30rem;
               }
               .use-content_num{
                 display: flex;
                 display: -webkit-flex;
                 align-items:baseline;
-                padding-top: 46px;
-                padding-left: 30px;
+                padding-top: 0.46rem;
+                padding-left: 0.30rem;
                 span:first-child{
-                  font-size: 80px;
+                  font-size: 0.8rem;
                   font-weight: bold;
                   display: block;
                   color: #ffffff;
                 }
                 span:last-child{
-                  font-size:20px;
+                  font-size:0.2rem;
                   color: #ffffff;
                 }
               }
             }
             .use-content_button{
-              padding-top: 30px;
+              padding-top: 0.3rem;
               .el-button{
-                padding: 10px 20px;
+                padding: 0.1rem 0.2rem;
               }
             }
           }
           .use-content_right{
-            width:350px;
-            height:228px;
+            width:3.5rem;
+            height:2.28rem;
             background:linear-gradient(133deg,rgba(142,201,248,1) 0%,rgba(53,148,231,1) 100%);
-            box-shadow:0px 2px 30px 0px rgba(255,255,255,0.33);
-            border-radius:20px;
+            box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
+            border-radius:0.2rem;
             >span{
-              font-size: 24px;
+              font-size: 0.24rem;
               color: #ffffff;
               font-weight: 600;
               display: block;
-              padding-top: 39px;
-              margin-left: 30px;
+              padding-top: 0.39rem;
+              margin-left: 0.3rem;
             }
             .use-content_num{
               display: flex;
               display: -webkit-flex;
               align-items:baseline;
-              padding-top: 46px;
-              padding-left: 30px;
+              padding-top: 0.46rem;
+              padding-left: 0.3rem;
               span:first-child{
-                font-size: 80px;
+                font-size: 0.8rem;
                 font-weight: bold;
                 display: block;
                 color: #ffffff;
               }
               span:last-child{
-                font-size:20px;
+                font-size:0.2rem;
                 color: #ffffff;
               }
             }
@@ -309,18 +309,18 @@
         }
       }
       .overIew-use_right{
-        width: 780px;
+        width: 7.8rem;
         .overIew-dosage{
           display: flex;
           display: -webkit-flex;
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          height: 40px;
-          padding-top: 5px;
-          padding-bottom: 5px;
+          height: 0.4rem;
+          padding-top: 0.05rem;
+          padding-bottom: 0.05rem;
           span{
-            font-size: 16px;
+            font-size: 0.16rem;
             color: #333333;
             font-weight: 600;
           }
@@ -329,29 +329,29 @@
             display: -webkit-flex;
             align-items: center;
             >span{
-              font-size: 14px;
+              font-size: 0.14rem;
               color: #333333;
               font-weight: 500;
-              padding-right: 20px;
+              padding-right: 0.2rem;
             }
             .el-range-separator{
-              font-size: 14px;
+              font-size: 0.14rem;
               color: #666666;
             }
           }
         }
         .overIew-right_pad{
-          width: 780px;
-          height: 353px;
+          width: 7.8rem;
+          height: 3.53rem;
           background: #fff;
-          box-shadow:0 2px 4px 1px rgba(0,0,0,0.1);
-          border-radius:10px;
+          box-shadow:0 0.02rem 0.04rem 1px rgba(0,0,0,0.1);
+          border-radius:0.1rem;
           .overIew-right_table{
-            padding:20px 30px 0 30px;
+            padding:0.2rem 0.3rem;
             .tableHead{
               color: #333333;
               font-weight: 600;
-              height: 60px;
+              height: 0.6rem;
               th{
                 background: #F1F1F1;
               }
@@ -363,51 +363,51 @@
     .overIew-basics{
       width: auto;
       .basics-topText{
-        font-size: 16px;
+        font-size: 0.16rem;
         color: #333333;
-        line-height: 50px;
+        line-height: 0.5rem;
         margin: 0;
         font-weight: 600;
       }
       .basics-ListPad{
-        height: 272px;
+        height: 2.72rem;
         display: flex;
         display: -webkit-flex;
         background: #ffffff;
-        box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
-        border-radius:10px;
+        box-shadow:0 0.02rem 0.04rem 1px rgba(0,0,0,0.1);
+        border-radius:0.1rem;
         align-items: center;
-        padding-left:30px;
+        padding-left:0.3rem;
         .basics-ListPad_face{
-          width: 424px;
-          height: 212px;
+          width: 4.24rem;
+          height: 2.12rem;
           display: flex;
           display: -webkit-flex;
           align-items: center;
           border: 1px solid #409EFF;
-          margin-right:20px;
+          margin-right:0.2rem;
           img{
-            width: 150px;
-            height: 132px;
+            width: 1.5rem;
+            height: 1.32rem;
             display: block;
-            margin-left: 24px;
+            margin-left: 0.24rem;
           }
           .face-Text{
-            width: 194px;
-            height: 132px;
+            width: 1.94rem;
+            height: 1.32rem;
             display: flex;
             display: -webkit-flex;
             flex-direction: column;
             justify-content: space-between;
-            margin-left: 20px;
+            margin-left: 0.2rem;
             h4{
               margin: 0;
-              font-size:16px;
+              font-size:0.16rem;
               font-weight: 600;
               color: #333333;
             }
             p{
-              font-size:14px;
+              font-size:0.14rem;
               color:#666666;
               margin: 0;
             }
@@ -418,51 +418,51 @@
     .overIew-scene{
       width: auto;
       .scene-topText{
-        font-size: 16px;
+        font-size: 0.16rem;
         color:#333333;
         font-weight: 600;
-        line-height: 55px;
+        line-height: 0.55rem;
         margin: 0;
       }
       .scene-ListPad{
         display: flex;
         display: -webkit-flex;
         background:#ffffff;
-        box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
-        border-radius:10px;
-        padding-left: 30px;
-        padding-top: 60px;
-        padding-bottom: 30px;
+        box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
+        border-radius:0.1rem;
+        padding-left: 0.3rem;
+        padding-top: 0.6rem;
+        padding-bottom: 0.3rem;
         position: relative;
         .ListPad-scene{
-          width: 450px;
-          height:286px;
+          width: 4.5rem;
+          height:2.86rem;
           border: 1px solid #409EFF;
           background:rgba(241,249,255,1);
           display: flex;
           display: -webkit-flex;
           align-items: center;
           justify-content: center;
-          margin-right:20px;
+          margin-right:0.2rem;
           .ListPad-scene_center{
-            width: 323px;
+            width: 3.23rem;
             >img{
-              width: 80px;
-              height: 96px;
+              width: 0.8rem;
+              height: 0.96rem;
               margin-left: auto;
               margin-right: auto;
               display: block;
             }
             .scene-Title{
-              font-size:16px;
+              font-size:0.16rem;
               font-weight: 600;
               color:#333333;
               margin:0;
-              padding:20px 0;
+              padding:0.2rem 0;
               text-align: center;
             }
             .scene-Text{
-              font-size:14px;
+              font-size:0.14rem;
               color:#666666;
               margin: 0;
               text-align: center;
@@ -472,13 +472,13 @@
               display: -webkit-flex;
               align-items: center;
               justify-content: center;
-              padding-top: 11px;
+              padding-top: 0.11rem;
               span:first-child{
-                font-size:16px;
+                font-size:0.16rem;
                 color: #333333;
               }
               span:last-child{
-                font-size:16px;
+                font-size:0.16rem;
                 color: #409EFF;
               }
               .ListPad-Text_RKE{
@@ -504,14 +504,14 @@
           align-items: center;
           justify-content: center;
           position: absolute;
-          top: 21px;
-          right: 30px;
+          top: 0.21rem;
+          right: 0.3rem;
           span{
-            font-size:16px;
+            font-size:0.16rem;
             font-weight: 500;
           }
           .el-icon-arrow-right{
-            font-size:16px;
+            font-size:0.16rem;
           }
         }
       }

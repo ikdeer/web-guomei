@@ -30,7 +30,7 @@
 <style lang="scss">
 .header{
   width:100%;
-  height: 60px;
+  height: 0.6rem;
   background: #ffffff;
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.11);
   display: flex;
@@ -42,22 +42,22 @@
     display: flex;
     display: -webkit-flex;
     align-items: center;
-    margin-left: 30px;
+    margin-left: 0.3rem;
     >img{
-      width: 90px;
-      height: 30px;
+      width: 0.9rem;
+      height: 0.3rem;
       display: block;
     }
     >span{
       width: 2px;
-      height: 20px;
+      height: 0.2rem;
       display: block;
       background: #333333;
-      margin-left: 16px;
-      margin-right: 16px;
+      margin-left: 0.16rem;
+      margin-right: 0.16rem;
     }
     >p{
-      font-size: 16px;
+      font-size: 0.16rem;
       color: #333333;
     }
   }
@@ -65,10 +65,10 @@
     display: flex;
     display: -webkit-flex;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 0.3rem;
     .header-issue{
-      width: 20px;
-      height: 20px;
+      width: 0.2rem;
+      height: 0.2rem;
       display: block;
     }
     .header-name{
@@ -76,23 +76,23 @@
       display: -webkit-flex;
       align-items: center;
       justify-content: center;
-      margin-left: 20px;
-      margin-right: 10px;
+      margin-left: 0.2rem;
+      margin-right: 0.1rem;
       >img{
-        width: 30px;
-        height: 30px;
+        width: 0.3rem;
+        height: 0.3rem;
         border-radius: 50%;
         overflow: hidden;
       }
       >span{
-        font-size: 16px;
+        font-size: 0.16rem;
         color: #333333;
-        margin-left: 20px;
+        margin-left: 0.2rem;
       }
     }
     .header-Badge{
-      width: 14px;
-      height: 8px;
+      width: 0.14rem;
+      height: 0.08rem;
       display: block;
     }
   }
