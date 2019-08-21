@@ -337,6 +337,7 @@
 
 <style lang="scss" scoped>
 .userlist{
+    font-size: .16rem;
     .overIew-nav{
         width: 100%;
         height: 60px;
