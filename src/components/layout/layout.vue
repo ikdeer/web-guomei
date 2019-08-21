@@ -89,7 +89,7 @@
 <style lang="scss">
 .sider{
   width: 260px;
-  height: calc(100% - 90px);
+  height: calc(100% - 60px);
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
   z-index: 10;
   background: #fff;
@@ -114,7 +114,7 @@
       }
       span{
         width: 120px;
-        font-size:20px;
+        font-size:16px;
         color:#666666;
         display: block;
         text-align: left;

@@ -190,13 +190,13 @@
   padding-bottom: 30px;
   .overIew-nav{
     width: 100%;
-    height: 70px;
+    height: 50px;
     display: flex;
     display: -webkit-flex;
     align-items: center;
     border-bottom: 1px dashed #979797;
     .el-breadcrumb{
-      font-size: 20px;
+      font-size: 16px;
     }
     .el-breadcrumb__inner{
       color: #333333;

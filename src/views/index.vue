@@ -32,7 +32,7 @@
         },
         methods:{
           getHeight(){
-            this.contentStyleObj.height = window.innerHeight - 90+'px';
+            this.contentStyleObj.height = window.innerHeight - 60+'px';
           }
         },
         mounted(){
@@ -53,8 +53,8 @@
       width: auto;
       box-sizing: border-box;
       margin-left: 260px;
-      padding-left: 32px;
-      padding-right: 30px;
+      padding-left: 25px;
+      padding-right: 25px;
       background: #F8F8F8;
       overflow-y: auto;
     }
