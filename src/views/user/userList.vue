@@ -101,6 +101,41 @@
             </div>
         </div>
 
+        <el-dialog
+            title="提示"
+            class="user_list_add_dialog"
+            :visible.sync="userListAddDialog"
+            width="30%"
+            :before-close="handleClose">
+            <el-form :model="dateDialogForm" ref="dateDialogForm" label-width="80px" class="demo-ruleForm">
+                <el-form-item label="用户名" required>
+                    <el-input type="phone" size="small" v-model="dateDialogForm.phone" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="手机号"
+                    prop="phone"
+                    required
+                    :rules="[
+                        {pattern:/^(13|14|15|16|17|18|19)\d{9}$/,message:'请输入正确的手机号码',trigger: 'change'}
+                    ]">
+                    <el-input type="phone" size="small" :maxlength="11" v-model.number="dateDialogForm.phone" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" required>
+                    <el-input type="phone" size="small" v-model="dateDialogForm.phone" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="设置密码" required>
+                    <el-input type="phone" size="small" :maxlength="20" v-model="dateDialogForm.phone" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" required>
+                    <el-input type="phone" size="small" :maxlength="20" v-model="dateDialogForm.phone" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="userListAddDialog = false">取 消</el-button>
+                <el-button type="primary" @click="userListAddDialog = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -118,12 +153,16 @@
                 tableData:[],
                 page:{
                     currentPage:1
+                },
+                userListAddDialog:false,
+                dateDialogForm:{
+
                 }
             }
         },
         methods: {
             adduser(){
-
+                this.userListAddDialog = true;
             },
             search(){
 
@@ -170,6 +209,15 @@
         }
     }
     h3{
+        color: #333333;
+        font-weight: 600;
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        height: 50px;
+        line-height: 50px;
+    }
+    /*h3{
         width:80px;
         height:20px;
         font-size:20px;
@@ -177,7 +225,7 @@
         font-weight:600;
         color:rgba(51,51,51,1);
         line-height:20px;
-    }
+    }*/
     .content{
         background:rgba(255,255,255,1);
         box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
@@ -208,6 +256,13 @@
 
 
 
+    }
+}
+
+
+.user_list_add_dialog{
+    .el-form{
+        padding: 0 30px;
     }
 }
 </style>
