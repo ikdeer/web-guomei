@@ -3,6 +3,7 @@ html,body{
   height: 100%;
   margin: 0;
   padding: 0;
+  font-size: 14px;
   overflow-y: auto;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -50,4 +51,9 @@ html,body{
 }
 .el-dialog .el-dialog__footer{
     text-align: center;
+}
+
+.el-table th {
+    background-color: #F1F1F1;
+    color: #333333;
 }

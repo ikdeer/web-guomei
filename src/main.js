@@ -11,7 +11,9 @@ import Header from '@/components/header/header.vue'
 import layout from '@/components/layout/layout.vue'
 import breadcrumb from '@/components/header/BoxHeader.vue'
 
-Vue.use(ElementUI)
+Vue.use(ElementUI,{
+    size:'small'
+});
 
 //注册全局组件
 Vue.component('layout-Header',Header)

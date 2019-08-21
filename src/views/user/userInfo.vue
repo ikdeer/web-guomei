@@ -9,11 +9,12 @@
             <div class="info_list">&emsp;用户名：admin</div>
             <div class="info_list">手机绑定：
                 <div class="info_list_inp">
-                    <el-input v-model="input" size="small" :maxlength="11" placeholder="请输入内容"></el-input>
+                    <span v-if="flag">{{input}}</span><el-button v-if="flag" type="text" @click="flag = false" style="margin-left: 30px">编辑</el-button>
+                    <el-input v-if="!flag" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
-                <div class="info_list_btn">
-                    <el-button type="primary" size="small" @click="">确定</el-button>
-                    <el-button class="" size="small" @click="">取消</el-button>
+                <div class="info_list_btn" v-if="!flag">
+                    <el-button type="primary" @click="flag = true">确定</el-button>
+                    <el-button @click="flag = true">取消</el-button>
                 </div>
             </div>
             <div class="info_list">邮箱绑定：ssss@email.com</div>
@@ -25,7 +26,6 @@
                 <el-button type="primary" size="small" @click="">新增</el-button>
             </div>
             <el-table
-                size="small"
                 :data="tableData"
                 style="width: 100%">
                 <el-table-column
@@ -44,8 +44,8 @@
                     align="center"
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button type="text" size="small" @click="see(scope.row)">修改</el-button>
-                        <el-button type="text" size="small" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                        <el-button type="text" @click="see(scope.row)">修改</el-button>
+                        <el-button type="text" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -58,8 +58,9 @@
         name: "userInfo",
         data(){
             return {
-                input:'',
+                input:'15738668129',
                 tableData:[],
+                flag:true
             }
         },
         methods:{
