@@ -31,7 +31,7 @@
 .header{
   width:100%;
   height: 0.6rem;
-  background: #ffffff;
+  background: #1B1B1B;
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.11);
   display: flex;
   display: -webkit-flex;
@@ -52,13 +52,14 @@
       width: 2px;
       height: 0.2rem;
       display: block;
-      background: #333333;
+      background: #ffffff;
       margin-left: 0.16rem;
       margin-right: 0.16rem;
     }
     >p{
       font-size: 0.16rem;
-      color: #333333;
+      color: #ffffff;
+      font-weight: 600;
     }
   }
   .header-right{
@@ -83,10 +84,11 @@
         height: 0.3rem;
         border-radius: 50%;
         overflow: hidden;
+        border: 1px solid #ffffff;
       }
       >span{
         font-size: 0.16rem;
-        color: #333333;
+        color: #999999;
         margin-left: 0.2rem;
       }
     }

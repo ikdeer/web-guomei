@@ -5,64 +5,63 @@
       </nav>
       <div class="overIew-content">
         <div class="overIew-use">
-          <div class="overIew-use_left">
-            <p class="overIew-use_text">应用</p>
-            <div class="use-content">
-              <div class="use-content_left">
-                <div class="use-content_left_pad">
-                  <span>已建应用</span>
-                  <div class="use-content_num">
+          <p class="overIew-userTitle">概览</p>
+          <div class="overIew-userCenter">
+            <div class="overIew-use_left">
+              <p class="overIew-use_text">应用</p>
+              <div class="use-content">
+                <div class="use-content_left">
+                  <h4>已建应用：</h4>
+                  <div class="use-TextNum">
                     <span>101</span>
                     <span>个</span>
                   </div>
                 </div>
-                <div class="use-content_button">
-                  <el-button type="primary">管理应用</el-button>
-                  <el-button>创建应用</el-button>
+                <div class="use-content_right">
+                  <h4>待审核应用：</h4>
+                  <div class="use-TextNum">
+                    <span>0</span>
+                    <span>个</span>
+                  </div>
                 </div>
               </div>
-              <div class="use-content_right">
-                <span>待审核应用</span>
-                <div class="use-content_num">
-                  <span>101</span>
-                  <span>个</span>
+              <div class="overIew-el_button">
+                <el-button class="button-bluer" type="primary">管理应用</el-button>
+                <el-button class="button-red">创建应用</el-button>
+              </div>
+            </div>
+            <div class="overIew-use_right">
+              <div class="overIew-dosage">
+                <span>用量</span>
+                <div class="block">
+                  <span class="demonstration">请选择时间</span>
+                  <el-date-picker
+                    v-model="value6"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="overIew-use_right">
-            <div class="overIew-dosage">
-              <span>用量</span>
-              <div class="block">
-                <span class="demonstration">请选择时间</span>
-                <el-date-picker
-                  v-model="value6"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期">
-                </el-date-picker>
-              </div>
-            </div>
-            <div class="overIew-right_pad">
-              <div class="overIew-right_table">
-                <el-table :data="tableData" :cell-style="{padding:'10px'}" header-row-class-name="tableHead" style="width: 100%">
-                  <el-table-column label="API" width="140" align="center">
+              <div class="overIew-right_pad">
+                <el-table :data="tableData" header-row-class-name="tableHead" style="width: 100%">
+                  <el-table-column label="API" width="110" align="center">
                     <template slot-scope="scope">
                       <span>{{scope.row.date}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column label="调用量" align="center" width="140">
+                  <el-table-column label="调用量" align="center" width="110">
                     <template slot-scope="scope">
                       <span>{{scope.row.name}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" width="140" label="调用失败">
+                  <el-table-column align="center" width="110" label="调用失败">
                     <template slot-scope="scope">
                       <span>{{scope.row.province}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" width="140" label="失败率">
+                  <el-table-column align="center" width="110" label="失败率">
                     <template slot-scope="scope">
                       <span>{{scope.row.city}}</span>
                     </template>
@@ -184,7 +183,7 @@
     }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .overIew{
   width: 100%;
   padding-bottom: 0.3rem;
@@ -196,162 +195,160 @@
     align-items: center;
     border-bottom: 1px dashed #979797;
     .el-breadcrumb{
-      font-size: 0.16rem;
+      font-size: 0.14rem;
     }
     .el-breadcrumb__inner{
       color: #333333;
     }
   }
   .overIew-content{
-    width: 100%;
+    width:auto;
     .overIew-use{
-      width: auto;
-      height: 4.18rem;
-      overflow: hidden;
-      display: flex;
-      display: -webkit-flex;
-      justify-content: space-between;
-      .overIew-use_left{
-        width:7.8rem;
-        height: 4.18rem;
-        .overIew-use_text{
-          font-size: 0.16rem;
-          color: #333333;
-          font-weight: 600;
-          margin: 0;
-          line-height: 0.4rem;
-          padding-top: 0.05rem;
-          padding-bottom: 0.05rem;
-        }
-        .use-content{
-          height: 3.25rem;
-          background: #ffffff;
-          box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
-          border-radius:0.1rem;
-          display: flex;
-          display: -webkit-flex;
-          justify-content: space-between;
-          padding-left: 0.3rem;
-          padding-right: 0.3rem;
-          padding-top: 0.28rem;
-          .use-content_left{
-            .use-content_left_pad{
-              width:3.5rem;
-              height:2.28rem;
-              background:linear-gradient(133deg,rgba(255,191,151,1) 0%,rgba(250,118,135,1) 100%);
-              box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
-              border-radius:0.2rem;
-              >span{
-                font-size: 0.24rem;
-                color: #ffffff;
-                font-weight: 600;
-                display: block;
-                padding-top: 0.39rem;
-                margin-left: 0.30rem;
-              }
-              .use-content_num{
-                display: flex;
-                display: -webkit-flex;
-                align-items:baseline;
-                padding-top: 0.46rem;
-                padding-left: 0.30rem;
-                span:first-child{
-                  font-size: 0.8rem;
-                  font-weight: bold;
-                  display: block;
-                  color: #ffffff;
-                }
-                span:last-child{
-                  font-size:0.2rem;
-                  color: #ffffff;
-                }
-              }
-            }
-            .use-content_button{
-              padding-top: 0.3rem;
-              .el-button{
-                padding: 0.1rem 0.2rem;
-              }
-            }
-          }
-          .use-content_right{
-            width:3.5rem;
-            height:2.28rem;
-            background:linear-gradient(133deg,rgba(142,201,248,1) 0%,rgba(53,148,231,1) 100%);
-            box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
-            border-radius:0.2rem;
-            >span{
-              font-size: 0.24rem;
-              color: #ffffff;
-              font-weight: 600;
-              display: block;
-              padding-top: 0.39rem;
-              margin-left: 0.3rem;
-            }
-            .use-content_num{
-              display: flex;
-              display: -webkit-flex;
-              align-items:baseline;
-              padding-top: 0.46rem;
-              padding-left: 0.3rem;
-              span:first-child{
-                font-size: 0.8rem;
-                font-weight: bold;
-                display: block;
-                color: #ffffff;
-              }
-              span:last-child{
-                font-size:0.2rem;
-                color: #ffffff;
-              }
-            }
-          }
-        }
+      .overIew-userTitle{
+        font-size: 0.16rem;
+        color: #333333;
+        line-height: 0.5rem;
+        font-weight: 600;
       }
-      .overIew-use_right{
-        width: 7.8rem;
-        .overIew-dosage{
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-          height: 0.4rem;
-          padding-top: 0.05rem;
-          padding-bottom: 0.05rem;
-          span{
+      .overIew-userCenter{
+        height: 4.13rem;
+        background: #ffffff;
+        box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
+        border-radius:0.1rem;
+        overflow: hidden;
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-between;
+        padding-left: 0.3rem;
+        padding-right: 0.25rem;
+        padding-top: 0.2rem;
+        .overIew-use_left{
+          width:7.14rem;
+          position: relative;
+          .overIew-use_text{
             font-size: 0.16rem;
             color: #333333;
             font-weight: 600;
+            margin: 0;
+            line-height: 0.4rem;
+            padding-top: 0.05rem;
+            padding-bottom: 0.05rem;
           }
-          .block{
+          .use-content{
+            width: 7.14rem;
+            height: 2.28rem;
             display: flex;
             display: -webkit-flex;
-            align-items: center;
-            >span{
-              font-size: 0.14rem;
-              color: #333333;
-              font-weight: 500;
-              padding-right: 0.2rem;
+            justify-content: space-between;
+            background:url('/static/images/establish_bg_image@2x.png')center center no-repeat;
+            /*background-size: 100% 100%;*/
+            box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
+            border-radius:0.2rem;
+            .use-content_left{
+              width: 3.7rem;
+              h4{
+                font-size: 0.24rem;
+                color: #ffffff;
+                margin-top: 0.39rem;
+                margin-left: 0.3rem;
+              }
+              .use-TextNum{
+                display: flex;
+                display: -webkit-flex;
+                align-items: baseline;
+                margin-top: 0.4rem;
+                margin-left: 0.3rem;
+                span:first-child{
+                  font-size: 0.8rem;
+                  color: #ffffff;
+                  font-weight: 600;
+                }
+                span:last-child{
+                  font-size: 0.2rem;
+                  color: #ffffff;
+                }
+              }
             }
-            .el-range-separator{
-              font-size: 0.14rem;
-              color: #666666;
+            .use-content_right{
+              width: 3.5rem;
+              h4{
+                font-size: 0.24rem;
+                color: #ffffff;
+                margin-top: 0.39rem;
+                margin-left: 0.3rem;
+              }
+              .use-TextNum{
+                display: flex;
+                display: -webkit-flex;
+                align-items: baseline;
+                margin-top: 0.4rem;
+                margin-left: 0.3rem;
+                span:first-child{
+                  font-size: 0.8rem;
+                  color: #ffffff;
+                  font-weight: 600;
+                }
+                span:last-child{
+                  font-size: 0.2rem;
+                  color: #ffffff;
+                }
+              }
+            }
+          }
+          .overIew-el_button{
+            display: flex;
+            display: -webkit-flex;
+            position: absolute;
+            left: 0;
+            bottom: 0.7rem;
+            .button-bluer{
+              background:rgba(64,158,255,1);
+            }
+            .button-red{
+              background:rgba(242,10,89,1);
+              border-color:#F20A59;
+              color: #ffffff;
             }
           }
         }
-        .overIew-right_pad{
-          width: 7.8rem;
-          height: 3.53rem;
-          background: #fff;
-          box-shadow:0 0.02rem 0.04rem 1px rgba(0,0,0,0.1);
-          border-radius:0.1rem;
-          .overIew-right_table{
-            padding:0.2rem 0.3rem;
+        .overIew-use_right{
+          width: 7.38rem;
+          .overIew-dosage{
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 0.4rem;
+            padding-top: 0.05rem;
+            padding-bottom: 0.05rem;
+            span{
+              font-size: 0.16rem;
+              color: #333333;
+              font-weight: 600;
+            }
+            .block{
+              display: flex;
+              display: -webkit-flex;
+              align-items: center;
+              >span{
+                font-size: 0.14rem;
+                color: #333333;
+                font-weight: 500;
+                padding-right: 0.2rem;
+              }
+              .el-range-separator{
+                font-size: 0.14rem;
+                color: #666666;
+              }
+            }
+          }
+          .overIew-right_pad{
+            width: 7.38rem;
+            height: 3.53rem;
             .tableHead{
               color: #333333;
               font-weight: 600;
-              height: 0.6rem;
               th{
                 background: #F1F1F1;
               }

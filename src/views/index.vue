@@ -44,7 +44,7 @@
     }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .content{
   width: 100%;
   .content-main{
