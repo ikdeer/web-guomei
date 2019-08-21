@@ -187,20 +187,6 @@
 .overIew{
   width: 100%;
   padding-bottom: 0.3rem;
-  .overIew-nav{
-    width: 100%;
-    height: 0.55rem;
-    display: flex;
-    display: -webkit-flex;
-    align-items: center;
-    border-bottom: 1px dashed #979797;
-    .el-breadcrumb{
-      font-size: 0.14rem;
-    }
-    .el-breadcrumb__inner{
-      color: #333333;
-    }
-  }
   .overIew-content{
     width:auto;
     .overIew-use{

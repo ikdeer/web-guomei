@@ -119,29 +119,6 @@
 
 <style lang="scss" scoped>
     .facelist{
-        .overIew-nav{
-            width: 100%;
-            height: 60px;
-            display: flex;
-            display: -webkit-flex;
-            align-items: center;
-            border-bottom: 1px dashed #979797;
-            .el-breadcrumb{
-                font-size: 20px;
-            }
-            .el-breadcrumb__inner{
-                color: #333333;
-            }
-        }
-        h3{
-            color: #333333;
-            font-weight: 600;
-            font-size: 16px;
-            margin: 0;
-            padding: 0;
-            height: 50px;
-            line-height: 50px;
-        }
         .content{
             background:rgba(255,255,255,1);
             box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
