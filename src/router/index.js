@@ -4,6 +4,7 @@ import Index from '@/views/index'
 import overview from '@/views/overview/overview'
 import userList from '@/views/user/userList'
 import userInfo from '@/views/user/userInfo'
+import faceList from '@/views/face/faceList'
 
 Vue.use(Router)
 
@@ -40,6 +41,14 @@ const router = new Router({
           meta: {
             title:'',
             code:3
+          },
+        },{
+          path: '/Index/faceList',
+          name: '人脸分组列表',
+          component: faceList,
+          meta: {
+            title:'',
+            code:4
           },
         },
       ],

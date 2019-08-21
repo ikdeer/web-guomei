@@ -3,9 +3,9 @@
         <nav class="overIew-nav">
             <layout-breadcrumb></layout-breadcrumb>
         </nav>
-        <div class="">
+        <div class="face_top">
             <h3>人脸分组列表</h3>
-            <el-button type="text" @click="see(scope.row)">查看</el-button>
+            <el-button type="primary" @click="see(scope.row)">添加人脸头像</el-button>
         </div>
         <div class="content">
             <div class="face_list_form">
@@ -119,6 +119,13 @@
 
 <style lang="scss" scoped>
     .facelist{
+      font-size: .16rem;
+      .face_top{
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-between;
+        align-items: center;
+      }
         .content{
             background:rgba(255,255,255,1);
             box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);

@@ -40,7 +40,7 @@
                 iconText:'人脸分组管理',
                 iconImgShow:'/static/images/management_selected_icon@2x.png',
                 iconImgHide:'/static/images/management_unselected_icon@2x.png',
-                iconRouter:'',
+                iconRouter:'/Index/faceList',
                 code:4,
               },
               {
