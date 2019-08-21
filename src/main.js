@@ -20,7 +20,17 @@ Vue.component('layout-Header',Header)
 Vue.component('layout-Sider',layout)
 Vue.component('layout-breadcrumb',breadcrumb)
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+window.onresize = function () {
+  rem();
+}
+rem();
+// 进行rem的计算 因为是已1920px为基准进行计算的，所以为了方便，把1rem等于100px
+function rem() {
+  let width = document.body.clientWidth;
+  let fontSize = document.getElementsByTagName('html')[0].style.fontSize = width / 19.2 + "px";
+}
 
 new Vue({
   el: '#app',

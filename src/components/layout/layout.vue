@@ -88,8 +88,8 @@
 
 <style lang="scss">
 .sider{
-  width: 260px;
-  height: calc(100% - 60px);
+  width: 2.6rem;
+  height: calc(100% - 0.6rem);
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
   z-index: 10;
   background: #fff;
@@ -98,23 +98,23 @@
   .sider-ul{
     width: 100%;
     margin: 0;
-    padding: 20px 0 0 0 ;
+    padding: 0.2rem 0 0 0 ;
     li{
-      height: 60px;
+      height: 0.6rem;
       list-style-type:none;
       display: flex;
       display: -webkit-flex;
       align-items: center;
       justify-content: center;
       img{
-        width: 20px;
-        height: 20px;
+        width: 0.2rem;
+        height: 0.2rem;
         display: block;
-        margin-right: 20px;
+        margin-right: 0.2rem;
       }
       span{
-        width: 120px;
-        font-size:16px;
+        width: 1.2rem;
+        font-size:0.16rem;
         color:#666666;
         display: block;
         text-align: left;

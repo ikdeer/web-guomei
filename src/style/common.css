@@ -3,12 +3,17 @@ html,body{
   height: 100%;
   margin: 0;
   padding: 0;
-  font-size: 14px;
-  overflow-y: auto;
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
+}
+p,h4,h1,h2,h3,h5,h6{
+  margin:0;
+  padding:0;
+  border: 0;
+}
+ol,li,ul,dl,dt,dd{
+  list-style:none;
+}
+.overflow {
+  overflow:hidden;
 }
 .el-dialog .el-dialog__header {
     background: #409EFF;

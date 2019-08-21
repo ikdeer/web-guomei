@@ -44,7 +44,7 @@
     }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .content{
   width: 100%;
   .content-main{
@@ -52,9 +52,9 @@
     .content-right{
       width: auto;
       box-sizing: border-box;
-      margin-left: 260px;
-      padding-left: 25px;
-      padding-right: 25px;
+      margin-left: 2.6rem;
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
       background: #F8F8F8;
       overflow-y: auto;
     }
