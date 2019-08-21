@@ -1,15 +1,26 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/views/index'
-import overview from '@/views/overview/overview'
-import userList from '@/views/user/userList'
-import userInfo from '@/views/user/userInfo'
+//CompanyHome
+import CompanyHome from '@/views/CompanyHome/home'
+//CMS
+import Index from '@/views/CMS/index'
+import overview from '@/views/CMS/overview/overview'
+import userList from '@/views/CMS/user/userList'
+import userInfo from '@/views/CMS/user/userInfo'
 
 Vue.use(Router)
 
 const router = new Router({
   mode:'history',
   routes: [
+    {
+      path: '/CompanyHome',
+      name: '国美人脸认证开放平台',
+      component: CompanyHome,
+      meta: {
+        title:'国美人脸认证开放平台',
+      },
+    },
     {
       path: '/Index',
       name: '主页容器',
@@ -46,7 +57,7 @@ const router = new Router({
     },
     {
       path: '*',
-      redirect: '/Index'
+      redirect: '/CompanyHome'
     }
   ]
 })
