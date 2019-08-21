@@ -193,6 +193,7 @@
 
 <style lang="scss" scoped>
     .userInfo{
+        font-size: 0.16rem;
         .overIew-nav{
             width: 100%;
             height: 60px;
