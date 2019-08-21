@@ -106,27 +106,22 @@
             class="user_list_add_dialog"
             :visible.sync="userListAddDialog"
             width="30%">
-            <el-form :model="dataDialogForm" ref="dataDialogForm" label-width="80px" class="demo-ruleForm">
-                <el-form-item label="用户名" required>
-                    <el-input type="phone" v-model="dataDialogForm.phone" autocomplete="off"></el-input>
+            <el-form :model="dataDialogForm"  :rules="addDialogRules" ref="dataDialogForm" label-width="80px">
+                <el-form-item label="用户名" prop="username" required>
+                    <el-input type="phone" v-model="dataDialogForm.username" :maxlength="20" placeholder="请输入用户名(6-20位字母数字)" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="手机号"
-                    prop="phone"
-                    required
-                    :rules="[
-                        {pattern:/^(13|14|15|16|17|18|19)\d{9}$/,message:'请输入正确的手机号码',trigger: 'change'}
-                    ]">
-                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phone" autocomplete="off"></el-input>
+                    label="手机号" prop="phone" required>
+                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phone" placeholder="请输入手机号" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" required>
-                    <el-input type="phone" v-model="dataDialogForm.phone" autocomplete="off"></el-input>
+                <el-form-item label="邮箱" prop="email" required>
+                    <el-input type="phone" v-model="dataDialogForm.email" placeholder="请输入邮箱（XXX@XXXX）" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="设置密码" required>
-                    <el-input type="phone" :maxlength="20" v-model="dataDialogForm.phone" autocomplete="off"></el-input>
+                <el-form-item label="设置密码" prop="passwordstart" required>
+                    <el-input type="phone" :maxlength="16" v-model="dataDialogForm.passwordstart" show-password placeholder="请设置登录密码（8-16位字母和数字）" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="确认密码" required>
-                    <el-input type="phone" :maxlength="20" v-model="dataDialogForm.phone" autocomplete="off"></el-input>
+                <el-form-item label="确认密码" prop="passwordend" required>
+                    <el-input type="phone" :maxlength="16" v-model="dataDialogForm.passwordend" show-password placeholder="请确认登录密码" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer">
@@ -159,6 +154,64 @@
     export default {
         name: "userList",
         data() {
+            let username = (rule, value, callback) => {
+                if(value){
+                    if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value)){
+                        return callback(new Error('请输入6-20位字母数字'));
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请输入用户名'))
+                }
+            };
+            let phone = (rule, value, callback) => {
+                if(value){
+                    if(!/^(13|14|15|16|17|18|19)\d{9}$/.test(value)){
+                        return callback(new Error('手机号错误，请输入11位手机号'));
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请输入手机号'))
+                }
+            };
+            let email = (rule, value, callback) => {
+                if(value){
+                    if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value)){
+                        console.log(value)
+                        return callback(new Error('邮箱格式错误'));
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请输入邮箱'))
+                }
+            };
+            let passwordstart = (rule, value, callback) => {
+                if(value){
+                    if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/.test(value)){
+                        return callback(new Error('密码设置错误'));
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请设置密码'))
+                }
+            };
+
+            let passwordend = (rule, value, callback) => {
+                if(value){
+                    if(String(value) !== String(this.dataDialogForm.passwordstart)){
+                        return callback(new Error('两次密码设置不一致'));
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请确认登录密码'))
+                }
+            };
+
             return {
                 formData:{
                     tel:'',
@@ -173,21 +226,49 @@
                     total:500
                 },
                 userListAddDialog:false,
-                dataDialogForm:{
-
+                dataDialogForm:{ //弹窗创建用户信息
+                    username:'',
+                    phone:'',
+                    email:'',
+                    passwordstart:'',
+                    passwordend:'',
                 },
                 userListTableDialog:false,
                 userListTableInfo:{
                     title:'',
                     btnInfo:'',
                     type:true,
-                    statys:0
+                    statys:0,
+                    id:''
+                },
+                addDialogRules:{
+                    username:[
+                        {validator:username,trigger:['blur','change']}
+                    ],
+                    phone:[
+                        {validator:phone,trigger:['blur','change']}
+                    ],
+                    email:[
+                        {validator:email,trigger:['blur','change']}
+                    ],
+                    passwordstart:[
+                        {validator:passwordstart,trigger:['blur','change']}
+                    ],
+                    passwordend:[
+                        {validator:passwordend,trigger:['blur','change']}
+                    ]
                 }
-
             }
         },
         methods: {
             adduser(){
+                this.dataDialogForm = {
+                    username:'',
+                    phone:'',
+                    email:'',
+                    passwordstart:'',
+                    passwordend:'',
+                };
                 this.userListAddDialog = true;
             },
             search(){

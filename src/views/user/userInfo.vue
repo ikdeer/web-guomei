@@ -1,29 +1,43 @@
 <template>
     <div class="userInfo">
+        <nav class="overIew-nav">
+            <layout-breadcrumb></layout-breadcrumb>
+        </nav>
         <h3>用户基本信息</h3>
         <div class="info">
             <div class="info_title">
-                <img src="static/images/head1.png" alt="">
+                <img src="/static/images/touxiang.jpeg" alt="">
                 <div>你好<br/>欢迎使用</div>
             </div>
             <div class="info_list">&emsp;用户名：admin</div>
             <div class="info_list">手机绑定：
                 <div class="info_list_inp">
-                    <span v-if="flag">{{input}}</span><el-button v-if="flag" type="text" @click="flag = false" style="margin-left: 30px">编辑</el-button>
-                    <el-input v-if="!flag" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
+                    <span v-if="info.phoneStatus">{{info.phone}}</span>
+                    <el-button v-if="info.phoneStatus" type="text" @click="info.phoneStatus = false" style="margin-left: 15px">编辑</el-button>
+                    <el-input v-if="!info.phoneStatus" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
-                <div class="info_list_btn" v-if="!flag">
-                    <el-button type="primary" @click="flag = true">确定</el-button>
-                    <el-button @click="flag = true">取消</el-button>
+                <div class="info_list_btn" v-if="!info.phoneStatus">
+                    <el-button type="primary" @click="info.phoneStatus = true">确定</el-button>
+                    <el-button @click="info.phoneStatus = true">取消</el-button>
                 </div>
             </div>
-            <div class="info_list">邮箱绑定：ssss@email.com</div>
-            <div class="info_list">账号状态：已启用</div>
+            <div class="info_list">邮箱绑定：
+                <div class="info_list_inp">
+                    <span v-if="info.emailStatus">{{info.email}}</span>
+                    <el-button v-if="info.emailStatus" type="text" @click="info.emailStatus = false" style="margin-left: 15px">编辑</el-button>
+                    <el-input v-if="!info.emailStatus" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
+                </div>
+                <div class="info_list_btn" v-if="!info.emailStatus">
+                    <el-button type="primary" @click="info.emailStatus = true">确定</el-button>
+                    <el-button @click="info.emailStatus = true">取消</el-button>
+                </div>
+            </div>
+            <div class="info_list">账号状态：{{info.status | status }}</div>
         </div>
         <h3>联系人</h3>
         <div class="user_table">
             <div class="user_table_btn">
-                <el-button type="primary" size="small" @click="">新增</el-button>
+                <el-button type="primary" size="small" @click="adduser"> 新增 </el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -44,12 +58,37 @@
                     align="center"
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button type="text" @click="see(scope.row)">修改</el-button>
+                        <el-button type="text" @click="edit(scope.row)">修改</el-button>
                         <el-button type="text" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
+
+
+        <el-dialog
+            title="新增联系人"
+            class="user_info_add_dialog"
+            :visible.sync="userInfoAddDialog"
+            width="30%">
+            <el-form :model="dataDialogForm" :rules="adduserDialogRules" ref="dataDialogForm" label-width="80px">
+                <el-form-item label="姓名" prop="name" required>
+                    <el-input type="phone" v-model="dataDialogForm.name" placeholder="请输入姓名" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="手机号" prop="phone" required>
+                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phone" placeholder="请输入手机号" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email" required>
+                    <el-input type="phone" v-model="dataDialogForm.email" placeholder="请输入邮箱" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer">
+                <el-button type="primary" @click="userInfoAddDialog = false">确 定</el-button>
+                <el-button @click="userInfoAddDialog = false">取 消</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -57,23 +96,117 @@
     export default {
         name: "userInfo",
         data(){
+            let name = (rule, value, callback) => {
+                if(value){
+                   /* if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value)){
+                        return callback(new Error('请输入6-20位字母数字'));
+                    }else{*/
+                        return callback()
+                    // }
+                }else{
+                    return callback(new Error('请输入姓名'))
+                }
+            };
+            let phone = (rule, value, callback) => {
+                if(value){
+                    if(!/^(13|14|15|16|17|18|19)\d{9}$/.test(value)){
+                        return callback(new Error('手机号错误，请输入11位手机号'));
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请输入手机号'))
+                }
+            };
+            let email = (rule, value, callback) => {
+                if(value){
+                    if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value)){
+                        console.log(value)
+                        return callback(new Error('邮箱格式错误'));
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请输入邮箱'))
+                }
+            };
+
             return {
                 input:'15738668129',
+                info:{
+                    phone:'18898089898',
+                    phoneStatus:true,
+                    email:'okdaewr@gamil.com',
+                    emailStatus:true,
+                    status:1,
+                },
                 tableData:[],
-                flag:true
+                userInfoAddDialog:false,
+                dataDialogForm:{
+                    name:'',
+                    phone:'',
+                    email:''
+                },
+                adduserDialogRules:{
+                    name:[
+                        {validator:name,trigger:['blur','change']}
+                    ],
+                    phone:[
+                        {validator:phone,trigger:['blur','change']}
+                    ],
+                    email:[
+                        {validator:email,trigger:['blur','change']}
+                    ],
+                }
             }
         },
         methods:{
+            edit(row){
 
+            },
+            remove(row){
+
+            },
+            adduser(){
+                this.userInfoAddDialog = true;
+            }
         },
         mounted(){
 
+        },
+        filters:{
+            status(val){
+                if(val==1){
+                    return '已启用'
+                }
+                if(val==2){
+                    return '未启用'
+                }
+                if(val==3){
+                    return '已禁用'
+                }
+                return '没有'
+            }
         }
     }
 </script>
 
 <style lang="scss" scoped>
     .userInfo{
+        .overIew-nav{
+            width: 100%;
+            height: 60px;
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            border-bottom: 1px dashed #979797;
+            .el-breadcrumb{
+                font-size: 20px;
+            }
+            .el-breadcrumb__inner{
+                color: #333333;
+            }
+        }
         h3{
             color: #333333;
             font-weight: 600;
@@ -94,9 +227,9 @@
                 display: -webkit-flex;
                 align-items: center;
                 img{
-                    width: 50px;
-                    height: 50px;
-                    margin-right: 10px;
+                    width: 60px;
+                    height: 60px;
+                    margin-right: 15px;
                     display: inline-block;
                     -webkit-border-radius: 100%;
                     -moz-border-radius: 100%;
@@ -113,8 +246,7 @@
                     display: inline-block;
                 }
                 .info_list_btn{
-                    position: absolute;
-                    right: 0;
+                    margin-left: 15px;
                     display: inline-block;
                 }
             }
@@ -131,6 +263,11 @@
                 line-height: 50px;
                 text-align: right;
             }
+        }
+    }
+    .user_info_add_dialog{
+        .el-form{
+            padding: 0 30px;
         }
     }
 </style>
