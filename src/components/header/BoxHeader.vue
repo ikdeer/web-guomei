@@ -13,9 +13,8 @@
       }
     },
     watch: {
-      $route:function(newVal,oldVal){
-        console.log(newVal);
-        this.routerList = newVal.meta.routeList;
+      $route(newVal,oldVal){
+        //this.routerList = newVal.meta.routeList;
       }
     },
     mounted(){

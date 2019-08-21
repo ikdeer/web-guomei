@@ -190,13 +190,13 @@
   padding-bottom: 30px;
   .overIew-nav{
     width: 100%;
-    height: 70px;
+    height: 55px;
     display: flex;
     display: -webkit-flex;
     align-items: center;
     border-bottom: 1px dashed #979797;
     .el-breadcrumb{
-      font-size: 20px;
+      font-size: 16px;
     }
     .el-breadcrumb__inner{
       color: #333333;
@@ -215,11 +215,13 @@
         width:780px;
         height: 418px;
         .overIew-use_text{
-          font-size: 20px;
+          font-size: 16px;
           color: #333333;
           font-weight: 600;
           margin: 0;
-          line-height: 60px;
+          line-height: 40px;
+          padding-top: 5px;
+          padding-bottom: 5px;
         }
         .use-content{
           height: 325px;
@@ -314,18 +316,20 @@
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          height: 60px;
+          height: 40px;
+          padding-top: 5px;
+          padding-bottom: 5px;
           span{
-            font-size: 20px;
+            font-size: 16px;
             color: #333333;
-            font-weight: bold;
+            font-weight: 600;
           }
           .block{
             display: flex;
             display: -webkit-flex;
             align-items: center;
             >span{
-              font-size: 20px;
+              font-size: 14px;
               color: #333333;
               font-weight: 500;
               padding-right: 20px;
@@ -359,10 +363,9 @@
     .overIew-basics{
       width: auto;
       .basics-topText{
-        font-size: 20px;
+        font-size: 16px;
         color: #333333;
-        padding-top: 30px;
-        padding-bottom: 20px;
+        line-height: 50px;
         margin: 0;
         font-weight: 600;
       }
@@ -399,12 +402,12 @@
             margin-left: 20px;
             h4{
               margin: 0;
-              font-size:20px;
+              font-size:16px;
               font-weight: 600;
               color: #333333;
             }
             p{
-              font-size:16px;
+              font-size:14px;
               color:#666666;
               margin: 0;
             }
@@ -415,11 +418,10 @@
     .overIew-scene{
       width: auto;
       .scene-topText{
-        font-size: 20px;
+        font-size: 16px;
         color:#333333;
         font-weight: 600;
-        padding-top: 30px;
-        padding-bottom: 20px;
+        line-height: 55px;
         margin: 0;
       }
       .scene-ListPad{
@@ -452,7 +454,7 @@
               display: block;
             }
             .scene-Title{
-              font-size:20px;
+              font-size:16px;
               font-weight: 600;
               color:#333333;
               margin:0;
@@ -460,7 +462,7 @@
               text-align: center;
             }
             .scene-Text{
-              font-size:16px;
+              font-size:14px;
               color:#666666;
               margin: 0;
               text-align: center;
@@ -505,11 +507,11 @@
           top: 21px;
           right: 30px;
           span{
-            font-size:20px;
+            font-size:16px;
             font-weight: 500;
           }
           .el-icon-arrow-right{
-            font-size:22px;
+            font-size:16px;
           }
         }
       }
