@@ -25,20 +25,21 @@ const router = new Router({
           },
         },
         {
-          path: '/Index/userList',
-          name: '用户管理',
-          component: userList,
-          meta: {
-            title:'',
-            code:2
-          },
-        },{
           path: '/Index/userInfo',
           name: '用户管理',
           component: userInfo,
           meta: {
-              title:'',
-              code:3
+            title:'',
+            code:2
+          },
+        },
+        {
+          path: '/Index/userList',
+          name: '用户列表',
+          component: userList,
+          meta: {
+            title:'',
+            code:3
           },
         },
       ],
