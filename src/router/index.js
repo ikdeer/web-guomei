@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/views/index'
-import overview from '@/views/overview/overview'
-import userList from '@/views/user/userList'
-import userInfo from '@/views/user/userInfo'
+import Index from '@/views/CMS/index'
+import overview from '@/views/CMS/overview/overview'
+import userList from '@/views/CMS/user/userList'
+import userInfo from '@/views/CMS/user/userInfo'
 
 Vue.use(Router)
 
