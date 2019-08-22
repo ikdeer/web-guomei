@@ -4,7 +4,7 @@
             <layout-breadcrumb></layout-breadcrumb>
         </nav>
         <h3>用户列表</h3>
-        <div class="content">
+        <div class="userlist_content">
             <div class="user_list_form">
                 <el-form :inline="true">
                     <el-form-item label="手机号">
@@ -284,7 +284,7 @@
                 this.search();
             },
             see(row){
-
+                this.$router.push({ path: '/Index/userInfo', query: { id: '1' }})
             },
             down(row){
                 this.userListTableInfo = {
@@ -338,19 +338,15 @@
 <style lang="scss" scoped>
     .userlist{
         font-size: .16rem;
-        .content{
+        .userlist_content{
             background:rgba(255,255,255,1);
             box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
             border-radius:10px;
             padding: 30px;
             box-sizing: border-box;
             .user_list_form{
-                position: relative;
                 .el-form{
                     border-bottom: 1px solid #eeeeee;
-                    .el-form-item__label{
-                        color: #666666;
-                    }
                     .user_list_form_status{
                         width: 120px;
                     }
@@ -358,16 +354,16 @@
                         width: 300px;
                     }
                 }
+                .user_list_btn{
+                  height: 50px;
+                  line-height: 50px;
+                  display: flex;
+                  display: -webkit-flex;
+                  justify-content: space-between;
+                }
             }
             .user_list_table{
                 width: 100%;
-            }
-            .user_list_btn{
-                height: 50px;
-                line-height: 50px;
-                display: flex;
-                display: -webkit-flex;
-                justify-content: space-between;
             }
             .user_list_footer{
                 margin-top: 10px;
