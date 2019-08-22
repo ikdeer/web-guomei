@@ -7,9 +7,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './style/common.css'
 
 //头部组件
-import Header from '@/components/header/header.vue'
-import layout from '@/components/layout/layout.vue'
-import breadcrumb from '@/components/header/BoxHeader.vue'
+import Header from '@/views/CMS/component/header/header.vue'
+import breadcrumb from '@/views/CMS/component/header/BoxHeader.vue'
+import layout from '@/views/CMS/component/layout/layout.vue'
 
 Vue.use(ElementUI,{
     size:'small'
