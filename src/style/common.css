@@ -64,6 +64,9 @@ h3{
     text-align: center;
 }
 
+.el-form-item__label{
+    color: #666666;
+}
 .el-table th {
     background-color: #F1F1F1;
     color: #333333;
