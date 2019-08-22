@@ -135,7 +135,7 @@
       align-items: center;
       justify-content: space-between;
       .header-nav_Left{
-        width: 65%;
+        width: 75%;
         display: flex;
         display: -webkit-flex;
         align-items: center;
@@ -228,18 +228,18 @@
       }
 
       .header-navRight{
-        width: 35%;
+        width: 25%;
         display: flex;
         display: -webkit-flex;
         align-items: center;
         justify-content: flex-end;
         margin-right: 0.4rem;
         .button-login{
-          font-size: 20px;
+          font-size: 0.2rem;
           color: #ffffff;
         }
         .button-register{
-          font-size: 20px;
+          font-size: 0.2rem;
           color: #ffffff;
           margin-left: 0.36rem;
           margin-right: 0.3rem;
