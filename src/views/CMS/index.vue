@@ -55,7 +55,6 @@
       margin-left: 2.6rem;
       padding-left: 0.25rem;
       padding-right: 0.25rem;
-      padding-bottom: 0.25rem;
       background: #F8F8F8;
       overflow-y: auto;
     }

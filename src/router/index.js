@@ -4,11 +4,6 @@ import Index from '@/views/index'
 import overview from '@/views/overview/overview'
 import userList from '@/views/user/userList'
 import userInfo from '@/views/user/userInfo'
-import faceList from '@/views/face/faceList'
-import equipmentList from '@/views/equipment/equipmentList'
-import statement from '@/views/statement/statement'
-import log from '@/views/operationLog/log'
-
 
 Vue.use(Router)
 
@@ -27,7 +22,7 @@ const router = new Router({
           meta: {
             title:'',
             code:1
-          }
+          },
         },
         {
           path: '/Index/userInfo',
@@ -36,7 +31,7 @@ const router = new Router({
           meta: {
             title:'',
             code:2
-          }
+          },
         },
         {
           path: '/Index/userList',
@@ -45,39 +40,7 @@ const router = new Router({
           meta: {
             title:'',
             code:3
-          }
-        },{
-          path: '/Index/faceList',
-          name: '人脸分组列表',
-          component: faceList,
-          meta: {
-            title:'',
-            code:4
-          }
-        },{
-          path: '/Index/equipmentList',
-          name: '设备管理',
-          component: equipmentList,
-          meta: {
-              title:'',
-              code:5
-          }
-        },{
-          path: '/Index/statement',
-          name: '监控报表',
-          component: statement,
-          meta: {
-              title:'',
-              code:6
-          }
-        },{
-          path: '/Index/log',
-          name: '操作日志',
-          component: log,
-          meta: {
-              title:'',
-              code:6
-          }
+          },
         },
       ],
     },
