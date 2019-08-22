@@ -254,6 +254,9 @@
                     }
                 }
             }
+            .equipment_table{
+                width: 100%;
+            }
             .equipment_footer{
                 margin-top: 10px;
                 text-align: right;
