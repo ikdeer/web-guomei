@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 //全局接口
-const HttpApi = 'https://baidu.com';
+const HttpApi = 'http://139.196.161.174:0890';
 //请求头部
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true; // 允许携带cookie
