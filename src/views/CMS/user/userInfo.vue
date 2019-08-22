@@ -98,10 +98,10 @@
         data(){
             let name = (rule, value, callback) => {
                 if(value){
-                   /* if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value)){
-                        return callback(new Error('请输入6-20位字母数字'));
-                    }else{*/
-                        return callback()
+                    /* if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value)){
+                         return callback(new Error('请输入6-20位字母数字'));
+                     }else{*/
+                    return callback()
                     // }
                 }else{
                     return callback(new Error('请输入姓名'))
@@ -193,29 +193,7 @@
 
 <style lang="scss" scoped>
     .userInfo{
-        .overIew-nav{
-            width: 100%;
-            height: 60px;
-            display: flex;
-            display: -webkit-flex;
-            align-items: center;
-            border-bottom: 1px dashed #979797;
-            .el-breadcrumb{
-                font-size: 20px;
-            }
-            .el-breadcrumb__inner{
-                color: #333333;
-            }
-        }
-        h3{
-            color: #333333;
-            font-weight: 600;
-            font-size: 16px;
-            margin: 0;
-            padding: 0;
-            height: 50px;
-            line-height: 50px;
-        }
+        font-size: 0.16rem;
         .info{
             background:rgba(255,255,255,1);
             box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);

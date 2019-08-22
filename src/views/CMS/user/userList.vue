@@ -336,81 +336,62 @@
 </script>
 
 <style lang="scss" scoped>
-.userlist{
-    .overIew-nav{
-        width: 100%;
-        height: 60px;
-        display: flex;
-        display: -webkit-flex;
-        align-items: center;
-        border-bottom: 1px dashed #979797;
-        .el-breadcrumb{
-            font-size: 20px;
-        }
-        .el-breadcrumb__inner{
-            color: #333333;
-        }
-    }
-    h3{
-        color: #333333;
-        font-weight: 600;
-        font-size: 16px;
-        margin: 0;
-        padding: 0;
-        height: 50px;
-        line-height: 50px;
-    }
-    .content{
-        background:rgba(255,255,255,1);
-        box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
-        border-radius:10px;
-        padding: 30px;
-        box-sizing: border-box;
-        .user_list_form{
-            position: relative;
-            .el-form{
-                border-bottom: 1px solid #eeeeee;
-                .el-form-item__label{
-                    color: #666666;
-                }
-                .user_list_form_status{
-                    width: 120px;
-                }
-                .user_list_form_time{
-                    width: 300px;
+    .userlist{
+        font-size: .16rem;
+        .content{
+            background:rgba(255,255,255,1);
+            box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
+            border-radius:10px;
+            padding: 30px;
+            box-sizing: border-box;
+            .user_list_form{
+                position: relative;
+                .el-form{
+                    border-bottom: 1px solid #eeeeee;
+                    .el-form-item__label{
+                        color: #666666;
+                    }
+                    .user_list_form_status{
+                        width: 120px;
+                    }
+                    .user_list_form_time{
+                        width: 300px;
+                    }
                 }
             }
+            .user_list_btn{
+                height: 50px;
+                line-height: 50px;
+                display: flex;
+                display: -webkit-flex;
+                justify-content: space-between;
+            }
+            .user_list_footer{
+                margin-top: 10px;
+                text-align: right;
+            }
+
+
         }
-        .user_list_btn{
-            height: 50px;
-            line-height: 50px;
+    }
+
+
+    .user_list_add_dialog{
+        .el-form{
+            padding: 0 30px;
+        }
+    }
+    .user_list_table_dialog{
+        div{
+            text-align: center;
             display: flex;
+            height: 1rem;
             display: -webkit-flex;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            color: #333333;
+            font-weight: 600;
         }
-        .user_list_footer{
-            margin-top: 10px;
-            text-align: right;
-        }
-
-
     }
-}
-
-
-.user_list_add_dialog{
-    .el-form{
-        padding: 0 30px;
-    }
-}
-.user_list_table_dialog{
-    div{
-        text-align: center;
-        display: block;
-        line-height: 100px;
-        color: #333333;
-        font-weight: 600;
-    }
-}
 
 </style>

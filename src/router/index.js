@@ -7,6 +7,10 @@ import Index from '@/views/CMS/index'
 import overview from '@/views/CMS/overview/overview'
 import userList from '@/views/CMS/user/userList'
 import userInfo from '@/views/CMS/user/userInfo'
+import faceList from '@/views/CMS/face/faceList'
+import equipmentList from '@/views/CMS/equipment/equipmentList'
+import statement from '@/views/CMS/statement/statement'
+import log from '@/views/CMS/operationLog/log'
 
 Vue.use(Router)
 
@@ -52,7 +56,39 @@ const router = new Router({
             title:'',
             code:3
           },
-        },
+        },{
+            path: '/Index/faceList',
+            name: '人脸分组列表',
+            component: faceList,
+            meta: {
+                title:'',
+                code:4
+              }
+          },{
+            path: '/Index/equipmentList',
+            name: '设备管理',
+            component: equipmentList,
+            meta: {
+                title:'',
+                code:5
+            }
+          },{
+            path: '/Index/statement',
+            name: '监控报表',
+            component: statement,
+            meta: {
+              title:'',
+              code:6
+            }
+          },{
+            path: '/Index/log',
+            name: '操作日志',
+            component: log,
+            meta: {
+              title:'',
+              code:7
+            }
+          },
       ],
     },
     {

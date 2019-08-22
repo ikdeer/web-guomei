@@ -14,9 +14,36 @@ ol,li,ul,dl,dt,dd{
   margin: 0;
   padding: 0;
 }
+
+/*全局nev样式*/
+.overIew-nav{
+    width: 100%;
+    height: 0.55rem;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    border-bottom: 1px dashed #979797;
+}
+.overIew-nav .el-breadcrumb{
+    font-size: 0.14rem;
+}
+.overIew-nav .el-breadcrumb__inner{
+    color: #333333;
+}
+h3{
+    color: #333333;
+    font-weight: 600;
+    font-size: .16rem;
+    height: .5rem;
+    line-height: .5rem;
+}
+
+
 .overflow {
   overflow:hidden;
 }
+
+/*重置element样式*/
 .el-dialog .el-dialog__header {
     background: #409EFF;
     padding: 10px;
@@ -39,6 +66,9 @@ ol,li,ul,dl,dt,dd{
     text-align: center;
 }
 
+.el-form-item__label{
+    color: #666666;
+}
 .el-table th {
     background-color: #F1F1F1;
     color: #333333;
