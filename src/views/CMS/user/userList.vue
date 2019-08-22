@@ -359,6 +359,9 @@
                     }
                 }
             }
+            .user_list_table{
+                width: 100%;
+            }
             .user_list_btn{
                 height: 50px;
                 line-height: 50px;
