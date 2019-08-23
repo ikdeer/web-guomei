@@ -86,10 +86,138 @@
             <h2 class="solution-TextH2">解决方案</h2>
             <span></span>
           </div>
-          <div class="solution-List"></div>
+          <div class="solution-List">
+            <ul class="solution-ListUl">
+              <li class="ListUl-li">
+                <div class="ListUl-pad">
+                  <div class="listUl-header">
+                    <img src="/static/images/attendance_icon@ss2x.png" alt="">
+                    <span>人脸考勤</span>
+                  </div>
+                  <p class="listUl-Text">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
+                  <div class="listUl-title">
+                    <span>主要服务：</span>
+                    <span>人脸检测</span>
+                  </div>
+                </div>
+              </li>
+              <li class="ListUl-li">
+                <div class="ListUl-pad">
+                  <div class="listUl-header">
+                    <img src="/static/images/guard_icon@2x.png" alt="">
+                    <span>刷脸门禁考勤</span>
+                  </div>
+                  <p class="listUl-Text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
+                  <div class="listUl-title">
+                    <span>主要服务：</span>
+                    <span>人脸搜索</span>
+                  </div>
+                </div>
+              </li>
+              <li class="ListUl-li">
+                <div class="ListUl-pad">
+                  <div class="listUl-header">
+                    <img src="/static/images/Group@2x.png" alt="">
+                    <span>安防监控</span>
+                  </div>
+                  <p class="listUl-Text">提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用</p>
+                  <div class="listUl-title">
+                    <span>主要服务：</span>
+                    <span>人脸搜索</span>
+                  </div>
+                </div>
+              </li>
+              <li class="ListUl-li">
+                <div class="ListUl-pad">
+                  <div class="listUl-header">
+                    <img src="/static/images/login_icon@2x.png" alt="">
+                    <span>人脸登录</span>
+                  </div>
+                  <p class="listUl-Text">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
+                  <div class="listUl-title">
+                    <span>主要服务：</span>
+                    <span>人脸检测</span>
+                  </div>
+                </div>
+              </li>
+              <li class="ListUl-li">
+                <div class="ListUl-pad">
+                  <div class="listUl-header">
+                    <img src="/static/images/pay_icon@2x.png" alt="">
+                    <span>人脸支付</span>
+                  </div>
+                  <p class="listUl-Text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
+                  <div class="listUl-title">
+                    <span>主要服务：</span>
+                    <span>人脸搜索</span>
+                  </div>
+                </div>
+              </li>
+              <li class="ListUl-li">
+                <div class="ListUl-pad">
+                  <div class="listUl-header">
+                    <img src="/static/images/member_icon@2x.png" alt="">
+                    <span>会员识别</span>
+                  </div>
+                  <p class="listUl-Text">提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用</p>
+                  <div class="listUl-title">
+                    <span>主要服务：</span>
+                    <span>人脸搜索</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- 服务类型 -->
+        <div class="main-service">
+          <div class="service-Text">
+            <h2 class="service-TextH2">服务类型</h2>
+            <span></span>
+          </div>
+          <div class="service-List">
+            <ul class="service-ListUl">
+              <li class="service-li">
+                <div class="service-pad">
+                  <h4 class="service-Title">在线接口</h4>
+                  <p class="service-text">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
+                  <div class="service-buttom">
+                    <span>查看接口文档</span>
+                    <span>开发工具</span>
+                  </div>
+                </div>
+              </li>
+              <li class="service-li">
+                <div class="service-pad">
+                  <h4 class="service-Title">离线SDK</h4>
+                  <p class="service-text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
+                  <div class="service-buttom">
+                    <span>离线采集SDK</span>
+                    <span>离线识别SDK</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </main>
-      <footer></footer>
+      <!-- 底部地址栏 -->
+      <footer class="home-footer">
+        <div class="footer-left">
+          <div class="footer-leftTop">
+            <span>技术文档</span>
+            <span>接入须知</span>
+            <span>常见问题</span>
+          </div>
+          <div class="footer-leftCenter">
+            <span>技术文档</span>
+          </div>
+          <div class="footer-leftBotton">
+            <span>SDK下载</span>
+          </div>
+        </div>
+        <div class="footer-right"></div>
+      </footer>
     </div>
 </template>
 
@@ -168,7 +296,7 @@
       padding-left: 1.69rem;
       padding-right: 1.69rem;
       padding-bottom: 0.3rem;
-      background: #F0F2F5;
+      background: #ffffff;
       .product-Text{
         width: 100%;
         padding-top: 0.8rem;
@@ -235,7 +363,7 @@
                 margin-right: auto;
                 padding: 0.1rem 0.35rem;
                 border-radius: 0.27rem;
-                background: #F0F2F5;
+                background: #ffffff;
                 font-size: 0.18rem;
                 border-color: #999999;
               }
@@ -263,10 +391,11 @@
       }
     }
     .main-solution{
+      background: #F0F2F5;
       .solution-Text{
         width: 100%;
-        padding-top: 0.8rem;
-        padding-bottom: 1rem;
+        padding-top: 0.78rem;
+        padding-bottom: 0.76rem;
         position: relative;
         .solution-TextH2{
           font-size: 0.48rem;
@@ -281,16 +410,191 @@
           background: #036FE2;
           display: block;
           position: absolute;
-          top: 65%;
+          top: 70%;
           left: 50%;
-          -webkit-transform: translate(-50%,-65%);
-          -ms-transform: translate(-50%,-65%);
-          transform: translate(-50%,-65%);
+          -webkit-transform: translate(-50%,-70%);
+          -ms-transform: translate(-50%,-70%);
+          transform: translate(-50%,-70%);
         }
       }
       .solution-List{
-
+        padding:0 1.21rem;
+        .solution-ListUl{
+          width: 100%;
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          .ListUl-li{
+            width: 4.8rem;
+            height: 3.26rem;
+            border: 1px solid #979797;
+            border-radius:0.6rem;
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.9rem;
+            .ListUl-pad{
+              width: 4rem;
+              .listUl-header{
+                display: flex;
+                display: -webkit-flex;
+                align-items: center;
+                justify-content: center;
+                >img{
+                  width: 0.5rem;
+                  height: 0.6rem;
+                  display: block;
+                }
+                >span{
+                  font-size: 0.26rem;
+                  color:#333333;
+                  font-weight:600;
+                  margin-left: 0.14rem;
+                }
+              }
+              .listUl-Text{
+                font-size: 0.18rem;
+                color: #666666;
+                padding-top: 0.25rem;
+                padding-bottom: 0.52rem;
+              }
+              .listUl-title{
+                display: flex;
+                display: -webkit-flex;
+                align-items: center;
+                span:first-child{
+                  font-size: 0.2rem;
+                  color: #252525;
+                }
+                span:last-child{
+                  font-size: 0.2rem;
+                  color: #036FE2;
+                }
+              }
+            }
+          }
+          .ListUl-li:hover{
+            border: 1px solid #036FE2;
+            .ListUl-pad{
+              .listUl-header{
+                span{
+                  color: #036FE2;
+                }
+              }
+            }
+          }
+        }
       }
+    }
+    .main-service{
+      background: #ffffff;
+      padding-bottom: 0.3rem;
+      .service-Text{
+        width: 100%;
+        padding-top: 0.8rem;
+        padding-bottom: 0.55rem;
+        position: relative;
+        .service-TextH2{
+          font-size: 0.48rem;
+          color:#252525;
+          text-align: center;
+          font-weight: 600;
+        }
+        >span{
+          width: 0.88rem;
+          height: 0.04rem;
+          border-radius:0.02rem;
+          background: #036FE2;
+          display: block;
+          position: absolute;
+          top: 80%;
+          left: 50%;
+          -webkit-transform: translate(-50%,-80%);
+          -ms-transform: translate(-50%,-80%);
+          transform: translate(-50%,-80%);
+        }
+      }
+      .service-List{
+        padding:0 4.49rem;
+        .service-ListUl{
+          width: 100%;
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: space-between;
+          .service-li{
+            width: 4.5rem;
+            height: 2.5rem;
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:0 0.01rem 0.1rem 0.01rem rgba(0,0,0,0.11);
+            border-radius:0.3rem;
+            border:0.01rem solid rgba(253,253,253,1);
+            .service-pad{
+              width: 3.42rem;
+              .service-Title{
+                font-size: 0.24rem;
+                font-weight: 600;
+                color: #252525;
+                text-align: center;
+              }
+              .service-text{
+                font-size: 0.18rem;
+                color: #666666;
+                margin-top: 0.22rem;
+                margin-bottom: 0.24rem;
+              }
+              .service-buttom{
+                display: flex;
+                display: -webkit-flex;
+                align-items: center;
+                justify-content: space-between;
+                span{
+                  font-size: 0.2rem;
+                  color: #F20A59;
+                  display: block;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .home-footer{
+    height: 2.68rem;
+    padding-left: 1.23rem;
+    padding-right: 1.23rem;
+    background: #333333;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    .footer-leftTop{
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+      justify-content: space-between;
+      span{
+        font-size: 0.22rem;
+        color: #ffffff;
+        font-weight: 600;
+        margin-right: 0.76rem;
+      }
+    }
+    .footer-leftCenter{
+      font-size: 0.18rem;
+      color: #ffffff;
+      margin-top: 0.16rem;
+      margin-bottom: 0.58rem;
+    }
+    .footer-leftBotton{
+      font-size: 0.18rem;
+      color: #ffffff;
     }
   }
 }
