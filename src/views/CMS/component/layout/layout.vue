@@ -107,6 +107,7 @@
     margin: 0;
     padding: 0.2rem 0 0 0 ;
     li{
+      cursor: pointer;
       height: 0.6rem;
       list-style-type:none;
       display: flex;
