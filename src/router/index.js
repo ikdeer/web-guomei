@@ -11,6 +11,7 @@ import faceList from '@/views/CMS/face/faceList'
 import equipmentList from '@/views/CMS/equipment/equipmentList'
 import statement from '@/views/CMS/statement/statement'
 import log from '@/views/CMS/operationLog/log'
+import applicationList from '@/views/CMS/applications/applicationList'
 
 Vue.use(Router)
 
@@ -40,18 +41,26 @@ const router = new Router({
           },
         },
         {
-          path: '/Index/userInfo',
+          path: '/Index/userList',
           name: '用户管理',
-          component: userInfo,
+          component: userList,
           meta: {
             title:'',
             code:2
           },
         },
         {
-          path: '/Index/userList',
+          path: '/Index/userInfo',
           name: '用户列表',
-          component: userList,
+          component:userInfo ,
+          meta: {
+            title:'',
+            code:2
+          },
+        },{
+          path: '/Index/applicationList',
+          name: '应用列表',
+          component:applicationList ,
           meta: {
             title:'',
             code:3

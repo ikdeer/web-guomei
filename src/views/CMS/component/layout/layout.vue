@@ -26,14 +26,14 @@
                 iconText:'用户管理',
                 iconImgShow:'/static/images/Combined Shape@2x.png',
                 iconImgHide:'/static/images/yonghuguanli_unselected_icon@2x.png',
-                iconRouter:'/Index/userInfo',
+                iconRouter:'/Index/userList',
                 code:2,
               },
               {
-                iconText:'用户列表',
+                iconText:'应用列表',
                 iconImgShow:'/static/images/list_selected_icon@2x.png',
                 iconImgHide:'/static/images/list_unselected_icon@2x.png',
-                iconRouter:'/Index/userList',
+                iconRouter:'/Index/applicationList',
                 code:3,
               },
               {
