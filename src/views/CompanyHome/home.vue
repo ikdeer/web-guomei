@@ -2,49 +2,8 @@
     <div class="CompanyHome">
       <!-- 头部区域 header -->
       <header class="home-header">
-        <nav class="header-nav">
-          <div class="header-nav_Left">
-            <div class="header-navLeft">
-              <img class="navLeft-Img" src="/static/images/logo_image@2x.png" alt="">
-              <div class="navLeft-Text">
-                <span></span>
-                <p>人脸认证开放平台</p>
-              </div>
-            </div>
-            <div class="header-navCenter">
-              <ul class="navCenter-ul">
-                <li>
-                  <span>产品服务</span>
-                  <ul class="navCenter-ulMenu">
-                    <li>
-                      <span>技术文档</span>
-                    </li>
-                    <li>
-                      <span>产品服务</span>
-                    </li>
-                    <li>
-                      <span>接入须知</span>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <span>解决方案</span>
-                </li>
-                <li>
-                  <span>技术文档</span>
-                </li>
-                <li>
-                  <span>接入须知</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="header-navRight">
-            <el-button type="text" class="button-login">登陆</el-button>
-            <el-button type="text" class="button-register">注册</el-button>
-            <el-button class="button-console">控制台</el-button>
-          </div>
-        </nav>
+        <!-- 头部公用组件 -->
+        <Header_Nav></Header_Nav>
         <div class="header-IfoImg">
           <div class="IfoImg-left">
             <h4 class="IfoImg-Title">人脸对比</h4>
@@ -80,30 +39,54 @@
               </li>
               <li>
                 <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/analysis_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">人脸检测与属性分析</h4>
-                  <p class="ListUl-PadText">人脸检测与属性分析</p>
+                  <img class="ListUl-PadImg" src="/static/images/identify_image@2x.png" alt="">
+                  <h4 class="ListUl-PadTitle">人脸对比</h4>
+                  <p class="ListUl-PadText">对比两张人脸的相似度，并给出相似度评分，从而判断是否同一人</p>
                   <el-button class="ListUl-PadButton">了解详情</el-button>
                 </div>
               </li>
               <li>
                 <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/analysis_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">人脸检测与属性分析</h4>
-                  <p class="ListUl-PadText">人脸检测与属性分析</p>
+                  <img class="ListUl-PadImg" src="/static/images/explore_image@2x.png" alt="">
+                  <h4 class="ListUl-PadTitle">人脸搜索</h4>
+                  <p class="ListUl-PadText">针对一张人脸照片，在指定人脸集合中搜索，找出最相似的一张脸或多张人脸，并给出相似度分值</p>
                   <el-button class="ListUl-PadButton">了解详情</el-button>
                 </div>
               </li>
               <li>
                 <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/analysis_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">人脸检测与属性分析</h4>
-                  <p class="ListUl-PadText">人脸检测与属性分析</p>
+                  <img class="ListUl-PadImg" src="/static/images/detection_image@2x.png" alt="">
+                  <h4 class="ListUl-PadTitle">活体检测</h4>
+                  <p class="ListUl-PadText">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
+                  <el-button class="ListUl-PadButton">了解详情</el-button>
+                </div>
+              </li>
+              <li>
+                <div class="ListUl-Pad">
+                  <img class="ListUl-PadImg" src="/static/images/collect_image@2x.png" alt="">
+                  <h4 class="ListUl-PadTitle">视频流人脸采集</h4>
+                  <p class="ListUl-PadText">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
+                  <el-button class="ListUl-PadButton">了解详情</el-button>
+                </div>
+              </li>
+              <li>
+                <div class="ListUl-Pad">
+                  <img class="ListUl-PadImg" src="/static/images/contrast_image@2x.png" alt="">
+                  <h4 class="ListUl-PadTitle">离线识别SDK</h4>
+                  <p class="ListUl-PadText">提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用</p>
                   <el-button class="ListUl-PadButton">了解详情</el-button>
                 </div>
               </li>
             </ul>
           </div>
+        </div>
+        <!-- 解决方案区域 -->
+        <div class="main-solution">
+          <div class="solution-Text">
+            <h2 class="solution-TextH2">解决方案</h2>
+            <span></span>
+          </div>
+          <div class="solution-List"></div>
         </div>
       </main>
       <footer></footer>
@@ -111,8 +94,10 @@
 </template>
 
 <script>
+    import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     export default {
         name: "home",
+        components:{Header_Nav},
         data(){
           return {
 
@@ -126,134 +111,6 @@
   width: 100%;
   .home-header{
     width: 100%;
-    .header-nav{
-      width: 100%;
-      height: 0.8rem;
-      background: #1B1B1B;
-      display: flex;
-      display: -webkit-flex;
-      align-items: center;
-      justify-content: space-between;
-      .header-nav_Left{
-        width: 75%;
-        display: flex;
-        display: -webkit-flex;
-        align-items: center;
-        .header-navLeft{
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          .navLeft-Img{
-            width: 1.38rem;
-            height: 0.46rem;
-            display: block;
-            margin-left: 0.4rem;
-          }
-          .navLeft-Text{
-            display: flex;
-            display: -webkit-flex;
-            align-items: center;
-            >span{
-              width: 0.02rem;
-              height: 0.3rem;
-              display: block;
-              background: #ffffff;
-              margin:0 0.2rem;
-            }
-            >p{
-              font-size: 0.26rem;
-              color: #ffffff;
-              font-weight: 600;
-            }
-          }
-        }
-        .header-navCenter{
-          margin-left: 0.82rem;
-          .navCenter-ul{
-            display: flex;
-            display: -webkit-flex;
-            align-items: center;
-            >li{
-              width: 1.6rem;
-              height:0.8rem;
-              display: flex;
-              display: -webkit-flex;
-              align-items: center;
-              justify-content: center;
-              position: relative;
-              span{
-                font-size: 0.2rem;
-                color: #ffffff;
-              }
-              .navCenter-ulMenu{
-                width: 1.6rem;
-                padding: 0.2rem 0;
-                position: absolute;
-                left: 0;
-                top: 0.8rem;
-                background: #1A1A1A;
-                display: none;
-                >li{
-                  display: flex;
-                  display: -webkit-flex;
-                  align-items: center;
-                  justify-content: center;
-                  >span{
-                    font-size: 0.18rem;
-                    padding: 0.09rem 0.18rem;
-                    color: #ffffff;
-                  }
-                }
-                >li:hover{
-                  >span{
-                    background: #2B2B2B;
-                    color: #F20A59;
-                  }
-                }
-              }
-            }
-            >li:hover{
-              background: #000000;
-              .navCenter-ulMenu{
-                display: block;
-              }
-              >span{
-                color: #F20A59;
-                line-height: 0.8rem;
-                border-bottom: 0.04rem solid #F20A59;
-              }
-            }
-          }
-        }
-      }
-
-      .header-navRight{
-        width: 25%;
-        display: flex;
-        display: -webkit-flex;
-        align-items: center;
-        justify-content: flex-end;
-        margin-right: 0.4rem;
-        .button-login{
-          font-size: 0.2rem;
-          color: #ffffff;
-        }
-        .button-register{
-          font-size: 0.2rem;
-          color: #ffffff;
-          margin-left: 0.36rem;
-          margin-right: 0.3rem;
-        }
-        .button-console{
-          padding: 0.11rem 0.45rem;
-          border-radius: 0.18rem;
-          font-size: 0.2rem;
-          color: #ffffff;
-          background:#F20A59;
-          border: none;
-        }
-      }
-    }
     .header-IfoImg{
       width: auto;
       height: 5.8rem;
@@ -264,6 +121,7 @@
       justify-content: space-between;
       padding-left: 1.5rem;
       padding-right: 2.12rem;
+      margin-top: 0.8rem;
       .IfoImg-left{
         .IfoImg-Title{
           font-size: 0.68rem;
@@ -307,7 +165,9 @@
   .home-main{
     width: 100%;
     .main-product{
-      padding:0 1.69rem;
+      padding-left: 1.69rem;
+      padding-right: 1.69rem;
+      padding-bottom: 0.3rem;
       background: #F0F2F5;
       .product-Text{
         width: 100%;
@@ -377,10 +237,59 @@
                 border-radius: 0.27rem;
                 background: #F0F2F5;
                 font-size: 0.18rem;
+                border-color: #999999;
+              }
+            }
+          }
+          >li:hover{
+            background: #ffffff;
+            box-shadow:0 0.02rem 0.2rem 0.07rem rgba(0,0,0,0.1);
+            border-radius:0.6rem;
+            .ListUl-Pad{
+              .ListUl-PadButton{
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 0.1rem 0.35rem;
+                border-radius: 0.27rem;
+                font-size: 0.18rem;
+                border-color: #F20A59;
+                color:#F20A59;
+                background: #ffffff;
               }
             }
           }
         }
+      }
+    }
+    .main-solution{
+      .solution-Text{
+        width: 100%;
+        padding-top: 0.8rem;
+        padding-bottom: 1rem;
+        position: relative;
+        .solution-TextH2{
+          font-size: 0.48rem;
+          color:#252525;
+          text-align: center;
+          font-weight: 600;
+        }
+        >span{
+          width: 0.88rem;
+          height: 0.04rem;
+          border-radius:0.02rem;
+          background: #036FE2;
+          display: block;
+          position: absolute;
+          top: 65%;
+          left: 50%;
+          -webkit-transform: translate(-50%,-65%);
+          -ms-transform: translate(-50%,-65%);
+          transform: translate(-50%,-65%);
+        }
+      }
+      .solution-List{
+
       }
     }
   }
