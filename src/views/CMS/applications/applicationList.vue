@@ -125,12 +125,24 @@
             :title="applicationInfo.title"
             class="application_list_table_dialog"
             :visible.sync="applicationTableDialog"
-            width="30%">
-            <div v-if="!applicationInfo.isAudit">
+            width="6rem">
+            <div v-if="!applicationInfo.isAudit" class="info">
                 <span>{{applicationInfo.info}}</span>
             </div>
-            <div v-if="applicationInfo.isAudit">
-
+            <div v-if="applicationInfo.isAudit" class="form">
+                <el-form :inline="true" label-width="80px">
+                    <el-form-item>
+                        <el-radio-group v-model="auditInfo.radio">
+                            <el-radio :label="0">审核通过</el-radio>
+                            <el-radio :label="1">审核不通过</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="原因描述" v-if="auditInfo.radio">
+                        <el-input type="textarea" rows="4" show-word-limit :maxlength="50"
+                                  v-model="auditInfo.info" placeholder="请输入原因描述"
+                                  autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
             </div>
             <span slot="footer">
                 <el-button type="primary" @click="submitTableDialog">{{applicationInfo.btnInfo}}</el-button>
@@ -163,7 +175,10 @@
                     type:true,//取消按钮状态
                     isAudit:false,//是否是审核弹窗
                 },
-
+                auditInfo:{
+                    radio:0,
+                    info:''
+                }
             }
         },
         methods: {
@@ -185,7 +200,7 @@
             },
             edit() {
                 //编辑应用
-
+                this.$router.push({path: '/Index/addApplication', query: {type: 'edit'}})
             },
             audit(row){
                 this.applicationInfo={
@@ -195,6 +210,10 @@
                     type:true,
                     isAudit:true,
                     status:4
+                };
+                this.auditInfo={
+                    radio:0,
+                    info:''
                 };
                 this.applicationTableDialog = true;
             },
@@ -234,7 +253,11 @@
                 this.applicationTableDialog = true;
             },
             submitTableDialog(){ //提交弹窗信息
-                if(this.applicationInfo.status === 2){
+                if(this.applicationInfo.status === 4){
+                    //审核接口调用
+                    this.search();
+                    this.applicationTableDialog = false;
+                }else if(this.applicationInfo.status === 2){
                     //禁用接口调用
                     this.search();
                     this.applicationTableDialog = false;
@@ -243,6 +266,7 @@
                     this.search();
                     this.applicationTableDialog = false;
                 }else{
+                    //启用直接过
                     this.search();
                     this.applicationTableDialog = false;
                 }
@@ -298,12 +322,27 @@
         div{
             text-align: center;
             display: flex;
-            height: 1rem;
             display: -webkit-flex;
             align-items: center;
             justify-content: center;
             color: #333333;
             font-weight: 600;
+        }
+        .info{
+            height: 1.5rem;
+        }
+        .form{
+            height: 1.5rem;
+            .el-form{
+                .el-form-item{
+                    align-items: normal;
+                    width: 5rem;
+                    .el-textarea{
+                        width: 4rem;
+                    }
+                }
+
+            }
         }
     }
 </style>

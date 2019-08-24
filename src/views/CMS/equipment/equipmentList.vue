@@ -137,6 +137,47 @@
 
         </div>
 
+        <el-dialog
+            :title="equipmentDialogInfo.title"
+            class="equipment_list_dialog"
+            :visible.sync="equipmentDialogInfo.dialog"
+            width="6rem">
+
+            <div v-if="equipmentDialogInfo.type===1">
+                <el-form :inline="true" label-width="80px">
+                    <el-form-item label="设备编号" required>
+                        <el-input :maxlength="30" v-model="dialogInfo.number" placeholder="请输入设备编号"></el-input>
+                    </el-form-item>
+                    <el-form-item label="设备类型" required>
+                        <el-select v-model="dialogInfo.status"  class="user_list_form_status" placeholder="请选择设备状态">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    </el-form-item>
+                    <el-form-item label="设备名称" required>
+                        <el-input :maxlength="25" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="设备位置" required>
+
+                    </el-form-item>
+                    <el-form-item label="选择门店" required>
+
+                    </el-form-item>
+                </el-form>
+            </div>
+
+
+            <div v-if="equipmentDialogInfo.type===2">
+
+            </div>
+
+            <span slot="footer">
+                <el-button type="primary" @click="submitTableDialog">{{equipmentDialogInfo.btnInfo}}</el-button>
+                <el-button v-if="applicationInfo.type" @click="equipmentDialogInfo.dialog = false">取 消</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -164,6 +205,18 @@
                     currentPage:1,
                     pageSize:10,
                     total:0
+                },
+                equipmentDialogInfo:{
+                    title:'新建设备',
+                    dialog:false,
+                    type:1,
+                    btnInfo:'确定'
+                },
+                dialogInfo:{
+
+                },
+                dialogFace:{
+
                 }
             }
         },

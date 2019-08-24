@@ -6,12 +6,12 @@
         <h3>创建应用</h3>
         <div class="add_application_content">
             <el-form :model="dataDialogForm" ref="dataDialogForm" label-width="80px">
-                <el-form-item label="应用名称" prop="name" required>
+                <el-form-item label="应用名称" prop="name" required >
                     <el-input type="phone" v-model="dataDialogForm.ame" :maxlength="20" placeholder="请输入应用名(20汉字以内)"
-                              autocomplete="off"></el-input>
+                              :disabled="type"   autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="应用类型" prop="type" required>
-                    <el-select v-model="dataDialogForm.category" placeholder="请选择">
+                    <el-select v-model="dataDialogForm.category" placeholder="请选择应用类型">
                         <el-option
                             v-for="item in dataDialogForm.categoryList"
                             :key="item.id"
@@ -25,19 +25,19 @@
 
                 </el-form-item>
                 <el-form-item label="应用描述" prop="passwordstart" required>
-                    <el-input type="textarea" rows="4" show-word-limit :maxlength="100"
-                              v-model="dataDialogForm.passwordstart" placeholder="请设置登录密码（8-16位字母和数字）"
+                    <el-input type="textarea" rows="5" show-word-limit :maxlength="100"
+                              v-model="dataDialogForm.passwordstart" placeholder="请输入应用描述"
                               autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="调用量" prop="type" required>
-                    <el-select v-model="dataDialogForm.category" placeholder="请选择">
+                    <el-select v-model="dataDialogForm.category" placeholder="请选择调用量">
                         <el-option label="100" value="1"></el-option>
                         <el-option label="500" value="2"></el-option>
                         <el-option label="1000" value="3"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="QPS限制" prop="type" required>
-                    <el-select v-model="dataDialogForm.category" placeholder="请选择">
+                    <el-select v-model="dataDialogForm.category" placeholder="请选择QPS限制">
                         <el-option label="10" value="1"></el-option>
                         <el-option label="50" value="2"></el-option>
                         <el-option label="100" value="3"></el-option>
@@ -62,6 +62,11 @@
                 dataDialogForm: {}
             }
         },
+        computed:{
+            type(){
+                return this.$route.query.type == 'edit' ? true : false;
+            }
+        },
         methods: {
             create() {
 
@@ -71,7 +76,7 @@
             }
         },
         mounted() {
-
+            console.log(this.type)
         }
     }
 </script>

@@ -71,6 +71,10 @@ h3{
     background-color: #F1F1F1;
     color: #333333;
 }
+/*禁止textarea拖动*/
+.el-textarea .el-textarea__inner{
+resize: none;
+}
 
 /*滚动条 start*/
 ::-webkit-scrollbar {
