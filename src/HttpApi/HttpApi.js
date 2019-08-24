@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 //全局接口
-const HttpApi = 'http://139.196.161.174:0890';
+const HttpApi = 'http://139.196.161.174:8090';
 //请求头部
 axios.defaults.headers['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true; // 允许携带cookie
@@ -14,7 +14,7 @@ axios.defaults.withCredentials = true; // 允许携带cookie
  * */
 export const apiPost = function(url, data) {
   return new Promise(function(resolve) {
-    axios.post(url, JSON.stringify(data)).then((response) => {
+    axios.post(HttpApi+url, JSON.stringify(data)).then((response) => {
       resolve(response.data)
     }).catch((response) => {
       resolve(response.data)
@@ -32,7 +32,7 @@ export const apiPost = function(url, data) {
 export const apiGet = function(url, data) {
   return new Promise(function(resolve) {
     let params = Object.assign(data);
-    axios.get(url, { params }).then((response) => {
+    axios.get(HttpApi+url, { params }).then((response) => {
       resolve(response.data)
     }).catch((response) => {
       resolve(response.data)

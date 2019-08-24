@@ -37,8 +37,8 @@
       </div>
     </div>
     <div class="header-navRight">
-      <el-button type="text" class="button-login">登陆</el-button>
-      <el-button type="text" class="button-register">注册</el-button>
+      <el-button type="text" class="button-login">注册</el-button>
+      <el-button type="text" class="button-register">登陆</el-button>
       <el-button class="button-console">控制台</el-button>
     </div>
   </nav>

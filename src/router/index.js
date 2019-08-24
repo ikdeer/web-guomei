@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 //CompanyHome
-import CompanyHome from '@/views/CompanyHome/home'
+import Company from '@/views/CompanyHome/coupany'
+import CompanyHome from '@/views/CompanyHome/home/home'
+import login from '@/views/CompanyHome/login/login'
+import userLogin from '@/views/CompanyHome/login/userLogin'
 //CMS
 import Index from '@/views/CMS/index'
 import overview from '@/views/CMS/overview/overview'
@@ -21,12 +24,35 @@ const router = new Router({
   mode:'history',
   routes: [
     {
-      path: '/CompanyHome',
-      name: '国美人脸认证开放平台',
-      component: CompanyHome,
-      meta: {
-        title:'国美人脸认证开放平台',
-      },
+      path: '/Company',
+      name: '首页容器',
+      component: Company,
+      children:[
+        {
+          path: '/Company/CompanyHome',
+          name: '国美人脸认证开放平台',
+          component: CompanyHome,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
+        {
+          path: '/Company/login',
+          name: '国美人脸认证开放平台',
+          component: login,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
+        {
+          path: '/Company/userLogin',
+          name: '国美人脸认证开放平台',
+          component: userLogin,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        }
+      ]
     },
     {
       path: '/Index',
@@ -120,7 +146,7 @@ const router = new Router({
     },
     {
       path: '*',
-      redirect: '/CompanyHome'
+      redirect: '/Company/CompanyHome'
     }
   ]
 })

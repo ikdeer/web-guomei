@@ -1,0 +1,229 @@
+<template>
+  <div class="login">
+    <!-- header导航组件 -->
+    <Header_Nav></Header_Nav>
+    <div class="login-bgImg">
+      <img src="/static/images/banner-login-bg@2x.png" alt="">
+    </div>
+    <div class="login-center">
+      <div class="login-input">
+        <p class="login-text">注册</p>
+        <el-form :model="loginForm" :rules="rules2" ref="loginForm">
+          <div class="loginUser-input">
+            <el-form-item prop="username">
+              <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" v-model="loginForm.username"></el-input>
+            </el-form-item>
+          </div>
+          <div class="loginUser-input">
+            <el-form-item prop="phoneNum">
+              <el-input placeholder="手机号" type="text" v-model="loginForm.phoneNum"></el-input>
+            </el-form-item>
+          </div>
+          <div class="loginUser-input">
+            <el-form-item prop="msgCode">
+              <el-input placeholder="请输入验证码" v-model="loginForm.msgCode">
+                <el-button slot="append"  :disabled='loginForm.disabled' @click="ClickCode()">{{loginForm.codeText}}</el-button>
+              </el-input>
+            </el-form-item>
+          </div>
+          <div class="loginUser-input">
+            <el-form-item prop="mail">
+              <el-input placeholder="邮箱" type="password" v-model="loginForm.mail"></el-input>
+            </el-form-item>
+          </div>
+          <div class="loginUser-input">
+            <el-form-item prop="password">
+              <el-input placeholder="密码" type="password" v-model="loginForm.password"></el-input>
+            </el-form-item>
+          </div>
+          <div class="loginUser-input">
+            <el-form-item prop="password">
+              <el-input placeholder="确认密码" type="password" v-model="loginForm.password"></el-input>
+            </el-form-item>
+          </div>
+          <div class="login-button">
+            <el-form-item>
+              <el-button @click="ClickUserRegister">注册</el-button>
+            </el-form-item>
+          </div>
+        </el-form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
+  import HttpApi from '@/HttpApi/login/loginApi'
+  export default {
+    name: "login",
+    components:{Header_Nav},
+    data(){
+      return {
+        loginForm:{
+          username:'',//用户名
+          phoneNum:'',//手机号码
+          mail:'',//邮箱
+          password:'',//密码, 非MD5
+          msgCode:'',//短信验证码
+          codeText:'发送验证码',
+          disabled:false,
+          outTime: 60,//验证码时间
+          time:'',//时间
+          phoneReg:/^1[3|4|5|7|8][0-9]{9}$/,//手机正则
+        },
+        rules2:{
+          username:[
+            { required: true, message: '用户名(6-20位字母数字)/手机号/邮箱', trigger: 'blur' },
+            { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
+            { pattern: /^\S+$/, message: '用户名不允许有空格', trigger: 'blur' },
+          ],
+          phoneNum:[
+            { required: true, message: '请输入手机号', trigger: 'blur' },
+          ],
+          mail:[
+            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+          ],
+          password:[
+            { required: true, message: '请输入密码', trigger: 'blur' },
+          ],
+          msgCode:[
+            { required: true, message: '请输入短信验证码', trigger: 'blur' },
+          ]
+        }
+      }
+    },
+    methods:{
+      //注册用户接口
+      getUserRegister(){
+        HttpApi.getUserRegister({
+          'username':this.loginForm.username,//用户名
+          'phoneNum':this.loginForm.phoneNum,//手机号码
+          'mail':this.loginForm.mail,//邮箱
+          'password':this.loginForm.password,//密码, 非MD5
+          'msgCode':this.loginForm.msgCode,//短信验证码
+        }).then(response => {
+
+        })
+      },
+      //短信验证码
+      getUserMsgCode(){
+        HttpApi.getUserMsgCode({'phoneNum':this.loginForm.phoneNum,'clientCode':''}).then(response => {
+          if(response.error_code == 0){
+
+          }
+        })
+      },
+      //获取短信证码
+      ClickCode(){
+        let _this = this;
+        this.$refs.loginForm.validateField('phoneNum', (phoneError) => {
+          if(this.loginForm.phoneReg.test(this.loginForm.phoneNum)){
+            this.loginForm.codeText='发送中...';
+            this.loginForm.disabled=true;
+            setTimeout(function(){
+              _this.getUserMsgCode();
+              this.setTime = setInterval(() => {
+                _this.loginForm.time=_this.loginForm.outTime--;
+                _this.loginForm.codeText=_this.loginForm.time+'S后发送';
+                if(_this.loginForm.time <= 0){
+                  _this.loginForm.outTime =60;
+                  clearInterval(_this.setTime);
+                  _this.loginForm.disabled=false;
+                  _this.loginForm.codeText='获取验证码';
+                }
+              },1000);
+            },500);
+          }
+        })
+      },
+      //注册
+      ClickUserRegister(){
+        this.$refs.loginForm.validate((valid) => {
+
+        })
+      }
+    },
+    mounted(){
+
+    }
+  }
+</script>
+
+<style lang="scss">
+  .login{
+    width: 100%;
+    height: 100%;
+    background:linear-gradient(289deg,rgba(26,85,164,1) 0%,rgba(2,25,68,1) 100%);
+    position: absolute;
+    .login-bgImg{
+      width: 8.68rem;
+      height: 7.28rem;
+      position: absolute;
+      left:1.08rem;
+      top: 0.52rem;
+      img{
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
+    .login-center{
+      width: 4.8rem;
+      background: #ffffff;
+      border-radius: 0.1rem;
+      position: absolute;
+      right: 3rem;
+      top: 1.5rem;
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 0.3rem;
+      padding-bottom: 0.2rem;
+      .login-input{
+        width: 3.28rem;
+        .login-text{
+          font-size: 0.26rem;
+          color: #F20A59;
+          font-weight: 600;
+          text-align: center;
+          padding-bottom: 0.2rem;
+        }
+        .loginUser-input{
+          width: 3.28rem;
+          height: 0.4rem;
+          display: flex;
+          display: -webkit-flex;
+          padding-bottom: 0.35rem;
+          .el-form-item{
+            width: 100%;
+            div{
+              input{
+                height: 0.5rem !important;
+                font-size: 0.14rem !important;
+              }
+            }
+          }
+        }
+        .login-button{
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: center;
+          .el-form-item{
+            button{
+              width: 1.6rem;
+              line-height: 0.25rem;
+              font-size: 0.18rem;
+              color: #ffffff;
+              background: #F20A59;
+              border-color: #F20A59;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
