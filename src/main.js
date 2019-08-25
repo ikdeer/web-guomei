@@ -4,12 +4,15 @@ import router from './router'
 import store from './vuex/store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import md5 from 'js-md5'
 import './style/common.css'
 import 'babel-polyfill'
 //头部组件
 import Header from '@/views/CMS/component/header/header.vue'
 import breadcrumb from '@/views/CMS/component/header/BoxHeader.vue'
 import layout from '@/views/CMS/component/layout/layout.vue'
+
+Vue.prototype.$md5 = md5;
 
 Vue.use(ElementUI,{
     size:'small'
@@ -28,8 +31,11 @@ window.onresize = function () {
 rem();
 // 进行rem的计算 因为是已1920px为基准进行计算的，所以为了方便，把1rem等于100px
 function rem() {
-  let width = document.body.clientWidth;
-  let fontSize = document.getElementsByTagName('html')[0].style.fontSize = width / 19.2 + "px";
+  let designSize = 1920; // 设计图尺寸
+  let html = document.documentElement;
+  let wW = html.clientWidth;// 窗口宽度
+  let rem = wW * 100 / designSize;
+  document.documentElement.style.fontSize = rem + 'px';
 }
 
 new Vue({
