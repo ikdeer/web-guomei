@@ -28,7 +28,7 @@
           </div>
           <div class="loginUser-input">
             <el-form-item prop="mail">
-              <el-input placeholder="邮箱" type="password" v-model="loginForm.mail"></el-input>
+              <el-input placeholder="邮箱" type="email" v-model="loginForm.mail"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
@@ -37,8 +37,8 @@
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="password">
-              <el-input placeholder="确认密码" type="password" v-model="loginForm.password"></el-input>
+            <el-form-item prop="confirmPassword">
+              <el-input placeholder="确认密码" type="password" v-model="loginForm.confirmPassword"></el-input>
             </el-form-item>
           </div>
           <div class="login-button">
@@ -59,6 +59,25 @@
     name: "login",
     components:{Header_Nav},
     data(){
+      var password = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.loginForm.confirmPassword !== '') {
+            this.$refs.loginForm.validateField('confirmPassword');
+          }
+          callback();
+        }
+      };
+      var confirmPassword = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.loginForm.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
       return {
         loginForm:{
           username:'',//用户名
@@ -66,6 +85,7 @@
           mail:'',//邮箱
           password:'',//密码, 非MD5
           msgCode:'',//短信验证码
+          confirmPassword:'',//确认密码
           codeText:'发送验证码',
           disabled:false,
           outTime: 60,//验证码时间
@@ -86,7 +106,10 @@
             { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
           ],
           password:[
-            { required: true, message: '请输入密码', trigger: 'blur' },
+            { validator: password, trigger: 'blur' },
+          ],
+          confirmPassword:[
+            { validator: confirmPassword, trigger: 'blur' },
           ],
           msgCode:[
             { required: true, message: '请输入短信验证码', trigger: 'blur' },
@@ -95,23 +118,16 @@
       }
     },
     methods:{
-      //注册用户接口
-      getUserRegister(){
-        HttpApi.getUserRegister({
-          'username':this.loginForm.username,//用户名
-          'phoneNum':this.loginForm.phoneNum,//手机号码
-          'mail':this.loginForm.mail,//邮箱
-          'password':this.loginForm.password,//密码, 非MD5
-          'msgCode':this.loginForm.msgCode,//短信验证码
-        }).then(response => {
-
-        })
-      },
       //短信验证码
       getUserMsgCode(){
         HttpApi.getUserMsgCode({'phoneNum':this.loginForm.phoneNum,'clientCode':''}).then(response => {
-          if(response.error_code == 0){
-
+          if(response.success){
+            this.$message({
+              message: '短信验证码发送成功',
+              type: 'success'
+            });
+          }else{
+            this.$message.error('短信验证码发送失败');
           }
         })
       },
@@ -130,8 +146,8 @@
                 if(_this.loginForm.time <= 0){
                   _this.loginForm.outTime =60;
                   clearInterval(_this.setTime);
-                  _this.loginForm.disabled=false;
-                  _this.loginForm.codeText='获取验证码';
+                  _this.loginForm.disabled = false;
+                  _this.loginForm.codeText = '获取验证码';
                 }
               },1000);
             },500);
@@ -141,7 +157,16 @@
       //注册
       ClickUserRegister(){
         this.$refs.loginForm.validate((valid) => {
+          //注册用户接口
+          HttpApi.getUserRegister({
+            'username':this.loginForm.username,//用户名
+            'phoneNum':this.loginForm.phoneNum,//手机号码
+            'mail':this.loginForm.mail,//邮箱
+            'password':this.loginForm.password,//密码, 非MD5
+            'msgCode':this.loginForm.msgCode,//短信验证码
+          }).then(response => {
 
+          })
         })
       }
     },

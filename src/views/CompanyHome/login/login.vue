@@ -8,24 +8,32 @@
       <div class="login-center">
         <div class="login-input">
           <p class="login-text">登陆</p>
-          <div class="login-phone">
-            <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" v-model="name"></el-input>
-          </div>
-          <div class="login-password">
-            <el-input placeholder="密码" type="password" v-model="password"></el-input>
-          </div>
-          <div class="login-code">
-            <el-input placeholder="请输入验证码" v-model="code">
-              <template slot="append">图片验证码？</template>
-            </el-input>
-          </div>
-          <div class="login-itemText">
-            <span>帐号或密码错误，请重新输入</span>
-            <span>忘记密码</span>
-          </div>
-          <div class="login-button">
-            <el-button>登陆</el-button>
-          </div>
+          <el-form :model="loginForm" :rules="rules2" ref="loginForm">
+            <div class="login-form">
+              <el-form-item prop="username">
+                <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" v-model="loginForm.username"></el-input>
+              </el-form-item>
+            </div>
+            <div class="login-form">
+              <el-form-item prop="password">
+                <el-input placeholder="密码" type="password" v-model="loginForm.password"></el-input>
+              </el-form-item>
+            </div>
+            <div class="login-form">
+              <el-form-item prop="code">
+                <el-input placeholder="请输入验证码" v-model="loginForm.code">
+                  <el-button slot="append">图片验证码？</el-button>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="login-itemText">
+              <span>帐号或密码错误，请重新输入</span>
+              <span>忘记密码</span>
+            </div>
+            <div class="login-button">
+              <el-button @click="ClickUserLogin">登陆</el-button>
+            </div>
+          </el-form>
         </div>
       </div>
     </div>
@@ -33,17 +41,43 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
+  import HttpApi from '@/HttpApi/login/loginApi'
     export default {
         name: "login",
         components:{Header_Nav},
         data(){
           return {
-            name:'',
-            password:'',
-            code:'',
+            loginForm:{
+              username:'',//用户名
+              password:'',//密码
+              code:'',//图片验证码
+            },
+            rules2:{
+              username:[
+                { required: true, message: '用户名(6-20位字母数字)/手机号/邮箱', trigger: 'blur' },
+                { min: 1, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
+                { pattern: /^\S+$/, message: '用户名不允许有空格', trigger: 'blur' },
+              ],
+              password:[
+                { required: true, message: '请输入密码', trigger: 'blur' },
+              ]
+            }
           }
         },
-        created(){
+        methods:{
+          //登陆
+          ClickUserLogin(){
+            this.$refs.loginForm.validate((valid) => {
+              HttpApi.getUserLogin({
+                'username':this.loginForm.username,//用户名
+                'password':this.$md5(this.loginForm.password)//密码
+              }).then(response => {
+
+              })
+            })
+          }
+        },
+        mounted(){
 
         }
     }
@@ -88,40 +122,17 @@
         font-weight: 600;
         text-align: center;
       }
-      .login-phone{
+      .login-form{
         width: 3.28rem;
         height: 0.5rem;
         display: flex;
         display: -webkit-flex;
-        margin-top: 0.45rem;
-        div{
+        margin-top: 0.3rem;
+        .el-form-item{
+          width: 100%;
+          height: 0.5rem !important;
           input{
             height: 0.5rem !important;
-          }
-        }
-      }
-      .login-password{
-        width: 3.28rem;
-        height: 0.5rem;
-        display: flex;
-        display: -webkit-flex;
-        margin-top: 0.35rem;
-        div{
-          input{
-            height: 0.5rem !important;
-          }
-        }
-      }
-      .login-code{
-        width: 3.28rem;
-        height: 0.5rem;
-        display: flex;
-        display: -webkit-flex;
-        margin-top: 0.35rem;
-        div{
-          input{
-            height: 0.5rem !important;
-            font-size: 0.14rem !important;
           }
         }
       }

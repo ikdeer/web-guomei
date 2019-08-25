@@ -15,4 +15,10 @@ export default {
   * @clientCode 客户端code，用来防止重复请求用的
   */
   getUserMsgCode:(params) => apiPost('/user/msgCode',params),
+  /*
+  * 用户登录接口
+  * @username 用户名
+  * @password 密码MD5
+  */
+  getUserLogin:(params) => apiPost('/user/login',params),
 }

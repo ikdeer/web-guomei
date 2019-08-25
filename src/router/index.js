@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 //CompanyHome
 import Company from '@/views/CompanyHome/coupany'
-import CompanyHome from '@/views/CompanyHome/home/home'
 import login from '@/views/CompanyHome/login/login'
 import userLogin from '@/views/CompanyHome/login/userLogin'
+import CompanyHome from '@/views/CompanyHome/home/home'
+import product from '@/views/CompanyHome/product/product'
 //CMS
 import Index from '@/views/CMS/index'
 import overview from '@/views/CMS/overview/overview'
@@ -29,16 +30,8 @@ const router = new Router({
       component: Company,
       children:[
         {
-          path: '/Company/CompanyHome',
-          name: '国美人脸认证开放平台',
-          component: CompanyHome,
-          meta: {
-            title:'国美人脸认证开放平台',
-          },
-        },
-        {
           path: '/Company/login',
-          name: '国美人脸认证开放平台',
+          name: 'login',
           component: login,
           meta: {
             title:'国美人脸认证开放平台',
@@ -46,22 +39,38 @@ const router = new Router({
         },
         {
           path: '/Company/userLogin',
-          name: '国美人脸认证开放平台',
+          name: 'userLogin',
           component: userLogin,
           meta: {
             title:'国美人脸认证开放平台',
           },
-        }
+        },
+        {
+          path: '/Company/CompanyHome',
+          name: 'CompanyHome',
+          component: CompanyHome,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
+        {
+          path: '/Company/product',
+          name: 'product',
+          component: product,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
       ]
     },
     {
       path: '/Index',
-      name: '主页容器',
+      name: 'Index',
       component: Index,
       children:[
         {
           path: '/Index/overview',
-          name: '概览',
+          name: 'overview',
           component: overview,
           meta: {
             title:'',
@@ -70,7 +79,7 @@ const router = new Router({
         },
         {
           path: '/Index/userList',
-          name: '用户管理',
+          name: 'userList',
           component: userList,
           meta: {
             title:'',
@@ -79,7 +88,7 @@ const router = new Router({
         },
         {
           path: '/Index/userInfo',
-          name: '用户列表',
+          name: 'userInfo',
           component:userInfo ,
           meta: {
             title:'',
@@ -87,7 +96,7 @@ const router = new Router({
           },
         },{
           path: '/Index/applicationList',
-          name: '应用列表',
+          name: 'applicationList',
           component:applicationList ,
           meta: {
             title:'',
@@ -95,7 +104,7 @@ const router = new Router({
           },
         },{
           path: '/Index/addApplication',
-          name: '新增应用',
+          name: 'addApplication',
           component:addApplication ,
           meta: {
             title:'',
@@ -103,7 +112,7 @@ const router = new Router({
           },
         },{
           path: '/Index/applicationDetail',
-          name: '应用详情',
+          name: 'applicationDetail',
           component:applicationDetail ,
           meta: {
               title:'',
@@ -111,7 +120,7 @@ const router = new Router({
           },
       },{
             path: '/Index/faceList',
-            name: '人脸分组列表',
+            name: 'faceList',
             component: faceList,
             meta: {
                 title:'',
@@ -119,7 +128,7 @@ const router = new Router({
               }
           },{
             path: '/Index/equipmentList',
-            name: '设备管理',
+            name: 'equipmentList',
             component: equipmentList,
             meta: {
                 title:'',
@@ -127,7 +136,7 @@ const router = new Router({
             }
           },{
             path: '/Index/statement',
-            name: '监控报表',
+            name: 'statement',
             component: statement,
             meta: {
               title:'',
@@ -135,7 +144,7 @@ const router = new Router({
             }
           },{
             path: '/Index/log',
-            name: '操作日志',
+            name: 'log',
             component: log,
             meta: {
               title:'',
