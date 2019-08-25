@@ -142,9 +142,12 @@
             class="equipment_list_dialog"
             :visible.sync="equipmentDialogInfo.dialog"
             width="6rem">
-
+            <div class="equipment_list_steps">
+                <span :class="equipmentDialogInfo.type===1?'active':''">第一步 填写设备信息</span>
+                <span :class="equipmentDialogInfo.type===2?'active':''">第二步 绑定人脸分组</span>
+            </div>
             <div v-if="equipmentDialogInfo.type===1">
-                <el-form :inline="true" label-width="80px">
+                <el-form label-width="1.5rem">
                     <el-form-item label="设备编号" required>
                         <el-input :maxlength="30" v-model="dialogInfo.number" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
@@ -160,22 +163,76 @@
                         <el-input :maxlength="25" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
                     <el-form-item label="设备位置" required>
-
+                        <el-select v-model="dialogInfo.status" placeholder="请选择所属公司">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属部门">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属楼层">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="选择门店" required>
-
+                        <el-select v-model="dialogInfo.status" placeholder="请选择所属大区">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属分部">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属二级分部">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属门店">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
             </div>
 
-
             <div v-if="equipmentDialogInfo.type===2">
-
+                <el-form label-width="1.5rem">
+                    <el-form-item label="人脸分组" required>
+                        <el-select v-model="dialogInfo.status" placeholder="请选择所属公司">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属部门">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属楼层">
+                            <el-option label="国美金融" value=""></el-option>
+                            <el-option label="国美零售" value="1"></el-option>
+                            <el-option label="国美控股" value="2"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <span>还未设置人脸分组？</span>
+                        <el-button size="mini" type="success">去设置人脸分组</el-button>
+                    </el-form-item>
+                </el-form>
             </div>
-
             <span slot="footer">
+                <el-button v-if="equipmentDialogInfo.type===2" @click="goStepsOne">上一步</el-button>
                 <el-button type="primary" @click="submitTableDialog">{{equipmentDialogInfo.btnInfo}}</el-button>
-                <el-button v-if="applicationInfo.type" @click="equipmentDialogInfo.dialog = false">取 消</el-button>
+                <el-button v-if="equipmentDialogInfo.btnShow" @click="equipmentDialogInfo.dialog = false"> 取 消 </el-button>
             </span>
         </el-dialog>
     </div>
@@ -210,7 +267,8 @@
                     title:'新建设备',
                     dialog:false,
                     type:1,
-                    btnInfo:'确定'
+                    btnShow:true,//取消按钮显示隐藏
+                    btnInfo:'保存并下一步'
                 },
                 dialogInfo:{
 
@@ -233,9 +291,15 @@
             clearDepartment(){
 
             },
-
             addEquiment(){//添加设备
-
+                this.equipmentDialogInfo={
+                    title:'新建设备',
+                    dialog:false,
+                    type:1,
+                    btnShow:true,//取消按钮显示隐藏
+                    btnInfo:'保存并下一步'
+                };
+                this.equipmentDialogInfo.dialog = true;
             },
             search(){
 
@@ -276,7 +340,21 @@
                 this.page.currentPage = val;
                 this.search()
             },
+            goStepsOne(){
+                this.equipmentDialogInfo.type=1;
+                this.equipmentDialogInfo.btnInfo='保存并下一步';
 
+            },
+            submitTableDialog(){
+                if(this.equipmentDialogInfo.type === 1){
+                    this.equipmentDialogInfo.type=2;
+                    this.equipmentDialogInfo.btnInfo=' 确 定 ';
+                }else{
+                    //请求保存接口，发送ajax
+
+                }
+
+            },
         }
     }
 </script>
@@ -313,6 +391,67 @@
             .equipment_footer{
                 margin-top: 10px;
                 text-align: right;
+            }
+        }
+    }
+    .equipment_list_dialog{
+        .equipment_list_steps{
+            height: 0.5rem;
+            margin-bottom: 10px;
+            span{
+                width: 40%;
+                background: #EFEDED;
+                position: relative;
+                display: inline-block;
+                height: .5rem;
+                line-height: 0.5rem;
+                color: #666666;
+                text-align: center;
+                padding-left: 0.3rem;
+                &:after{
+                    content: '';
+                    display: block;
+                    border-top: 0.25rem solid transparent;
+                    border-bottom: 0.25rem solid transparent;
+                    border-left: 0.4rem solid #EFEDED;
+                    position: absolute;
+                    right: -0.4rem;
+                    top: 0;
+                    z-index: 10;
+                }
+                &:before{
+                    content: '';
+                    display: block;
+                    border-top: 0.25rem solid #EFEDED;
+                    border-bottom: 0.25rem solid #EFEDED;
+                    border-left: 0.4rem solid white;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+                &:last-child{
+                    margin-left: 8px;
+                }
+            }
+            .active{
+                color: white;
+                background: #409EFF;
+                &:after{
+                    border-left: 0.4rem solid #409EFF;
+                }
+                &:before{
+                    border-top: 0.25rem solid #409EFF;
+                    border-bottom: 0.25rem solid #409EFF;
+                }
+            }
+        }
+        .el-form{
+            padding: 0 30px;
+            .el-input{
+                width: 200px;
+            }
+            .marginTop{
+                margin-top: 10px;
             }
         }
     }
