@@ -41,7 +41,7 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
-  import {getUseerLogin} from '@/HttpApi/login/loginApi'
+  import {getUserLogin} from '@/HttpApi/login/loginApi'
     export default {
         name: "login",
         components:{Header_Nav},
