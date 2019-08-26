@@ -39,7 +39,7 @@
     <div class="header-navRight">
       <el-button type="text" class="button-login">注册</el-button>
       <el-button type="text" class="button-register">登陆</el-button>
-      <el-button class="button-console">控制台</el-button>
+      <el-button class="button-console" @click="ClickWhetherLogin">控制台</el-button>
     </div>
   </nav>
 </template>
@@ -50,6 +50,16 @@
     data(){
       return {
 
+      }
+    },
+    methods:{
+      //检查是否登陆
+      ClickWhetherLogin(){
+        if(this.Cookies.get('token')){
+          this.$router.push({path: '/Index/overview'});
+        }else{
+          this.$router.push({path: '/Company/login'});
+        }
       }
     }
   }

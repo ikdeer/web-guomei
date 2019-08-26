@@ -54,7 +54,7 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
-  import HttpApi from '@/HttpApi/login/loginApi'
+  import {getUserMsgCode,getUserRegister} from '@/HttpApi/login/loginApi'
   export default {
     name: "login",
     components:{Header_Nav},
@@ -119,8 +119,8 @@
     },
     methods:{
       //短信验证码
-      getUserMsgCode(){
-        HttpApi.getUserMsgCode({'phoneNum':this.loginForm.phoneNum,'clientCode':''}).then(response => {
+      UserMsgCode(){
+        getUserMsgCode({'phoneNum':this.loginForm.phoneNum,'clientCode':''}).then(response => {
           if(response.success){
             this.$message({
               message: '短信验证码发送成功',
@@ -139,7 +139,7 @@
             this.loginForm.codeText='发送中...';
             this.loginForm.disabled=true;
             setTimeout(function(){
-              _this.getUserMsgCode();
+              _this.UserMsgCode();
               this.setTime = setInterval(() => {
                 _this.loginForm.time=_this.loginForm.outTime--;
                 _this.loginForm.codeText=_this.loginForm.time+'S后发送';
@@ -158,7 +158,7 @@
       ClickUserRegister(){
         this.$refs.loginForm.validate((valid) => {
           //注册用户接口
-          HttpApi.getUserRegister({
+          getUserRegister({
             'username':this.loginForm.username,//用户名
             'phoneNum':this.loginForm.phoneNum,//手机号码
             'mail':this.loginForm.mail,//邮箱
