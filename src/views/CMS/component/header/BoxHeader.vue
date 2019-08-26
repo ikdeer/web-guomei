@@ -14,7 +14,8 @@
     },
     watch: {
       $route(newVal,oldVal){
-        //this.routerList = newVal.meta.routeList;
+        console.log(newVal);
+        this.routerList = newVal.meta.routeList;
       }
     },
     mounted(){

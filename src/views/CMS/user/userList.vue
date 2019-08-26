@@ -1,7 +1,7 @@
 <template>
     <div class="userlist">
         <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
+            <breadcrumb></breadcrumb>
         </nav>
         <h3>用户列表</h3>
         <div class="userlist_content">
@@ -151,8 +151,10 @@
 </template>
 
 <script>
+    import breadcrumb from '@/views/CMS/component/header/BoxHeader'
     export default {
         name: "userList",
+        components:{breadcrumb},
         data() {
             let username = (rule, value, callback) => {
                 if(value){

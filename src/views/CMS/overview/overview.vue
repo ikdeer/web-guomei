@@ -1,7 +1,7 @@
 <template>
     <div class="overIew">
       <nav class="overIew-nav">
-        <layout-breadcrumb></layout-breadcrumb>
+        <breadcrumb></breadcrumb>
       </nav>
       <div class="overIew-content">
         <div class="overIew-use">
@@ -149,8 +149,10 @@
 </template>
 
 <script>
+    import breadcrumb from '@/views/CMS/component/header/BoxHeader'
     export default {
         name: "overview",
+        components:{breadcrumb},
         data(){
           return {
             value6:'',
