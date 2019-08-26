@@ -5,7 +5,7 @@
         </nav>
         <div class="face_top">
             <h3>人脸分组列表</h3>
-            <el-button type="primary" @click="see(scope.row)">添加人脸头像</el-button>
+            <el-button type="primary" @click="updateFace">上传人脸图片</el-button>
         </div>
         <div class="content">
             <div class="face_list_form">
@@ -32,7 +32,7 @@
                 </el-form>
                 <div class="face_list_btn">
                     <div>
-                        <el-button type="primary" @click="addface">创建用户</el-button>
+                        <el-button type="primary" @click="addGroup">创建分组</el-button>
                     </div>
                     <div>
                         <el-button type="primary" @click="search">查询</el-button>
@@ -73,13 +73,80 @@
                         label="操作" align="center">
                         <template slot-scope="scope">
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
-                            <el-button type="text" style="color: #E56565;" @click="down(scope.row)">修改分组</el-button>
-                            <el-button type="text" style="color: #67C23A;" @click="on(scope.row)">添加人像</el-button>
+                            <el-button type="text" @click="editGroup(scope.row)">修改分组</el-button>
+                            <el-button type="text" @click="addFace(scope.row)">添加人像</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
         </div>
+
+        <el-dialog
+            title="提示"
+            class="face__upload_dialog"
+            :visible.sync="dataDialogForm.uploadFaceDialog"
+            width="60%">
+            <h3>填写人员信息</h3>
+            <el-form :inline="true" :model="dataDialogForm"  ref="dataDialogForm" label-width="80px">
+                <el-form-item label="图片来源" required>
+                    <el-select v-model="dataDialogForm.status" placeholder="请选择图片来源">
+                        <el-option label="美办" value="0"></el-option>
+                        <el-option label="考勤" value="1"></el-option>
+                        <el-option label="监控" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="编号" required>
+                    <el-select v-model="dataDialogForm.status" placeholder="请选择编号系统">
+                        <el-option label="PS" value="0"></el-option>
+                        <el-option label="SAP" value="1"></el-option>
+                    </el-select>
+                    <el-input :maxlength="20" v-model="dataDialogForm.name" placeholder="请输入编号"></el-input>
+                </el-form-item>
+                <el-form-item label="类型" required>
+                    <el-select v-model="dataDialogForm.status" placeholder="请选择类型">
+                        <el-option label="国美员工" value="0"></el-option>
+                        <el-option label="国美会员" value="1"></el-option>
+                        <el-option label="游客" value="3"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="姓名" required>
+                    <el-input :maxlength="10" v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="性别" required>
+                    <el-select v-model="dataDialogForm.status" placeholder="请选择性别">
+                        <el-option label="男" value="0"></el-option>
+                        <el-option label="女" value="1"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div class="upload_face">
+                <h3>上传图片</h3>
+                <div class="upload">
+                    <el-upload
+                        class="avatar-uploader"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <div v-else class="upload_info" >
+                            <i class="el-icon-picture-outline"></i>
+                            <p class="btn">点此添加图片</p>
+                            <p>请上传用户正面，无遮挡照片</p>
+                            <p>仅支持PNG、JPG、JPEG、BMP格式，大小5M以内</p>
+                            <p>若包含多张人脸，则只注册图片中"可检测到的最大脸"</p>
+                        </div>
+                    </el-upload>
+                </div>
+            </div>
+            <span slot="footer">
+                <el-button @click="userListAddDialog = false">取 消</el-button>
+                <el-button type="primary" @click="userListAddDialog = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
+
+
     </div>
 </template>
 
@@ -95,10 +162,17 @@
                     dataTime:''
                 },
                 tableData:[{}],
+                dataDialogForm:{
+                    uploadFaceDialog:false,
+                },
+                imageUrl: ''
             }
         },
         methods: {
-            addface(){
+            updateFace(){
+                this.dataDialogForm.uploadFaceDialog = true;
+            },
+            addGroup(){
 
             },
             search(){
@@ -113,6 +187,30 @@
                 };
                 this.search();
             },
+            see(){
+
+            },
+            editGroup(){
+
+            },
+            addFace(){
+
+            },
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
         },
     }
 </script>
@@ -125,6 +223,7 @@
             display: -webkit-flex;
             justify-content: space-between;
             align-items: center;
+            margin: 5px;
         }
         .content{
             background:rgba(255,255,255,1);
@@ -155,5 +254,76 @@
                 justify-content: space-between;
             }
         }
+    }
+    .face__upload_dialog{
+        h3{
+            color: #666666;
+        }
+        .el-form{
+            .el-select{
+                width: 140px;
+            }
+            .el-input{
+                width: 140px;
+            }
+        }
+        .upload_face{
+            width: 100%;
+            height: 280px;
+            display: flex;
+            display: -webkit-flex;
+            .upload{
+                margin-left: 20px;
+                width: 90%;
+                display: flex;
+                display: -webkit-flex;
+                justify-content: space-around;
+                border:1px dashed #eeeeee;
+                background: #f6f6f6;
+                .avatar-uploader{
+                    height: 100%;
+                    width: 50%;
+                    display: flex;
+                    display: -webkit-flex;
+                    align-items: center;
+                    justify-content: space-around;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                        overflow: hidden;
+                    }
+                    .el-icon-picture-outline{
+                        font-size: .8rem;
+                        color: #cccccc;
+                    }
+                    .upload_info{
+                        display: flex;
+                        display: -webkit-flex;
+                        align-items: center;
+                        flex-direction: column;
+                        justify-content: space-around;
+                        p{
+                            line-height: 20px;
+                            color: #A5A5A5;
+                            font-size: 12px;
+                        }
+                        .btn{
+                            width: 140px;
+                            height: .5rem;
+                            text-align: center;
+                            line-height: .5rem;
+                            color: white;
+                            margin-bottom: 5px;
+                            -webkit-border-radius: 5px;
+                            -moz-border-radius: 5px;
+                            border-radius: 5px;
+                            background: #409EFF;
+                        }
+
+                    }
+                }
+            }
+        }
+
     }
 </style>
