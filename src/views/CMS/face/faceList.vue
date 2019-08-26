@@ -5,7 +5,7 @@
         </nav>
         <div class="face_top">
             <h3>人脸分组列表</h3>
-            <el-button type="primary" @click="see(scope.row)">添加人脸头像</el-button>
+            <el-button type="primary" @click="updateFace">上传人脸图片</el-button>
         </div>
         <div class="content">
             <div class="face_list_form">
@@ -32,7 +32,7 @@
                 </el-form>
                 <div class="face_list_btn">
                     <div>
-                        <el-button type="primary" @click="addface">创建用户</el-button>
+                        <el-button type="primary" @click="addGroup">创建分组</el-button>
                     </div>
                     <div>
                         <el-button type="primary" @click="search">查询</el-button>
@@ -73,13 +73,45 @@
                         label="操作" align="center">
                         <template slot-scope="scope">
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
-                            <el-button type="text" style="color: #E56565;" @click="down(scope.row)">修改分组</el-button>
-                            <el-button type="text" style="color: #67C23A;" @click="on(scope.row)">添加人像</el-button>
+                            <el-button type="text" @click="editGroup(scope.row)">修改分组</el-button>
+                            <el-button type="text" @click="addFace(scope.row)">添加人像</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
         </div>
+
+        <el-dialog
+            title="提示"
+            class="user_list_add_dialog"
+            :visible.sync="userListAddDialog"
+            width="80%">
+            <el-form :model="dataDialogForm"  :rules="addDialogRules" ref="dataDialogForm" label-width="80px">
+                <el-form-item label="用户名" prop="username" required>
+                    <el-input type="phone" v-model="dataDialogForm.username" :maxlength="20" placeholder="请输入用户名(6-20位字母数字)" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="手机号" prop="phone" required>
+                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phone" placeholder="请输入手机号" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email" required>
+                    <el-input type="phone" v-model="dataDialogForm.email" placeholder="请输入邮箱（XXX@XXXX）" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="设置密码" prop="passwordstart" required>
+                    <el-input type="phone" :maxlength="16" v-model="dataDialogForm.passwordstart" show-password placeholder="请设置登录密码（8-16位字母和数字）" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="passwordend" required>
+                    <el-input type="phone" :maxlength="16" v-model="dataDialogForm.passwordend" show-password placeholder="请确认登录密码" autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer">
+                <el-button @click="userListAddDialog = false">取 消</el-button>
+                <el-button type="primary" @click="userListAddDialog = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
+
+
     </div>
 </template>
 
@@ -98,7 +130,10 @@
             }
         },
         methods: {
-            addface(){
+            updateFace(){
+
+            },
+            addGroup(){
 
             },
             search(){
@@ -113,6 +148,15 @@
                 };
                 this.search();
             },
+            see(){
+
+            },
+            editGroup(){
+
+            },
+            addFace(){
+
+            }
         },
     }
 </script>
@@ -125,6 +169,7 @@
             display: -webkit-flex;
             justify-content: space-between;
             align-items: center;
+            margin: 5px;
         }
         .content{
             background:rgba(255,255,255,1);
