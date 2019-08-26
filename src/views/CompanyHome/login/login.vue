@@ -41,7 +41,7 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
-  import HttpApi from '@/HttpApi/login/loginApi'
+  import {getUseerLogin} from '@/HttpApi/login/loginApi'
     export default {
         name: "login",
         components:{Header_Nav},
@@ -67,12 +67,17 @@
         methods:{
           //登陆
           ClickUserLogin(){
+            let _this = this;
             this.$refs.loginForm.validate((valid) => {
-              HttpApi.getUserLogin({
-                'username':this.loginForm.username,//用户名
-                'password':this.$md5(this.loginForm.password)//密码
-              }).then(response => {
-
+              getUserLogin({'username':this.loginForm.username,'password':this.$md5(this.loginForm.password)})
+                .then(response => {
+                if(response.data.success){
+                  this.Cookies.set('token',response.data.data.token);
+                  this.$message({message: '登陆成功', type: 'success'});
+                  setTimeout(()=>{
+                    _this.$router.push({path: '/Company/CompanyHome'});
+                  },500)
+                }
               })
             })
           }

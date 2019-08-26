@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    import {getMenuList} from '@/HttpApi/layout/layoutApi'
     export default {
         name: "layout",
         data(){
@@ -85,10 +86,15 @@
           //路径跳转
           clickRouter(item){
             this.$router.push({path:item.iconRouter});
-          }
+          },
+          MenuList(){
+            getMenuList().then(response => {
+
+            })
+          },
         },
         mounted(){
-
+          this.MenuList();
         }
     }
 </script>

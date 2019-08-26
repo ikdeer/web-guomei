@@ -5,6 +5,7 @@ import store from './vuex/store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import md5 from 'js-md5'
+import Cookie from 'js-cookie'
 import './style/common.css'
 import 'babel-polyfill'
 //头部组件
@@ -13,6 +14,8 @@ import breadcrumb from '@/views/CMS/component/header/BoxHeader.vue'
 import layout from '@/views/CMS/component/layout/layout.vue'
 
 Vue.prototype.$md5 = md5;
+
+Vue.prototype.Cookies = Cookie;
 
 Vue.use(ElementUI,{
     size:'small'
