@@ -15,23 +15,24 @@
                         <el-input :maxlength="20" v-model="formData.id" placeholder="请输入APPID"></el-input>
                     </el-form-item>
                     <el-form-item label="应用状态">
-                        <el-select v-model="formData.status" placeholder="请选择状态">
+                        <el-select v-model="formData.state" placeholder="请选择状态">
                             <el-option label="全部" value=""></el-option>
-                            <el-option label="未开始" value="1"></el-option>
-                            <el-option label="进行中" value="2"></el-option>
-                            <el-option label="已结束" value="3"></el-option>
+                            <el-option label="新建" value="1"></el-option>
+                            <el-option label="修改" value="2"></el-option>
+                            <el-option label="审核完成" value="10"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="审核状态">
-                        <el-select v-model="formData.status" placeholder="请选择状态">
+                        <el-select v-model="formData.reviewState" placeholder="请选择状态">
                             <el-option label="全部" value=""></el-option>
-                            <el-option label="未开始" value="1"></el-option>
-                            <el-option label="进行中" value="2"></el-option>
-                            <el-option label="已结束" value="3"></el-option>
+                            <el-option label="待提交" value="1"></el-option>
+                            <el-option label="待审核" value="10"></el-option>
+                            <el-option label="审核不通过" value="20"></el-option>
+                            <el-option label="审核通过" value="21"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" v-model="formData.user" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -60,18 +61,18 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="username"
-                        label="用户名">
+                        prop="name"
+                        label="应用名称">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="telphone"
-                        label="手机号">
+                        prop="appTypeName"
+                        label="应用类型">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="email"
-                        label="邮箱">
+                        prop="id"
+                        label="appID">
                     </el-table-column>
                     <el-table-column
                         align="center"
@@ -80,13 +81,23 @@
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
-                        label="最近一次登录">
+                        prop="lastModifyTime"
+                        label="最后修改时间">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="status"
-                        label="账号状态">
+                        prop="createrName"
+                        label="创建人">
+                    </el-table-column>
+                    <el-table-column
+                        align="center"
+                        prop="showEnable"
+                        label="应用状态">
+                    </el-table-column>
+                    <el-table-column
+                        align="center"
+                        prop="showReviewState"
+                        label="审核状态">
                     </el-table-column>
                     <el-table-column
                         label="操作" align="center">
@@ -106,7 +117,7 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="page.currentPage"
+                    :current-page="page.page"
                     :page-sizes="[10, 20, 50, 100]"
                     :page-size="page.pageSize"
                     background
@@ -155,14 +166,24 @@
 </template>
 
 <script>
+    import {formatTimes} from "../../../lib/utils";
+    import {getAppList} from '@/HttpApi/application/application';
     export default {
         name: "applicationList",
         data() {
             return {
-                formData: {},
+                formatTimes:formatTimes,
+                formData: {
+                    name:'',
+                    id:'',
+                    state:'',
+                    reviewState:'',
+                    createName:'',
+                    dataTime:null
+                },
                 tableData: [{}],
                 page: {
-                    currentPage: 1,
+                    page: 1,
                     pageSize: 10,
                     total: 500
                 },
@@ -186,10 +207,34 @@
                 this.$router.push({path: '/Index/addApplication', query: {type: 'add'}})
             },
             search() {
+                //查询应用列表
+                let params = {
+                    ...this.page,...this.formData,
+                    creatTimeStart:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[0]):'',
+                    creatTimeEnd:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[1]):''
+                };
+                getAppList(params).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data.list;
+                        this.page.total = data.pagerManager.totalResults;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+
+                })
+
 
             },
             reset() {
-
+                this.formData= {
+                    name:'',
+                    appID:'',
+                    appState:'',
+                    reviewState:'',
+                    createBy:'',
+                    dataTime:null
+                };
+                this.search();
             },
             statement() {
                 //查看报表
@@ -276,12 +321,27 @@
                 this.search()
             },
             handleCurrentChange(val) {
-                this.page.currentPage = val;
+                this.page.page = val;
                 this.search()
             },
+            GetTimeStr(inputTime) {
+                var date = new Date(inputTime);
+                var y = date.getFullYear();
+                var m = date.getMonth() + 1;
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('0' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+            }
         },
         mounted() {
-
+            this.search()
         }
     }
 </script>

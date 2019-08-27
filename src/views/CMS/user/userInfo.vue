@@ -7,12 +7,12 @@
         <div class="info">
             <div class="info_title">
                 <img src="/static/images/touxiang.jpeg" alt="">
-                <div>你好<br/>欢迎使用</div>
+                <div>你好<br/>欢迎使用国美人脸认证开放平台</div>
             </div>
-            <div class="info_list">&emsp;用户名：admin</div>
+            <div class="info_list">&emsp;用户名：{{info.name}}</div>
             <div class="info_list">手机绑定：
                 <div class="info_list_inp">
-                    <span v-if="info.phoneStatus">{{info.phone}}</span>
+                    <span v-if="info.phoneStatus">{{info.phoneNum}}</span>
                     <el-button v-if="info.phoneStatus" type="text" @click="info.phoneStatus = false" style="margin-left: 15px">编辑</el-button>
                     <el-input v-if="!info.phoneStatus" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
@@ -23,7 +23,7 @@
             </div>
             <div class="info_list">邮箱绑定：
                 <div class="info_list_inp">
-                    <span v-if="info.emailStatus">{{info.email}}</span>
+                    <span v-if="info.emailStatus">{{info.mail}}</span>
                     <el-button v-if="info.emailStatus" type="text" @click="info.emailStatus = false" style="margin-left: 15px">编辑</el-button>
                     <el-input v-if="!info.emailStatus" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
@@ -43,15 +43,15 @@
                 :data="tableData"
                 style="width: 100%">
                 <el-table-column
-                    prop="username"
+                    prop="name"
                     label="用户名">
                 </el-table-column>
                 <el-table-column
-                    prop="telphone"
+                    prop="phoneNum"
                     label="手机号">
                 </el-table-column>
                 <el-table-column
-                    prop="email"
+                    prop="mail"
                     label="邮箱">
                 </el-table-column>
                 <el-table-column
@@ -67,7 +67,7 @@
 
 
         <el-dialog
-            title="新增联系人"
+            :title="dataDialogForm.isEdit?'编辑联系人':'新增联系人'"
             class="user_info_add_dialog"
             :visible.sync="userInfoAddDialog"
             width="30%">
@@ -84,7 +84,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer">
-                <el-button type="primary" @click="userInfoAddDialog = false">确 定</el-button>
+                <el-button type="primary" @click="addContact">确 定</el-button>
                 <el-button @click="userInfoAddDialog = false">取 消</el-button>
             </span>
         </el-dialog>
@@ -93,6 +93,8 @@
 </template>
 
 <script>
+    import {formatTimes} from '@/lib/utils'
+    import {userDetail,userContactList,delContactInfo,addUserContact,editUserContact,editUserInfo} from '@/HttpApi/user/user';
     export default {
         name: "userInfo",
         data(){
@@ -132,11 +134,14 @@
             };
 
             return {
+                formatTimes:formatTimes,
+                id:'',
                 input:'15738668129',
                 info:{
-                    phone:'18898089898',
+                    name:'',
+                    phoneNum:'',
                     phoneStatus:true,
-                    email:'okdaewr@gamil.com',
+                    mail:'',
                     emailStatus:true,
                     status:1,
                 },
@@ -145,7 +150,9 @@
                 dataDialogForm:{
                     name:'',
                     phone:'',
-                    email:''
+                    email:'',
+                    id:'',
+                    isEdit:false
                 },
                 adduserDialogRules:{
                     name:[
@@ -162,18 +169,101 @@
         },
         methods:{
             edit(row){
-
+                this.dataDialogForm={
+                    name:row.name,
+                    phone:row.phoneNum,
+                    email:row.mail,
+                    id:row.id,
+                    isEdit:true,
+                };
+                this.userInfoAddDialog = true;
             },
             remove(row){
-
+                delContactInfo({id:row.id}).then(({data})=>{
+                    if(data.success){
+                        this.$message.success('删除成功');
+                        this.getContactList()
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             adduser(){
+                this.dataDialogForm={
+                    name:'',
+                    phone:'',
+                    email:'',
+                    id:this.id,
+                    isEdit:false,
+                };
                 this.userInfoAddDialog = true;
+            },
+            addContact(){
+                this.$refs['dataDialogForm'].validate((valid) => {
+                    if (valid) {
+                        let params = {
+                            id:this.dataDialogForm.id,
+                            name:this.dataDialogForm.name,
+                            mail:this.dataDialogForm.email,
+                            phoneNum:this.dataDialogForm.phone,
+                        };
+                        if(this.dataDialogForm.isEdit){
+                            //编辑联系人
+                            editUserContact(params).then(({data})=>{
+                                if(data.success){
+                                    this.$message.success('编辑成功');
+                                    this.getContactList();
+                                    this.userInfoAddDialog = false;
+                                }else{
+                                    this.$message.warning(data.errorInfo)
+                                }
+                            })
+                        }else{
+                            //新增联系人
+                            addUserContact(params).then(({data})=>{
+                                if(data.success){
+                                    this.$message.success('添加成功');
+                                    this.getContactList();
+                                    this.userInfoAddDialog = false;
+                                }else{
+                                    this.$message.warning(data.errorInfo)
+                                }
+                            })
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            getUserDetail(){
+                userDetail({id:this.id}).then(({data})=>{
+                    if(data.success){
+                        this.info.name = data.data.name;
+                        this.info.mail = data.data.mail;
+                        this.info.phoneNum = data.data.phoneNum;
+                        this.info.name = data.data.name;
+                        this.info.status = data.data.accountState;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
+            getContactList(){
+                userContactList({id:this.id}).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             }
         },
         mounted(){
-
+            this.id = this.$route.query.id;
+            this.getUserDetail();
+            this.getContactList();
         },
+
         filters:{
             status(val){
                 if(val==1){
@@ -181,9 +271,6 @@
                 }
                 if(val==2){
                     return '未启用'
-                }
-                if(val==3){
-                    return '已禁用'
                 }
                 return '没有'
             }
