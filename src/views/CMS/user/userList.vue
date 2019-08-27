@@ -8,17 +8,16 @@
             <div class="user_list_form">
                 <el-form :inline="true">
                     <el-form-item label="手机号">
-                        <el-input :maxlength="11" v-model="formData.tel" placeholder="请输入手机号"></el-input>
+                        <el-input :maxlength="11" v-model="formData.phoneNumList" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱">
-                        <el-input :maxlength="20" v-model="formData.email" placeholder="请输入邮箱"></el-input>
+                        <el-input :maxlength="20" v-model="formData.mailList" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="账号状态">
-                        <el-select v-model="formData.status"  class="user_list_form_status" placeholder="请选择状态">
+                        <el-select v-model="formData.accountState"  class="user_list_form_status" placeholder="请选择状态">
                             <el-option label="全部" value=""></el-option>
-                            <el-option label="未开始" value="1"></el-option>
-                            <el-option label="进行中" value="2"></el-option>
-                            <el-option label="已结束" value="3"></el-option>
+                            <el-option label="已停用" value="0"></el-option>
+                            <el-option label="使用中" value="1"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建时间">
@@ -53,35 +52,41 @@
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="telphone"
+                        prop="phoneNum"
                         label="手机号">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="email"
+                        prop="mail"
                         label="邮箱">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="createTime"
                         label="创建时间">
+                        <template slot-scope="scope">
+                            {{GetTimeStr(scope.row.createTime)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
                         label="最近一次登录">
+                        <template slot-scope="scope">
+                            {{GetTimeStr(scope.row.lastLoginTime)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="status"
                         label="账号状态">
+                        <template slot-scope="scope">
+                            {{scope.row.accountState | accountState}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         label="操作" align="center">
                         <template slot-scope="scope">
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
-                            <el-button type="text" style="color: #E56565;" @click="down(scope.row)">停用</el-button>
-                            <el-button type="text" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                            <el-button type="text" v-if="scope.row.accountState === 1" style="color: #E56565;" @click="down(scope.row)">停用</el-button>
+                            <el-button type="text" v-if="scope.row.accountState === 0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
                             <el-button type="text" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -91,9 +96,9 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="page.currentPage"
+                    :current-page="page.page"
                     :page-sizes="[10, 20, 30, 40]"
-                    :page-size="page.pageSize"
+                    :page-size="page.pageCount"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="page.total">
@@ -102,7 +107,7 @@
         </div>
 
         <el-dialog
-            title="提示"
+            title="创建用户"
             class="user_list_add_dialog"
             :visible.sync="userListAddDialog"
             width="30%">
@@ -111,11 +116,11 @@
                     <el-input type="phone" v-model="dataDialogForm.username" :maxlength="20" placeholder="请输入用户名(6-20位字母数字)" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="手机号" prop="phone" required>
-                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phone" placeholder="请输入手机号" autocomplete="off"></el-input>
+                    label="手机号" prop="phoneNum" required>
+                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phoneNum" placeholder="请输入手机号" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email" required>
-                    <el-input type="phone" v-model="dataDialogForm.email" placeholder="请输入邮箱（XXX@XXXX）" autocomplete="off"></el-input>
+                <el-form-item label="邮箱" prop="mail" required>
+                    <el-input type="phone" v-model="dataDialogForm.mail" placeholder="请输入邮箱（XXX@XXXX）" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="设置密码" prop="passwordstart" required>
                     <el-input type="phone" :maxlength="16" v-model="dataDialogForm.passwordstart" show-password placeholder="请设置登录密码（8-16位字母和数字）" autocomplete="off"></el-input>
@@ -126,7 +131,7 @@
             </el-form>
             <span slot="footer">
                 <el-button @click="userListAddDialog = false">取 消</el-button>
-                <el-button type="primary" @click="userListAddDialog = false">确 定</el-button>
+                <el-button type="primary" @click="createUser">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -151,7 +156,8 @@
 </template>
 
 <script>
-    import breadcrumb from '@/views/CMS/component/header/BoxHeader'
+    import breadcrumb from '@/views/CMS/component/header/BoxHeader';
+    import { getUserList,createUser,removeUser,enableUser } from '@/HttpApi/user/user';
     export default {
         name: "userList",
         components:{breadcrumb},
@@ -216,22 +222,22 @@
 
             return {
                 formData:{
-                    tel:'',
-                    email:'',
-                    status:'',
-                    dataTime:''
+                    phoneNumList:'',
+                    mailList:'',
+                    accountState:'',
+                    dataTime:null
                 },
-                tableData:[{}],
+                tableData:[],
                 page:{
-                    currentPage:1,
-                    pageSize:10,
-                    total:500
+                    page:1,
+                    pageCount:10,
+                    total:0
                 },
                 userListAddDialog:false,
                 dataDialogForm:{ //弹窗创建用户信息
                     username:'',
-                    phone:'',
-                    email:'',
+                    phoneNum:'',
+                    mail:'',
                     passwordstart:'',
                     passwordend:'',
                 },
@@ -241,16 +247,16 @@
                     btnInfo:'',
                     type:true,
                     statys:0,
-                    id:''
+                    uid:''
                 },
                 addDialogRules:{
                     username:[
                         {validator:username,trigger:['blur','change']}
                     ],
-                    phone:[
+                    phoneNum:[
                         {validator:phone,trigger:['blur','change']}
                     ],
-                    email:[
+                    mail:[
                         {validator:email,trigger:['blur','change']}
                     ],
                     passwordstart:[
@@ -266,22 +272,33 @@
             adduser(){
                 this.dataDialogForm = {
                     username:'',
-                    phone:'',
-                    email:'',
+                    phoneNum:'',
+                    mail:'',
                     passwordstart:'',
                     passwordend:'',
                 };
                 this.userListAddDialog = true;
             },
             search(){
-
+                let params = {
+                    ...this.formData,...this.page,
+                    creatTimeStart:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[0]):'',
+                    creatTimeEnd:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[1]):''
+                };
+                getUserList(params).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                });
             },
             reset(){
                 this.formData = {
-                    tel:'',
-                    email:'',
-                    status:'',
-                    dataTime:''
+                    phoneNumList:'',
+                    mailList:'',
+                    accountState:'',
+                    dataTime:null
                 };
                 this.search();
             },
@@ -294,7 +311,7 @@
                     btnInfo:'停用',
                     type:true,
                     status:1,
-                    id:row.id
+                    uid:row.uid
                 };
                 this.userListTableDialog = true;
             },
@@ -304,7 +321,7 @@
                     btnInfo:'知道了',
                     type:false,
                     status:2,
-                    id:row.id
+                    uid:row.uid
                 };
                 this.userListTableDialog = true;
             },
@@ -314,26 +331,88 @@
                     btnInfo:'删除',
                     type:true,
                     status:3,
-                    id:row.id
+                    uid:row.uid
                 };
                 this.userListTableDialog = true;
             },
             handleSizeChange(val){
-                this.page.pageSize = val;
+                this.page.pageCount = val;
                 this.search()
             },
             handleCurrentChange(val){
-                this.page.currentPage = val;
+                this.page.page = val;
                 this.search()
+            },
+            createUser(){
+                this.$refs['dataDialogForm'].validate((valid) => {
+                    if (valid) {
+                        let params = {
+                            ...this.dataDialogForm,
+                            password:this.$md5(this.dataDialogForm.passwordend)
+                        };
+                        createUser(params).then(({data})=>{
+
+                        })
+                    } else {
+                        return false;
+                    }
+                });
             },
             submitTableDialog(){
                 /*
                 * 提交 停用/禁用/删除 操作
                 * this.userListTableInfo.status 标识点击的是那种形式  1-停用操作  2-启用操作 3-删除操作
                 * */
+                let params = {
+                    uid:this.userListTableInfo.uid
+                };
+                if(this.userListTableInfo.status===1){
+                    params.enable = 0
+                }
+                if(this.userListTableInfo.status===2){
+                    params.enable = 1
+                }
+                if(this.userListTableInfo.status===3){
+                    removeUser({uid:this.userListTableInfo.uid}).then(({data})=>{
+
+                    })
+                }else{
+                    enableUser(params).then(({data})=>{
+
+                    })
+                }
                 console.log(this.userListTableInfo)
+            },
+            GetTimeStr(inputTime) {
+                var date = new Date(inputTime);
+                var y = date.getFullYear();
+                var m = date.getMonth() + 1;
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('0' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
             }
         },
+        mounted(){
+            this.search();
+        },
+        filters:{
+            accountState(val){
+                if(val==0){
+                    return '已停用'
+                }
+                if(val == 1){
+                    return '使用中'
+                }
+                return ''
+            }
+        }
     }
 </script>
 
