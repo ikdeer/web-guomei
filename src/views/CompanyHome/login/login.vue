@@ -52,6 +52,10 @@
               password:'',//密码
               code:'',//图片验证码
             },
+            userInfo:{
+              userName:'',//用户姓名
+              userImg:''//用户头头像
+            },
             rules2:{
               username:[
                 { required: true, message: '用户名(6-20位字母数字)/手机号/邮箱', trigger: 'blur' },
@@ -73,6 +77,9 @@
                 .then(response => {
                 if(response.data.success){
                   this.Cookies.set('token',response.data.data.token);
+                  this.userInfo.userName = response.data.data.username;
+                  this.userInfo.userImg = response.data.data.username.substring(0,1);
+                  localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
                   this.$message({message: '登陆成功', type: 'success'});
                   setTimeout(()=>{
                     _this.$router.push({path: '/Company/CompanyHome'});

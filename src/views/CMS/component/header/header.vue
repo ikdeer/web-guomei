@@ -9,7 +9,7 @@
           <img class="header-issue" src="/static/images/Shape_btn@2x.png" alt="">
           <div class="header-name">
             <img src="/static/images/meizhi.JPG" alt="">
-            <span>孙大爷来了</span>
+            <span>{{userInfo.userName}}</span>
           </div>
           <img class="header-Badge" src="/static/images/arrow_btn@2x.png" alt="">
         </div>
@@ -18,12 +18,22 @@
 
 <script>
     export default {
-        name: "header",
-        data(){
-          return {
-
+      name: "header",
+      data(){
+        return {
+          userInfo:{
+            userName:'',//用户姓名
+            userImg:'',//用户头像
           }
         }
+      },
+      methods:{
+
+      },
+      mounted(){
+        this.userInfo.userName = JSON.parse(localStorage.getItem('userInfo')).userName;
+        this.userInfo.userImg = JSON.parse(localStorage.getItem('userInfo')).userImg;
+      }
     }
 </script>
 
