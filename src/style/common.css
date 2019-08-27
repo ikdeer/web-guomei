@@ -36,7 +36,7 @@ ol,li,ul,dl,dt,dd{
 h3{
     color: #333333;
     font-weight: 600;
-    font-size: .16rem;
+    font-size: .18rem;
     height: .5rem;
     line-height: .5rem;
 }
@@ -73,6 +73,14 @@ h3{
 .el-table th {
     background-color: #F1F1F1;
     color: #333333;
+}
+.el-checkbox__input{
+    line-height: normal;
+    vertical-align: top;
+}
+.el-checkbox__input .el-checkbox__inner{
+    width: .2rem;
+    height: .2rem;
 }
 /*禁止textarea拖动*/
 .el-textarea .el-textarea__inner{

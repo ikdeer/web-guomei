@@ -12,6 +12,8 @@ import overview from '@/views/CMS/overview/overview'
 import userList from '@/views/CMS/user/userList'
 import userInfo from '@/views/CMS/user/userInfo'
 import faceList from '@/views/CMS/face/faceList'
+import addGroup from '@/views/CMS/face/addGroup'
+import groupList from '@/views/CMS/face/groupList'
 import equipmentList from '@/views/CMS/equipment/equipmentList'
 import statement from '@/views/CMS/statement/statement'
 import log from '@/views/CMS/operationLog/log'
@@ -119,38 +121,54 @@ const router = new Router({
               code:3
           },
       },{
-            path: '/Index/faceList',
-            name: 'faceList',
-            component: faceList,
-            meta: {
-                title:'',
-                code:4
-              }
-          },{
-            path: '/Index/equipmentList',
-            name: 'equipmentList',
-            component: equipmentList,
-            meta: {
-                title:'',
-                code:5
-            }
-          },{
-            path: '/Index/statement',
-            name: 'statement',
-            component: statement,
-            meta: {
-              title:'',
-              code:6
-            }
-          },{
-            path: '/Index/log',
-            name: 'log',
-            component: log,
-            meta: {
-              title:'',
-              code:7
-            }
-          },
+        path: '/Index/faceList',
+        name: 'faceList',
+        component: faceList,
+        meta: {
+            title:'',
+            code:4
+          }
+      },{
+        path: '/Index/addGroup',
+        name: 'addGroup',
+        component: addGroup,
+        meta: {
+          title:'',
+          code:4
+        }
+      },{
+        path: '/Index/groupList',
+        name: 'groupList',
+        component: groupList,
+        meta: {
+          title:'',
+          code:4
+        }
+      },{
+        path: '/Index/equipmentList',
+        name: 'equipmentList',
+        component: equipmentList,
+        meta: {
+            title:'',
+            code:5
+        }
+      },{
+        path: '/Index/statement',
+        name: 'statement',
+        component: statement,
+        meta: {
+          title:'',
+          code:6
+        }
+      },{
+        path: '/Index/log',
+        name: 'log',
+        component: log,
+        meta: {
+          title:'',
+          code:7
+        }
+      },
       ],
     },
     {

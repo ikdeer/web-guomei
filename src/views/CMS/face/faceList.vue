@@ -173,7 +173,7 @@
                 this.dataDialogForm.uploadFaceDialog = true;
             },
             addGroup(){
-
+                this.$router.push({path:'/Index/addGroup',query:{type:''}})
             },
             search(){
 
