@@ -38,4 +38,14 @@ export const getUserMsgCode = (params) => {
     })
   })
 }
-
+/**
+ * 用户登出接口
+ * @token 请求头部添加
+ **/
+export const getUserLogout = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/user/logout', params).then(response => {
+      resolve(response)
+    })
+  })
+}
