@@ -6,6 +6,8 @@ import login from '@/views/CompanyHome/login/login'
 import userLogin from '@/views/CompanyHome/login/userLogin'
 import CompanyHome from '@/views/CompanyHome/home/home'
 import product from '@/views/CompanyHome/product/product'
+import solution from '@/views/CompanyHome/product/solution'
+import APITCF from '@/views/CompanyHome/TCF/APITCF'
 //CMS
 import Index from '@/views/CMS/index'
 import overview from '@/views/CMS/overview/overview'
@@ -33,7 +35,7 @@ const router = new Router({
       children:[
         {
           path: '/Company/login',
-          name: 'login',
+          name: '登陆',
           component: login,
           meta: {
             title:'国美人脸认证开放平台',
@@ -41,7 +43,7 @@ const router = new Router({
         },
         {
           path: '/Company/userLogin',
-          name: 'userLogin',
+          name: '注册',
           component: userLogin,
           meta: {
             title:'国美人脸认证开放平台',
@@ -49,7 +51,7 @@ const router = new Router({
         },
         {
           path: '/Company/CompanyHome',
-          name: 'CompanyHome',
+          name: '国美首页',
           component: CompanyHome,
           meta: {
             title:'国美人脸认证开放平台',
@@ -57,8 +59,24 @@ const router = new Router({
         },
         {
           path: '/Company/product',
-          name: 'product',
+          name: '产品服务',
           component: product,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
+        {
+          path: '/Company/solution',
+          name: '解决方案',
+          component: solution,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
+        {
+          path: '/Company/APITCF',
+          name: '技术文档',
+          component: APITCF,
           meta: {
             title:'国美人脸认证开放平台',
           },

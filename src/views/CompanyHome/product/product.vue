@@ -194,7 +194,7 @@
             border-bottom: 1px solid #cccccc;
             span{
               color:#333333;
-              font-size: 0.22rem;
+              font-size: 0.2rem;
               font-weight: 400;
               margin-left: 0.18rem;
             }
