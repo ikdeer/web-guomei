@@ -23,33 +23,29 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="username"
-                        label="用户名">
+                        prop="name"
+                        label="API">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="telphone"
-                        label="手机号">
+                        prop="showEnable"
+                        label="状态">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="email"
-                        label="邮箱">
+                        width="380"
+                        prop="transferAddr"
+                        label="请求地址">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="createTime"
-                        label="创建时间">
+                        prop="amountLimit"
+                        label="调用量限制">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
-                        label="最近一次登录">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="status"
-                        label="账号状态">
+                        prop="qpsLimit"
+                        label="QPS限制">
                     </el-table-column>
                     <el-table-column
                         label="操作" align="center">
@@ -74,7 +70,7 @@
         </div>
         <h3>应用描述</h3>
         <div class="application_detail_button">
-            测试应用测试应用测试应用测试应用测试应用测试应用测试应用测试应用
+            {{introduction}}
         </div>
     </div>
 </template>
@@ -122,6 +118,7 @@
                     content:''
                 }],
                 tableData:[],
+                introduction:'',
                 page:{
                     currentPage:1,
                     pageSize:10,
@@ -145,7 +142,7 @@
                         this.InfoTwo[3].content = data.data.data.lastModifyTime;
                         this.InfoTwo[4].content = data.data.data.name;
                         this.InfoTwo[5].content = data.data.data.createrName;
-
+                        this.introduction = data.data.data.introduction;
                         this.tableData = data.data.data.apisList;
                         this.page.total = data.pagerManager.totalResults;
                     }else{
@@ -191,6 +188,7 @@
                     box-sizing: border-box;
                     &:nth-child(1){
                         background: #F1F1F1;
+                        font-weight: 600;
                         border-right: 1px solid white;
                     }
                 }
@@ -205,6 +203,7 @@
                     line-height: .5rem;
                     box-sizing: border-box;
                     &:nth-child(1){
+                        font-weight: 600;
                         background: #F1F1F1;
                         border-right: 1px solid white;
                     }
