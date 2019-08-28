@@ -80,56 +80,78 @@
 </template>
 
 <script>
+    import {formatTimes} from "../../../lib/utils";
+    import { getApplicationDetail } from '@/HttpApi/application/application';
     export default {
         name: "applicationDetail",
         data(){
             return{
                 InfoOne:[{
                     title:'应用名称',
-                    content:'人脸检测测试'
+                    content:''
                 },{
                     title:'应用类型',
-                    content:'人脸考勤'
+                    content:''
                 },{
                     title:'AppID',
-                    content:'15742488'
+                    content:''
                 },{
                     title:'API Key',
-                    content:'LbMWyASnkAorE0jNuv2G'
+                    content:''
                 },{
                     title:'Secret Key',
-                    content:'5fQEelBmRVRyDw9Ua45L'
+                    content:''
                 }],
                 InfoTwo:[{
                     title:'应用状态',
-                    content:'启用'
+                    content:''
                 },{
                     title:'审核状态',
-                    content:'审核通过'
+                    content:''
                 },{
                     title:'创建时间',
-                    content:'2019-07-09 11:20:35'
+                    content:''
                 },{
                     title:'修改时间',
-                    content:'2019-07-09 11:20:35'
+                    content:''
                 },{
                     title:'QPS限制',
-                    content:'10'
+                    content:''
                 },{
                     title:'创建人',
-                    content:'admin'
+                    content:''
                 }],
                 tableData:[],
                 page:{
                     currentPage:1,
                     pageSize:10,
-                    total:500
+                    total:0
                 }
             }
         },
         methods:{
             search(){
+                getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
+                    if(data.success){
+                        this.InfoOne[0].content = data.data.data.name;
+                        this.InfoOne[1].content = data.data.data.appTypeName;
+                        this.InfoOne[2].content = data.data.data.id;
+                        this.InfoOne[3].content = data.data.data.apiKey;
+                        this.InfoOne[4].content = data.data.data.secretKey;
 
+                        this.InfoTwo[0].content = data.data.data.showEnable;
+                        this.InfoTwo[1].content = data.data.data.showReviewState;
+                        this.InfoTwo[2].content = data.data.data.createTime;
+                        this.InfoTwo[3].content = data.data.data.lastModifyTime;
+                        this.InfoTwo[4].content = data.data.data.name;
+                        this.InfoTwo[5].content = data.data.data.createrName;
+
+                        this.tableData = data.data.data.apisList;
+                        this.page.total = data.pagerManager.totalResults;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             down(){
 
@@ -144,7 +166,7 @@
             },
         },
         mounted(){
-
+            this.search()
         }
     }
 </script>

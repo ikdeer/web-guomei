@@ -64,14 +64,14 @@
                         align="center"
                         label="创建时间">
                         <template slot-scope="scope">
-                            {{GetTimeStr(scope.row.createTime)}}
+                            {{formatTimes(scope.row.createTime)}}
                         </template>
                     </el-table-column>
                     <el-table-column
                         align="center"
                         label="最近一次登录">
                         <template slot-scope="scope">
-                            {{GetTimeStr(scope.row.lastLoginTime)}}
+                            {{formatTimes(scope.row.lastLoginTime)}}
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -157,6 +157,7 @@
 
 <script>
     import breadcrumb from '@/views/CMS/component/header/BoxHeader';
+    import {formatTimes} from '@/lib/utils'
     import { getUserList,createUser,removeUser,enableUser } from '@/HttpApi/user/user';
     export default {
         name: "userList",
@@ -221,19 +222,20 @@
             };
 
             return {
-                formData:{
+                formatTimes:formatTimes,
+                formData:{ //查询信息
                     phoneNumList:'',
                     mailList:'',
                     accountState:'',
                     dataTime:null
                 },
-                tableData:[],
+                tableData:[],//用户列表
                 page:{
                     page:1,
                     pageCount:10,
                     total:0
                 },
-                userListAddDialog:false,
+                userListAddDialog:false,//新增用户弹窗
                 dataDialogForm:{ //弹窗创建用户信息
                     username:'',
                     phoneNum:'',
@@ -241,13 +243,13 @@
                     passwordstart:'',
                     passwordend:'',
                 },
-                userListTableDialog:false,
+                userListTableDialog:false,//提示信息弹窗
                 userListTableInfo:{
                     title:'',
                     btnInfo:'',
                     type:true,
                     statys:0,
-                    uid:''
+                    id:''
                 },
                 addDialogRules:{
                     username:[
@@ -269,7 +271,7 @@
             }
         },
         methods: {
-            adduser(){
+            adduser(){//新增用户
                 this.dataDialogForm = {
                     username:'',
                     phoneNum:'',
@@ -282,8 +284,8 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
-                    creatTimeStart:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[0]):'',
-                    creatTimeEnd:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[1]):''
+                    creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
+                    creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
                 };
                 getUserList(params).then(({data})=>{
                     if(data.success){
@@ -303,7 +305,7 @@
                 this.search();
             },
             see(row){
-                this.$router.push({ path: '/Index/userInfo', query: { id: '1' }})
+                this.$router.push({ path: '/Index/userInfo', query: { id: row.id }})
             },
             down(row){
                 this.userListTableInfo = {
@@ -311,7 +313,7 @@
                     btnInfo:'停用',
                     type:true,
                     status:1,
-                    uid:row.uid
+                    id:row.id
                 };
                 this.userListTableDialog = true;
             },
@@ -321,7 +323,7 @@
                     btnInfo:'知道了',
                     type:false,
                     status:2,
-                    uid:row.uid
+                    id:row.id
                 };
                 this.userListTableDialog = true;
             },
@@ -331,7 +333,7 @@
                     btnInfo:'删除',
                     type:true,
                     status:3,
-                    uid:row.uid
+                    id:row.id
                 };
                 this.userListTableDialog = true;
             },
@@ -351,7 +353,12 @@
                             password:this.$md5(this.dataDialogForm.passwordend)
                         };
                         createUser(params).then(({data})=>{
-
+                            if(data.success){
+                                this.search();
+                                this.userListAddDialog = false;
+                            }else{
+                                this.$message.warning(data.errorInfo)
+                            }
                         })
                     } else {
                         return false;
@@ -364,7 +371,7 @@
                 * this.userListTableInfo.status 标识点击的是那种形式  1-停用操作  2-启用操作 3-删除操作
                 * */
                 let params = {
-                    uid:this.userListTableInfo.uid
+                    id:this.userListTableInfo.id
                 };
                 if(this.userListTableInfo.status===1){
                     params.enable = 0
@@ -373,31 +380,27 @@
                     params.enable = 1
                 }
                 if(this.userListTableInfo.status===3){
-                    removeUser({uid:this.userListTableInfo.uid}).then(({data})=>{
-
+                    removeUser({id:this.userListTableInfo.id}).then(({data})=>{
+                        if(data.success){
+                            this.search();
+                            this.$message.success('删除成功');
+                            this.userListTableDialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
                     })
                 }else{
                     enableUser(params).then(({data})=>{
-
+                        if(data.success){
+                            this.search();
+                            this.$message.success(this.userListTableInfo.status===1?'停用成功':'启用成功');
+                            this.userListTableDialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
                     })
                 }
-                console.log(this.userListTableInfo)
             },
-            GetTimeStr(inputTime) {
-                var date = new Date(inputTime);
-                var y = date.getFullYear();
-                var m = date.getMonth() + 1;
-                m = m < 10 ? ('0' + m) : m;
-                var d = date.getDate();
-                d = d < 10 ? ('0' + d) : d;
-                var h = date.getHours();
-                h = h < 10 ? ('0' + h) : h;
-                var minute = date.getMinutes();
-                var second = date.getSeconds();
-                minute = minute < 10 ? ('0' + minute) : minute;
-                second = second < 10 ? ('0' + second) : second;
-                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-            }
         },
         mounted(){
             this.search();

@@ -17,7 +17,7 @@
                         <el-input :maxlength="20" v-model="formData.id" placeholder="请输入人脸分组ID"></el-input>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" v-model="formData.user" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" v-model="formData.createBy" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -151,15 +151,18 @@
 </template>
 
 <script>
+    import {formatTimes} from '@/lib/utils'
+    import {getFaceList} from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
             return {
+                formatTimes:formatTimes,
                 formData:{
                     name:'',
                     id:'',
-                    user:'',
-                    dataTime:''
+                    createBy:'',
+                    dataTime:null
                 },
                 tableData:[{}],
                 dataDialogForm:{
@@ -176,14 +179,25 @@
                 this.$router.push({path:'/Index/addGroup',query:{type:''}})
             },
             search(){
-
+                let params = {
+                    ...this.formData,...this.page,
+                    creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
+                    creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
+                };
+                getFaceList(params).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             reset(){
                 this.formData = {
-                    tel:'',
-                    email:'',
-                    status:'',
-                    dataTime:''
+                    name:'',
+                    id:'',
+                    createBy:'',
+                    dataTime:null
                 };
                 this.search();
             },
