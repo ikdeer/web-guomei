@@ -4,30 +4,55 @@
     <Header_Nav></Header_Nav>
     <div class="gm-apiContent">
       <div class="gm-menu">
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-          background-color="#ffffff"
-          text-color="#333333"
-          active-text-color="#666666">
-          <el-submenu index="1">
-            <template slot="title">
-              <span>导航一</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">
-                <span>选项1</span>
-              </el-menu-item>
-            </el-submenu>
-          </el-submenu>
-        </el-menu>
+        <div class="menu-introduction">
+          <span class="menu-text">文档目录</span>
+          <i class="el-icon-s-fold"></i>
+        </div>
+        <div class="menu-list" v-for="(item,index) in dataList">
+          <div class="menu-gm" @click="ClickMenu(item,index)">
+            <span class="menu-text">{{item.text}}</span>
+            <i class="el-icon-arrow-down gm-sbc"></i>
+          </div>
+          <div :class="item.isText ? 'menu-levelShow menu-level' : 'menu-level'"
+               v-for="(items,indexs) in item.DataText">
+            <div class="level-gm" @click="ClickLevel(items,indexs)">
+              <span class="menu-text">{{items.text}}</span>
+              <i class="el-icon-arrow-down gm-sbc"></i>
+            </div>
+            <div :class="items.isText ? 'menu-itm menu-itmShow' : 'menu-itm'"
+                 v-for="(itemss,index) in items.DataText">
+              <span class="menu-text">{{itemss.text}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gm-content">
+        <nav class="gm-nav">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item>首页</el-breadcrumb-item>
+            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
+        <div class="gm-contentPad">
+          <h4 class="gm-contentPadText">人脸检测</h4>
+          <div class="gm-contentArea">
+            <div class="contentArea-left" :style="contentStyleObj"></div>
+            <div class="contentArea-right">
+              <div class="contentArea-catalogue">
+                <h4 class="catalogue-h4">文本目录</h4>
+                <p class="catalogue-p">人脸检测与属性分析</p>
+                <div class="catalogue-list">
+                  <span>能力介绍</span>
+                  <span>调用方式</span>
+                  <span>请求说明</span>
+                  <span>返回说明</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -40,16 +65,77 @@
       components:{Header_Nav},
       data(){
         return {
-
+          dataList:[
+            {
+              'text':'技术文档',
+              'isText':false,
+              'DataText':[
+                {
+                  'text':'API文档1',
+                  'isText':false,
+                  'DataText':[
+                    {'text':'人脸检测'}
+                  ]
+                },
+                {
+                  'text':'SDK',
+                  'isText':false,
+                }
+              ]
+            },
+            {
+              'text':'技术大咖',
+              'isText':false,
+              'DataText':[
+                {
+                  'text':'API文档2',
+                  'isText':false,
+                  'DataText':[
+                    {'text':'人员追踪'}
+                  ]
+                }
+              ]
+            }
+          ],
+          contentStyleObj:{
+            height:''
+          }
         }
       },
+      created(){
+        this.getHeight();
+        window.addEventListener('resize', this.getHeight);
+
+      },
       methods:{
-        handleOpen(key, keyPath) {
-          console.log(key, keyPath);
+        getHeight(){
+          this.contentStyleObj.height = window.innerHeight - 120+'px';
         },
-        handleClose(key, keyPath) {
-          console.log(key, keyPath);
+        //一级目录
+        ClickMenu(item,index){
+          if(item.isText){
+            for(let i =0; i < this.dataList[index].DataText.length; i++){
+              this.dataList[index].DataText[i].isText = false;
+            }
+            item.isText = false;
+          }else{
+            for(let i =0; i < this.dataList.length; i++){
+              this.dataList[i].isText = false;
+            }
+            item.isText = true;
+          }
+        },
+        //二级目录
+        ClickLevel(items,indexs){
+          if(items.isText){
+            items.isText = false;
+          }else{
+            items.isText = true;
+          }
         }
+      },
+      destroyed() {
+        window.removeEventListener('resize', this.getHeight)
       }
     }
 </script>
@@ -59,9 +145,11 @@
   width: 100%;
   .header-nav{
     position:static;
+    cursor: pointer;
   }
   .gm-apiContent{
     width: 100%;
+    background:#F8F8F8;
     .gm-menu{
       width: 2.6rem;
       height: 100%;
@@ -69,23 +157,186 @@
       position: absolute;
       left: 0;
       box-shadow:0 0.02rem 0.04rem 0 rgba(0,0,0,0.1);
+      z-index: 100;
+      cursor: pointer;
+      .menu-introduction{
+        padding-left: 0.4rem;
+        padding-right: 0.3rem;
+        min-height: 0.6rem;
+        line-height: 0.6rem;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        .menu-text{
+          font-size: 0.16rem;
+          color: #666666;
+        }
+        .el-icon-s-fold{
+          font-size: 0.2rem;
+          color: #666666;
+        }
+      }
+      .menu-list{
+        width: 100%;
+        cursor: pointer;
+        .menu-gm{
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-left: 0.4rem;
+          padding-right: 0.3rem;
+          min-height: 0.6rem;
+          line-height: 0.6rem;
+          .menu-text{
+            font-size: 0.16rem;
+            color: #333333;
+            font-weight: 600;
+          }
+          .gm-sbc{
+            font-size: 0.2rem;
+            color: #dddddd;
+          }
+        }
+        .menu-levelShow{
+          display: block !important;
+          -webkit-animation: slide-down .5s linear;
+          transition: max-height .3s linear;
+          transform-origin: 50% 0;
+        }
+        @-webkit-keyframes slide-down{
+          from {transform: scale(1,0);}
+          to{transform: scale(1,1);}
+        }
+        .menu-level{
+          width: 100%;
+          display: none;
+          .level-gm{
+            display: flex;
+            display: -webkit-flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 0.73rem;
+            padding-right: 0.3rem;
+            min-height: 0.6rem;
+            line-height: 0.6rem;
+            .menu-text{
+              font-size: 0.16rem;
+              color: #666666;
+              font-weight: 500;
+            }
+            .gm-sbc{
+              font-size: 0.2rem;
+              color: #dddddd;
+            }
+          }
+          .menu-itmShow{
+            -webkit-animation: slide-down .5s ease-in;
+            transition: max-height .3s ease-in;
+            transform-origin: 50% 0;
+            display: block !important;
+          }
+          @-webkit-keyframes slide-down{
+            0%{transform: scale(1,0);}
+            25%{transform: scale(1,1.2);}
+            50%{transform: scale(1,0.85);}
+            75%{transform: scale(1,1.05);}
+            100%{transform: scale(1,1);}
+          }
+          .menu-itm{
+            width: 100%;
+            display: none;
+            min-height: 0.6rem;
+            line-height: 0.6rem;
+            background: #F8F8F8;
+            .menu-text{
+              font-size: 0.16rem;
+              color: #036FE2;
+              font-weight: 500;
+              margin-left: 1.06rem;
+            }
+          }
+        }
+      }
     }
-  }
-}
-.el-menu{
-  width: 100%;
-  height: 100%;
-  .el-submenu{
-    .el-submenu__title{
-      >span{
-        font-weight: 600;
-        font-size: 0.16rem;
-        color: #333333;
-        margin-left: 0.4rem;
+    .gm-content{
+      width: 86%;
+      height: 100%;
+      position: absolute;
+      right: 0;
+      left: 2.6rem;
+      background: #F8F8F8;
+      .gm-nav{
+        width: auto;
+        height: 0.56rem;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        border-bottom: 1px dashed #979797;
+        margin-left: 0.32rem;
+        .el-breadcrumb{
+          font-size:0.16rem;
+          color:#999999;
+        }
+      }
+      .gm-contentPad{
+        width: auto;
+        margin-left:0.32rem;
+        .gm-contentPadText{
+          width: 100%;
+          line-height:0.6rem;
+          font-size: 0.18rem;
+          color:#333333;
+        }
+        .gm-contentArea{
+          width: 100%;
+          display: flex;
+          display: -webkit-flex;
+          justify-content: space-between;
+          .contentArea-left{
+            width: 85%;
+            background: #ffffff;
+            box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
+            border-radius:0.1rem;
+            overflow-x: hidden;
+          }
+          .contentArea-right{
+            width: 15%;
+            display: flex;
+            display: -webkit-flex;
+            justify-content: center;
+            cursor: pointer;
+            .contentArea-catalogue{
+              width: 80%;
+              .catalogue-h4{
+                font-size:0.18rem;
+                color: #333333;
+              }
+              .catalogue-p{
+                font-size:0.16rem;
+                color: #333333;
+                padding: 0.2rem 0;
+              }
+              .catalogue-list{
+                span{
+                  display: block;
+                  font-size:0.14rem;
+                  color: #333333;
+                  margin-bottom: 0.1rem;
+                  text-indent:0.1rem;
+                }
+                span:first-child{
+                  color:#036FE2;
+                  border-left: 0.02rem solid #036FE2;
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
 }
-
-
 </style>
