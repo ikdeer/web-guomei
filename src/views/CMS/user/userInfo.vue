@@ -13,22 +13,22 @@
             <div class="info_list">手机绑定：
                 <div class="info_list_inp">
                     <span v-if="info.phoneStatus">{{info.phoneNum}}</span>
-                    <el-button v-if="info.phoneStatus" type="text" @click="info.phoneStatus = false" style="margin-left: 15px">编辑</el-button>
-                    <el-input v-if="!info.phoneStatus" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
+                    <el-button v-if="info.phoneStatus" type="text" @click="editPhone" style="margin-left: 15px">编辑</el-button>
+                    <el-input v-if="!info.phoneStatus" v-model.number="info.phone" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
                 <div class="info_list_btn" v-if="!info.phoneStatus">
-                    <el-button type="primary" @click="info.phoneStatus = true">确定</el-button>
+                    <el-button type="primary" @click="submitPhone">确定</el-button>
                     <el-button @click="info.phoneStatus = true">取消</el-button>
                 </div>
             </div>
             <div class="info_list">邮箱绑定：
                 <div class="info_list_inp">
                     <span v-if="info.emailStatus">{{info.mail}}</span>
-                    <el-button v-if="info.emailStatus" type="text" @click="info.emailStatus = false" style="margin-left: 15px">编辑</el-button>
-                    <el-input v-if="!info.emailStatus" v-model="input" :maxlength="11" placeholder="请输入内容"></el-input>
+                    <el-button v-if="info.emailStatus" type="text" @click="editEmail" style="margin-left: 15px">编辑</el-button>
+                    <el-input v-if="!info.emailStatus" v-model="info.email" :maxlength="30" placeholder="请输入内容"></el-input>
                 </div>
                 <div class="info_list_btn" v-if="!info.emailStatus">
-                    <el-button type="primary" @click="info.emailStatus = true">确定</el-button>
+                    <el-button type="primary" @click="submitEmail">确定</el-button>
                     <el-button @click="info.emailStatus = true">取消</el-button>
                 </div>
             </div>
@@ -123,7 +123,6 @@
             let email = (rule, value, callback) => {
                 if(value){
                     if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value)){
-                        console.log(value)
                         return callback(new Error('邮箱格式错误'));
                     }else{
                         return callback()
@@ -136,12 +135,13 @@
             return {
                 formatTimes:formatTimes,
                 id:'',
-                input:'15738668129',
                 info:{
                     name:'',
                     phoneNum:'',
                     phoneStatus:true,
+                    phone:'',
                     mail:'',
+                    email:'',
                     emailStatus:true,
                     status:1,
                 },
@@ -168,6 +168,52 @@
             }
         },
         methods:{
+            editPhone(){
+                this.info.phone = this.info.phoneNum;
+                this.info.phoneStatus = false;
+            },
+            submitPhone(){
+                if(/^1[3456789]\d{9}$/.test(this.info.phone)){
+                    //修改手机号
+                    editUserInfo({
+                        id:this.id,
+                        phoneNum:this.info.phone
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.getUserDetail();
+                            this.$message.success('修改成功');
+                            this.info.phoneStatus = true;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }else{
+                    this.$message.warning('手机号格式不正确！');
+                }
+            },
+            editEmail(){
+                this.info.email = this.info.mail;
+                this.info.emailStatus = false;
+            },
+            submitEmail(){
+                if(/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(this.info.email)){
+                    //修改邮箱
+                    editUserInfo({
+                        id:this.id,
+                        mail:this.info.email
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.getUserDetail();
+                            this.$message.success('修改成功');
+                            this.info.emailStatus = true;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }else{
+                    this.$message.warning('邮箱格式不正确！');
+                }
+            },
             edit(row){
                 this.dataDialogForm={
                     name:row.name,
@@ -179,14 +225,20 @@
                 this.userInfoAddDialog = true;
             },
             remove(row){
-                delContactInfo({id:row.id}).then(({data})=>{
-                    if(data.success){
-                        this.$message.success('删除成功');
-                        this.getContactList()
-                    }else{
-                        this.$message.warning(data.errorInfo)
-                    }
-                })
+                this.$confirm('此操作将删除该联系人, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    delContactInfo({id:row.id}).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('删除成功');
+                            this.getContactList()
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }).catch(() => {});
             },
             adduser(){
                 this.dataDialogForm={
@@ -235,7 +287,7 @@
                     }
                 });
             },
-            getUserDetail(){
+            getUserDetail(){//获取用户详情
                 userDetail({id:this.id}).then(({data})=>{
                     if(data.success){
                         this.info.name = data.data.name;
@@ -248,7 +300,7 @@
                     }
                 })
             },
-            getContactList(){
+            getContactList(){//获取联系人列表
                 userContactList({id:this.id}).then(({data})=>{
                     if(data.success){
                         this.tableData = data.data

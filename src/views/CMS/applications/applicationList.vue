@@ -167,7 +167,7 @@
 
 <script>
     import {formatTimes} from "../../../lib/utils";
-    import {getAppList} from '@/HttpApi/application/application';
+    import {getAppList,disableApplication,delApplication,auditApplication} from '@/HttpApi/application/application';
     export default {
         name: "applicationList",
         data() {
@@ -195,6 +195,7 @@
                     status:1,//来源状态 1-启用 2-禁用 3-删除
                     type:true,//取消按钮状态
                     isAudit:false,//是否是审核弹窗
+                    id:1
                 },
                 auditInfo:{
                     radio:0,
@@ -210,8 +211,8 @@
                 //查询应用列表
                 let params = {
                     ...this.page,...this.formData,
-                    creatTimeStart:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[0]):'',
-                    creatTimeEnd:this.formData.dataTime?this.GetTimeStr(this.formData.dataTime[1]):''
+                    creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
+                    creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
                 };
                 getAppList(params).then(({data})=>{
                     if(data.success){
@@ -220,10 +221,7 @@
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
-
                 })
-
-
             },
             reset() {
                 this.formData= {
@@ -239,9 +237,9 @@
             statement() {
                 //查看报表
             },
-            see() {
+            see(row) {
                 //查看应用详情
-                this.$router.push({path: '/Index/applicationDetail', query: {id: 1}})
+                this.$router.push({path: '/Index/applicationDetail', query: {id: row.id}})
             },
             edit() {
                 //编辑应用
@@ -249,12 +247,13 @@
             },
             audit(row){
                 this.applicationInfo={
-                    title:'启用应用',
-                    info:'APPIDXXXXX应用接口已启用',
+                    title:'审核应用',
+                    info:'',
                     btnInfo:'确定',
                     type:true,
                     isAudit:true,
-                    status:4
+                    status:4,
+                    id:row.id
                 };
                 this.auditInfo={
                     radio:0,
@@ -262,58 +261,113 @@
                 };
                 this.applicationTableDialog = true;
             },
-            on() {
+            on(row) {
                 //启用
-                this.applicationInfo={
-                    title:'启用应用',
-                    info:'APPIDXXXXX应用接口已启用',
-                    btnInfo:'我知道了',
-                    type:false,
-                    isAudit:false,
-                    status:1
-                };
-                this.applicationTableDialog = true;
+                disableApplication({
+                    appID:row.id,
+                    enable:1
+                }).then(({data})=>{
+                    if(data.success){
+                        this.applicationInfo={
+                            title:'启用应用',
+                            info:'APPID'+row.id+'应用接口已启用',
+                            btnInfo:'我知道了',
+                            type:false,
+                            isAudit:false,
+                            status:1,
+                            id:row.id
+                        };
+                        this.applicationTableDialog = true;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                });
+
             },
-            off() {
+            off(row) {
                 // 禁用
                 this.applicationInfo={
                     title:'禁用应用',
-                    info:'应用接口将无法调用，请谨慎操作！',
+                    info:'APPID'+row.id+'应用接口将无法调用，请谨慎操作！',
                     btnInfo:'禁用',
                     type:true,
                     isAudit:false,
-                    status:2
+                    status:2,
+                    id:row.id
                 };
                 this.applicationTableDialog = true;
             },
-            remove() {
+            remove(row) {
                 this.applicationInfo={
                     title:'删除应用',
                     info:'应用删除后APPID失效，数据将无法恢复，请谨慎操作！',
                     btnInfo:'删除',
                     type:true,
                     isAudit:false,
-                    status:3
+                    status:3,
+                    id:row.id
                 };
                 this.applicationTableDialog = true;
             },
             submitTableDialog(){ //提交弹窗信息
+                //启用直接过
+                if(this.applicationInfo.status === 1){
+                    this.search();
+                    this.applicationTableDialog = false;
+                }
+
+                //禁用接口调用
+                if(this.applicationInfo.status === 2){
+                    disableApplication({
+                        appID:this.applicationInfo.id,
+                        enable:1
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('禁用成功');
+                            this.search();
+                            this.applicationTableDialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    });
+                }
+
+                //删除调用
+                if(this.applicationInfo.status === 3){
+                    delApplication({
+                        appID:this.applicationInfo.id
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('删除成功');
+                            this.search();
+                            this.applicationTableDialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }
+
+                //审核接口调用
                 if(this.applicationInfo.status === 4){
-                    //审核接口调用
-                    this.search();
-                    this.applicationTableDialog = false;
-                }else if(this.applicationInfo.status === 2){
-                    //禁用接口调用
-                    this.search();
-                    this.applicationTableDialog = false;
-                }else if(this.applicationInfo.status === 3){
-                    //删除调用
-                    this.search();
-                    this.applicationTableDialog = false;
-                }else{
-                    //启用直接过
-                    this.search();
-                    this.applicationTableDialog = false;
+                    let params = {
+                        appID:this.applicationInfo.id
+                    };
+                    if(this.auditInfo.radio === 0){
+                        params.reviewState = 21
+                    }
+                    if(this.auditInfo.radio === 1){
+                        params.reviewState = 22;
+                        params.rejectReason = this.auditInfo.info;
+                    }
+                    auditApplication(params).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('审核完成');
+                            this.search();
+                            this.applicationTableDialog = false;
+                        }else{
+                            this.applicationTableDialog = false;
+                        }
+                    });
                 }
             },
             handleSizeChange(val) {
@@ -323,21 +377,6 @@
             handleCurrentChange(val) {
                 this.page.page = val;
                 this.search()
-            },
-            GetTimeStr(inputTime) {
-                var date = new Date(inputTime);
-                var y = date.getFullYear();
-                var m = date.getMonth() + 1;
-                m = m < 10 ? ('0' + m) : m;
-                var d = date.getDate();
-                d = d < 10 ? ('0' + d) : d;
-                var h = date.getHours();
-                h = h < 10 ? ('0' + h) : h;
-                var minute = date.getMinutes();
-                var second = date.getSeconds();
-                minute = minute < 10 ? ('0' + minute) : minute;
-                second = second < 10 ? ('0' + second) : second;
-                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
             }
         },
         mounted() {

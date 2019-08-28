@@ -223,19 +223,19 @@
 
             return {
                 formatTimes:formatTimes,
-                formData:{
+                formData:{ //查询信息
                     phoneNumList:'',
                     mailList:'',
                     accountState:'',
                     dataTime:null
                 },
-                tableData:[],
+                tableData:[],//用户列表
                 page:{
                     page:1,
                     pageCount:10,
                     total:0
                 },
-                userListAddDialog:false,
+                userListAddDialog:false,//新增用户弹窗
                 dataDialogForm:{ //弹窗创建用户信息
                     username:'',
                     phoneNum:'',
@@ -243,7 +243,7 @@
                     passwordstart:'',
                     passwordend:'',
                 },
-                userListTableDialog:false,
+                userListTableDialog:false,//提示信息弹窗
                 userListTableInfo:{
                     title:'',
                     btnInfo:'',
@@ -271,7 +271,7 @@
             }
         },
         methods: {
-            adduser(){
+            adduser(){//新增用户
                 this.dataDialogForm = {
                     username:'',
                     phoneNum:'',
@@ -353,7 +353,12 @@
                             password:this.$md5(this.dataDialogForm.passwordend)
                         };
                         createUser(params).then(({data})=>{
-
+                            if(data.success){
+                                this.search();
+                                this.userListAddDialog = false;
+                            }else{
+                                this.$message.warning(data.errorInfo)
+                            }
                         })
                     } else {
                         return false;
@@ -376,14 +381,25 @@
                 }
                 if(this.userListTableInfo.status===3){
                     removeUser({id:this.userListTableInfo.id}).then(({data})=>{
-
+                        if(data.success){
+                            this.search();
+                            this.$message.success('删除成功');
+                            this.userListTableDialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
                     })
                 }else{
                     enableUser(params).then(({data})=>{
-
+                        if(data.success){
+                            this.search();
+                            this.$message.success(this.userListTableInfo.status===1?'停用成功':'启用成功');
+                            this.userListTableDialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
                     })
                 }
-                console.log(this.userListTableInfo)
             },
         },
         mounted(){
