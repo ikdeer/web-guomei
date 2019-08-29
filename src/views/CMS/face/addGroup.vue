@@ -135,7 +135,7 @@
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
                             :current-page="page.page"
-                            :page-sizes="[10, 20, 30, 40]"
+                            :page-sizes="[10, 20, 30, 50, 100]"
                             :page-size="page.pageCount"
                             background
                             layout="total, sizes, prev, pager, next, jumper"
@@ -236,7 +236,7 @@
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="facePage.page"
-                        :page-sizes="[10, 20, 30, 40]"
+                        :page-sizes="[10, 20, 30, 50, 100]"
                         :page-size="facePage.pageCount"
                         background
                         layout="total, sizes, prev, pager, next, jumper"

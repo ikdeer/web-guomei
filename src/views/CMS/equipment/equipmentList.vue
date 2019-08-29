@@ -9,12 +9,12 @@
                 <el-form :inline="true">
                     <el-form-item label="设备位置">
                         <el-select  clearable
-                                    v-model="formData.company"
+                                    v-model="formData.belongComID"
                                     @clear="clearCompany"
                                     @change="choosedCompany"
                                     placeholder="请选择所属公司">
                             <el-option v-for="item in companyList"
-                                       :label="item.companyName"
+                                       :label="item.name"
                                        :value="item.id"
                                        :key="item.id">
                             </el-option>
@@ -42,22 +42,24 @@
                     </el-form-item>
                     <el-form-item label="设备类型">
                         <el-select v-model="formData.type"  class="user_list_form_status" placeholder="请选择设备类型">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="未开始" value="1"></el-option>
-                            <el-option label="进行中" value="2"></el-option>
-                            <el-option label="已结束" value="3"></el-option>
+                            <el-option v-for="item in EquipmentType"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="设备状态">
-                        <el-select v-model="formData.status"  class="user_list_form_status" placeholder="请选择设备状态">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="未开始" value="1"></el-option>
-                            <el-option label="进行中" value="2"></el-option>
-                            <el-option label="已结束" value="3"></el-option>
+                        <el-select v-model="formData.online"  class="user_list_form_status" placeholder="请选择设备状态">
+                            <el-option v-for="item in EquipmentState"
+                                       :label="item.common"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="设备编号">
-                        <el-input :maxlength="30" v-model="formData.number" placeholder="请输入设备编号"></el-input>
+                        <el-input :maxlength="30" v-model="formData.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
                     </el-form-item>
                     <el-form-item label="设备名称">
@@ -67,8 +69,8 @@
                 <div class="equipment_form_btn">
                     <div>
                         <el-button type="primary" @click="addEquiment">添加设备</el-button>
-                        <span class="equipment_form_btn_span">在线：<span style="color: #67C23A;">5</span></span>
-                        <span class="equipment_form_btn_span">离线：<span style="color: #E56565;">12</span></span>
+                        <span class="equipment_form_btn_span">在线：<span style="color: #67C23A;">{{totalList.onLineCount}}</span></span>
+                        <span class="equipment_form_btn_span">离线：<span style="color: #E56565;">{{totalList.offLineCount}}</span></span>
                     </div>
                     <div>
                         <el-button type="primary" @click="search">查询</el-button>
@@ -87,27 +89,27 @@
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="telphone"
+                        prop="no"
                         label="设备编号">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="email"
+                        prop="deviceLocation"
                         label="设备位置">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="createTime"
+                        prop="deviceTypeName"
                         label="设备类型">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
+                        prop="showFaceBingingState"
                         label="绑定人脸状态">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="status"
+                        prop="showOnline"
                         label="设备状态">
                     </el-table-column>
                     <el-table-column
@@ -126,8 +128,8 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="page.currentPage"
-                    :page-sizes="[10, 20, 30, 40]"
+                    :current-page="page.page"
+                    :page-sizes="[10, 20, 30, 50, 100]"
                     :page-size="page.pageSize"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
@@ -239,27 +241,34 @@
 </template>
 
 <script>
+    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
         data(){
             return{
                 formData:{
-                    company:'',//公司
+                    belongComID:'',//公司
                     department:'',//部门
                     floor:'',//楼层
                     type:'',//设备类型
-                    status:'',//设备状态
-                    number:'',//设备编号
+                    online:'',//设备状态
+                    no:'',//设备编号
                     name:''//设备名称
                 },
                 companyList:[],//公司列表
                 departmentList:[],//部门列表
                 floorList:[],//楼层列表
+                EquipmentType:[],//设备类型
+                EquipmentState:[],//设备状态
 
 
                 tableData:[],
+                totalList:{
+                    offLineCount:0,
+                    onLineCount:0
+                },
                 page:{
-                    currentPage:1,
+                    page:1,
                     pageSize:10,
                     total:0
                 },
@@ -282,8 +291,13 @@
             clearCompany(){
                 //清除公司
             },
-            choosedCompany(){
+            choosedCompany(val){
                 // 选中公司
+                // console.log(val)
+                getEquipmentLocation({id:this.companyList[0].id}).then(({data})=>{
+                    // this.companyList = data.data.list;
+                })
+
             },
             choosedCity(){
 
@@ -302,17 +316,34 @@
                 this.equipmentDialogInfo.dialog = true;
             },
             search(){
-
-
+                let params = {
+                    ...this.formData,...this.page,
+                };
+                getEquipmentList(params).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data.list || [];
+                        this.page.total = data.pagerManager.totalResults || 0;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                });
+                getLineTotal().then(({data})=>{
+                    if(data.success){
+                        this.totalList.offLineCount = data.data.data.offLineCount;
+                        this.totalList.onLineCount = data.data.data.onLineCount
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             reset(){
                 this.formData={
-                    company:'',//公司
+                    belongComID:'',//公司
                     department:'',//部门
                     floor:'',//楼层
                     type:'',//设备类型
-                    status:'',//设备状态
-                    number:'',//设备编号
+                    online:'',//设备状态
+                    no:'',//设备编号
                     name:''//设备名称
                 };
                 this.search()
@@ -337,7 +368,7 @@
                 this.search()
             },
             handleCurrentChange(val){
-                this.page.currentPage = val;
+                this.page.page = val;
                 this.search()
             },
             goStepsOne(){
@@ -355,6 +386,37 @@
                 }
 
             },
+            getEquipmentLocation(){
+              //获取设别位置列表
+                getEquipmentLocation({}).then(({data})=>{
+                    this.companyList = data.data.list;
+                })
+            },
+            getEquipmentType(){
+                //获取设备类型
+                getEquipmentType().then(({data})=>{
+                    /*data.data.list.unshift({
+                        id: '',
+                        name: "全部"
+                    });*/
+                    this.EquipmentType = data.data.list;
+                })
+            },
+            getEquipmentState(){
+                getEquipmentState().then(({data})=>{
+                    /*data.data.list.unshift({
+                        id: '',
+                        common: "全部"
+                    });*/
+                    this.EquipmentState = data.data.list;
+                })
+            }
+        },
+        mounted(){
+            this.search();
+            this.getEquipmentLocation();
+            this.getEquipmentType();
+            this.getEquipmentState()
         }
     }
 </script>
@@ -381,6 +443,7 @@
                     align-items: center;
                     .equipment_form_btn_span{
                         margin-left: 20px;
+                        font-size: 14px;
                         color: #666666;
                     }
                 }

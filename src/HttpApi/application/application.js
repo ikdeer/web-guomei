@@ -41,15 +41,27 @@ export const getApplicationDetail = ({ appID }) => AxIos({
 
 
 //应用类型下拉框
-
 export const getApplicationTypes = () => AxIos({
-    url: '/options/applicationTypes',
+    url: '/options/app/applicationTypes',
     method: 'get',
 });
 
+//应用状态下拉框
+export const getAapplicationState = () => AxIos({
+    url: '/options/app/applicationState',
+    method: 'get',
+});
+
+//应用审核状态下拉框
+export const getApplicationReviewState = () => AxIos({
+    url: '/options/app/applicationReviewState',
+    method: 'get',
+});
+
+
 //应用类型接口选择项
 export const getApplicationTypesInterface = ({baseApiGroupID}) => AxIos({
-    url: '/options/applicationTypesInterface',
+    url: '/options/app/applicationTypesInterface',
     method: 'get',
     params:{baseApiGroupID}
 });

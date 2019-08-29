@@ -17,7 +17,7 @@
                         <el-input :maxlength="20" v-model="formData.id" placeholder="请输入人脸分组ID"></el-input>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" v-model="formData.createBy" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -78,6 +78,18 @@
                         </template>
                     </el-table-column>
                 </el-table>
+            </div>
+            <div class="face_list_footer">
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="page.page"
+                    :page-sizes="[10, 20, 30, 50, 100]"
+                    :page-size="page.pageSize"
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="page.total">
+                </el-pagination>
             </div>
         </div>
 
@@ -161,14 +173,19 @@
                 formData:{
                     name:'',
                     id:'',
-                    createBy:'',
+                    createrName:'',
                     dataTime:null
                 },
                 tableData:[{}],
+                page:{
+                    page:1,
+                    pageSize:10,
+                    total:0
+                },
                 dataDialogForm:{
                     uploadFaceDialog:false,
                 },
-                imageUrl: ''
+                imageUrl: '',
             }
         },
         methods: {
@@ -196,7 +213,7 @@
                 this.formData = {
                     name:'',
                     id:'',
-                    createBy:'',
+                    createrName:'',
                     dataTime:null
                 };
                 this.search();
@@ -209,6 +226,14 @@
             },
             addFace(){
 
+            },
+            handleSizeChange(val){
+                this.page.pageSize = val;
+                this.search()
+            },
+            handleCurrentChange(val){
+                this.page.page = val;
+                this.search()
             },
             handleAvatarSuccess(res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);
@@ -266,6 +291,10 @@
                 display: flex;
                 display: -webkit-flex;
                 justify-content: space-between;
+            }
+            .face_list_footer{
+                margin-top: 10px;
+                text-align: right;
             }
         }
     }

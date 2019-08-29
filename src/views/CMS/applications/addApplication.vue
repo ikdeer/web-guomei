@@ -13,7 +13,7 @@
                 <el-form-item label="应用类型" prop="typeID" required>
                     <el-select v-model="dataDialogForm.typeID" placeholder="请选择应用类型">
                         <el-option
-                            v-for="item in dataDialogForm.categoryList"
+                            v-for="item in applicationTypes"
                             :key="item.id"
                             :label="item.name"
                             :value="item.id">
@@ -21,7 +21,14 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="接口选择" required>
-                    <span style="font-size: 8px;color: #FE023F;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span>
+                    <span style="font-size: 8px;color: #FE023F;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span><br/>
+
+                    <template v-for="item in InterfaceApi">
+                        <el-checkbox :indeterminate="isIndeterminate">{{item.name}}</el-checkbox>
+
+                        <el-checkbox v-for="api in item.apisList" :label="api.id" :key="api.id">{{api.name}}</el-checkbox>
+                    </template>
+
 
                 </el-form-item>
                 <el-form-item label="应用描述" prop="introduction" required>
@@ -60,7 +67,13 @@
         name: "addApplication",
         data() {
             return {
-                dataDialogForm: {}
+                dataDialogForm: {},
+
+                applicationTypes:[],//应用类型
+                InterfaceApi:[],//接口选择
+
+
+
             }
         },
         computed:{
@@ -80,25 +93,16 @@
             },
             getApplicationTypes(){
                 getApplicationTypes().then(({data})=>{
-                    if(data.success){
-
-                    }else{
-
-                    }
+                    this.applicationTypes = data.data.list;
                 })
             },
             getInterface(){
                 getApplicationTypesInterface({baseApiGroupID:1}).then(({data})=>{
-                    if(data.success){
-
-                    }else{
-
-                    }
+                    this.InterfaceApi = data.data.list;
                 })
             }
         },
         mounted() {
-            console.log(this.type)
             this.getApplicationTypes();
             this.getInterface();
         }

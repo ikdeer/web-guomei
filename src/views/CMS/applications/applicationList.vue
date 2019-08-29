@@ -16,19 +16,20 @@
                     </el-form-item>
                     <el-form-item label="应用状态">
                         <el-select v-model="formData.state" placeholder="请选择状态">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="新建" value="1"></el-option>
-                            <el-option label="修改" value="2"></el-option>
-                            <el-option label="审核完成" value="10"></el-option>
+                            <el-option v-for="item in AapplicationState"
+                                       :label="item.common"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="审核状态">
                         <el-select v-model="formData.reviewState" placeholder="请选择状态">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option label="待提交" value="1"></el-option>
-                            <el-option label="待审核" value="10"></el-option>
-                            <el-option label="审核通过" value="21"></el-option>
-                            <el-option label="审核不通过" value="20"></el-option>
+                            <el-option v-for="item in ApplicationReviewState"
+                                       :label="item.common"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建人">
@@ -118,7 +119,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="page.page"
-                    :page-sizes="[10, 20, 50, 100]"
+                    :page-sizes="[10, 20, 30, 50, 100]"
                     :page-size="page.pageSize"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
@@ -167,7 +168,7 @@
 
 <script>
     import {formatTimes} from "../../../lib/utils";
-    import {getAppList,disableApplication,delApplication,auditApplication} from '@/HttpApi/application/application';
+    import {getAppList,disableApplication,delApplication,auditApplication,getAapplicationState,getApplicationReviewState } from '@/HttpApi/application/application';
     export default {
         name: "applicationList",
         data() {
@@ -181,6 +182,9 @@
                     createName:'',
                     dataTime:null
                 },
+                AapplicationState:[],//应用状态
+                ApplicationReviewState:[],//应用审核状态
+
                 tableData: [{}],
                 page: {
                     page: 1,
@@ -377,10 +381,24 @@
             handleCurrentChange(val) {
                 this.page.page = val;
                 this.search()
+            },
+            getAapplicationState(){
+                //应用状态下拉
+                getAapplicationState().then(({data})=>{
+                    this.AapplicationState = data.data.list;
+                })
+            },
+            getApplicationReviewState(){
+                //应用审核状态下拉
+                getApplicationReviewState().then(({data})=>{
+                    this.ApplicationReviewState = data.data.list;
+                })
             }
         },
         mounted() {
-            this.search()
+            this.search();
+            this.getAapplicationState();
+            this.getApplicationReviewState();
         }
     }
 </script>

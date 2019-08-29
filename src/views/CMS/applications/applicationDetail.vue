@@ -60,7 +60,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="page.currentPage"
-                    :page-sizes="[10, 20, 30, 40]"
+                    :page-sizes="[10, 20, 30, 50, 100]"
                     :page-size="page.pageSize"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
@@ -130,21 +130,21 @@
             search(){
                 getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
                     if(data.success){
-                        this.InfoOne[0].content = data.data.data.name;
-                        this.InfoOne[1].content = data.data.data.appTypeName;
-                        this.InfoOne[2].content = data.data.data.id;
-                        this.InfoOne[3].content = data.data.data.apiKey;
-                        this.InfoOne[4].content = data.data.data.secretKey;
+                        this.InfoOne[0].content = data.data.data.name || '————';
+                        this.InfoOne[1].content = data.data.data.appTypeName || '————';
+                        this.InfoOne[2].content = data.data.data.id || '————';
+                        this.InfoOne[3].content = data.data.data.apiKey || '————';
+                        this.InfoOne[4].content = data.data.data.secretKey || '————';
 
-                        this.InfoTwo[0].content = data.data.data.showEnable;
-                        this.InfoTwo[1].content = data.data.data.showReviewState;
-                        this.InfoTwo[2].content = data.data.data.createTime;
-                        this.InfoTwo[3].content = data.data.data.lastModifyTime;
-                        this.InfoTwo[4].content = data.data.data.name;
-                        this.InfoTwo[5].content = data.data.data.createrName;
-                        this.introduction = data.data.data.introduction;
-                        this.tableData = data.data.data.apisList;
-                        this.page.total = data.pagerManager.totalResults;
+                        this.InfoTwo[0].content = data.data.data.showEnable || '————';
+                        this.InfoTwo[1].content = data.data.data.showReviewState || '————';
+                        this.InfoTwo[2].content = data.data.data.createTime || '————';
+                        this.InfoTwo[3].content = data.data.data.lastModifyTime || '————';
+                        this.InfoTwo[4].content = data.data.data.name || '————';
+                        this.InfoTwo[5].content = data.data.data.createrName || '————';
+                        this.introduction = data.data.data.introduction || '无';
+                        this.tableData = data.data.data.apisList || [];
+                        this.page.total = data.pagerManager.totalResults || 0;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
