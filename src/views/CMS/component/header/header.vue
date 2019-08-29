@@ -11,7 +11,8 @@
             <img src="/static/images/meizhi.JPG" alt="">
             <span>{{userInfo.userName}}</span>
           </div>
-          <img class="header-Badge" src="/static/images/arrow_btn@2x.png" alt="">
+          <span class="el-icon-arrow-right gm-sbc"></span>
+          <div class="gm-popUp"></div>
         </div>
     </div>
 </template>
@@ -31,8 +32,8 @@
 
       },
       mounted(){
-        this.userInfo.userName = JSON.parse(localStorage.getItem('userInfo')).userName;
-        this.userInfo.userImg = JSON.parse(localStorage.getItem('userInfo')).userImg;
+        this.userInfo.userName = JSON.parse(localStorage.getItem('userInfo')).userName || '';
+        this.userInfo.userImg = JSON.parse(localStorage.getItem('userInfo')).userImg || '';
       }
     }
 </script>
@@ -42,7 +43,7 @@
   width:100%;
   height: 0.6rem;
   background: #1B1B1B;
-  box-shadow:0px 2px 4px 0px rgba(0,0,0,0.11);
+  box-shadow:0 0.02rem 0.04rem 0 rgba(0,0,0,0.11);
   display: flex;
   display: -webkit-flex;
   align-items: center;
@@ -77,6 +78,7 @@
     display: -webkit-flex;
     align-items: center;
     margin-right: 0.3rem;
+    cursor: pointer;
     .header-issue{
       width: 0.2rem;
       height: 0.2rem;
@@ -106,6 +108,10 @@
       width: 0.14rem;
       height: 0.08rem;
       display: block;
+    }
+    .gm-sbc{
+      color: #ffffff;
+      font-size:0.2rem;
     }
   }
 }

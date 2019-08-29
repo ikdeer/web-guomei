@@ -1,6 +1,6 @@
 <template>
   <el-breadcrumb separator="/">
-    <el-breadcrumb-item v-for="(item,index) in routerList" :to="item.path" :key="item.name">{{item.name}}</el-breadcrumb-item>
+    <el-breadcrumb-item></el-breadcrumb-item>
   </el-breadcrumb>
 </template>
 
@@ -13,13 +13,12 @@
       }
     },
     watch: {
-      $route(newVal,oldVal){
-        console.log(newVal);
-        this.routerList = newVal.meta.routeList;
+      '$route'(val,oldVal){
+        console.log(oldVal);
       }
     },
     mounted(){
-      this.routerList = this.$route.meta.routeList;
+      //this.routerList = this.$route.meta.routeList;
     }
   }
 </script>

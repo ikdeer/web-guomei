@@ -11,7 +11,7 @@
       <div class="header-navCenter">
         <ul class="navCenter-ul">
           <li>
-            <span>产品服务</span>
+            <router-link to="/Company/product">产品服务</router-link>
             <ul class="navCenter-ulMenu">
               <li>
                 <span>技术文档</span>
@@ -25,13 +25,13 @@
             </ul>
           </li>
           <li>
-            <span>解决方案</span>
+            <router-link to="/Company/solution">解决方案</router-link>
           </li>
           <li>
-            <span>技术文档</span>
+            <router-link to="/Company/APITCF">技术文档</router-link>
           </li>
           <li>
-            <span>接入须知</span>
+            <router-link to="/Company/APITCF">接入须知</router-link>
           </li>
         </ul>
       </div>
@@ -137,6 +137,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            cursor: pointer;
             span{
               font-size: 0.16rem;
               color: #ffffff;

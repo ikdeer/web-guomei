@@ -196,22 +196,8 @@ const router = new Router({
   ]
 })
 
-//路由拦截切
-var routeList = [];
 router.beforeEach((to, from, next)=>{
-  var index = -1;
-  for(let i = 0; i < routeList.length; i++){
-    if(routeList[i].name == to.name){
-      index = i;
-      break;
-    }
-  }
-  if(index !== -1){
-    routeList.splice(index + 1, routeList.length - index - 1);
-  }else{
-    routeList.push({ name: to.name, path: to.path});
-  }
-  to.meta.routeList = routeList;
+
   document.title = to.meta.title || '国美人脸认证开放平台';
   next();
 });

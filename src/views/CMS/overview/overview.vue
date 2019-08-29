@@ -10,24 +10,16 @@
             <div class="overIew-use_left">
               <p class="overIew-use_text">应用</p>
               <div class="use-content">
-                <div class="use-content_left">
-                  <h4>已建应用：</h4>
-                  <div class="use-TextNum">
-                    <span>101</span>
-                    <span>个</span>
+                <div class="use-contentPad">
+                  <div class="user-TextNum">
+                    <p class="user-contentNum">已建应用：<span>101</span>个</p>
+                    <p class="user-contentNum">待审核应用：<span>0</span>个</p>
+                  </div>
+                  <div class="use-contentButton">
+                    <el-button class="button-bluer" type="primary">管理应用</el-button>
+                    <el-button class="button-red">创建应用</el-button>
                   </div>
                 </div>
-                <div class="use-content_right">
-                  <h4>待审核应用：</h4>
-                  <div class="use-TextNum">
-                    <span>0</span>
-                    <span>个</span>
-                  </div>
-                </div>
-              </div>
-              <div class="overIew-el_button">
-                <el-button class="button-bluer" type="primary">管理应用</el-button>
-                <el-button class="button-red">创建应用</el-button>
               </div>
             </div>
             <div class="overIew-use_right">
@@ -237,62 +229,50 @@
             padding-bottom: 0.05rem;
           }
           .use-content{
-            width: 7.14rem;
-            height: 2.28rem;
+            width: 6.6rem;
+            height: 3.6rem;
             display: flex;
             display: -webkit-flex;
-            justify-content: space-between;
-            background:url('/static/images/establish_bg_image@2x.png')center center no-repeat;
-            /*background-size: 100% 100%;*/
-            box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
-            border-radius:0.2rem;
-            .use-content_left{
-              width: 3.7rem;
-              h4{
-                font-size: 0.24rem;
-                color: #ffffff;
-                margin-top: 0.39rem;
-                margin-left: 0.3rem;
+            align-items: center;
+            justify-content: center;
+            .use-contentPad{
+              width: 6rem;
+              height: 3.1rem;
+              box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
+              border-radius:0.2rem;
+              overflow: hidden;
+              background: url('/static/images/audit_bg_image@2x.png')center center no-repeat;
+              -webkit-background-size: cover;
+              background-size: cover;
+              .user-TextNum{
+                margin-top: 0.54rem;
+                .user-contentNum{
+                  font-size: 0.24rem;
+                  color: #666666;
+                  text-align: center;
+                  padding-bottom: 0.1rem;
+                  span{
+                    font-size:0.3rem;
+                    color: #F20A59;
+                  }
+                }
               }
-              .use-TextNum{
+              .use-contentButton{
+                padding-top: 0.15rem;
                 display: flex;
                 display: -webkit-flex;
-                align-items: baseline;
-                margin-top: 0.4rem;
-                margin-left: 0.3rem;
-                span:first-child{
-                  font-size: 0.8rem;
+                align-items: center;
+                justify-content: space-between;
+                flex-direction: column;
+                button{
+                  font-size: 0.16rem;
+                  width: 1.3rem;
+                  height: 0.4rem;
+                  background:#FE023F;
                   color: #ffffff;
-                  font-weight: 600;
-                }
-                span:last-child{
-                  font-size: 0.2rem;
-                  color: #ffffff;
-                }
-              }
-            }
-            .use-content_right{
-              width: 3.5rem;
-              h4{
-                font-size: 0.24rem;
-                color: #ffffff;
-                margin-top: 0.39rem;
-                margin-left: 0.3rem;
-              }
-              .use-TextNum{
-                display: flex;
-                display: -webkit-flex;
-                align-items: baseline;
-                margin-top: 0.4rem;
-                margin-left: 0.3rem;
-                span:first-child{
-                  font-size: 0.8rem;
-                  color: #ffffff;
-                  font-weight: 600;
-                }
-                span:last-child{
-                  font-size: 0.2rem;
-                  color: #ffffff;
+                  border-color:#FE023F;
+                  margin-left:0;
+                  margin-bottom: 0.1rem;
                 }
               }
             }
@@ -314,7 +294,7 @@
           }
         }
         .overIew-use_right{
-          width: 7.38rem;
+          width: 9rem;
           .overIew-dosage{
             display: flex;
             display: -webkit-flex;
@@ -323,7 +303,7 @@
             width: 100%;
             height: 0.4rem;
             padding-top: 0.05rem;
-            padding-bottom: 0.05rem;
+            padding-bottom: 0.15rem;
             span{
               font-size: 0.16rem;
               color: #333333;
@@ -346,7 +326,7 @@
             }
           }
           .overIew-right_pad{
-            width: 7.38rem;
+            width: 9rem;
             height: 3.53rem;
             .tableHead{
               color: #333333;
