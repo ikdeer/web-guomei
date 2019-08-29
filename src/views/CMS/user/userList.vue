@@ -16,8 +16,8 @@
                     <el-form-item label="账号状态">
                         <el-select v-model="formData.accountState"  class="user_list_form_status" placeholder="请选择状态">
                             <el-option label="全部" value=""></el-option>
-                            <el-option label="已停用" value="0"></el-option>
                             <el-option label="使用中" value="1"></el-option>
+                            <el-option label="已停用" value="0"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建时间">

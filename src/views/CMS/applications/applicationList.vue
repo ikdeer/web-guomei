@@ -27,8 +27,8 @@
                             <el-option label="全部" value=""></el-option>
                             <el-option label="待提交" value="1"></el-option>
                             <el-option label="待审核" value="10"></el-option>
-                            <el-option label="审核不通过" value="20"></el-option>
                             <el-option label="审核通过" value="21"></el-option>
+                            <el-option label="审核不通过" value="20"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建人">
