@@ -84,10 +84,20 @@ h3{
     font-weight: bold;
 }
 .el-message-box .el-message-box__content{
-    padding: 30px;
+    padding: 50px 30px;
+    color: #333333;
+    font-weight: 600;
 }
-.el-message-box .el-message-box__content .el-message-box__message{
-    color: #666666;
+.el-message-box .el-message-box__btns{
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row-reverse;
+    -webkit-flex-direction: row-reverse;
+    justify-content: center;
+
+}
+.el-message-box .el-message-box__btns .el-button{
+    margin-left: 10px;
 }
 
 .el-form-item__label{
@@ -100,10 +110,13 @@ h3{
 .el-checkbox__input{
     line-height: normal;
     vertical-align: top;
+    width: 100%;
+    height: 100%;
 }
 .el-checkbox__input .el-checkbox__inner{
-    width: .2rem;
-    height: .2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 /*禁止textarea拖动*/
 .el-textarea .el-textarea__inner{

@@ -143,13 +143,13 @@
             :title="equipmentDialogInfo.title"
             class="equipment_list_dialog"
             :visible.sync="equipmentDialogInfo.dialog"
-            width="6rem">
+            width="430px">
             <div class="equipment_list_steps">
                 <span :class="equipmentDialogInfo.type===1?'active':''">第一步 填写设备信息</span>
                 <span :class="equipmentDialogInfo.type===2?'active':''">第二步 绑定人脸分组</span>
             </div>
             <div v-if="equipmentDialogInfo.type===1">
-                <el-form label-width="1.5rem">
+                <el-form label-width="80px">
                     <el-form-item label="设备编号" required>
                         <el-input :maxlength="30" v-model="dialogInfo.number" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
@@ -207,7 +207,7 @@
             </div>
 
             <div v-if="equipmentDialogInfo.type===2">
-                <el-form label-width="1.5rem">
+                <el-form label-width="80px">
                     <el-form-item label="人脸分组" required>
                         <el-select v-model="dialogInfo.status" placeholder="请选择所属公司">
                             <el-option label="国美金融" value=""></el-option>
@@ -241,7 +241,7 @@
 </template>
 
 <script>
-    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState } from '@/HttpApi/equipment/equipment'
+    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
         data(){
@@ -263,7 +263,7 @@
 
 
                 tableData:[],
-                totalList:{
+                totalList:{ //在线量
                     offLineCount:0,
                     onLineCount:0
                 },
@@ -356,12 +356,51 @@
             },
             on(row){
                 //上线操作
+                this.$confirm('设备数据传输开启，设备状态更改为在线，如设备前端网络等原因不在线，设备状态仍为离线；', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(() => {
+                    lineEquipment({
+                        deviceID:row.id,
+                        onOffLine:1
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('上线成功');
+                            this.search()
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }).catch(() => {});
             },
             down(row){
                 //下线操作
+                this.$confirm('设备数据传输断开，非物理下线，设备状态更改为离线', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消'
+                }).then(() => {
+                    lineEquipment({
+                        deviceID:row.id,
+                        onOffLine:0
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('下线成功');
+                            this.search()
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }).catch(() => {});
             },
             binding(row){
               //绑定人脸操作
+                this.equipmentDialogInfo = {
+                    title:'编辑设备',
+                    dialog:true,
+                    type:2,
+                    btnShow:true,//取消按钮显示隐藏
+                    btnInfo:' 确 定 '
+                }
             },
             handleSizeChange(val){
                 this.page.pageSize = val;

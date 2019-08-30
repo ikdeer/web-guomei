@@ -73,14 +73,14 @@
             width="30%">
             <el-form :model="dataDialogForm" :rules="adduserDialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="姓名" prop="name" required>
-                    <el-input type="phone" v-model="dataDialogForm.name" placeholder="请输入姓名" autocomplete="off"></el-input>
+                    <el-input type="text" v-model="dataDialogForm.name" placeholder="请输入姓名" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     label="手机号" prop="phone" required>
-                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phone" placeholder="请输入手机号" autocomplete="off"></el-input>
+                    <el-input type="tel" :maxlength="11" v-model.number="dataDialogForm.phone" placeholder="请输入手机号" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email" required>
-                    <el-input type="phone" v-model="dataDialogForm.email" placeholder="请输入邮箱" autocomplete="off"></el-input>
+                    <el-input type="email" v-model="dataDialogForm.email" placeholder="请输入邮箱" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer">

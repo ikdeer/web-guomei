@@ -423,6 +423,7 @@
                     display: flex;
                     display: -webkit-flex;
                     justify-content: space-between;
+                    border-top: 1px solid #eeeeee;
                 }
 
             }

@@ -32,3 +32,24 @@ export const getEquipmentState = () => AxIos({
     method: 'get',
 });
 
+//添加设备
+export const addEquipment = ({ belongComID,createrID,faceGroupID,gmAreaID,name,no,type,id,positionType }) => AxIos({
+    url: '/device/add',
+    method: 'post',
+    data:{ belongComID,createrID,faceGroupID,gmAreaID,name,no,type,id,positionType }
+});
+
+//启用禁用设备  enable 0-停用，1-启用
+export const disableEquipment = ({ deviceID,enable }) => AxIos({
+    url: '/device/disable/dev',
+    method: 'post',
+    data:{ deviceID,enable }
+});
+
+//上线/下线设备
+export const lineEquipment = ({ deviceID,onOffLine }) => AxIos({
+    url: '/device/line/dev',
+    method: 'post',
+    data:{ deviceID,onOffLine }
+});
+

@@ -46,27 +46,27 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="username"
+                        prop="name"
                         label="人脸分组名称">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="telphone"
+                        prop="id"
                         label="人脸分组ID">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="email"
+                        prop="createTime"
                         label=" 创建时间">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="createTime"
+                        prop="lastModifyTime"
                         label="修改时间">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
+                        prop="creatorName"
                         label="创建人">
                     </el-table-column>
                     <el-table-column
@@ -176,7 +176,7 @@
                     createrName:'',
                     dataTime:null
                 },
-                tableData:[{}],
+                tableData:[],
                 page:{
                     page:1,
                     pageSize:10,
@@ -198,12 +198,15 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
+                    faceGroupNames :this.formData.name/* ? this.formData.name.split(',') : ''*/,
+                    faceGroupIds:this.formData.id/* ? this.formData.id.split(','):''*/,
+                    faceGroupCreators:this.formData.createName /*?this.formData.createName.split(","):''*/,
                     creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
                     creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
                 };
                 getFaceList(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data;
+                        this.tableData = data.data.list;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -251,6 +254,9 @@
                 return isJPG && isLt2M;
             }
         },
+        mounted(){
+            this.search();
+        }
     }
 </script>
 

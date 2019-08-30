@@ -7,7 +7,7 @@
         <div class="add_application_content">
             <el-form :model="dataDialogForm" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="应用名称" prop="name" required >
-                    <el-input type="phone" v-model="dataDialogForm.ame" :maxlength="20" placeholder="请输入应用名(20汉字以内)"
+                    <el-input type="text" v-model="dataDialogForm.ame" :maxlength="20" placeholder="请输入应用名(20汉字以内)"
                               :disabled="type"   autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="应用类型" prop="typeID" required>
