@@ -11,8 +11,15 @@
             <img src="/static/images/meizhi.JPG" alt="">
             <span>{{userInfo.userName}}</span>
           </div>
-          <span class="el-icon-arrow-right gm-sbc"></span>
-          <div class="gm-popUp"></div>
+          <el-dropdown>
+            <span class="el-icon-arrow-right gm-sbc" @click="userInfo.isUserShow =! userInfo.isUserShow"></span>
+            <div class="gm-popUp">
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-user">用户中心</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-switch-button">退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </div>
+          </el-dropdown>
         </div>
     </div>
 </template>
@@ -25,15 +32,20 @@
           userInfo:{
             userName:'',//用户姓名
             userImg:'',//用户头像
+            isUserShow:false,
           }
         }
       },
       methods:{
-
+        ClickUserRouter(){
+          this.userInfo.isUserShow = false;
+          this.$router.push({path:'/Index/userInfo'});
+        }
       },
       mounted(){
-        this.userInfo.userName = JSON.parse(localStorage.getItem('userInfo')).userName || '';
-        this.userInfo.userImg = JSON.parse(localStorage.getItem('userInfo')).userImg || '';
+        let localUser = JSON.parse(localStorage.getItem('userInfo'));
+        this.userInfo.userName = localUser ? localUser.userName : '智能国美';
+        //this.userInfo.userImg = JSON.parse(localStorage.getItem('userInfo')).userImg || '';
       }
     }
 </script>
@@ -79,6 +91,7 @@
     align-items: center;
     margin-right: 0.3rem;
     cursor: pointer;
+    position: relative;
     .header-issue{
       width: 0.2rem;
       height: 0.2rem;
@@ -111,8 +124,70 @@
     }
     .gm-sbc{
       color: #ffffff;
-      font-size:0.2rem;
+      display: block;
+      font-size:0.18rem;
+    }
+    .gm-sbc:hover + .gm-popUp{
+      display: block;
+    }
+    .gm-popUp{
+      width: 1.6rem;
+      position: absolute;
+      top: 0.46rem;
+      right: -0.3rem;
+      background: #1B1B1B;
+      z-index: 100;
+      display: none;
+      .gm-user{
+        margin-left: 0.2rem;
+        height: 0.5rem;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        .el-icon-user{
+          font-size:0.18rem;
+          color: #ffffff;
+          margin-right: 0.15rem;
+        }
+        button{
+          font-size: 0.14rem;
+          color: #999999;
+          margin-left: 0.15rem;
+        }
+      }
+      .gm-quit{
+        margin-left: 0.2rem;
+        height: 0.5rem;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        .el-icon-switch-button{
+          font-size:0.18rem;
+          color: #ffffff;
+          margin-right: 0.15rem;
+        }
+        button{
+          font-size: 0.14rem;
+          color: #999999;
+          margin-left: 0.15rem;
+        }
+      }
     }
   }
+}
+.el-dropdown-menu{
+  width: 1.6rem;
+  background: #1B1B1B;
+  border: none;
+  padding: 0;
+  right: -0.3rem !important;
+  .el-dropdown-menu__item{
+    line-height:0.5rem;
+    background: #1B1B1B;
+    color: #ffffff;
+  }
+}
+.el-popper .popper__arrow{
+  display: none;
 }
 </style>

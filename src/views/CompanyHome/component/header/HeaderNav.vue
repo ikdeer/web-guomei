@@ -14,13 +14,13 @@
             <router-link to="/Company/product">产品服务</router-link>
             <ul class="navCenter-ulMenu">
               <li>
-                <span>技术文档</span>
+                <router-link to="">技术文档</router-link>
               </li>
               <li>
-                <span>产品服务</span>
+                <router-link to="">产品服务</router-link>
               </li>
               <li>
-                <span>接入须知</span>
+                <router-link to="">接入须知</router-link>
               </li>
             </ul>
           </li>
@@ -138,8 +138,9 @@
             justify-content: center;
             position: relative;
             cursor: pointer;
-            span{
+            a{
               font-size: 0.16rem;
+              text-decoration: none;
               color: #ffffff;
             }
             .navCenter-ulMenu{
@@ -155,16 +156,18 @@
                 display: -webkit-flex;
                 align-items: center;
                 justify-content: center;
-                >span{
+                >a{
                   font-size: 0.14rem;
                   padding: 0.09rem 0.18rem;
                   color: #ffffff;
+                  text-decoration: none;
                 }
               }
               >li:hover{
-                >span{
+                >a{
                   background: #2B2B2B;
                   color: #F20A59;
+                  text-decoration: none;
                 }
               }
             }
@@ -174,8 +177,9 @@
             .navCenter-ulMenu{
               display: block;
             }
-            >span{
+            >a{
               color: #F20A59;
+              text-decoration: none;
               line-height: 0.8rem;
               border-bottom: 0.04rem solid #F20A59;
             }
