@@ -713,27 +713,24 @@
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
 
-                border: 1px solid transparent;
-                transition: 600ms ease-out;
-                -moz-transition: 600ms ease-out; /* Firefox 4 */
-                -webkit-transition: 600ms ease-out; /* Safari and Chrome */
-                -o-transition: 600ms ease-out; /* Opera */
+                /*border: 1px solid transparent;*/
+                border: 1px solid #409EFF;
+                transition: 500ms ease-out;
+                -moz-transition: 500ms ease-out; /* Firefox 4 */
+                -webkit-transition: 500ms ease-out; /* Safari and Chrome */
+                -o-transition: 500ms ease-out; /* Opera */
                 &:hover{
-                    border: 1px solid #409EFF;
+                    box-shadow:0 5px 6px 0 rgba(196,196,196,0.5);
                 }
                 .list_img{
                     position: relative;
                     width: 100%;
                     .checkbox{
                         position: absolute;
-                        width: 0.2rem;
-                        height: 0.2rem;
-                        top: 0;
+                        /*width: 0.2rem;*/
+                        /*height: 0.2rem;*/
+                        top: -3px;
                         left: 0;
-                        .el-checkbox__inner{
-                            width: 0.2rem;
-                            height: 0.2rem;
-                        }
                     }
                     img{
                         width: 100%;

@@ -8,13 +8,13 @@
             <div class="user_list_form">
                 <el-form :inline="true">
                     <el-form-item label="手机号">
-                        <el-input :maxlength="11" v-model="formData.phoneNumList" placeholder="请输入手机号"></el-input>
+                        <el-input :maxlength="11" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱">
-                        <el-input :maxlength="20" v-model="formData.mailList" placeholder="请输入邮箱"></el-input>
+                        <el-input :maxlength="20" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="账号状态">
-                        <el-select v-model="formData.accountState"  class="user_list_form_status" placeholder="请选择状态">
+                        <el-select v-model="formData.enable"  class="user_list_form_status" placeholder="请选择状态">
                             <el-option label="全部" value=""></el-option>
                             <el-option label="使用中" value="1"></el-option>
                             <el-option label="已停用" value="0"></el-option>
@@ -98,7 +98,7 @@
                     @current-change="handleCurrentChange"
                     :current-page="page.page"
                     :page-sizes="[10, 20, 30, 50, 100]"
-                    :page-size="page.pageCount"
+                    :page-size="page.pageSize"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
                     :total="page.total">
@@ -223,15 +223,15 @@
             return {
                 formatTimes:formatTimes,
                 formData:{ //查询信息
-                    phoneNumList:'',
-                    mailList:'',
-                    accountState:'',
+                    phoneNums:'',
+                    mails:'',
+                    enable:'',
                     dataTime:null
                 },
                 tableData:[],//用户列表
                 page:{
                     page:1,
-                    pageCount:10,
+                    pageSize:10,
                     total:0
                 },
                 userListAddDialog:false,//新增用户弹窗
@@ -296,9 +296,9 @@
             },
             reset(){
                 this.formData = {
-                    phoneNumList:'',
-                    mailList:'',
-                    accountState:'',
+                    phoneNums:'',
+                    mails:'',
+                    enable:'',
                     dataTime:null
                 };
                 this.search();
@@ -337,7 +337,7 @@
                 this.userListTableDialog = true;
             },
             handleSizeChange(val){
-                this.page.pageCount = val;
+                this.page.pageSize = val;
                 this.search()
             },
             handleCurrentChange(val){
