@@ -17,7 +17,7 @@
                         <el-input :maxlength="20" v-model="formData.id" placeholder="请输入人脸分组ID"></el-input>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" v-model="formData.createBy" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -46,27 +46,27 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="username"
+                        prop="name"
                         label="人脸分组名称">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="telphone"
+                        prop="id"
                         label="人脸分组ID">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="email"
+                        prop="createTime"
                         label=" 创建时间">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="createTime"
+                        prop="lastModifyTime"
                         label="修改时间">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
+                        prop="creatorName"
                         label="创建人">
                     </el-table-column>
                     <el-table-column
@@ -78,6 +78,18 @@
                         </template>
                     </el-table-column>
                 </el-table>
+            </div>
+            <div class="face_list_footer">
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="page.page"
+                    :page-sizes="[10, 20, 30, 50, 100]"
+                    :page-size="page.pageSize"
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="page.total">
+                </el-pagination>
             </div>
         </div>
 
@@ -161,14 +173,19 @@
                 formData:{
                     name:'',
                     id:'',
-                    createBy:'',
+                    createrName:'',
                     dataTime:null
                 },
-                tableData:[{}],
+                tableData:[],
+                page:{
+                    page:1,
+                    pageSize:10,
+                    total:0
+                },
                 dataDialogForm:{
                     uploadFaceDialog:false,
                 },
-                imageUrl: ''
+                imageUrl: '',
             }
         },
         methods: {
@@ -181,12 +198,15 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
+                    faceGroupNames :this.formData.name/* ? this.formData.name.split(',') : ''*/,
+                    faceGroupIds:this.formData.id/* ? this.formData.id.split(','):''*/,
+                    faceGroupCreators:this.formData.createName /*?this.formData.createName.split(","):''*/,
                     creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
                     creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
                 };
                 getFaceList(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data;
+                        this.tableData = data.data.list;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -196,7 +216,7 @@
                 this.formData = {
                     name:'',
                     id:'',
-                    createBy:'',
+                    createrName:'',
                     dataTime:null
                 };
                 this.search();
@@ -209,6 +229,14 @@
             },
             addFace(){
 
+            },
+            handleSizeChange(val){
+                this.page.pageSize = val;
+                this.search()
+            },
+            handleCurrentChange(val){
+                this.page.page = val;
+                this.search()
             },
             handleAvatarSuccess(res, file) {
                 this.imageUrl = URL.createObjectURL(file.raw);
@@ -226,6 +254,9 @@
                 return isJPG && isLt2M;
             }
         },
+        mounted(){
+            this.search();
+        }
     }
 </script>
 
@@ -266,6 +297,10 @@
                 display: flex;
                 display: -webkit-flex;
                 justify-content: space-between;
+            }
+            .face_list_footer{
+                margin-top: 10px;
+                text-align: right;
             }
         }
     }

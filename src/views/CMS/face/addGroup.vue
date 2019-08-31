@@ -13,7 +13,7 @@
                 <div class="set_group">
                     <h3>设置分组</h3>
                     <div class="set_group_inp">
-                        <el-form :inline="true" label-width="1.5rem">
+                        <el-form :inline="true" label-width="100px">
                             <el-form-item label="分组名称" required>
                                 <el-input :maxlength="11" v-model="groupData.name" placeholder="请输入人脸分组名称"></el-input>
                                 <el-button type="primary" @click="">保存</el-button>
@@ -27,29 +27,35 @@
                 <div class="set_child_group">
                     <h3>设置子分组 <span>请注意一级分组不可添加图片</span></h3>
                     <div class="set_group_childinp">
-                        <el-form :inline="true" label-width="1.5rem">
+                        <el-form :inline="true" label-width="110px">
                             <el-form-item label="一级分组名称" required>
-                                <el-input :maxlength="20" v-model="groupChildData.name" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" @click="">保存</el-button>
-                                <el-button type="primary" @click="">删除</el-button>
+                                <el-input :maxlength="20" v-model="groupChildData.oneName" placeholder="20汉字以内"></el-input>
+                                <el-button type="primary" @click="addGroupOne">保存</el-button>
+                                <el-button type="primary" @click="deleteGroupOne">删除</el-button>
                             </el-form-item>
                             <el-form-item label="二级分组名称" required>
-                                <el-input :maxlength="20" v-model="groupChildData.name" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" @click="">保存</el-button>
-                                <el-button type="primary" @click="">删除</el-button>
+                                <el-input :maxlength="20" v-model="groupChildData.twoName" placeholder="20汉字以内"></el-input>
+                                <el-button type="primary" @click="addGroupTwo">保存</el-button>
+                                <el-button type="primary" @click="deleteGroupTwo">删除</el-button>
                             </el-form-item>
                         </el-form>
                         <div class="group_list">
                             <div class="group_item_list">
-                                <p v-for="item in groupOneList">
-                                    <span>{{item.title}}</span>
-                                </p>
+                                <div class="item">
+                                    <p v-for="item in groupOneList">
+                                        <span>{{item.title}}</span>
+                                    </p>
+                                </div>
+
                             </div>
                             <div class="group_item_list">
-                                <p v-for="item in groupTwoList">
-                                    <span>{{item.title}}</span>
-                                    <span>{{item.face}}</span>
-                                </p>
+                                <div class="item">
+                                    <p v-for="item in groupTwoList">
+                                        <span>{{item.title}}</span>
+                                        <span>{{item.face}}</span>
+                                    </p>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -135,7 +141,7 @@
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
                             :current-page="page.page"
-                            :page-sizes="[10, 20, 30, 40]"
+                            :page-sizes="[10, 20, 30, 50, 100]"
                             :page-size="page.pageCount"
                             background
                             layout="total, sizes, prev, pager, next, jumper"
@@ -207,7 +213,7 @@
                 <div class="content">
                     <div class="list" v-for="item in faceList">
                         <div class="list_img">
-                            <el-checkbox class="checkbox"></el-checkbox>
+                            <el-checkbox size="" class="checkbox"></el-checkbox>
                             <img :src="item.img">
                         </div>
                         <div class="list_info">
@@ -236,7 +242,7 @@
                         @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
                         :current-page="facePage.page"
-                        :page-sizes="[10, 20, 30, 40]"
+                        :page-sizes="[10, 20, 30, 50, 100]"
                         :page-size="facePage.pageCount"
                         background
                         layout="total, sizes, prev, pager, next, jumper"
@@ -255,6 +261,7 @@
 </template>
 
 <script>
+    import { createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo } from '@/HttpApi/face/face'
     export default {
         name: "addGroup",
         data(){
@@ -265,7 +272,10 @@
                     id:''
                 },
                 groupChildData:{
-                    name:''
+                    oneId:'',
+                    oneName:'',
+                    twoId:'',
+                    twoName:''
                 },
                 groupOneList:[{
                     title:'adadfasf'
@@ -289,7 +299,7 @@
                     pageCount:10,
                     total:0
                 },
-                addGroupFace:true,
+                addGroupFace:false,
                 dataDialogForm:{
 
                 },
@@ -400,6 +410,68 @@
             lastStep(){
                 this.step = 1;
             },
+
+            addGroupOne(){
+                //创建一级分组
+                if(!this.groupChildData.oneName){
+                    return;
+                }
+                createGroupOne({name:this.groupChildData.oneName}).then(({data})=>{
+                    if(data.success){
+                        this.$message.success('创建成功');
+                        this.getGroup();
+                        this.groupChildData.oneName = '';
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
+            addGroupTwo(){
+                if(!this.groupChildData.twoName){
+                    this.$message.warning('请输入文字');
+                    return;
+                }
+                createGroupTwo({name:this.groupChildData.twoName}).then(({data})=>{
+                    if(data.success){
+                        this.$message.success('创建成功');
+                        this.getGroup();
+                        this.groupChildData.twoName = '';
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
+            deleteGroupOne(){
+                if(!this.groupChildData.oneId){
+                    this.$message.warning('请选中要删除的分组');
+                    return;
+                }
+                deleteGroupOne().then(({data})=>{
+                    if(data.success){
+                        this.$message.success('删除成功');
+                        this.getGroup();
+                        this.groupChildData.oneId = '';
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
+            deleteGroupTwo(){
+                if(!this.groupChildData.twoId){
+                    this.$message.warning('请选中要删除的分组');
+                    return;
+                }
+                deleteGroupTwo({name:this.groupChildData.twoName}).then(({data})=>{
+                    if(data.success){
+                        this.$message.success('删除成功');
+                        this.getGroup();
+                        this.groupChildData.twoId = '';
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
+
             handleSelectionChange(){
                 // 选中
             },
@@ -417,10 +489,18 @@
             },
             reset(){
 
+            },
+            getGroup(){
+                getGroupOne().then(({data})=>{
+
+                });
+                getGroupTwo().then(({data})=>{
+
+                })
             }
         },
         mounted(){
-
+            this.getGroup();
         }
     }
 </script>
@@ -504,7 +584,7 @@
         .stepone{
             .set_group{
                 .el-form{
-                    padding: .30rem;
+                    padding: .3rem;
                     .el-form-item{
                         width: 48%;
                     }
@@ -523,35 +603,49 @@
                     }
                 }
                 .el-form{
-                    padding: .3rem;
+                    padding:0.1rem .3rem;
                     .el-form-item{
                         width: 48%;
                     }
                     .el-input{
-                        width: 300px;
+                        width: 280px;
                     }
                 }
                 .group_list{
                     display: flex;
                     display: -webkit-flex;
-                    justify-content: space-around;
+
                     .group_item_list{
-                        width: 386px;
-                        height: 190px;
-                        border: 1px solid #999999;
-                        overflow-y: auto;
-                        -webkit-border-radius: 5px;
-                        -moz-border-radius: 5px;
-                        border-radius: 5px;
-                        color: #999999;
-                        p{
-                            padding: 0 15px;
-                            display: flex;
-                            display: -webkit-flex;
-                            justify-content: space-between;
-                            line-height: 30px;
-                            cursor: pointer;
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                        width: 50%;
+                        &:first-child{
+                            margin-left: 130px;
                         }
+                        &:last-child{
+                            margin-left: 80px;
+                        }
+                        margin-left: 100px;
+                        .item{
+                            width: 4rem;
+                            height: 2rem;
+                            border: 1px solid #999999;
+                            overflow-y: auto;
+                            -webkit-border-radius: 5px;
+                            -moz-border-radius: 5px;
+                            border-radius: 5px;
+                            color: #999999;
+                            p{
+                                padding: 0 15px;
+                                display: flex;
+                                display: -webkit-flex;
+                                justify-content: space-between;
+                                line-height: 30px;
+                                cursor: pointer;
+                            }
+                        }
+
                     }
                 }
             }
@@ -604,25 +698,32 @@
         .content{
             display: flex;
             display: -webkit-flex;
-            /*justify-content: space-between;*/
+            justify-content: space-between;
             flex-wrap: wrap;
 
             .list{
-                width: 2.15rem;
-                height: 4rem;
-                margin: .1rem .16rem;
+                width: 19%;
+                margin: .1rem 0;
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
                 border-radius: 4px;
-                border: 1px solid #409EFF;
+
                 padding: .2rem;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
 
-
+                border: 1px solid transparent;
+                transition: 600ms ease-out;
+                -moz-transition: 600ms ease-out; /* Firefox 4 */
+                -webkit-transition: 600ms ease-out; /* Safari and Chrome */
+                -o-transition: 600ms ease-out; /* Opera */
+                &:hover{
+                    border: 1px solid #409EFF;
+                }
                 .list_img{
                     position: relative;
-                    width: 2.15rem;
-                    height: 2.15rem;
-                    margin-bottom: .12rem;
+                    width: 100%;
                     .checkbox{
                         position: absolute;
                         width: 0.2rem;

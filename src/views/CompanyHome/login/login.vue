@@ -16,7 +16,7 @@
             </div>
             <div class="login-form">
               <el-form-item prop="password">
-                <el-input placeholder="密码" type="password" v-model="loginForm.password"></el-input>
+                <el-input placeholder="密码" show-password type="password" v-model="loginForm.password"></el-input>
               </el-form-item>
             </div>
             <div class="login-form">

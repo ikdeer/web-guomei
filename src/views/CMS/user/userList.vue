@@ -16,8 +16,8 @@
                     <el-form-item label="账号状态">
                         <el-select v-model="formData.accountState"  class="user_list_form_status" placeholder="请选择状态">
                             <el-option label="全部" value=""></el-option>
-                            <el-option label="已停用" value="0"></el-option>
                             <el-option label="使用中" value="1"></el-option>
+                            <el-option label="已停用" value="0"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建时间">
@@ -97,7 +97,7 @@
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     :current-page="page.page"
-                    :page-sizes="[10, 20, 30, 40]"
+                    :page-sizes="[10, 20, 30, 50, 100]"
                     :page-size="page.pageCount"
                     background
                     layout="total, sizes, prev, pager, next, jumper"
@@ -113,20 +113,19 @@
             width="30%">
             <el-form :model="dataDialogForm"  :rules="addDialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="用户名" prop="username" required>
-                    <el-input type="phone" v-model="dataDialogForm.username" :maxlength="20" placeholder="请输入用户名(6-20位字母数字)" autocomplete="off"></el-input>
+                    <el-input type="text" v-model="dataDialogForm.username" :maxlength="20" placeholder="请输入用户名(6-20位字母数字)" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item
-                    label="手机号" prop="phoneNum" required>
-                    <el-input type="phone" :maxlength="11" v-model.number="dataDialogForm.phoneNum" placeholder="请输入手机号" autocomplete="off"></el-input>
+                <el-form-item label="手机号" prop="phoneNum" required>
+                    <el-input type="tel" :maxlength="11" v-model.number="dataDialogForm.phoneNum" placeholder="请输入手机号" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="mail" required>
-                    <el-input type="phone" v-model="dataDialogForm.mail" placeholder="请输入邮箱（XXX@XXXX）" autocomplete="off"></el-input>
+                    <el-input type="email" v-model="dataDialogForm.mail" placeholder="请输入邮箱（XXX@XXXX）" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="设置密码" prop="passwordstart" required>
-                    <el-input type="phone" :maxlength="16" v-model="dataDialogForm.passwordstart" show-password placeholder="请设置登录密码（8-16位字母和数字）" autocomplete="off"></el-input>
+                    <el-input type="password" :maxlength="16" v-model="dataDialogForm.passwordstart" show-password placeholder="请设置登录密码（8-16位字母和数字）" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="passwordend" required>
-                    <el-input type="phone" :maxlength="16" v-model="dataDialogForm.passwordend" show-password placeholder="请确认登录密码" autocomplete="off"></el-input>
+                    <el-input type="password" :maxlength="16" v-model="dataDialogForm.passwordend" show-password placeholder="请确认登录密码" autocomplete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer">
