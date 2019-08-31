@@ -21,17 +21,19 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="接口选择" required>
-                    <span style="font-size: 8px;color: #FE023F;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span><br/>
-
+                    <span style="font-size: 11px;color: #FE023F;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span><br/>
                     <template v-for="item in InterfaceApi">
-                        <el-checkbox :indeterminate="isIndeterminate">{{item.name}}</el-checkbox>
-
-                        <el-checkbox v-for="api in item.apisList" :label="api.id" :key="api.id">{{api.name}}</el-checkbox>
+                        <div class="left">
+                            <el-checkbox :indeterminate="isIndeterminate" :label="item.name"></el-checkbox>
+                        </div>
+                        <div class="right">
+                            <el-checkbox v-for="api in item.apisList" :label="api.id" :key="api.id">{{api.name}}</el-checkbox>
+                        </div>
                     </template>
 
 
                 </el-form-item>
-                <el-form-item label="应用描述" prop="introduction" required>
+                <el-form-item label="应用描述" required>
                     <el-input type="textarea" rows="5" show-word-limit :maxlength="100"
                               v-model="dataDialogForm.introduction" placeholder="请输入应用描述"
                               autocomplete="off"></el-input>
@@ -114,12 +116,17 @@
         font-size: .16rem;
         .add_application_content {
             background: rgba(255, 255, 255, 1);
-            box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             padding: 30px;
             box-sizing: border-box;
             .el-form {
-                width: 40%;
+                width: 520px;
+                .el-form-item__content{
+                    .right{
+                        margin-left: 24px;
+                    }
+                }
             }
         }
     }

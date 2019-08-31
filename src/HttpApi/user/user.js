@@ -1,10 +1,10 @@
 import AxIos from "../HttpApi";
 
 //获取用户列表
-export const getUserList = ({ page,pageCount,phoneNumList,mailList,accountState,creatTimeStart,creatTimeEnd }) => AxIos({
+export const getUserList = ({ page,pageSize,phoneNums,mails,enable,creatTimeStart,creatTimeEnd }) => AxIos({
     url: '/user/list',
-    method: 'post',
-    data: { page,pageCount,phoneNumList,mailList,accountState,creatTimeStart,creatTimeEnd }
+    method: 'get',
+    params: { page,pageSize,phoneNums,mails,enable,creatTimeStart,creatTimeEnd }
 });
 
 //创建新用户
