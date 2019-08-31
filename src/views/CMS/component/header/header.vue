@@ -11,12 +11,12 @@
             <img src="/static/images/meizhi.JPG" alt="">
             <span>{{userInfo.userName}}</span>
           </div>
-          <el-dropdown>
+          <el-dropdown @command="handleCommand">
             <span class="el-icon-arrow-right gm-sbc" @click="userInfo.isUserShow =! userInfo.isUserShow"></span>
             <div class="gm-popUp">
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item icon="el-icon-user">用户中心</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-switch-button">退出</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-switch-button" command="Quit">退出</el-dropdown-item>
               </el-dropdown-menu>
             </div>
           </el-dropdown>
@@ -25,29 +25,55 @@
 </template>
 
 <script>
-    export default {
-      name: "header",
-      data(){
-        return {
-          userInfo:{
-            userName:'',//用户姓名
-            userImg:'',//用户头像
-            isUserShow:false,
-          }
+  import {getUserLogout} from "../../../../HttpApi/login/loginApi";
+  export default {
+    name: "header",
+    data(){
+      return {
+        userInfo:{
+          userName:'',//用户姓名
+          userImg:'',//用户头像
+          uid:'',//用户ID
         }
-      },
-      methods:{
-        ClickUserRouter(){
-          this.userInfo.isUserShow = false;
-          this.$router.push({path:'/Index/userInfo'});
-        }
-      },
-      mounted(){
-        let localUser = JSON.parse(localStorage.getItem('userInfo'));
-        this.userInfo.userName = localUser ? localUser.userName : '智能国美';
-        //this.userInfo.userImg = JSON.parse(localStorage.getItem('userInfo')).userImg || '';
       }
+    },
+    methods:{
+      handleCommand(command){
+        let _this = this;
+        if(command == 'Quit'){
+          this.$confirm('此操作将退出登陆, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            customClass:'gm-config',
+            type: 'warning'
+          }).then(() => {
+            getUserLogout().then(response => {
+              if(response.data.success){
+                _this.Cookies.remove('token');
+                _this.$message({
+                  type: 'success',
+                  message: '退出登陆成功!'
+                });
+                setTimeout(()=>{
+                  _this.$router.push({path:'/Company/CompanyHome'});
+                })
+              }else{
+                _this.$message.error(response.data.data.msg);
+              }
+            })
+          }).catch(() => {});
+        }else{
+          this.$router.push({path:'/Index/userInfo',query:{id:this.userInfo.uid}});
+        }
+      }
+    },
+    mounted(){
+      let cookies = JSON.parse(this.Cookies.get('userInfo'));
+      this.userInfo.userName = cookies ? cookies.userName : '智能国美';
+      this.userInfo.userImg = cookies ? cookies.userImg : '';
+      this.userInfo.uid = cookies ? cookies.uid : '';
     }
+  }
 </script>
 
 <style lang="scss">
@@ -175,19 +201,17 @@
     }
   }
 }
-.el-dropdown-menu{
-  width: 1.6rem;
-  background: #1B1B1B;
-  border: none;
-  padding: 0;
-  right: -0.3rem !important;
-  .el-dropdown-menu__item{
-    line-height:0.5rem;
-    background: #1B1B1B;
-    color: #ffffff;
+.gm-config{
+  .el-message-box__content{
+    padding: 0.3rem 0.3rem;
+    color: #333333;
+    font-weight: 600;
+  }
+  .el-message-box__btns{
+    button{
+      padding: 0.09rem 0.25rem;
+    }
   }
 }
-.el-popper .popper__arrow{
-  display: none;
-}
+
 </style>

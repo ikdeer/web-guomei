@@ -103,7 +103,7 @@
           ],
           mail:[
             { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
+            { pattern:/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/, message: '请输入正确的邮箱地址', trigger: 'blur' },
           ],
           password:[
             { validator: password, trigger: 'blur' },
@@ -156,6 +156,7 @@
       },
       //注册
       ClickUserRegister(){
+        let _this = this;
         this.$refs.loginForm.validate((valid) => {
           //注册用户接口
           getUserRegister({
@@ -165,7 +166,21 @@
             'password':this.loginForm.password,//密码, 非MD5
             'msgCode':this.loginForm.msgCode,//短信验证码
           }).then(response => {
-
+            if(response.data.success){
+              if(response.data.data.errMsgCode != 23){
+                _this.$message({
+                  message: response.data.data.msg,
+                  type: 'success'
+                });
+                setTimeout(()=>{
+                  _this.$router.push({path:'/Company/login'});
+                },500)
+              }else{
+                _this.$message.error(response.data.data.msg);
+              }
+            }else{
+              _this.$message.error(response.data.msg);
+            }
           })
         })
       }
@@ -176,7 +191,7 @@
   }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
   .login{
     width: 100%;
     height: 100%;

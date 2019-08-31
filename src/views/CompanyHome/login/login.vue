@@ -54,7 +54,9 @@
             },
             userInfo:{
               userName:'',//用户姓名
-              userImg:''//用户头头像
+              userImg:'',//用户头头像
+              uid:'',//用户ID
+              groupID:'',//用户身份
             },
             rules2:{
               username:[
@@ -79,7 +81,9 @@
                   this.Cookies.set('token',response.data.data.token);
                   this.userInfo.userName = response.data.data.username;
                   this.userInfo.userImg = response.data.data.username.substring(0,1);
-                  localStorage.setItem('userInfo',JSON.stringify(this.userInfo));
+                  this.userInfo.uid = response.data.data.uid;
+                  this.userInfo.groupID = response.data.data.groupID;
+                  this.Cookies.set('userInfo',JSON.stringify(this.userInfo));
                   this.$message({message: '登陆成功', type: 'success'});
                   setTimeout(()=>{
                     _this.$router.push({path: '/Company/CompanyHome'});
@@ -95,7 +99,7 @@
     }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .login{
   width: 100%;
   height: 100%;

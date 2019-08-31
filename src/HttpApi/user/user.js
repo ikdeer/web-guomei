@@ -72,4 +72,3 @@ export const delContactInfo = ({ id }) => AxIos({
     method: 'post',
     data: { id }
 });
-

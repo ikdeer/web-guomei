@@ -12,12 +12,24 @@
               <div class="use-content">
                 <div class="use-contentPad">
                   <div class="user-TextNum">
-                    <p class="user-contentNum">已建应用：<span>101</span>个</p>
-                    <p class="user-contentNum">待审核应用：<span>0</span>个</p>
+                    <p class="user-contentNum">
+                      已建应用：
+                      <span>{{newAppsCount}}</span>
+                      个
+                    </p>
+                    <p class="user-contentNum">
+                      待审核应用：
+                      <span>{{toBeAuditedAppsCount}}</span>
+                      个
+                    </p>
                   </div>
                   <div class="use-contentButton">
-                    <el-button class="button-bluer" type="primary">管理应用</el-button>
-                    <el-button class="button-red">创建应用</el-button>
+                    <router-link to="/Index/applicationList">
+                      <el-button class="button-bluer" type="primary">管理应用</el-button>
+                    </router-link>
+                    <router-link :to="{path:'/Index/addApplication',query:{type:'add'}}">
+                      <el-button class="button-red">创建应用</el-button>
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -28,9 +40,11 @@
                 <div class="block">
                   <span class="demonstration">请选择时间</span>
                   <el-date-picker
-                    v-model="value6"
-                    type="daterange"
+                    v-model="TimeData.TimeDate"
+                    type="datetimerange"
+                    @change="TimeBluer"
                     range-separator="至"
+                    clearable
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
@@ -40,22 +54,22 @@
                 <el-table :data="tableData" header-row-class-name="tableHead" style="width: 100%">
                   <el-table-column label="API" width="110" align="center">
                     <template slot-scope="scope">
-                      <span>{{scope.row.date}}</span>
+                      <span>{{scope.row.name}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column label="调用量" align="center" width="110">
                     <template slot-scope="scope">
-                      <span>{{scope.row.name}}</span>
+                      <span>{{scope.row.apiCallCount}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column align="center" width="110" label="调用失败">
                     <template slot-scope="scope">
-                      <span>{{scope.row.province}}</span>
+                      <span>{{scope.row.apiCallFailCount}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column align="center" width="110" label="失败率">
                     <template slot-scope="scope">
-                      <span>{{scope.row.city}}</span>
+                      <span>{{scope.row.failureRate}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column align="center" label="详细统计">
@@ -141,40 +155,85 @@
 </template>
 
 <script>
-    import breadcrumb from '@/views/CMS/component/header/BoxHeader'
-    export default {
-        name: "overview",
-        components:{breadcrumb},
-        data(){
-          return {
-            value6:'',
-            tableData: [{
-              date: '2016-05-03',
-              name: '王小虎',
-              province: '上海',
-              city: '普陀区',
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-            }]
-          }
+import breadcrumb from '@/views/CMS/component/header/BoxHeader'
+import {getAppAudit,getApisConSumpTion} from "../../../HttpApi/overview/overview";
+export default {
+    name: "overview",
+    components:{breadcrumb},
+    data(){
+      return {
+        newAppsCount:0,//应用总数
+        toBeAuditedAppsCount:0,//待审核应用
+        TimeData:{
+          TimeDate:[],//时间获取
+          timeStart:'',//创建开始时间
+          timeEnd:'',//创建结束时间
+          top:5,//用量数量条数
         },
-        methods:{
-
-        }
+        tableData: [],//列表数据
+      }
+    },
+    methods:{
+      //应用审核数据总量
+      getAppAudit(){
+        getAppAudit({}).then(response => {
+          if(response.data.errorCode == 200){
+            this.newAppsCount = response.data.data.data.newAppsCount;
+            this.toBeAuditedAppsCount =response.data.data.data.toBeAuditedAppsCount;
+          }else{
+            this.$message.warning(response.data.errorInfo);
+          }
+        })
+      },
+      //选择时间
+      TimeBluer(){
+        getApisConSumpTion({
+          'timeStart':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[0]) : '',//开始时间
+          'timeEnd':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[1]) : '',//结束时间
+          'top':this.TimeData.top,
+        }).then(response => {
+          if(response.data.errorCode == 200){
+            if(response.data.data){
+              this.tableData = response.data.data.list;
+            }else{
+              this.tableData = [];
+            }
+          }else{
+            this.$message.warning(response.data.errorInfo);
+          }
+        })
+      },
+      //应用App用量列表
+      getApisConSumpTion(){
+        getApisConSumpTion(this.TimeData).then(response => {
+          if(response.data.errorCode == 200){
+            if(response.data.data){
+              this.tableData = response.data.data.list;
+            }else{
+              this.tableData = [];
+            }
+          }else{
+            this.$message.warning(response.data.errorInfo);
+          }
+        })
+      },
+      //时间转换格式2019-01-01 00:00:00
+      TimeCycle(Time){
+        let myDate = new Date(Time);
+        let F = myDate.getFullYear();//年
+        let M = myDate.getMonth()+1;//月
+        let D = myDate.getDate();//日
+        let H = myDate.getHours();//时
+        let Mis = myDate.getMinutes();//分
+        let S = myDate.getSeconds();//秒
+        return `${F}-${M > 10 ? M : '0'+M}-${D > 10 ? D : '0'+D} ${H > 10 ? H : '0'+H}:${Mis > 10 ? Mis : '0'+Mis}:${S > 10 ? S : '0'+S}`;
+      }
+    },
+    mounted(){
+      this.getAppAudit();
+      this.getApisConSumpTion();
     }
+}
 </script>
 
 <style scoped lang="scss">
@@ -303,7 +362,7 @@
             width: 100%;
             height: 0.4rem;
             padding-top: 0.05rem;
-            padding-bottom: 0.15rem;
+            padding-bottom: 0.3rem;
             span{
               font-size: 0.16rem;
               color: #333333;
@@ -327,7 +386,7 @@
           }
           .overIew-right_pad{
             width: 9rem;
-            height: 3.53rem;
+            height: 3.35rem;
             .tableHead{
               color: #333333;
               font-weight: 600;
