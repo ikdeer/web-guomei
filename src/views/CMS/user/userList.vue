@@ -14,7 +14,7 @@
                         <el-input :maxlength="20" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="账号状态">
-                        <el-select v-model="formData.enable"  class="user_list_form_status" placeholder="请选择状态">
+                        <el-select v-model="formData.disenable"  class="user_list_form_status" placeholder="请选择状态">
                             <el-option label="全部" value=""></el-option>
                             <el-option label="使用中" value="1"></el-option>
                             <el-option label="已停用" value="0"></el-option>
@@ -110,7 +110,7 @@
             title="创建用户"
             class="user_list_add_dialog"
             :visible.sync="userListAddDialog"
-            width="30%">
+            width="460px">
             <el-form :model="dataDialogForm"  :rules="addDialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="用户名" prop="username" required>
                     <el-input type="text" v-model="dataDialogForm.username" :maxlength="20" placeholder="请输入用户名(6-20位字母数字)" autocomplete="off"></el-input>
@@ -140,7 +140,7 @@
             title="提示"
             class="user_list_table_dialog"
             :visible.sync="userListTableDialog"
-            width="30%">
+            width="500px">
             <div>
                 <span>{{userListTableInfo.title}}</span>
             </div>
@@ -225,7 +225,7 @@
                 formData:{ //查询信息
                     phoneNums:'',
                     mails:'',
-                    enable:'',
+                    disenable:'',
                     dataTime:null
                 },
                 tableData:[],//用户列表
@@ -283,9 +283,11 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
-                    creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
-                    creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
+                    createTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
+                    createTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
                 };
+                if(this.formData.disenable)  params.enable = this.formData.disenable;
+
                 getUserList(params).then(({data})=>{
                     if(data.success){
                         this.tableData = data.data;
@@ -298,7 +300,7 @@
                 this.formData = {
                     phoneNums:'',
                     mails:'',
-                    enable:'',
+                    disenable:'',
                     dataTime:null
                 };
                 this.search();

@@ -11,7 +11,7 @@
                               :disabled="type"   autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="应用类型" prop="typeID" required>
-                    <el-select v-model="dataDialogForm.typeID" placeholder="请选择应用类型">
+                    <el-select v-model="dataDialogForm.typeID" @change="getInterface" placeholder="请选择应用类型">
                         <el-option
                             v-for="item in applicationTypes"
                             :key="item.id"
@@ -24,10 +24,10 @@
                     <span style="font-size: 11px;color: #FE023F;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span><br/>
                     <template v-for="item in InterfaceApi">
                         <div class="left">
-                            <el-checkbox :indeterminate="isIndeterminate" :label="item.name"></el-checkbox>
+                            <el-checkbox :indeterminate="item.isIndeterminate" @chenge="outerCheck(item)" :v-model="item.checkd" :label="item.name"></el-checkbox>
                         </div>
                         <div class="right">
-                            <el-checkbox v-for="api in item.apisList" :label="api.id" :key="api.id">{{api.name}}</el-checkbox>
+                            <el-checkbox v-for="api in item.apisList" :v-model="api.checkd" @cheng="innerCheck(api)" :label="api.name" :key="api.id"></el-checkbox>
                         </div>
                     </template>
 
@@ -93,20 +93,47 @@
                     }
                 })
             },
+
+            outerCheck(item){
+                console.log(item);
+            },
+            innerCheck(ins){
+                console.log(ins);
+            },
+
+
+
+
             getApplicationTypes(){
                 getApplicationTypes().then(({data})=>{
                     this.applicationTypes = data.data.list;
                 })
             },
-            getInterface(){
-                getApplicationTypesInterface({baseApiGroupID:1}).then(({data})=>{
-                    this.InterfaceApi = data.data.list;
+            getInterface(id){
+                getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
+                    if(data.data.list){
+                        /*给外层一个默认值 内层一个外层index备用*/
+                        data.data.list.forEach((item,index)=>{
+                            item.isIndeterminate = false;
+                            item.checkd = false;
+                            item.index = index;
+                            if(item.apisList){
+                                item.apisList.forEach((ins,ind)=>{
+                                    ins.checkd = false;
+                                    ins.index = index;
+                                })
+                            }
+                        });
+                        this.InterfaceApi = data.data.list;
+                    }else{
+                        this.InterfaceApi = [];
+                    }
+
                 })
             }
         },
         mounted() {
             this.getApplicationTypes();
-            this.getInterface();
         }
     }
 </script>

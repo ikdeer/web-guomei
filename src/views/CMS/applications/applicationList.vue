@@ -137,12 +137,12 @@
             :title="applicationInfo.title"
             class="application_list_table_dialog"
             :visible.sync="applicationTableDialog"
-            width="6rem">
+            width="460px">
             <div v-if="!applicationInfo.isAudit" class="info">
                 <span>{{applicationInfo.info}}</span>
             </div>
             <div v-if="applicationInfo.isAudit" class="form">
-                <el-form :inline="true" label-width="80px">
+                <el-form :inline="true" label-width="90px">
                     <el-form-item>
                         <el-radio-group v-model="auditInfo.radio">
                             <el-radio :label="0">审核通过</el-radio>
@@ -324,7 +324,7 @@
                 if(this.applicationInfo.status === 2){
                     disableApplication({
                         appID:this.applicationInfo.id,
-                        enable:1
+                        enable:0
                     }).then(({data})=>{
                         if(data.success){
                             this.$message.success('禁用成功');
@@ -447,16 +447,16 @@
             font-weight: 600;
         }
         .info{
-            height: 1.5rem;
+            height: 120px;
         }
         .form{
-            height: 1.5rem;
+            height: 120px;
             .el-form{
                 .el-form-item{
                     align-items: normal;
-                    width: 5rem;
+                    width: 100%;
                     .el-textarea{
-                        width: 4rem;
+                        width: 280px;
                     }
                 }
 
