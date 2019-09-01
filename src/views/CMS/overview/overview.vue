@@ -10,24 +10,28 @@
             <div class="overIew-use_left">
               <p class="overIew-use_text">应用</p>
               <div class="use-content">
-                <div class="use-content_left">
-                  <h4>已建应用：</h4>
-                  <div class="use-TextNum">
-                    <span>101</span>
-                    <span>个</span>
+                <div class="use-contentPad">
+                  <div class="user-TextNum">
+                    <p class="user-contentNum">
+                      已建应用：
+                      <span>{{newAppsCount}}</span>
+                      个
+                    </p>
+                    <p class="user-contentNum">
+                      待审核应用：
+                      <span>{{toBeAuditedAppsCount}}</span>
+                      个
+                    </p>
+                  </div>
+                  <div class="use-contentButton">
+                    <router-link to="/Index/applicationList">
+                      <el-button class="button-bluer" type="primary">管理应用</el-button>
+                    </router-link>
+                    <router-link :to="{path:'/Index/addApplication',query:{type:'add'}}">
+                      <el-button class="button-red">创建应用</el-button>
+                    </router-link>
                   </div>
                 </div>
-                <div class="use-content_right">
-                  <h4>待审核应用：</h4>
-                  <div class="use-TextNum">
-                    <span>0</span>
-                    <span>个</span>
-                  </div>
-                </div>
-              </div>
-              <div class="overIew-el_button">
-                <el-button class="button-bluer" type="primary">管理应用</el-button>
-                <el-button class="button-red">创建应用</el-button>
               </div>
             </div>
             <div class="overIew-use_right">
@@ -36,9 +40,11 @@
                 <div class="block">
                   <span class="demonstration">请选择时间</span>
                   <el-date-picker
-                    v-model="value6"
-                    type="daterange"
+                    v-model="TimeData.TimeDate"
+                    type="datetimerange"
+                    @change="TimeBluer"
                     range-separator="至"
+                    clearable
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
@@ -48,22 +54,22 @@
                 <el-table :data="tableData" header-row-class-name="tableHead" style="width: 100%">
                   <el-table-column label="API" width="110" align="center">
                     <template slot-scope="scope">
-                      <span>{{scope.row.date}}</span>
+                      <span>{{scope.row.name}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column label="调用量" align="center" width="110">
                     <template slot-scope="scope">
-                      <span>{{scope.row.name}}</span>
+                      <span>{{scope.row.apiCallCount}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column align="center" width="110" label="调用失败">
                     <template slot-scope="scope">
-                      <span>{{scope.row.province}}</span>
+                      <span>{{scope.row.apiCallFailCount}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column align="center" width="110" label="失败率">
                     <template slot-scope="scope">
-                      <span>{{scope.row.city}}</span>
+                      <span>{{scope.row.failureRate}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column align="center" label="详细统计">
@@ -149,40 +155,85 @@
 </template>
 
 <script>
-    import breadcrumb from '@/views/CMS/component/header/BoxHeader'
-    export default {
-        name: "overview",
-        components:{breadcrumb},
-        data(){
-          return {
-            value6:'',
-            tableData: [{
-              date: '2016-05-03',
-              name: '王小虎',
-              province: '上海',
-              city: '普陀区',
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-            }]
-          }
+import breadcrumb from '@/views/CMS/component/header/BoxHeader'
+import {getAppAudit,getApisConSumpTion} from "../../../HttpApi/overview/overview";
+export default {
+    name: "overview",
+    components:{breadcrumb},
+    data(){
+      return {
+        newAppsCount:0,//应用总数
+        toBeAuditedAppsCount:0,//待审核应用
+        TimeData:{
+          TimeDate:[],//时间获取
+          timeStart:'',//创建开始时间
+          timeEnd:'',//创建结束时间
+          top:5,//用量数量条数
         },
-        methods:{
-
-        }
+        tableData: [],//列表数据
+      }
+    },
+    methods:{
+      //应用审核数据总量
+      getAppAudit(){
+        getAppAudit({}).then(response => {
+          if(response.data.errorCode == 200){
+            this.newAppsCount = response.data.data.data.newAppsCount;
+            this.toBeAuditedAppsCount =response.data.data.data.toBeAuditedAppsCount;
+          }else{
+            this.$message.warning(response.data.errorInfo);
+          }
+        })
+      },
+      //选择时间
+      TimeBluer(){
+        getApisConSumpTion({
+          'timeStart':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[0]) : '',//开始时间
+          'timeEnd':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[1]) : '',//结束时间
+          'top':this.TimeData.top,
+        }).then(response => {
+          if(response.data.errorCode == 200){
+            if(response.data.data){
+              this.tableData = response.data.data.list;
+            }else{
+              this.tableData = [];
+            }
+          }else{
+            this.$message.warning(response.data.errorInfo);
+          }
+        })
+      },
+      //应用App用量列表
+      getApisConSumpTion(){
+        getApisConSumpTion(this.TimeData).then(response => {
+          if(response.data.errorCode == 200){
+            if(response.data.data){
+              this.tableData = response.data.data.list;
+            }else{
+              this.tableData = [];
+            }
+          }else{
+            this.$message.warning(response.data.errorInfo);
+          }
+        })
+      },
+      //时间转换格式2019-01-01 00:00:00
+      TimeCycle(Time){
+        let myDate = new Date(Time);
+        let F = myDate.getFullYear();//年
+        let M = myDate.getMonth()+1;//月
+        let D = myDate.getDate();//日
+        let H = myDate.getHours();//时
+        let Mis = myDate.getMinutes();//分
+        let S = myDate.getSeconds();//秒
+        return `${F}-${M > 10 ? M : '0'+M}-${D > 10 ? D : '0'+D} ${H > 10 ? H : '0'+H}:${Mis > 10 ? Mis : '0'+Mis}:${S > 10 ? S : '0'+S}`;
+      }
+    },
+    mounted(){
+      this.getAppAudit();
+      this.getApisConSumpTion();
     }
+}
 </script>
 
 <style scoped lang="scss">
@@ -237,62 +288,50 @@
             padding-bottom: 0.05rem;
           }
           .use-content{
-            width: 7.14rem;
-            height: 2.28rem;
+            width: 6.6rem;
+            height: 3.6rem;
             display: flex;
             display: -webkit-flex;
-            justify-content: space-between;
-            background:url('/static/images/establish_bg_image@2x.png')center center no-repeat;
-            /*background-size: 100% 100%;*/
-            box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
-            border-radius:0.2rem;
-            .use-content_left{
-              width: 3.7rem;
-              h4{
-                font-size: 0.24rem;
-                color: #ffffff;
-                margin-top: 0.39rem;
-                margin-left: 0.3rem;
+            align-items: center;
+            justify-content: center;
+            .use-contentPad{
+              width: 6rem;
+              height: 3.1rem;
+              box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
+              border-radius:0.2rem;
+              overflow: hidden;
+              background: url('/static/images/audit_bg_image@2x.png')center center no-repeat;
+              -webkit-background-size: cover;
+              background-size: cover;
+              .user-TextNum{
+                margin-top: 0.54rem;
+                .user-contentNum{
+                  font-size: 0.24rem;
+                  color: #666666;
+                  text-align: center;
+                  padding-bottom: 0.1rem;
+                  span{
+                    font-size:0.3rem;
+                    color: #F20A59;
+                  }
+                }
               }
-              .use-TextNum{
+              .use-contentButton{
+                padding-top: 0.15rem;
                 display: flex;
                 display: -webkit-flex;
-                align-items: baseline;
-                margin-top: 0.4rem;
-                margin-left: 0.3rem;
-                span:first-child{
-                  font-size: 0.8rem;
+                align-items: center;
+                justify-content: space-between;
+                flex-direction: column;
+                button{
+                  font-size: 0.16rem;
+                  width: 1.3rem;
+                  height: 0.4rem;
+                  background:#FE023F;
                   color: #ffffff;
-                  font-weight: 600;
-                }
-                span:last-child{
-                  font-size: 0.2rem;
-                  color: #ffffff;
-                }
-              }
-            }
-            .use-content_right{
-              width: 3.5rem;
-              h4{
-                font-size: 0.24rem;
-                color: #ffffff;
-                margin-top: 0.39rem;
-                margin-left: 0.3rem;
-              }
-              .use-TextNum{
-                display: flex;
-                display: -webkit-flex;
-                align-items: baseline;
-                margin-top: 0.4rem;
-                margin-left: 0.3rem;
-                span:first-child{
-                  font-size: 0.8rem;
-                  color: #ffffff;
-                  font-weight: 600;
-                }
-                span:last-child{
-                  font-size: 0.2rem;
-                  color: #ffffff;
+                  border-color:#FE023F;
+                  margin-left:0;
+                  margin-bottom: 0.1rem;
                 }
               }
             }
@@ -314,7 +353,7 @@
           }
         }
         .overIew-use_right{
-          width: 7.38rem;
+          width: 9rem;
           .overIew-dosage{
             display: flex;
             display: -webkit-flex;
@@ -323,7 +362,7 @@
             width: 100%;
             height: 0.4rem;
             padding-top: 0.05rem;
-            padding-bottom: 0.05rem;
+            padding-bottom: 0.3rem;
             span{
               font-size: 0.16rem;
               color: #333333;
@@ -346,8 +385,8 @@
             }
           }
           .overIew-right_pad{
-            width: 7.38rem;
-            height: 3.53rem;
+            width: 9rem;
+            height: 3.35rem;
             .tableHead{
               color: #333333;
               font-weight: 600;
