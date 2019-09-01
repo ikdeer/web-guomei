@@ -23,10 +23,18 @@ import applicationList from '@/views/CMS/applications/applicationList'
 import addApplication from '@/views/CMS/applications/addApplication'
 import applicationDetail from '@/views/CMS/applications/applicationDetail'
 
-Vue.use(Router)
+//控制跳转同一个路由报错
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+Vue.use(Router);
 
 const router = new Router({
   mode:'history',
+  //路由跳转后页面回到顶部
+  scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
       path: '/Company',
@@ -85,12 +93,12 @@ const router = new Router({
     },
     {
       path: '/Index',
-      name: 'Index',
+      name: '首页',
       component: Index,
       children:[
         {
           path: '/Index/overview',
-          name: 'overview',
+          name: '概览',
           component: overview,
           meta: {
             title:'',
@@ -99,7 +107,7 @@ const router = new Router({
         },
         {
           path: '/Index/userList',
-          name: 'userList',
+          name: '用户管理',
           component: userList,
           meta: {
             title:'',
@@ -196,8 +204,8 @@ const router = new Router({
   ]
 })
 
+//路由处理函数
 router.beforeEach((to, from, next)=>{
-
   document.title = to.meta.title || '国美人脸认证开放平台';
   next();
 });

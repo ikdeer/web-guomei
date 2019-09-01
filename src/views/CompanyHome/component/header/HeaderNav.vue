@@ -70,6 +70,10 @@
         if(this.Cookies.get('token')){
           this.$router.push({path: '/Index/overview'});
         }else{
+          this.$message({
+            message: '你还没有登陆,请先登陆~~~',
+            type: 'warning'
+          });
           this.$router.push({path: '/Company/login'});
         }
       }
