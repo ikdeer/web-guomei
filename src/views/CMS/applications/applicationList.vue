@@ -105,10 +105,11 @@
                         <template slot-scope="scope">
                             <el-button type="text" @click="statement(scope.row)">报表</el-button>
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
-                            <el-button type="text" @click="audit(scope.row)">审核</el-button>
-                            <el-button type="text" @click="edit(scope.row)">修改</el-button>
-                            <el-button type="text" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                            <el-button type="text" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                            <el-button type="text" v-if="scope.row.reviewState !== 21 && scope.row.reviewState !== 1" @click="audit(scope.row)">审核</el-button>
+                            <el-button type="text" v-if="scope.row.reviewState === 1" @click="commitAudit(scope.row)">提交审核</el-button>
+                            <el-button type="text" v-if="" @click="edit(scope.row)">修改</el-button>
+                            <el-button type="text" v-if="scope.row.enable === 0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                            <el-button type="text" v-if="scope.row.enable === 1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                             <el-button type="text" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -137,12 +138,12 @@
             :title="applicationInfo.title"
             class="application_list_table_dialog"
             :visible.sync="applicationTableDialog"
-            width="6rem">
+            width="460px">
             <div v-if="!applicationInfo.isAudit" class="info">
                 <span>{{applicationInfo.info}}</span>
             </div>
             <div v-if="applicationInfo.isAudit" class="form">
-                <el-form :inline="true" label-width="80px">
+                <el-form :inline="true" label-width="90px">
                     <el-form-item>
                         <el-radio-group v-model="auditInfo.radio">
                             <el-radio :label="0">审核通过</el-radio>
@@ -204,7 +205,8 @@
                 auditInfo:{
                     radio:0,
                     info:''
-                }
+                },
+                groupID:'',//用户登录信息
             }
         },
         methods: {
@@ -220,9 +222,10 @@
                 };
                 getAppList(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data.list;
+                        this.tableData = data.data?data.data.list:[];
                         this.page.total = data.pagerManager.totalResults;
                     }else{
+                        this.tableData = [];
                         this.$message.warning(data.errorInfo)
                     }
                 })
@@ -265,6 +268,18 @@
                 };
                 this.applicationTableDialog = true;
             },
+            commitAudit(row){
+                this.applicationInfo={
+                    title:'提交审核',
+                    info:'确认提交APPID为'+row.id+'的应用进行审核吗',
+                    btnInfo:'提交',
+                    type:true,
+                    isAudit:false,
+                    status:5,
+                    id:row.id
+                };
+                this.applicationTableDialog = true;
+            },
             on(row) {
                 //启用
                 disableApplication({
@@ -274,13 +289,14 @@
                     if(data.success){
                         this.applicationInfo={
                             title:'启用应用',
-                            info:'APPID'+row.id+'应用接口已启用',
+                            info:'APPID为'+row.id+'的应用接口已启用',
                             btnInfo:'我知道了',
                             type:false,
                             isAudit:false,
                             status:1,
                             id:row.id
                         };
+                        this.search();
                         this.applicationTableDialog = true;
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -292,7 +308,7 @@
                 // 禁用
                 this.applicationInfo={
                     title:'禁用应用',
-                    info:'APPID'+row.id+'应用接口将无法调用，请谨慎操作！',
+                    info:'APPID为'+row.id+'的应用接口将无法调用，请谨慎操作！',
                     btnInfo:'禁用',
                     type:true,
                     isAudit:false,
@@ -316,7 +332,7 @@
             submitTableDialog(){ //提交弹窗信息
                 //启用直接过
                 if(this.applicationInfo.status === 1){
-                    this.search();
+                    // this.search();
                     this.applicationTableDialog = false;
                 }
 
@@ -324,7 +340,7 @@
                 if(this.applicationInfo.status === 2){
                     disableApplication({
                         appID:this.applicationInfo.id,
-                        enable:1
+                        enable:0
                     }).then(({data})=>{
                         if(data.success){
                             this.$message.success('禁用成功');
@@ -360,7 +376,7 @@
                         params.reviewState = 21
                     }
                     if(this.auditInfo.radio === 1){
-                        params.reviewState = 22;
+                        params.reviewState = 20;
                         params.rejectReason = this.auditInfo.info;
                     }
                     auditApplication(params).then(({data})=>{
@@ -369,9 +385,24 @@
                             this.search();
                             this.applicationTableDialog = false;
                         }else{
-                            this.applicationTableDialog = false;
+                            this.$message.warning(data.errorInfo)
                         }
                     });
+                }
+                //提交审核
+                if(this.applicationInfo.status === 5){
+                    auditApplication({
+                        appID:this.applicationInfo.id,
+                        reviewState:10
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('提交成功');
+                            this.search();
+                            this.applicationTableDialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
                 }
             },
             handleSizeChange(val) {
@@ -396,6 +427,7 @@
             }
         },
         mounted() {
+            this.groupID = JSON.parse(this.Cookies.get('userInfo')).groupID;
             this.search();
             this.getAapplicationState();
             this.getApplicationReviewState();
@@ -447,16 +479,16 @@
             font-weight: 600;
         }
         .info{
-            height: 1.5rem;
+            height: 120px;
         }
         .form{
-            height: 1.5rem;
+            height: 120px;
             .el-form{
                 .el-form-item{
                     align-items: normal;
-                    width: 5rem;
+                    width: 100%;
                     .el-textarea{
-                        width: 4rem;
+                        width: 280px;
                     }
                 }
 

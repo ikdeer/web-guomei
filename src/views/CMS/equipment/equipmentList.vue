@@ -8,10 +8,8 @@
             <div class="equipment_form">
                 <el-form :inline="true">
                     <el-form-item label="设备位置">
-                        <el-select  clearable
-                                    v-model="formData.belongComID"
-                                    @clear="clearCompany"
-                                    @change="choosedCompany"
+                        <el-select v-model="formData.company"
+                                    @change="choosedCompany(1)"
                                     placeholder="请选择所属公司">
                             <el-option v-for="item in companyList"
                                        :label="item.name"
@@ -19,22 +17,19 @@
                                        :key="item.id">
                             </el-option>
                         </el-select>
-                        <el-select  clearable
-                                    v-model="formData.department"
-                                    @change="choosedCity"
-                                    @clear="clearDepartment"
+                        <el-select v-model="formData.department"
+                                    @change="choosedCompany(2)"
                                     placeholder="请选择所属部门">
                             <el-option v-for="item in departmentList"
-                                       :label="item.departmentName"
+                                       :label="item.name"
                                        :value="item.id"
                                        :key="item.id">
                             </el-option>
                         </el-select>
-                        <el-select  clearable
-                                    v-model="formData.floor"
+                        <el-select v-model="formData.floor"
                                     placeholder="请选择所属楼层">
                             <el-option v-for="item in floorList"
-                                       :label="item.floorName"
+                                       :label="item.name"
                                        :value="item.id"
                                        :key="item.id">
                             </el-option>
@@ -117,8 +112,8 @@
                         <template slot-scope="scope">
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
                             <el-button type="text" style="color: #E56565;" @click="edit(scope.row)">修改</el-button>
-                            <el-button type="text" style="color: #67C23A;" @click="on(scope.row)">上线</el-button>
-                            <el-button type="text" style="color: #67C23A;" @click="down(scope.row)">下线</el-button>
+                            <el-button type="text" v-if="scope.row.online === 0" style="color: #67C23A;" @click="on(scope.row)">上线</el-button>
+                            <el-button type="text" v-if="scope.row.online === 1" style="color: #67C23A;" @click="down(scope.row)">下线</el-button>
                             <el-button type="text" style="color: #E56565;" @click="binding(scope.row)">绑定人脸</el-button>
                         </template>
                     </el-table-column>
@@ -143,7 +138,7 @@
             :title="equipmentDialogInfo.title"
             class="equipment_list_dialog"
             :visible.sync="equipmentDialogInfo.dialog"
-            width="430px">
+            width="500px">
             <div class="equipment_list_steps">
                 <span :class="equipmentDialogInfo.type===1?'active':''">第一步 填写设备信息</span>
                 <span :class="equipmentDialogInfo.type===2?'active':''">第二步 绑定人脸分组</span>
@@ -151,13 +146,15 @@
             <div v-if="equipmentDialogInfo.type===1">
                 <el-form label-width="80px">
                     <el-form-item label="设备编号" required>
-                        <el-input :maxlength="30" v-model="dialogInfo.number" placeholder="请输入设备编号"></el-input>
+                        <el-input :maxlength="30" v-model="dialogInfo.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
                     <el-form-item label="设备类型" required>
-                        <el-select v-model="dialogInfo.status"  class="user_list_form_status" placeholder="请选择设备状态">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.type"  class="user_list_form_status" placeholder="请选择设备类型">
+                            <el-option v-for="item in dialogType"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     </el-form-item>
@@ -165,42 +162,56 @@
                         <el-input :maxlength="25" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
                     <el-form-item label="设备位置" required>
-                        <el-select v-model="dialogInfo.status" placeholder="请选择所属公司">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.siteOne" @change="Clicksite(1)" placeholder="请选择所属公司">
+                            <el-option v-for="item in siteOne"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属部门">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.siteTwo" @change="Clicksite(2)" class="marginTop" placeholder="请选择所属部门">
+                            <el-option v-for="item in siteTwo"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属楼层">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.siteThree" class="marginTop" placeholder="请选择所属楼层">
+                            <el-option v-for="item in siteThree"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="选择门店" required>
-                        <el-select v-model="dialogInfo.status" placeholder="请选择所属大区">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.shopOne" @change="ClickShop(1)" placeholder="请选择所属大区">
+                            <el-option v-for="item in shopOne"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属分部">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.shopTwo" @change="ClickShop(2)" class="marginTop" placeholder="请选择所属分部">
+                            <el-option v-for="item in shopTwo"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属二级分部">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.shopThree" @change="ClickShop(3)" class="marginTop" placeholder="请选择所属二级分部">
+                            <el-option v-for="item in shopThree"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属门店">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.shopFour"  class="marginTop" placeholder="请选择所属门店">
+                            <el-option v-for="item in shopFour"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-form>
@@ -209,20 +220,14 @@
             <div v-if="equipmentDialogInfo.type===2">
                 <el-form label-width="80px">
                     <el-form-item label="人脸分组" required>
-                        <el-select v-model="dialogInfo.status" placeholder="请选择所属公司">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.status" placeholder="请选择人脸分组">
+
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属部门">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择一级子分组">
+
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择所属楼层">
-                            <el-option label="国美金融" value=""></el-option>
-                            <el-option label="国美零售" value="1"></el-option>
-                            <el-option label="国美控股" value="2"></el-option>
+                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择二级子分组">
+
                         </el-select>
                     </el-form-item>
                     <el-form-item>
@@ -241,13 +246,13 @@
 </template>
 
 <script>
-    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment } from '@/HttpApi/equipment/equipment'
+    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
         data(){
             return{
                 formData:{
-                    belongComID:'',//公司
+                    company:'',//公司
                     department:'',//部门
                     floor:'',//楼层
                     type:'',//设备类型
@@ -258,9 +263,9 @@
                 companyList:[],//公司列表
                 departmentList:[],//部门列表
                 floorList:[],//楼层列表
+
                 EquipmentType:[],//设备类型
                 EquipmentState:[],//设备状态
-
 
                 tableData:[],
                 totalList:{ //在线量
@@ -280,32 +285,70 @@
                     btnInfo:'保存并下一步'
                 },
                 dialogInfo:{
+                    no:'',//设备编号
+                    name:'',//设备名称
+                    type:'',//设备类型
+                    siteOne:'',//设备位置123
+                    siteTwo:'',
+                    siteThree:'',
+                    shopOne:'',//门店1234
+                    shopTwo:'',
+                    shopThree:'',
+                    shopFour:'',
 
                 },
                 dialogFace:{
 
-                }
+                },
+
+                dialogType:[],//弹窗设备类型
+
+                siteOne:[],// 弹窗设备位置一级
+                siteTwo:[],// 弹窗设备位置二级
+                siteThree:[],// 弹窗设备位置三级
+
+                shopOne:[],//弹窗门店大区
+                shopTwo:[],//弹窗门店分部
+                shopThree:[],//弹窗门店二级分部
+                shopFour:[],//弹窗所属门店
+
+                faceGroup:[],//人脸分组
+                faceChildOne:[],//人脸一级分组
+                faceChildTwo:[],//人脸二级分组
             }
         },
         methods:{
-            clearCompany(){
-                //清除公司
-            },
-            choosedCompany(val){
-                // 选中公司
-                // console.log(val)
-                getEquipmentLocation({id:this.companyList[0].id}).then(({data})=>{
-                    // this.companyList = data.data.list;
+            choosedCompany(index){
+                // 选中公司 部门
+                let params = {};
+                if(index===1){
+                    params.id = this.formData.company
+                }else{
+                    params.id = this.formData.department
+                }
+                getEquipmentLocation(params).then(({data})=>{
+                    if(index===1){
+                        this.departmentList = data.data ? data.data.list:[];
+                        this.floorList = [];
+                    }
+                    if(index===2){
+                        this.floorList = data.data? data.data.list:[];
+                    }
                 })
-
-            },
-            choosedCity(){
-
-            },
-            clearDepartment(){
-
             },
             addEquiment(){//添加设备
+                this.dialogInfo = {
+                    no:'',//设备编号
+                    name:'',//设备名称
+                    type:'',//设备类型
+                    siteOne:'',//设备位置123
+                    siteTwo:'',
+                    siteThree:'',
+                    shopOne:'',//门店1234
+                    shopTwo:'',
+                    shopThree:'',
+                    shopFour:'',
+                };
                 this.equipmentDialogInfo={
                     title:'新建设备',
                     dialog:false,
@@ -324,7 +367,8 @@
                         this.tableData = data.data.list || [];
                         this.page.total = data.pagerManager.totalResults || 0;
                     }else{
-                        this.$message.warning(data.errorInfo)
+                        this.tableData = [];
+                        // this.$message.warning(data.errorInfo)
                     }
                 });
                 getLineTotal().then(({data})=>{
@@ -423,39 +467,87 @@
                     //请求保存接口，发送ajax
 
                 }
-
             },
-            getEquipmentLocation(){
-              //获取设别位置列表
-                getEquipmentLocation({}).then(({data})=>{
-                    this.companyList = data.data.list;
+            Clicksite(index){
+               //点击选择设备位置
+                let params = {};
+                if(index===1){
+                    params.id = this.dialogInfo.siteOne;
+                }
+                if(index===2){
+                    params.id = this.dialogInfo.siteTwo;
+                }
+                getEquipmentLocation(params).then(({data})=>{
+                    if(index===1){
+                        this.siteTwo = data.data ? data.data.list:[];
+                        this.siteThree = [];
+                    }
+                    if(index===2){
+                        this.siteThree = data.data? data.data.list:[];
+                    }
                 })
             },
-            getEquipmentType(){
+            ClickShop(index){
+                //点击选择门店大区
+                let params = {};
+                if(index===1){
+                    params.id = this.dialogInfo.shopOne;
+                }
+                if(index===2){
+                    params.id = this.dialogInfo.shopTwo;
+                }
+                if(index===3){
+                    params.id = this.dialogInfo.shopThree;
+                }
+                getEquipmentArea(params).then(({data})=>{
+                    if(index===1){
+                        this.shopTwo = data.data ? data.data.list:[];
+                        this.shopThree = [];
+                        this.shopFour = [];
+                    }
+                    if(index===2){
+                        this.shopThree = data.data ? data.data.list:[];
+                        this.shopFour = [];
+                    }
+                    if(index===3){
+                        this.shopFour = data.data ? data.data.list:[];
+                    }
+                })
+            },
+
+            getEquipment(){
+                //获取设别位置列表
+                getEquipmentLocation({}).then(({data})=>{
+                    this.companyList = data.data.list;
+                    this.siteOne = data.data ? data.data.list:[];
+                });
                 //获取设备类型
                 getEquipmentType().then(({data})=>{
                     /*data.data.list.unshift({
                         id: '',
                         name: "全部"
                     });*/
-                    this.EquipmentType = data.data.list;
-                })
-            },
-            getEquipmentState(){
+                    this.EquipmentType =data.data ? data.data.list:[];
+                });
+                //获取设备状态
                 getEquipmentState().then(({data})=>{
                     /*data.data.list.unshift({
                         id: '',
                         common: "全部"
                     });*/
-                    this.EquipmentState = data.data.list;
+                    this.EquipmentState = data.data ? data.data.list:[];
+                });
+                // 获取门店
+                getEquipmentArea({}).then(({data})=>{
+                    this.shopOne = data.data ? data.data.list:[];
                 })
-            }
+            },
         },
         mounted(){
             this.search();
-            this.getEquipmentLocation();
-            this.getEquipmentType();
-            this.getEquipmentState()
+            this.getEquipment();
+            // this.getEquipmentType();
+            // this.getEquipmentState()
         }
     }
 </script>
@@ -498,35 +590,35 @@
     }
     .equipment_list_dialog{
         .equipment_list_steps{
-            height: 0.5rem;
+            height: 40px;
             margin-bottom: 10px;
             span{
-                width: 40%;
+                width: 180px;
                 background: #EFEDED;
                 position: relative;
                 display: inline-block;
-                height: .5rem;
-                line-height: 0.5rem;
+                height: 40px;
+                line-height: 40px;
                 color: #666666;
                 text-align: center;
-                padding-left: 0.3rem;
+                padding-left: 30px;
                 &:after{
                     content: '';
                     display: block;
-                    border-top: 0.25rem solid transparent;
-                    border-bottom: 0.25rem solid transparent;
-                    border-left: 0.4rem solid #EFEDED;
+                    border-top: 20px solid transparent;
+                    border-bottom: 20px solid transparent;
+                    border-left: 30px solid #EFEDED;
                     position: absolute;
-                    right: -0.4rem;
+                    right: -30px;
                     top: 0;
                     z-index: 10;
                 }
                 &:before{
                     content: '';
                     display: block;
-                    border-top: 0.25rem solid #EFEDED;
-                    border-bottom: 0.25rem solid #EFEDED;
-                    border-left: 0.4rem solid white;
+                    border-top: 20px solid #EFEDED;
+                    border-bottom: 20px solid #EFEDED;
+                    border-left: 30px solid white;
                     position: absolute;
                     left: 0;
                     top: 0;
@@ -539,18 +631,21 @@
                 color: white;
                 background: #409EFF;
                 &:after{
-                    border-left: 0.4rem solid #409EFF;
+                    border-left: 30px solid #409EFF;
                 }
                 &:before{
-                    border-top: 0.25rem solid #409EFF;
-                    border-bottom: 0.25rem solid #409EFF;
+                    border-top: 20px solid #409EFF;
+                    border-bottom: 20px solid #409EFF;
                 }
             }
         }
         .el-form{
-            padding: 0 30px;
+            padding: 0 40px;
             .el-input{
-                width: 200px;
+                width: 280px;
+            }
+            .el-select{
+                width: 280px;
             }
             .marginTop{
                 margin-top: 10px;

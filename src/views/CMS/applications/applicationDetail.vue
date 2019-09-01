@@ -50,7 +50,7 @@
                     <el-table-column
                         label="操作" align="center">
                         <template slot-scope="scope">
-                            <el-button type="text" @click="down(scope.row)">停用</el-button>
+                            <el-button type="text" @click="down(scope.row)">{{scope.row.enable===1 ? '停用':'启用'}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -77,7 +77,7 @@
 
 <script>
     import {formatTimes} from "../../../lib/utils";
-    import { getApplicationDetail } from '@/HttpApi/application/application';
+    import { getApplicationDetail,enableApplicationApi } from '@/HttpApi/application/application';
     export default {
         name: "applicationDetail",
         data(){
@@ -150,8 +150,27 @@
                     }
                 })
             },
-            down(){
-
+            down(row){
+                let params = {
+                    appID:this.$route.query.id,
+                    apiID:row.id,
+                };
+                if(row.enable===1){
+                    //停用操作
+                    params.enable = 0
+                }
+                if (row.enable===0){
+                    //启用操作
+                    params.enable = 1
+                }
+                enableApplicationApi(params).then(({data})=>{
+                    if(data.success){
+                        this.search();
+                        this.$message.success(row.enable===1 ? '停用成功':'启用成功')
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             handleSizeChange(val){
                 this.page.pageSize = val;

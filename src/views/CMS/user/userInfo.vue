@@ -44,7 +44,7 @@
                 style="width: 100%">
                 <el-table-column
                     prop="name"
-                    label="用户名">
+                    label="姓名">
                 </el-table-column>
                 <el-table-column
                     prop="phoneNum"
@@ -228,7 +228,6 @@
                 this.$confirm('此操作将删除该联系人, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
-                    type: 'warning'
                 }).then(() => {
                     delContactInfo({id:row.id}).then(({data})=>{
                         if(data.success){
@@ -319,12 +318,12 @@
         filters:{
             status(val){
                 if(val==1){
-                    return '已启用'
+                    return '使用中'
                 }
                 if(val==2){
-                    return '未启用'
+                    return '已停用'
                 }
-                return '没有'
+                return ''
             }
         }
     }
@@ -339,6 +338,7 @@
             border-radius:10px;
             padding: 30px;
             box-sizing: border-box;
+            font-size: 12px;
             .info_title{
                 display: flex;
                 display: -webkit-flex;

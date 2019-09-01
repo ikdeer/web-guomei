@@ -1,10 +1,10 @@
 import AxIos from "../HttpApi";
 
 //获取应用列表接口 缺少审核状态
-export const getAppList = ({ page,pageSize,name,id,state,createName,creatTimeStart,creatTimeEnd }) => AxIos({
+export const getAppList = ({ page,pageSize,name,id,state,reviewState,createName,creatTimeStart,creatTimeEnd }) => AxIos({
     url: '/app/show',
     method: 'get',
-    params: { page,pageSize,name,id,state,createName,creatTimeStart,creatTimeEnd }
+    params: { page,pageSize,name,id,state,createName,reviewState,creatTimeStart,creatTimeEnd }
 });
 
 //启用/禁用应用 enable 0-禁用 1-启用
@@ -39,6 +39,14 @@ export const getApplicationDetail = ({ appID }) => AxIos({
     params: { appID }
 });
 
+//启用禁用api
+export const enableApplicationApi = ({ apiID,appID,enable }) => AxIos({
+    url: '/app/disable/api',
+    method: 'post',
+    data: { appID,enable,apiID }
+});
+
+
 
 //应用类型下拉框
 export const getApplicationTypes = () => AxIos({
@@ -66,9 +74,12 @@ export const getApplicationTypesInterface = ({baseApiGroupID}) => AxIos({
     params:{baseApiGroupID}
 });
 
+
+
+
 //新增应用
-export const createApplication = ({ amountLimit,apiIds,createrID,introduction,name,qpsLimit,typeID,id }) => AxIos({
+export const createApplication = ({ amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }) => AxIos({
     url: '/app/create',
     method: 'post',
-    data: { amountLimit,apiIds,createrID,introduction,name,qpsLimit,typeID,id }
+    data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }
 });

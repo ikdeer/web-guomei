@@ -70,6 +70,7 @@ h3{
 /*重置alert弹窗样式*/
 .el-message-box{
     border: none;
+    padding-bottom: 20px;
 }
 .el-message-box .el-message-box__header{
     background: #409EFF;
@@ -87,6 +88,7 @@ h3{
     padding: 50px 30px;
     color: #333333;
     font-weight: 600;
+    text-align: center;
 }
 .el-message-box .el-message-box__btns{
     display: flex;
