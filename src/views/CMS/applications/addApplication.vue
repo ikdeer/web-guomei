@@ -33,7 +33,7 @@
                               v-model="dataForm.introduction" placeholder="请输入应用描述"
                               autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="调用量" prop="amountLimit" required>
+                <!--<el-form-item label="调用量" prop="amountLimit" required>
                     <el-select v-model="dataForm.amountLimit" placeholder="请选择调用量">
                         <el-option label="100" value="100"></el-option>
                         <el-option label="500" value="500"></el-option>
@@ -46,9 +46,9 @@
                         <el-option label="50" value="50"></el-option>
                         <el-option label="100" value="100"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item>
-                    <el-button type="primary" @click="create">立即创建</el-button>
+                    <el-button type="primary" @click="create">{{type?'编辑应用':'立即创建'}}</el-button>
                     <el-button @click="$router.back()">&emsp;取消&emsp;</el-button>
                 </el-form-item>
             </el-form>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-    import { getApplicationTypes,getApplicationTypesInterface,createApplication } from '@/HttpApi/application/application';
+    import { getApplicationDetail,getApplicationTypes,getApplicationTypesInterface,createApplication,editApplication } from '@/HttpApi/application/application';
     export default {
         name: "addApplication",
         data() {
@@ -81,7 +81,7 @@
                     return callback(new Error('请输入应用描述'))
                 }
             };
-            let amountLimit = (rule, value, callback) => {
+            /*let amountLimit = (rule, value, callback) => {
                 if(value){
                     return callback()
                 }else{
@@ -94,7 +94,7 @@
                 }else{
                     return callback(new Error('请选择QPS限制'))
                 }
-            };
+            };*/
             let typeID = (rule, value, callback) => {
                 if(value){
                     return callback()
@@ -123,10 +123,10 @@
 
             return {
                 dataForm: {
-                    amountLimit:'',//调用量 , 用量限制
+                    //amountLimit:'',//调用量 , 用量限制
                     introduction:'',//应用描述
                     name:'',//应用名称
-                    qpsLimit:'',//qps限制
+                    //qpsLimit:'',//qps限制
                     typeID:'',//APP类型ID
                     id:'',//APP的ID
                     api:'1'
@@ -143,12 +143,12 @@
                     introduction:[
                         {validator:introduction,trigger:['blur','change']}
                     ],
-                    amountLimit:[
+                    /*amountLimit:[
                         {validator:amountLimit,trigger:['blur','change']}
                     ],
                     qpsLimit:[
                         {validator:qpsLimit,trigger:['blur','change']}
-                    ],
+                    ],*/
                     typeID:[
                         {validator:typeID,trigger:['blur','change']}
                     ],
@@ -180,14 +180,27 @@
                             createrID:this.info.uid,
                             apiIds:ids.join()
                         };
-                        createApplication(params).then(({data})=>{
-                            if(data.success){
-                                this.$message.success('创建成功');
-                                this.$router.back()
-                            }else{
-                                this.$message.warning(data.errorInfo)
-                            }
-                        })
+                        if(this.type){
+                            //编辑
+                            params.id = this.$route.query.id;
+                            editApplication(params).then(({data})=>{
+                                if(data.success){
+                                    this.$message.success('编辑成功');
+                                    this.$router.back()
+                                }else{
+                                    this.$message.warning(data.errorInfo)
+                                }
+                            })
+                        }else{
+                            createApplication(params).then(({data})=>{
+                                if(data.success){
+                                    this.$message.success('创建成功');
+                                    this.$router.back()
+                                }else{
+                                    this.$message.warning(data.errorInfo)
+                                }
+                            })
+                        }
                     } else {
                         return false;
                     }
@@ -222,7 +235,18 @@
                     }
                 }
             },
-
+            getDetail(){
+                getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
+                    if(data.success){
+                        this.dataForm.name = data.data.data.name;
+                        this.dataForm.introduction = data.data.data.introduction;
+                        this.dataForm.typeID = data.data.data.typeID;
+                        this.getInterface(data.data.data.typeID)
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
 
             getApplicationTypes(){
                 getApplicationTypes().then(({data})=>{
@@ -248,14 +272,15 @@
                     }else{
                         this.InterfaceApi = [];
                     }
-
                 })
             }
         },
         mounted() {
             this.getApplicationTypes();
             this.info = JSON.parse(this.Cookies.get('userInfo'));
-            // console.log(this.info)
+            if(this.$route.query.type === 'edit'){
+                this.getDetail();
+            }
         }
     }
 </script>

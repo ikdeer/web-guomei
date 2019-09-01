@@ -229,7 +229,7 @@
                     </el-form-item>
                     <el-form-item>
                         <span>还未设置人脸分组？</span>
-                        <el-button size="mini" type="success">去设置人脸分组</el-button>
+                        <el-button size="mini" @click="goGroup" type="success">去设置人脸分组</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -326,10 +326,13 @@
                 getEquipmentLocation(params).then(({data})=>{
                     if(index===1){
                         this.departmentList = data.data ? data.data.list:[];
+                        this.formData.floor = '';
+                        this.formData.department = '';
                         this.floorList = [];
                     }
                     if(index===2){
                         this.floorList = data.data? data.data.list:[];
+                        this.formData.floor = '';
                     }
                 })
             },
@@ -391,9 +394,23 @@
             },
             see(row) {
                 //查看操作
+                this.equipmentDialogInfo = {
+                    title:'查看设备',
+                    dialog:true,
+                    type:1,
+                    btnShow:true,//取消按钮显示隐藏
+                    btnInfo:' 下一步 '
+                }
             },
             edit(row){
                 //修改操作
+                this.equipmentDialogInfo = {
+                    title:'编辑设备',
+                    dialog:true,
+                    type:1,
+                    btnShow:true,//取消按钮显示隐藏
+                    btnInfo:'保存并下一步'
+                }
             },
             on(row){
                 //上线操作
@@ -465,6 +482,9 @@
 
                 }
             },
+            goGroup(){
+                this.$router.push({path: '/Index/faceList'})
+            },
             Clicksite(index){
                //点击选择设备位置
                 let params = {};
@@ -478,8 +498,11 @@
                     if(index===1){
                         this.siteTwo = data.data ? data.data.list:[];
                         this.siteThree = [];
+                        this.dialogInfo.siteTwo = '';
+                        this.dialogInfo.siteThree = '';
                     }
                     if(index===2){
+                        this.dialogInfo.siteThree = '';
                         this.siteThree = data.data? data.data.list:[];
                     }
                 })
@@ -501,13 +524,19 @@
                         this.shopTwo = data.data ? data.data.list:[];
                         this.shopThree = [];
                         this.shopFour = [];
+                        this.dialogInfo.shopTwo = '';
+                        this.dialogInfo.shopThree = '';
+                        this.dialogInfo.shopFour = '';
                     }
                     if(index===2){
                         this.shopThree = data.data ? data.data.list:[];
                         this.shopFour = [];
+                        this.dialogInfo.shopThree = '';
+                        this.dialogInfo.shopFour = '';
                     }
                     if(index===3){
                         this.shopFour = data.data ? data.data.list:[];
+                        this.dialogInfo.shopFour = '';
                     }
                 })
             },
