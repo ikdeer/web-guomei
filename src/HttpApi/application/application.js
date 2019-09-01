@@ -39,6 +39,14 @@ export const getApplicationDetail = ({ appID }) => AxIos({
     params: { appID }
 });
 
+//启用禁用api
+export const enableApplicationApi = ({ apiID,appID,enable }) => AxIos({
+    url: '/app/disable/api',
+    method: 'post',
+    data: { appID,enable,apiID }
+});
+
+
 
 //应用类型下拉框
 export const getApplicationTypes = () => AxIos({
@@ -66,9 +74,12 @@ export const getApplicationTypesInterface = ({baseApiGroupID}) => AxIos({
     params:{baseApiGroupID}
 });
 
+
+
+
 //新增应用
-export const createApplication = ({ amountLimit,apiIds,createrID,introduction,name,qpsLimit,typeID,id }) => AxIos({
+export const createApplication = ({ amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }) => AxIos({
     url: '/app/create',
     method: 'post',
-    data: { amountLimit,apiIds,createrID,introduction,name,qpsLimit,typeID,id }
+    data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }
 });

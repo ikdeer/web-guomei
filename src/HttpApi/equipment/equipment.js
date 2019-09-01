@@ -20,6 +20,14 @@ export const getEquipmentLocation = ({id}) => AxIos({
     params:{id}
 });
 
+//选择门店
+export const getEquipmentArea = ({id}) => AxIos({
+    url: '/options/device/equipmentArea',
+    method: 'get',
+    params:{id}
+});
+
+
 //设备类型
 export const getEquipmentType = () => AxIos({
     url: '/options/device/equipmentType',

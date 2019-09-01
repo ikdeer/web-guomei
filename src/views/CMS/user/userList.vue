@@ -8,10 +8,10 @@
             <div class="user_list_form">
                 <el-form :inline="true">
                     <el-form-item label="手机号">
-                        <el-input :maxlength="11" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
+                        <el-input :maxlength="200" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱">
-                        <el-input :maxlength="20" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
+                        <el-input :maxlength="200" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="账号状态">
                         <el-select v-model="formData.disenable"  class="user_list_form_status" placeholder="请选择状态">
@@ -64,7 +64,7 @@
                         align="center"
                         label="创建时间">
                         <template slot-scope="scope">
-                            {{formatTimes(scope.row.createTime)}}
+                            {{formatTimes(scope.row.regTime)}}
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -78,7 +78,7 @@
                         align="center"
                         label="账号状态">
                         <template slot-scope="scope">
-                            {{scope.row.accountState | accountState}}
+                            {{scope.row.state | accountState}}
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -286,12 +286,13 @@
                     createTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
                     createTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
                 };
-                if(this.formData.disenable)  params.enable = this.formData.disenable;
+                if(this.formData.disenable) params.enable = this.formData.disenable;
 
                 getUserList(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data;
+                        this.tableData = data.data.list || [];
                     }else{
+                        this.tableData = [];
                         this.$message.warning(data.errorInfo)
                     }
                 });
@@ -351,10 +352,11 @@
                     if (valid) {
                         let params = {
                             ...this.dataDialogForm,
-                            password:this.$md5(this.dataDialogForm.passwordend)
+                            password:this.dataDialogForm.passwordend
                         };
                         createUser(params).then(({data})=>{
                             if(data.success){
+                                this.$message.success('添加成功');
                                 this.search();
                                 this.userListAddDialog = false;
                             }else{

@@ -97,7 +97,7 @@
             title="提示"
             class="face__upload_dialog"
             :visible.sync="dataDialogForm.uploadFaceDialog"
-            width="60%">
+            width="890px">
             <h3>填写人员信息</h3>
             <el-form :inline="true" :model="dataDialogForm"  ref="dataDialogForm" label-width="80px">
                 <el-form-item label="图片来源" required>
@@ -137,6 +137,7 @@
                     <el-upload
                         class="avatar-uploader"
                         action="https://jsonplaceholder.typicode.com/posts/"
+                        accept="image/jpg,image/jpeg,image/png,image/x-ms-bmp"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
@@ -152,8 +153,8 @@
                 </div>
             </div>
             <span slot="footer">
-                <el-button @click="userListAddDialog = false">取 消</el-button>
                 <el-button type="primary" @click="userListAddDialog = false">确 定</el-button>
+                <el-button @click="userListAddDialog = false">取 消</el-button>
             </span>
         </el-dialog>
 
@@ -307,6 +308,7 @@
     .face__upload_dialog{
         h3{
             color: #666666;
+            font-size: 14px;
         }
         .el-form{
             .el-select{
@@ -342,7 +344,7 @@
                         overflow: hidden;
                     }
                     .el-icon-picture-outline{
-                        font-size: .8rem;
+                        font-size: 56px;
                         color: #cccccc;
                     }
                     .upload_info{
@@ -358,11 +360,11 @@
                         }
                         .btn{
                             width: 140px;
-                            height: .5rem;
+                            height: 36px;
                             text-align: center;
-                            line-height: .5rem;
+                            line-height: 36px;
                             color: white;
-                            margin-bottom: 5px;
+                            margin: 5px;
                             -webkit-border-radius: 5px;
                             -moz-border-radius: 5px;
                             border-radius: 5px;
