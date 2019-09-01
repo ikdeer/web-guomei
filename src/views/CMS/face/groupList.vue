@@ -1,8 +1,5 @@
 <template>
     <div class="group_list">
-        <nav class="overIew-nav">
-            <breadcrumb></breadcrumb>
-        </nav>
         <h3>子分组列表</h3>
         <div class="group_list_table">
             <div class="group_list_table_btn">

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Cookie from 'js-cookie'
 //CompanyHome
 import Company from '@/views/CompanyHome/coupany'
 import login from '@/views/CompanyHome/login/login'
@@ -101,7 +102,7 @@ const router = new Router({
           name: '概览',
           component: overview,
           meta: {
-            title:'',
+            title:'概览',
             code:1
           },
         },
@@ -110,7 +111,7 @@ const router = new Router({
           name: '用户管理',
           component: userList,
           meta: {
-            title:'',
+            title:'用户管理',
             code:2
           },
         },
@@ -119,7 +120,7 @@ const router = new Router({
           name: 'userInfo',
           component:userInfo ,
           meta: {
-            title:'',
+            title:'userInfo',
             code:2
           },
         },{
@@ -127,7 +128,7 @@ const router = new Router({
           name: 'applicationList',
           component:applicationList ,
           meta: {
-            title:'',
+            title:'applicationList',
             code:3
           },
         },{
@@ -135,7 +136,7 @@ const router = new Router({
           name: 'addApplication',
           component:addApplication ,
           meta: {
-            title:'',
+            title:'addApplication',
             code:3
           },
         },{
@@ -143,7 +144,7 @@ const router = new Router({
           name: 'applicationDetail',
           component:applicationDetail ,
           meta: {
-              title:'',
+              title:'applicationDetail',
               code:3
           },
       },{
@@ -151,7 +152,7 @@ const router = new Router({
         name: 'faceList',
         component: faceList,
         meta: {
-            title:'',
+            title:'faceList',
             code:4
           }
       },{
@@ -159,7 +160,7 @@ const router = new Router({
         name: 'addGroup',
         component: addGroup,
         meta: {
-          title:'',
+          title:'addGroup',
           code:4
         }
       },{
@@ -167,7 +168,7 @@ const router = new Router({
         name: 'groupList',
         component: groupList,
         meta: {
-          title:'',
+          title:'groupList',
           code:4
         }
       },{
@@ -175,7 +176,7 @@ const router = new Router({
         name: 'equipmentList',
         component: equipmentList,
         meta: {
-            title:'',
+            title:'equipmentList',
             code:5
         }
       },{
@@ -183,7 +184,7 @@ const router = new Router({
         name: 'statement',
         component: statement,
         meta: {
-          title:'',
+          title:'statement',
           code:6
         }
       },{
@@ -191,7 +192,7 @@ const router = new Router({
         name: 'log',
         component: log,
         meta: {
-          title:'',
+          title:'log',
           code:7
         }
       },
@@ -203,6 +204,7 @@ const router = new Router({
     }
   ]
 })
+
 
 //路由处理函数
 router.beforeEach((to, from, next)=>{

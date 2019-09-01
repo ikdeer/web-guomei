@@ -1,8 +1,5 @@
 <template>
     <div class="add_group">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <h3>创建分组</h3>
         <div class="add_group_content">
             <div class="addgroup_top">

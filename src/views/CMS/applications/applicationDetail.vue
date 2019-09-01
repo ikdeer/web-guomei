@@ -1,8 +1,5 @@
 <template>
     <div class="application_detail">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <h3>应用详情</h3>
         <div class="application_detail_top">
             <div class="application_detail_top_listone" v-for="item in InfoOne">

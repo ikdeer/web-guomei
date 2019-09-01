@@ -1,10 +1,6 @@
 <template>
     <div class="application_list">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <h3>应用列表</h3>
-
         <div class="application_list_content">
             <div class="application_list_form">
                 <el-form :inline="true" label-width="80px">

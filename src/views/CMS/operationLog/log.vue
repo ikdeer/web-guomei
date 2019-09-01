@@ -1,8 +1,5 @@
 <template>
     <div class="log">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <h3>日志信息</h3>
         <div class="log_content">
             <div class="log_form">

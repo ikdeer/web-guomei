@@ -1,8 +1,5 @@
 <template>
     <div class="add_application">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <h3>创建应用</h3>
         <div class="add_application_content">
             <el-form :model="dataForm" ref="dataForm" :rules="dataFormRules" label-width="80px">

@@ -1,8 +1,5 @@
 <template>
     <div class="equipment_list">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <h3>设备管理</h3>
         <div class="equipment_content">
             <div class="equipment_form">

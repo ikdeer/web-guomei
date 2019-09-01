@@ -1,8 +1,5 @@
 <template>
     <div class="facelist">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <div class="face_top">
             <h3>人脸分组列表</h3>
             <el-button type="primary" @click="updateFace">上传人脸图片</el-button>

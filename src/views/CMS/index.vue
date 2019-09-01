@@ -8,9 +8,7 @@
         <!-- 主体内容区域 -->
         <div class="content-right" :style="contentStyleObj">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="item in levelList" :key="item.path">
-              {{item.name}}
-            </el-breadcrumb-item>
+            <el-breadcrumb-item v-for="item in routerList" :to="item.path">{{item.name}}</el-breadcrumb-item>
           </el-breadcrumb>
           <transition name="slide-fade">
             <router-view class="view"></router-view>
@@ -25,34 +23,23 @@
         name: "index",
         data(){
           return {
+            routerList:[],
             contentStyleObj:{
               height:''
             },
-            levelList:null,
           }
         },
         watch:{
-          $route() {
-            this.getBreadcrumb();
-          }
+
         },
         created(){
           this.getHeight();
-          this.getBreadcrumb();
           window.addEventListener('resize', this.getHeight);
         },
         methods:{
           getHeight(){
             this.contentStyleObj.height = window.innerHeight - 60+'px';
-          },
-          getBreadcrumb(){
-            console.log(this.$route);
-            let matched = this.$route.matched.filter(item => item.name);
-            this.levelList = matched
           }
-        },
-        mounted(){
-
         },
         destroyed() {
           window.removeEventListener('resize', this.getHeight)
