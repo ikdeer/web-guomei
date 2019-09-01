@@ -205,11 +205,9 @@ const router = new Router({
   ]
 })
 
-
 //路由处理函数
 router.beforeEach((to, from, next)=>{
   document.title = to.meta.title || '国美人脸认证开放平台';
   next();
 });
-
 export default router;
