@@ -241,16 +241,17 @@
                 };
                 this.search();
             },
-            statement() {
+            statement(row) {
                 //查看报表
+                this.$router.push({path: '/Index/statement', query: {id: row.id}})
             },
             see(row) {
                 //查看应用详情
                 this.$router.push({path: '/Index/applicationDetail', query: {id: row.id}})
             },
-            edit() {
+            edit(row) {
                 //编辑应用
-                this.$router.push({path: '/Index/addApplication', query: {type: 'edit'}})
+                this.$router.push({path: '/Index/addApplication', query: {type: 'edit',id:row.id}})
             },
             audit(row){
                 this.applicationInfo={

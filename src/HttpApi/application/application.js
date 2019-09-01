@@ -83,3 +83,9 @@ export const createApplication = ({ amountLimit,createrID, introduction, name, q
     method: 'post',
     data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }
 });
+//编辑应用
+export const editApplication = ({ amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }) => AxIos({
+    url: '/app/modify',
+    method: 'post',
+    data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }
+});

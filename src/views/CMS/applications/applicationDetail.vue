@@ -9,10 +9,6 @@
                 <div>{{item.title}}</div>
                 <div>{{item.content}}</div>
             </div>
-            <div class="application_detail_top_listtwo" v-for="item in InfoTwo">
-                <div>{{item.title}}</div>
-                <div>{{item.content}}</div>
-            </div>
             <div style="clear: both"></div>
         </div>
         <h3>API列表</h3>
@@ -97,8 +93,7 @@
                 },{
                     title:'Secret Key',
                     content:''
-                }],
-                InfoTwo:[{
+                },{
                     title:'应用状态',
                     content:''
                 },{
@@ -109,9 +104,6 @@
                     content:''
                 },{
                     title:'修改时间',
-                    content:''
-                },{
-                    title:'QPS限制',
                     content:''
                 },{
                     title:'创建人',
@@ -135,13 +127,11 @@
                         this.InfoOne[2].content = data.data.data.id || '————';
                         this.InfoOne[3].content = data.data.data.apiKey || '————';
                         this.InfoOne[4].content = data.data.data.secretKey || '————';
-
-                        this.InfoTwo[0].content = data.data.data.showEnable || '————';
-                        this.InfoTwo[1].content = data.data.data.showReviewState || '————';
-                        this.InfoTwo[2].content = data.data.data.createTime || '————';
-                        this.InfoTwo[3].content = data.data.data.lastModifyTime || '————';
-                        this.InfoTwo[4].content = data.data.data.name || '————';
-                        this.InfoTwo[5].content = data.data.data.createrName || '————';
+                        this.InfoOne[5].content = data.data.data.showEnable || '————';
+                        this.InfoOne[6].content = data.data.data.showReviewState || '————';
+                        this.InfoOne[7].content = data.data.data.createTime || '————';
+                        this.InfoOne[8].content = data.data.data.lastModifyTime || '————';
+                        this.InfoOne[9].content = data.data.data.createrName || '————';
                         this.introduction = data.data.data.introduction || '无';
                         this.tableData = data.data.data.apisList || [];
                         this.page.total = data.pagerManager.totalResults || 0;
@@ -208,22 +198,6 @@
                     &:nth-child(1){
                         background: #F1F1F1;
                         font-weight: 600;
-                        border-right: 1px solid white;
-                    }
-                }
-            }
-            .application_detail_top_listtwo{
-                width: 16.666666%;
-                float: left;
-                text-align: center;
-                color: #666666;
-                div{
-                    height: .5rem;
-                    line-height: .5rem;
-                    box-sizing: border-box;
-                    &:nth-child(1){
-                        font-weight: 600;
-                        background: #F1F1F1;
                         border-right: 1px solid white;
                     }
                 }
