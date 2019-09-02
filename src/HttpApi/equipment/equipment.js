@@ -13,6 +13,14 @@ export const getLineTotal = () => AxIos({
     method: 'get',
 });
 
+//获取设别详情
+export const getEquipmentDetail = ({id}) => AxIos({
+    url: '/device/details',
+    method: 'get',
+    params:{id}
+});
+
+
 //设备位置
 export const getEquipmentLocation = ({id}) => AxIos({
     url: '/options/device/equipmentLocation',

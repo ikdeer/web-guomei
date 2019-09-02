@@ -243,7 +243,7 @@
 </template>
 
 <script>
-    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea } from '@/HttpApi/equipment/equipment'
+    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea,getEquipmentDetail } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
         data(){
@@ -400,7 +400,8 @@
                     type:1,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:' 下一步 '
-                }
+                };
+                this.getDetail(row.id)
             },
             edit(row){
                 //修改操作
@@ -467,6 +468,26 @@
             handleCurrentChange(val){
                 this.page.page = val;
                 this.search()
+            },
+            getDetail(id){
+                getEquipmentDetail({id:id}).then(({data})=>{
+                    if(data.success){
+                        this.dialogInfo = {
+                            no:data.data.no,//设备编号
+                            name:data.data.name,//设备名称
+                            type:data.data.type,//设备类型
+                            siteOne:'',//设备位置123
+                            siteTwo:'',
+                            siteThree:'',
+                            shopOne:'',//门店1234
+                            shopTwo:'',
+                            shopThree:'',
+                            shopFour:'',
+                        }
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             goStepsOne(){
                 this.equipmentDialogInfo.type=1;
