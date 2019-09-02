@@ -1,8 +1,5 @@
 <template>
     <div class="statement">
-        <nav class="overIew-nav">
-            <layout-breadcrumb></layout-breadcrumb>
-        </nav>
         <h3>监控报表</h3>
         <div class="statement_content">
             <div class="statement_form">

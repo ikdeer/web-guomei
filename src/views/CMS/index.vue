@@ -20,23 +20,23 @@
         name: "index",
         data(){
           return {
+            routerList:[],
             contentStyleObj:{
               height:''
-            }
+            },
           }
+        },
+        watch:{
+
         },
         created(){
           this.getHeight();
           window.addEventListener('resize', this.getHeight);
-
         },
         methods:{
           getHeight(){
             this.contentStyleObj.height = window.innerHeight - 60+'px';
           }
-        },
-        mounted(){
-
         },
         destroyed() {
           window.removeEventListener('resize', this.getHeight)

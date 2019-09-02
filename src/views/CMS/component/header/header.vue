@@ -206,6 +206,7 @@
     padding: 0.3rem 0.3rem;
     color: #333333;
     font-weight: 600;
+    text-align: left;
   }
   .el-message-box__btns{
     button{

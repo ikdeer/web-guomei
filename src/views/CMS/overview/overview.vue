@@ -1,8 +1,8 @@
 <template>
     <div class="overIew">
-      <nav class="overIew-nav">
+      <!--<nav class="overIew-nav">
         <breadcrumb></breadcrumb>
-      </nav>
+      </nav>-->
       <div class="overIew-content">
         <div class="overIew-use">
           <p class="overIew-userTitle">概览</p>
@@ -155,11 +155,9 @@
 </template>
 
 <script>
-import breadcrumb from '@/views/CMS/component/header/BoxHeader'
 import {getAppAudit,getApisConSumpTion} from "../../../HttpApi/overview/overview";
 export default {
     name: "overview",
-    components:{breadcrumb},
     data(){
       return {
         newAppsCount:0,//应用总数
