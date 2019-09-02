@@ -7,9 +7,6 @@
         <layout-Sider></layout-Sider>
         <!-- 主体内容区域 -->
         <div class="content-right" :style="contentStyleObj">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="item in routerList" :to="item.path">{{item.name}}</el-breadcrumb-item>
-          </el-breadcrumb>
           <transition name="slide-fade">
             <router-view class="view"></router-view>
           </transition>

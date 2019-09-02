@@ -20,23 +20,8 @@
         <div class="product-action">
           <div class="action-left">
             <ul class="action-ul">
-              <li>
-                <span>人脸检测与属性分析</span>
-              </li>
-              <li>
-                <span>人脸对比</span>
-              </li>
-              <li>
-                <span>人脸搜索</span>
-              </li>
-              <li>
-                <span>活体检测</span>
-              </li>
-              <li>
-                <span>视频流人脸采集</span>
-              </li>
-              <li>
-                <span>离线识别SDK</span>
+              <li v-for="(item,index) in SolutionList">
+                <span>{{item.name}}</span>
               </li>
             </ul>
           </div>
@@ -102,14 +87,30 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
+    import {getSolutionShow} from "../../../HttpApi/product/productApi";
     export default {
-        name: "product",
-        components:{Header_Nav,Footer_Nav},
-        data(){
-          return {
-
-          }
+      name: "product",
+      components:{Header_Nav,Footer_Nav},
+      data(){
+        return {
+          SolutionList:[],//数据展示
         }
+      },
+      methods:{
+        //解决方案列表
+        getSolutionShow(){
+          getSolutionShow().then(response => {
+            if(response.data.errorCode == 200){
+              this.SolutionList = response.data.data.list;
+            }else{
+              this.$message.error(response.data.pagerManager);
+            }
+          })
+        }
+      },
+      mounted(){
+        this.getSolutionShow();
+      }
     }
 </script>
 
