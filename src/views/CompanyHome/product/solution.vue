@@ -8,10 +8,10 @@
             <h4 class="header-leftTitle">人脸考勤</h4>
             <p class="header-leftText">利用高精度的人脸识别、对比能力，搭建考勤系统，提升考勤效率，提高防作弊能力</p>
             <div class="header-leftButton">
-              <el-button>立即申请</el-button>
-              <el-button>技术文档</el-button>
+              <el-button @click.stop="ClickApply">立即申请</el-button>
+              <router-link tag="button" class="el-button el-button--default el-button--small" :to="{path:'/Company/APITCF'}">技术文档</router-link>
             </div>
-            <p class="header-leftItem">国美家服务信息技术中心  提供技术支持</p>
+            <p class="header-leftItem">国美家服务信息技术中心提供技术支持</p>
           </div>
           <div class="header-right">
             <img src="/static/images/plan_banner_bg@2x.png" alt="">
@@ -20,23 +20,11 @@
         <div class="solution-center">
           <div class="solution-left">
             <ul class="solution-ul">
-              <li>
-                <span>人脸检测与属性分析</span>
-              </li>
-              <li>
-                <span>人脸对比</span>
-              </li>
-              <li>
-                <span>人脸搜索</span>
-              </li>
-              <li>
-                <span>活体检测</span>
-              </li>
-              <li>
-                <span>视频流人脸采集</span>
-              </li>
-              <li>
-                <span>离线识别SDK</span>
+              <li v-for="(item,index) in schemeList"
+                  :class="{'solution-liBg':item.flag}"
+                  :key="item.id"
+                  @click.stop="ClickScheme(item)">
+                <span>{{item.name}}</span>
               </li>
             </ul>
           </div>
@@ -102,7 +90,7 @@
                   <ul class="productComposition-listUl">
                     <li class="productComposition-listLi">
                       移动考勤
-                      <span class="el-icon-caret-bottom"></span>
+                      <span class="el-icon-caret-bottom gm-button"></span>
                     </li>
                     <li class="productComposition-listLi">摄像头无感知考勤</li>
                     <li class="productComposition-listLi">考勤一体机</li>
@@ -150,13 +138,53 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
+    import {getProductServiceShow} from "../../../HttpApi/product/solutionApi";
     export default {
       name: "solution",
       components:{Header_Nav,Footer_Nav},
       data(){
         return {
-
+          schemeList:[],//数据展示
+          schemeText:[],//右侧内容数据
         }
+      },
+      methods:{
+        //跳转应用创建页
+        ClickApply(){
+          let _this = this;
+          if(this.Cookies.get('token')){
+            _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+          }else{
+            _this.$message.error('此功能需要登陆过后才能查看');
+            setTimeout(()=>{
+              _this.$router.push({path:'/Company/login'});
+            },300)
+          }
+        },
+        //产品服务列表
+        getProductServiceShow(){
+          getProductServiceShow().then(response => {
+            if(response.data.errorCode == 200){
+              response.data.data.list.forEach((item) => {
+                item.flag = false;
+              });
+              response.data.data.list[0].flag = true;
+              this.schemeList = response.data.data.list;
+            }else{
+              this.$message.error(response.data.pagerManager);
+            }
+          })
+        },
+        //点击列表
+        ClickScheme(item){
+          for(let i =0; i < this.schemeList.length; i++){
+            this.schemeList[i].flag = false;
+          }
+          item.flag = true;
+        }
+      },
+      mounted(){
+        this.getProductServiceShow();
       }
     }
 </script>
@@ -207,7 +235,7 @@
         }
         .header-leftItem{
           font-size: 0.18rem;
-          color: #ffffff;
+          color: #666666;
           font-weight: 400;
         }
       }
@@ -233,13 +261,14 @@
         .solution-ul{
           width: 100%;
           border: 1px solid #EEEEEE;
-          >li{
+          li{
             width: 100%;
             height: 0.66rem;
             display: flex;
             display: -webkit-flex;
             align-items: center;
             border-bottom: 1px solid #cccccc;
+            cursor: pointer;
             span{
               color:#333333;
               font-size: 0.2rem;
@@ -249,6 +278,18 @@
           }
           li:last-child{
             border: none;
+          }
+          li:hover{
+            background: #036FE2;
+            span{
+              color: #ffffff;
+            }
+          }
+          .solution-liBg{
+            background: #036FE2;
+            span{
+              color: #ffffff;
+            }
           }
         }
       }
@@ -387,10 +428,11 @@
                   font-weight: 600;
                   text-align: center;
                   position: relative;
+                  cursor: pointer;
                   .el-icon-caret-bottom{
                     position: absolute;
                     left: 50%;
-                    top:0.61rem;
+                    top:0.6rem;
                     -webkit-transform: translate(-50%);
                     -ms-transform: translate(-50%);
                     transform: translate(-50%);

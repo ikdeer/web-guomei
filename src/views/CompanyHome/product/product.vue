@@ -8,10 +8,10 @@
             <h4 class="header-leftTitle">人脸识别</h4>
             <p class="header-leftText">基于深度学习的人脸识别方案，准确识别图片中的人脸信息，提供人脸属性识别、关键点定位、人脸1：1比对、人脸1：N识别、活体检测等能力</p>
             <div class="header-leftButton">
-              <el-button>立即申请</el-button>
-              <el-button>技术文档</el-button>
+              <el-button @click.stop="ClickApply">立即申请</el-button>
+              <router-link tag="button" class="el-button el-button--default el-button--small" :to="{path:'/Company/APITCF'}">技术文档</router-link>
             </div>
-            <p class="header-leftItem">国美家服务信息技术中心  提供技术支持</p>
+            <p class="header-leftItem">国美家服务信息技术中心提供技术支持</p>
           </div>
           <div class="header-right">
             <img src="/static/images/product_banner_bg@2x.png" alt="">
@@ -20,7 +20,10 @@
         <div class="product-action">
           <div class="action-left">
             <ul class="action-ul">
-              <li v-for="(item,index) in SolutionList">
+              <li v-for="(item,index) in SolutionList"
+                  :key="item.id"
+                  :class="{'action-liBg':item.flag}"
+                  @click.stop="ClickSolution(item)">
                 <span>{{item.name}}</span>
               </li>
             </ul>
@@ -94,18 +97,42 @@
       data(){
         return {
           SolutionList:[],//数据展示
+          SolutionText:[],//右侧内容数据
         }
       },
       methods:{
+        //跳转应用创建页
+        ClickApply(){
+          let _this = this;
+          if(this.Cookies.get('token')){
+            _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+          }else{
+            _this.$message.error('此功能需要登陆过后才能查看');
+            setTimeout(()=>{
+              _this.$router.push({path:'/Company/login'});
+            },300)
+          }
+        },
         //解决方案列表
         getSolutionShow(){
           getSolutionShow().then(response => {
             if(response.data.errorCode == 200){
+              response.data.data.list.forEach((item,index) => {
+                item.flag = false;
+              });
+              response.data.data.list[0].flag = true;
               this.SolutionList = response.data.data.list;
             }else{
               this.$message.error(response.data.pagerManager);
             }
           })
+        },
+        //点击列表
+        ClickSolution(item){
+          for(let i =0; i < this.SolutionList.length; i++){
+            this.SolutionList[i].flag = false;
+          }
+          item.flag = true;
         }
       },
       mounted(){
@@ -160,7 +187,7 @@
         }
         .header-leftItem{
           font-size: 0.18rem;
-          color: #ffffff;
+          color: #666666;
           font-weight: 400;
         }
       }
@@ -186,13 +213,14 @@
         .action-ul{
           width: 100%;
           border: 1px solid #EEEEEE;
-          >li{
+          li{
             width: 100%;
             height: 0.66rem;
             display: flex;
             display: -webkit-flex;
             align-items: center;
             border-bottom: 1px solid #cccccc;
+            cursor: pointer;
             span{
               color:#333333;
               font-size: 0.2rem;
@@ -202,6 +230,18 @@
           }
           li:last-child{
             border: none;
+          }
+          li:hover{
+            background:#036FE2;
+            span{
+              color: #ffffff;
+            }
+          }
+          .action-liBg{
+            background:#036FE2;
+            span{
+              color: #ffffff;
+            }
           }
         }
       }

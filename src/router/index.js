@@ -9,6 +9,7 @@ import CompanyHome from '@/views/CompanyHome/home/home'
 import product from '@/views/CompanyHome/product/product'
 import solution from '@/views/CompanyHome/product/solution'
 import APITCF from '@/views/CompanyHome/TCF/APITCF'
+import AccessToInformation from '@/views/CompanyHome/TCF/AccessToInformation'
 //CMS
 import Index from '@/views/CMS/index'
 import overview from '@/views/CMS/overview/overview'
@@ -86,6 +87,14 @@ const router = new Router({
           path: '/Company/APITCF',
           name: '技术文档',
           component: APITCF,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
+        {
+          path: '/Company/AccessToInformation',
+          name: '接入须知',
+          component: AccessToInformation,
           meta: {
             title:'国美人脸认证开放平台',
           },

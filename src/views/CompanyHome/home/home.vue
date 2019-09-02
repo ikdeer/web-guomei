@@ -11,8 +11,8 @@
               提供人脸检测定位、人脸属性识别和人脸比对等独立服务模块。可以为开发者和
               企业提供高性能的在线API服务，应用于人脸AR、人脸识别和认证、大规模人脸
               检索、照片管理等各种场景。</p>
-            <el-button class="IfoImg-button">立即申请</el-button>
-            <p class="IfoImg-TextSmall">国美家服务信息技术中心  提供技术支持</p>
+            <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
+            <p class="IfoImg-TextSmall">国美家服务信息技术中心提供技术支持</p>
           </div>
           <div class="IfoImg-right">
             <img src="/static/images/banner_bg@2x.png" alt="">
@@ -210,16 +210,30 @@
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
     export default {
-        name: "home",
-        components:{
-          Header_Nav,
-          Footer_Nav
-        },
-        data(){
-          return {
+      name: "home",
+      components:{
+        Header_Nav,
+        Footer_Nav
+      },
+      data(){
+        return {
 
+        }
+      },
+      methods:{
+        //跳转应用创建页
+        ClickApply(){
+          let _this = this;
+          if(this.Cookies.get('token')){
+            _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+          }else{
+            _this.$message.error('此功能需要登陆过后才能查看');
+            setTimeout(()=>{
+              _this.$router.push({path:'/Company/login'});
+            },300)
           }
         }
+      }
     }
 </script>
 
@@ -264,7 +278,7 @@
         .IfoImg-TextSmall{
           padding-top: 0.38rem;
           font-size: 0.18rem;
-          color: #ffffff;
+          color: #333333;
           font-weight: 400;
         }
       }

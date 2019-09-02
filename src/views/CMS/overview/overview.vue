@@ -109,7 +109,13 @@
           </div>
         </div>
         <div class="overIew-scene">
-          <p class="scene-topText">常用应用场景</p>
+          <div class="scene-top">
+            <p class="scene-topText">常用应用场景</p>
+            <div class="overIew-fixed">
+              <span>更多</span>
+              <i class="el-icon-arrow-right"></i>
+            </div>
+          </div>
           <div class="scene-ListPad">
             <div class="ListPad-scene">
               <div class="ListPad-scene_center">
@@ -143,10 +149,6 @@
                   <span class="ListPad-TextRed">人脸检索</span>
                 </div>
               </div>
-            </div>
-            <div class="overIew-fixed">
-              <span>更多</span>
-              <i class="el-icon-arrow-right"></i>
             </div>
           </div>
         </div>
@@ -294,7 +296,7 @@ export default {
             justify-content: center;
             .use-contentPad{
               width: 6rem;
-              height: 3.1rem;
+              height: 3.65rem;
               box-shadow:0 0.02rem 0.3rem 0 rgba(255,255,255,0.33);
               border-radius:0.2rem;
               overflow: hidden;
@@ -302,7 +304,7 @@ export default {
               -webkit-background-size: cover;
               background-size: cover;
               .user-TextNum{
-                margin-top: 0.54rem;
+                margin-top: 0.8rem;
                 .user-contentNum{
                   font-size: 0.24rem;
                   color: #666666;
@@ -401,7 +403,7 @@ export default {
       .basics-topText{
         font-size: 0.16rem;
         color: #333333;
-        line-height: 0.5rem;
+        line-height: 0.6rem;
         margin: 0;
         font-weight: 600;
       }
@@ -414,14 +416,15 @@ export default {
         border-radius:0.1rem;
         align-items: center;
         padding-left:0.3rem;
+        padding-right: 0.3rem;
+        justify-content: space-between;
         .basics-ListPad_face{
-          width: 4.24rem;
+          width: 32%;
           height: 2.12rem;
           display: flex;
           display: -webkit-flex;
           align-items: center;
           border: 1px solid #409EFF;
-          margin-right:0.2rem;
           img{
             width: 1.5rem;
             height: 1.32rem;
@@ -453,12 +456,32 @@ export default {
     }
     .overIew-scene{
       width: auto;
-      .scene-topText{
-        font-size: 0.16rem;
-        color:#333333;
-        font-weight: 600;
-        line-height: 0.55rem;
-        margin: 0;
+      .scene-top{
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 0.6rem;
+        .scene-topText{
+          font-size: 0.16rem;
+          color:#333333;
+          font-weight: 600;
+          margin: 0;
+        }
+        .overIew-fixed{
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: center;
+          margin-right:0.1rem;
+          span{
+            font-size:0.16rem;
+            font-weight: 500;
+          }
+          .el-icon-arrow-right{
+            font-size:0.16rem;
+          }
+        }
       }
       .scene-ListPad{
         display: flex;
@@ -466,12 +489,10 @@ export default {
         background:#ffffff;
         box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
         border-radius:0.1rem;
-        padding-left: 0.3rem;
-        padding-top: 0.6rem;
-        padding-bottom: 0.3rem;
-        position: relative;
+        padding: 0.3rem;
+        justify-content: space-between;
         .ListPad-scene{
-          width: 4.5rem;
+          width: 32%;
           height:2.86rem;
           border: 1px solid #409EFF;
           background:rgba(241,249,255,1);
@@ -479,7 +500,6 @@ export default {
           display: -webkit-flex;
           align-items: center;
           justify-content: center;
-          margin-right:0.2rem;
           .ListPad-scene_center{
             width: 3.23rem;
             >img{
@@ -533,22 +553,6 @@ export default {
         .ListPad-bgRed{
           border: 1px solid #ED6A65;
           background:rgba(255,235,234,1);
-        }
-        .overIew-fixed{
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          justify-content: center;
-          position: absolute;
-          top: 0.21rem;
-          right: 0.3rem;
-          span{
-            font-size:0.16rem;
-            font-weight: 500;
-          }
-          .el-icon-arrow-right{
-            font-size:0.16rem;
-          }
         }
       }
     }

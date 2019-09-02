@@ -9,35 +9,26 @@
         </div>
       </div>
       <div class="header-navCenter">
-        <ul class="navCenter-ul">
-          <li>
-            <router-link to="/Company/product">产品服务</router-link>
-            <ul class="navCenter-ulMenu">
-              <li>
-                <router-link to="">技术文档</router-link>
-              </li>
-              <li>
-                <router-link to="">产品服务</router-link>
-              </li>
-              <li>
-                <router-link to="">接入须知</router-link>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <router-link to="/Company/solution">解决方案</router-link>
-          </li>
-          <li>
-            <router-link to="/Company/APITCF">技术文档</router-link>
-          </li>
-          <li>
-            <router-link to="/Company/APITCF">接入须知</router-link>
-          </li>
-        </ul>
+        <div class="navCenter-div">
+          <router-link  tag="div"
+                        class="One-Level"
+                        v-for="(item,index) in stairList"
+                        :to="{path:item.stairRouter}">
+            <span class="One-LevelText">{{item.stairText}}</span>
+            <div class="navCenter-divMenu" v-if="item.secondList.length != '0'">
+              <router-link  tag="div"
+                            class="second-level"
+                            v-for="(items,indexS) in item.secondList"
+                            :to="{path:''}">
+                <span class="second-levelText">{{items.secondText}}</span>
+              </router-link>
+            </div>
+          </router-link>
+        </div>
       </div>
     </div>
     <div class="header-navRight">
-      <router-link to="/Company/userLogin">
+      <router-link :to="{path:'/Company/userLogin'}">
         <el-button type="text" class="button-login">注册</el-button>
       </router-link>
       <el-button type="text" class="button-register" @click="ClickLogout">登陆</el-button>
@@ -51,7 +42,45 @@
     name: "header",
     data(){
       return {
-
+        stairList:[
+          {
+            stairText:'产品服务',
+            isStairText:false,
+            stairRouter:'/Company/product',
+            secondList:[
+              {
+                secondText:'技术文档',
+                isSecondText:false,
+              },
+              {
+                secondText:'产品服务',
+                isSecondText:false,
+              },
+              {
+                secondText:'接入须知',
+                isSecondText:false,
+              },
+            ]
+          },
+          {
+            stairText:'解决方案',
+            isStairText:false,
+            stairRouter:'/Company/solution',
+            secondList:[]
+          },
+          {
+            stairText:'技术文档',
+            isStairText:false,
+            stairRouter:'/Company/APITCF',
+            secondList:[]
+          },
+          {
+            stairText:'接入须知',
+            isStairText:false,
+            stairRouter:'/Company/AccessToInformation',
+            secondList:[]
+          },
+        ]
       }
     },
     methods:{
@@ -74,7 +103,7 @@
             message: '你还没有登陆,请先登陆~~~',
             type: 'warning'
           });
-          this.$router.push({path: '/Company/login'});
+          this.$router.push({path: '/Company/login',query:{console:'overview'}});
         }
       }
     }
@@ -129,11 +158,11 @@
       }
       .header-navCenter{
         margin-left: 0.82rem;
-        .navCenter-ul{
+        .navCenter-div{
           display: flex;
           display: -webkit-flex;
           align-items: center;
-          >li{
+          .One-Level{
             width: 1.6rem;
             height:0.8rem;
             display: flex;
@@ -142,12 +171,12 @@
             justify-content: center;
             position: relative;
             cursor: pointer;
-            a{
+            .One-LevelText{
               font-size: 0.16rem;
               text-decoration: none;
               color: #ffffff;
             }
-            .navCenter-ulMenu{
+            .navCenter-divMenu{
               width: 1.6rem;
               padding: 0.2rem 0;
               position: absolute;
@@ -155,33 +184,32 @@
               top: 0.8rem;
               background: #1A1A1A;
               display: none;
-              >li{
+              .second-level{
                 display: flex;
                 display: -webkit-flex;
                 align-items: center;
                 justify-content: center;
-                >a{
+                .second-levelText{
                   font-size: 0.14rem;
                   padding: 0.09rem 0.18rem;
                   color: #ffffff;
-                  text-decoration: none;
+                  display: block;
                 }
               }
-              >li:hover{
-                >a{
+              .second-level:hover{
+                .second-levelText{
                   background: #2B2B2B;
                   color: #F20A59;
-                  text-decoration: none;
                 }
               }
             }
           }
-          >li:hover{
+          .One-Level:hover{
             background: #000000;
-            .navCenter-ulMenu{
+            .navCenter-divMenu{
               display: block;
             }
-            >a{
+            .One-LevelText{
               color: #F20A59;
               text-decoration: none;
               line-height: 0.8rem;

@@ -7,7 +7,7 @@
       </div>
       <div class="login-center">
         <div class="login-input">
-          <p class="login-text">登陆</p>
+          <p class="login-text">登 录</p>
           <el-form :model="loginForm" :rules="rules2" ref="loginForm">
             <div class="login-form">
               <el-form-item prop="username">
@@ -31,7 +31,7 @@
               <span>忘记密码</span>
             </div>
             <div class="login-button">
-              <el-button @click="ClickUserLogin">登陆</el-button>
+              <el-button @click="ClickUserLogin">登 录</el-button>
             </div>
           </el-form>
         </div>
@@ -75,21 +75,27 @@
           ClickUserLogin(){
             let _this = this;
             this.$refs.loginForm.validate((valid) => {
-              getUserLogin({'username':this.loginForm.username,'password':this.$md5(this.loginForm.password)})
-                .then(response => {
-                if(response.data.success){
-                  this.Cookies.set('token',response.data.data.token);
-                  this.userInfo.userName = response.data.data.username;
-                  this.userInfo.userImg = response.data.data.username.substring(0,1);
-                  this.userInfo.uid = response.data.data.uid;
-                  this.userInfo.groupID = response.data.data.groupID;
-                  this.Cookies.set('userInfo',JSON.stringify(this.userInfo));
-                  this.$message({message: '登陆成功', type: 'success'});
-                  setTimeout(()=>{
-                    _this.$router.push({path: '/Company/CompanyHome'});
-                  },500)
-                }
-              })
+              if(valid){
+                getUserLogin({'username':this.loginForm.username,'password':this.$md5(this.loginForm.password)})
+                  .then(response => {
+                    if(response.data.success){
+                      this.Cookies.set('token',response.data.data.token);
+                      this.userInfo.userName = response.data.data.username;
+                      this.userInfo.userImg = response.data.data.username.substring(0,1);
+                      this.userInfo.uid = response.data.data.uid;
+                      this.userInfo.groupID = response.data.data.groupID;
+                      this.Cookies.set('userInfo',JSON.stringify(this.userInfo));
+                      this.$message({message: '登陆成功', type: 'success'});
+                      setTimeout(()=>{
+                        if(_this.$route.query.console == 'overview'){
+                          _this.$router.push({path: '/Index/overview'});
+                        }else{
+                          _this.$router.push({path: '/Company/CompanyHome'});
+                        }
+                      },500)
+                    }
+                  })
+              }
             })
           }
         },

@@ -100,6 +100,7 @@
           ],
           phoneNum:[
             { required: true, message: '请输入手机号', trigger: 'blur' },
+            { pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '请输入正确的11位手机号码', trigger: 'blur' },
           ],
           mail:[
             { required: true, message: '请输入邮箱地址', trigger: 'blur' },
@@ -158,30 +159,32 @@
       ClickUserRegister(){
         let _this = this;
         this.$refs.loginForm.validate((valid) => {
-          //注册用户接口
-          getUserRegister({
-            'username':this.loginForm.username,//用户名
-            'phoneNum':this.loginForm.phoneNum,//手机号码
-            'mail':this.loginForm.mail,//邮箱
-            'password':this.loginForm.password,//密码, 非MD5
-            'msgCode':this.loginForm.msgCode,//短信验证码
-          }).then(response => {
-            if(response.data.success){
-              if(response.data.data.errMsgCode != 23){
-                _this.$message({
-                  message: response.data.data.msg,
-                  type: 'success'
-                });
-                setTimeout(()=>{
-                  _this.$router.push({path:'/Company/login'});
-                },500)
+          if(valid){
+            //注册用户接口
+            getUserRegister({
+              'username':this.loginForm.username,//用户名
+              'phoneNum':this.loginForm.phoneNum,//手机号码
+              'mail':this.loginForm.mail,//邮箱
+              'password':this.loginForm.password,//密码, 非MD5
+              'msgCode':this.loginForm.msgCode,//短信验证码
+            }).then(response => {
+              if(response.data.success){
+                if(response.data.data.errMsgCode != 23){
+                  _this.$message({
+                    message: response.data.data.msg,
+                    type: 'success'
+                  });
+                  setTimeout(()=>{
+                    _this.$router.push({path:'/Company/login'});
+                  },500)
+                }else{
+                  _this.$message.error(response.data.data.msg);
+                }
               }else{
-                _this.$message.error(response.data.data.msg);
+                _this.$message.error(response.data.msg);
               }
-            }else{
-              _this.$message.error(response.data.msg);
-            }
-          })
+            })
+          }
         })
       }
     },
