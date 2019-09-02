@@ -141,7 +141,7 @@
                 <span :class="equipmentDialogInfo.type===2?'active':''">第二步 绑定人脸分组</span>
             </div>
             <div v-if="equipmentDialogInfo.type===1">
-                <el-form label-width="80px">
+                <el-form label-width="80px" :disabled="this.equipmentDialogInfo.isSee">
                     <el-form-item label="设备编号" required>
                         <el-input :maxlength="30" v-model="dialogInfo.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
@@ -215,7 +215,7 @@
             </div>
 
             <div v-if="equipmentDialogInfo.type===2">
-                <el-form label-width="80px">
+                <el-form label-width="80px" :disabled="this.equipmentDialogInfo.isSee">
                     <el-form-item label="人脸分组" required>
                         <el-select v-model="dialogInfo.status" placeholder="请选择人脸分组">
 
@@ -243,7 +243,7 @@
 </template>
 
 <script>
-    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea } from '@/HttpApi/equipment/equipment'
+    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea,getEquipmentDetail } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
         data(){
@@ -278,6 +278,7 @@
                     title:'新建设备',
                     dialog:false,
                     type:1,
+                    isSee:false,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 },
@@ -353,6 +354,7 @@
                     title:'新建设备',
                     dialog:false,
                     type:1,
+                    isSee:false,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 };
@@ -398,9 +400,11 @@
                     title:'查看设备',
                     dialog:true,
                     type:1,
+                    isSee:true,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:' 下一步 '
-                }
+                };
+                this.getDetail(row.id)
             },
             edit(row){
                 //修改操作
@@ -408,9 +412,12 @@
                     title:'编辑设备',
                     dialog:true,
                     type:1,
+                    isSee:false,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
-                }
+                };
+                this.getDetail(row.id);
+                this.getDialogEquType();
             },
             on(row){
                 //上线操作
@@ -460,6 +467,12 @@
                     btnInfo:' 确 定 '
                 }
             },
+            getDialogEquType(){
+                //获取设备类型
+                getEquipmentType().then(({data})=>{
+                    this.dialogType = data.data ? data.data.list:[];
+                });
+            },
             handleSizeChange(val){
                 this.page.pageSize = val;
                 this.search()
@@ -467,6 +480,26 @@
             handleCurrentChange(val){
                 this.page.page = val;
                 this.search()
+            },
+            getDetail(id){
+                getEquipmentDetail({id:id}).then(({data})=>{
+                    if(data.success){
+                        this.dialogInfo = {
+                            no:data.data.no,//设备编号
+                            name:data.data.name,//设备名称
+                            type:data.data.type,//设备类型
+                            siteOne:'',//设备位置123
+                            siteTwo:'',
+                            siteThree:'',
+                            shopOne:'',//门店1234
+                            shopTwo:'',
+                            shopThree:'',
+                            shopFour:'',
+                        }
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             goStepsOne(){
                 this.equipmentDialogInfo.type=1;

@@ -5,10 +5,10 @@
             <div class="statement_form">
                 <el-form label-width="80px">
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" style="width: 200px" v-model="formData.user" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" style="width: 200px" v-model="formData.createName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="选择应用">
-                        <el-select v-model="formData.category" multiple placeholder="请选择">
+                        <el-select v-model="formData.appIds" multiple placeholder="请选择">
                             <el-option
                                 v-for="item in formData.categoryList"
                                 :key="item.id"
@@ -18,7 +18,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="选择API">
-                        <el-select v-model="formData.status"  class="user_list_form_status" placeholder="请选择状态">
+                        <el-select v-model="formData.apiIds"  class="user_list_form_status" placeholder="请选择状态">
                             <el-option
                                 v-for="item in formData.categoryList"
                                 :key="item.id"
@@ -29,14 +29,14 @@
                     </el-form-item>
                     <el-form-item label="统计项">
                         <el-radio-group v-model="formData.radio">
-                            <el-radio :label="3">调用量</el-radio>
-                            <el-radio :label="6">QPS</el-radio>
+                            <el-radio :label="1">调用量</el-radio>
+                            <el-radio :label="2">QPS</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="监控项">
                         <el-checkbox-group v-model="formData.checkList">
-                            <el-checkbox label="调用成功"></el-checkbox>
-                            <el-checkbox label="调用失败"></el-checkbox>
+                            <el-checkbox label="1">调用成功</el-checkbox>
+                            <el-checkbox label="2">调用失败</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>
                     <el-form-item label="时间段">
@@ -55,7 +55,18 @@
                 </el-form>
             </div>
             <div class="statement_echarts">
-
+                <div class="info">
+                    <div>
+                        <span>调用总量：<span style="color:#409EFF;">{{callData.callDataCount}}</span></span>
+                        <span>调用成功：<span style="color:#409EFF;">{{callData.callSucessCount}}</span></span>
+                        <span>调用失败：<span style="color:#409EFF;">{{callData.callFailCount}}</span></span>
+                    </div>
+                    <div>
+                        <el-radio v-model="radio" label="1">按日</el-radio>
+                        <el-radio v-model="radio" label="2">按时</el-radio>
+                    </div>
+                </div>
+                <div id="MyEcharts" class="echartsbox"></div>
             </div>
             <div class="statement_table">
                 <el-table
@@ -63,42 +74,42 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="username"
+                        prop="appName"
                         label="应用名称">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="telphone"
+                        prop="appType"
                         label="应用类型">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="email"
+                        prop="appID"
                         label="AppID">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="createTime"
+                        prop="callCount"
                         label="调用量">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
+                        prop="callSucessCount"
                         label="调用成功">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
+                        prop="callFailCount"
                         label="调用失败">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="updateTime"
+                        prop="failureRate"
                         label="失败率">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="status"
+                        prop="lastCallTime"
                         label="最后调用时间">
                     </el-table-column>
                 </el-table>
@@ -109,24 +120,124 @@
 </template>
 
 <script>
+    import {formatTimes} from '@/lib/utils'
+    import { getStatement } from '@/HttpApi/statement/statement'
     export default {
         name: "statement",
         data(){
             return{
+                formatTimes:formatTimes,
                 formData:{
+                    createName:'',//创建人名称
+                    apiIds:'',//api ID
+                    appIds:'',//app ID
+                    statisItems:'',//统计项 1-调用量 2-qps
+                    dataTime:null,
                     checkList:[]
                 },
                 tableData:[],
-
+                radio:'1',
+                callData:{
+                    callDataCount: 0,
+                    callFailCount: 0,
+                    callSucessCount: 0
+                },
+                lineCharts: null,
+                lineOption: {}
             }
         },
         methods:{
             search(){
+                let params = {
+                    ...this.formData,
+                    monitorItems:this.formData.checkList.length?this.formData.checkList.join():'',
+                    timeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
+                    timeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):'',
+                    timeType:this.radio,
+                };
+                getStatement(params).then(({data}) => {
+                    if(data.success){
+                        this.callData = data.data.data.callData;
+                        this.tableData = data.data.data.appStatisApiList;
 
-            }
+                        let days=[],callFailCount=[],callSucessCount=[];
+                        data.data.data.charStaticApiList.forEach((item,index)=>{
+                            days.push(item.days);
+                            callSucessCount.push(item.callSucessCount);
+                            callFailCount.push(item.callFailCount);
+                        });
+                        let option = {
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            legend: {
+
+                                data: ['调用成功', '调用失败']
+                            },
+                            grid: {
+                                left: '3%',
+                                right: '4%',
+                                bottom: '3%',
+                                containLabel: true
+                            },
+                            toolbox: {
+                                feature: {
+                                    saveAsImage: {
+                                        show: false
+                                    }
+                                }
+                            },
+                            xAxis: {
+                                type: 'category',
+                                boundaryGap: false,
+                                data: days
+                            },
+                            yAxis: {
+                                type: 'value',
+                                name: '(次)',
+                                nameLocation: 'start',
+                                nameTextStyle: {
+                                    fontSize: 14,
+                                    padding: [6, 50, 0, 0],
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '调用成功',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: callSucessCount
+                                },
+                                {
+                                    name: '调用失败',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: callFailCount
+                                }
+                            ]
+                        };
+                        this.lineCharts.clear();
+                        this.lineCharts.setOption(option);
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
+            handleResize() {
+                this.lineCharts.resize()
+            },
         },
         mounted(){
-
+            this.$nextTick(() => {
+                this.lineCharts = this.$echarts.init(document.getElementById('MyEcharts'))
+                this.lineCharts.setOption(this.lineOption);
+                window.addEventListener('resize', this.handleResize)
+            });
+            this.search();
+        },
+        beforeDestroy() {
+            window.removeEventListener('resize', this.handleResize)
+            this.lineCharts.dispose()
         }
     }
 </script>
@@ -141,6 +252,36 @@
         padding: 30px;
         box-sizing: border-box;
 
+
+        .statement_echarts{
+            height: 470px;
+            .info{
+                width: 100%;
+                height: 50px;
+                display: flex;
+                display: -webkit-flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 30px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                font-size: 14px;
+                color: #666666;
+                span{
+                    margin-right: 15px;
+                }
+            }
+            .echartsbox{
+                width: 100%;
+                height: 400px;
+                padding: 0 30px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+        }
 
     }
 }

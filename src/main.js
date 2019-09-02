@@ -19,6 +19,9 @@ Vue.prototype.Cookies = Cookie;
 Vue.use(ElementUI,{
     size:'small'
 });
+//引入echarts
+import echarts from 'echarts';
+Vue.prototype.$echarts = echarts;
 
 //注册全局组件
 Vue.component('layout-Header',Header)
