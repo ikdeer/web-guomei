@@ -1,8 +1,5 @@
 <template>
     <div class="overIew">
-      <!--<nav class="overIew-nav">
-        <breadcrumb></breadcrumb>
-      </nav>-->
       <div class="overIew-content">
         <div class="overIew-use">
           <p class="overIew-userTitle">概览</p>
@@ -74,7 +71,7 @@
                   </el-table-column>
                   <el-table-column align="center" label="详细统计">
                     <template slot-scope="scope">
-                      <el-button type="text">查看</el-button>
+                      <el-button type="text" @click.stop="clickStatement(scope)">查看</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -216,6 +213,10 @@ export default {
             this.$message.warning(response.data.errorInfo);
           }
         })
+      },
+      //跳转监控报表
+      clickStatement(scope){
+        this.$router.push({path:'/Index/statement',query:{id:scope.row.id}});
       },
       //时间转换格式2019-01-01 00:00:00
       TimeCycle(Time){
