@@ -58,7 +58,18 @@
                 </el-form>
             </div>
             <div class="statement_echarts">
-
+                <div class="info">
+                    <div>
+                        <span>调用总量：<span style="color:#409EFF;">100</span></span>
+                        <span>调用成功：<span style="color:#409EFF;">100</span></span>
+                        <span>调用失败：<span style="color:#409EFF;">100</span></span>
+                    </div>
+                    <div>
+                        <el-radio v-model="radio" label="1">按日</el-radio>
+                        <el-radio v-model="radio" label="2">按时</el-radio>
+                    </div>
+                </div>
+                <div id="MyEcharts" class="echartsbox"></div>
             </div>
             <div class="statement_table">
                 <el-table
@@ -120,16 +131,81 @@
                     checkList:[]
                 },
                 tableData:[],
+                radio:1,
+                lineCharts: null,
+                lineOption: {
+                   /* title: {
+                        text: '消费逐月消费趋势'
+                    },*/
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
 
+                        data: ['差旅', '个人']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {
+                                show: false
+                            }
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: '(万)',
+                        nameLocation: 'start',
+                        nameTextStyle: {
+                            fontSize: 14,
+                            padding: [0, 50, 30, 0],
+                        }
+                    },
+                    series: [
+                        {
+                            name: '差旅',
+                            type: 'line',
+                            stack: '总量',
+                            data: [120, 132, 101, 134, 90, 230, 210, 120, 132, 101, 134, 90, 230, 210]
+                        },
+                        {
+                            name: '个人',
+                            type: 'line',
+                            stack: '总量',
+                            data: [220, 182, 191, 234, 290, 330, 310, 120, 132, 101, 134, 90, 230, 210]
+                        }
+                    ]
+                }
             }
         },
         methods:{
             search(){
 
-            }
+            },
+            handleResize() {
+                this.lineCharts.resize()
+            },
         },
         mounted(){
-
+            this.$nextTick(() => {
+                this.lineCharts = this.$echarts.init(document.getElementById('MyEcharts'))
+                this.lineCharts.setOption(this.lineOption);
+                window.addEventListener('resize', this.handleResize)
+            })
+        },
+        beforeDestroy() {
+            window.removeEventListener('resize', this.handleResize)
+            this.lineCharts.dispose()
         }
     }
 </script>
@@ -144,6 +220,36 @@
         padding: 30px;
         box-sizing: border-box;
 
+
+        .statement_echarts{
+            height: 470px;
+            .info{
+                width: 100%;
+                height: 50px;
+                display: flex;
+                display: -webkit-flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 30px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                font-size: 14px;
+                color: #666666;
+                span{
+                    margin-right: 15px;
+                }
+            }
+            .echartsbox{
+                width: 100%;
+                height: 400px;
+                padding: 0 30px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+        }
 
     }
 }
