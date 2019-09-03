@@ -1,5 +1,11 @@
 <template>
     <div class="facelist">
+      <!-- 面包屑导航栏 -->
+      <nav class="nav-Type">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>人脸分组列表</el-breadcrumb-item>
+        </el-breadcrumb>
+      </nav>
         <div class="face_top">
             <h3>人脸分组列表</h3>
             <el-button type="primary" @click="updateFace">上传人脸图片</el-button>

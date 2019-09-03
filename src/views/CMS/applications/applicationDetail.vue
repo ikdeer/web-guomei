@@ -1,5 +1,14 @@
 <template>
     <div class="application_detail">
+      <!-- 面包屑导航栏 -->
+      <template>
+        <nav class="nav-Type">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{path:'/Index/applicationList'}">应用列表</el-breadcrumb-item>
+            <el-breadcrumb-item>应用详情</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
+      </template>
         <h3>应用详情</h3>
         <div class="application_detail_top">
             <div class="application_detail_top_listone" v-for="item in InfoOne">

@@ -52,7 +52,7 @@ export default [
             iconText:'技术文档',
             iconImgShow:'/static/images/document_selected_icon@2x.png',
             iconImgHide:'/static/images/document_unselected_icon@2x.png',
-            iconRouter:'',
+            iconRouter:'/Index/TCFApi',
             code:8,
           },
           {

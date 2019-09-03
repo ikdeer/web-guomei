@@ -24,6 +24,7 @@ import log from '@/views/CMS/operationLog/log'
 import applicationList from '@/views/CMS/applications/applicationList'
 import addApplication from '@/views/CMS/applications/addApplication'
 import applicationDetail from '@/views/CMS/applications/applicationDetail'
+import TCFApi from '@/views/CMS/tcf/TCFApi'
 
 //控制跳转同一个路由报错
 const originalPush = Router.prototype.push;
@@ -205,6 +206,15 @@ const router = new Router({
           code:7
         }
       },
+        {
+          path: '/Index/TCFApi',
+          name: '技术文档',
+          component: TCFApi,
+          meta: {
+            title:'TCFApi',
+            code:8
+          }
+        },
       ],
     },
     {

@@ -1,5 +1,23 @@
 <template>
     <div class="add_application">
+        <!-- 面包屑导航栏从概览过来 -->
+        <template v-if="Breadcrumb == 'overview'">
+          <nav class="nav-Type">
+            <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Index/overview'}">概览</el-breadcrumb-item>
+              <el-breadcrumb-item>创建应用</el-breadcrumb-item>
+            </el-breadcrumb>
+          </nav>
+        </template>
+        <!-- 本级过来 -->
+        <template v-if="Breadcrumb == 'VIS-A-VIS'">
+          <nav class="nav-Type">
+            <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Index/applicationList'}">应用列表</el-breadcrumb-item>
+              <el-breadcrumb-item>创建应用</el-breadcrumb-item>
+            </el-breadcrumb>
+          </nav>
+        </template>
         <h3>创建应用</h3>
         <div class="add_application_content">
             <el-form :model="dataForm" ref="dataForm" :rules="dataFormRules" label-width="80px">
@@ -155,7 +173,8 @@
                     api:[
                         {validator:api,trigger:['blur','change']}
                     ]
-                }
+                },
+                Breadcrumb:'',//面包屑导航栏
             }
         },
         computed:{
@@ -278,6 +297,7 @@
         mounted() {
             this.getApplicationTypes();
             this.info = JSON.parse(this.Cookies.get('userInfo'));
+            this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
             if(this.$route.query.type === 'edit'){
                 this.getDetail();
             }

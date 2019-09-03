@@ -1,5 +1,11 @@
 <template>
     <div class="overIew">
+      <!-- 面包屑导航栏 -->
+      <nav class="nav-Type">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>概览</el-breadcrumb-item>
+        </el-breadcrumb>
+      </nav>
       <div class="overIew-content">
         <div class="overIew-use">
           <p class="overIew-userTitle">概览</p>
@@ -21,10 +27,10 @@
                     </p>
                   </div>
                   <div class="use-contentButton">
-                    <router-link to="/Index/applicationList">
+                    <router-link :to="{path:'/Index/applicationList',query:{NavType:'overview'}}">
                       <el-button class="button-bluer" type="primary">管理应用</el-button>
                     </router-link>
-                    <router-link :to="{path:'/Index/addApplication',query:{type:'add'}}">
+                    <router-link :to="{path:'/Index/addApplication',query:{type:'add',NavType:'overview'}}">
                       <el-button class="button-red">创建应用</el-button>
                     </router-link>
                   </div>
@@ -216,7 +222,7 @@ export default {
       },
       //跳转监控报表
       clickStatement(scope){
-        this.$router.push({path:'/Index/statement',query:{id:scope.row.id}});
+        this.$router.push({path:'/Index/statement',query:{id:scope.row.id,NavType:'overview'}});
       },
       //时间转换格式2019-01-01 00:00:00
       TimeCycle(Time){
@@ -248,12 +254,6 @@ export default {
     display: -webkit-flex;
     align-items: center;
     border-bottom: 1px dashed #979797;
-    .el-breadcrumb{
-      font-size: 0.14rem;
-    }
-    .el-breadcrumb__inner{
-      color: #333333;
-    }
   }
   .overIew-content{
     width:auto;

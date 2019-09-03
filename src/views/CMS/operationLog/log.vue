@@ -1,5 +1,11 @@
 <template>
     <div class="log">
+        <!-- 面包屑导航栏 -->
+        <nav class="nav-Type">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item>操作日志</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
         <h3>日志信息</h3>
         <div class="log_content">
             <div class="log_form">

@@ -1,5 +1,11 @@
 <template>
     <div class="equipment_list">
+      <!-- 面包屑导航栏 -->
+      <nav class="nav-Type">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>设备管理</el-breadcrumb-item>
+        </el-breadcrumb>
+      </nav>
         <h3>设备管理</h3>
         <div class="equipment_content">
             <div class="equipment_form">

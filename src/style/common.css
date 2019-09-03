@@ -19,7 +19,7 @@ ol,li,ul,dl,dt,dd{
   padding: 0;
 }
 /*全局nev样式*/
-.overIew-nav{
+.nav-Type{
     width: 100%;
     height: 0.55rem;
     display: flex;
@@ -27,11 +27,16 @@ ol,li,ul,dl,dt,dd{
     align-items: center;
     border-bottom: 1px dashed #979797;
 }
-.overIew-nav .el-breadcrumb{
-    font-size: 0.14rem;
+.nav-Type .el-breadcrumb__inner{
+  font-size: 0.14rem;
+  font-weight: 600;
+  color: #999999;
+  cursor: pointer;
 }
-.overIew-nav .el-breadcrumb__inner{
-    color: #333333;
+.nav-Type .is-link{
+  color:#F20A59 !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
 }
 h3{
     color: #333333;
