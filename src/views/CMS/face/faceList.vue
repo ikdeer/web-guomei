@@ -43,8 +43,10 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="name"
                         label="人脸分组名称">
+                        <template slot-scope="scope">
+                            {{textLen(scope.row.name,16)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         align="center"
@@ -96,33 +98,33 @@
             :visible.sync="dataDialogForm.uploadFaceDialog"
             width="890px">
             <h3>填写人员信息</h3>
-            <el-form :inline="true" :model="dataDialogForm"  ref="dataDialogForm" label-width="80px">
-                <el-form-item label="图片来源" required>
-                    <el-select v-model="dataDialogForm.status" placeholder="请选择图片来源">
+            <el-form :inline="true" :model="dataDialogForm" :rules="DialogRules" ref="dataDialogForm" label-width="80px">
+                <el-form-item label="图片来源" prop="picFromID" required>
+                    <el-select v-model="dataDialogForm.picFromID" placeholder="请选择图片来源">
                         <el-option label="美办" value="0"></el-option>
                         <el-option label="考勤" value="1"></el-option>
                         <el-option label="监控" value="2"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="编号" required>
-                    <el-select v-model="dataDialogForm.status" placeholder="请选择编号系统">
-                        <el-option label="PS" value="0"></el-option>
-                        <el-option label="SAP" value="1"></el-option>
+                <el-form-item label="编号" prop="noType" required>
+                    <el-select v-model="dataDialogForm.noType" placeholder="请选择编号系统">
+                        <el-option label="PS" value="1"></el-option>
+                        <el-option label="SAP" value="2"></el-option>
                     </el-select>
-                    <el-input :maxlength="20" v-model="dataDialogForm.name" placeholder="请输入编号"></el-input>
+                    <el-input :maxlength="20" v-model="dataDialogForm.no" placeholder="请输入编号"></el-input>
                 </el-form-item>
-                <el-form-item label="类型" required>
-                    <el-select v-model="dataDialogForm.status" placeholder="请选择类型">
-                        <el-option label="国美员工" value="0"></el-option>
-                        <el-option label="国美会员" value="1"></el-option>
+                <el-form-item label="类型" prop="type" required>
+                    <el-select v-model="dataDialogForm.type" placeholder="请选择类型">
+                        <el-option label="国美员工" value="1"></el-option>
+                        <el-option label="国美会员" value="2"></el-option>
                         <el-option label="游客" value="3"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="姓名" required>
+                <el-form-item label="姓名" prop="name" required>
                     <el-input :maxlength="10" v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" required>
-                    <el-select v-model="dataDialogForm.status" placeholder="请选择性别">
+                <el-form-item label="性别" prop="sex" required>
+                    <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
                         <el-option label="男" value="0"></el-option>
                         <el-option label="女" value="1"></el-option>
                     </el-select>
@@ -136,7 +138,8 @@
                         action="https://jsonplaceholder.typicode.com/posts/"
                         accept="image/jpg,image/jpeg,image/png,image/x-ms-bmp"
                         :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
+                        :auto-upload="false"
+                        :on-change="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <div v-else class="upload_info" >
@@ -150,7 +153,7 @@
                 </div>
             </div>
             <span slot="footer">
-                <el-button type="primary" @click="userListAddDialog = false">确 定</el-button>
+                <el-button type="primary" @click="commitFaceImage">确 定</el-button>
                 <el-button @click="userListAddDialog = false">取 消</el-button>
             </span>
         </el-dialog>
@@ -161,13 +164,57 @@
 </template>
 
 <script>
-    import {formatTimes} from '@/lib/utils'
+    import {formatTimes,textLen} from '@/lib/utils'
     import {getFaceList} from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
+            let name = (rule, value, callback) => {
+                if(value){
+                    /*if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value)){
+                        return callback(new Error('请输入6-20位字母数字'));
+                    }else{*/
+                        return callback()
+                    // }
+                }else{
+                    return callback(new Error('请输入姓名'))
+                }
+            };
+            let noType = (rule, value, callback) => {
+                if(value){
+                    if(this.dataDialogForm.no === ''){
+                        return callback(new Error('请输入编号'))
+                    }else{
+                        return callback()
+                    }
+                }else{
+                    return callback(new Error('请选择编号系统'))
+                }
+            };
+            let picFromID = (rule, value, callback) => {
+                if(value){
+                    return callback()
+                }else{
+                    return callback(new Error('请选择图片来源'))
+                }
+            };
+            let type = (rule, value, callback) => {
+                if(value){
+                    return callback()
+                }else{
+                    return callback(new Error('请选择类型'))
+                }
+            };
+            let sex = (rule, value, callback) => {
+                if(value){
+                    return callback()
+                }else{
+                    return callback(new Error('请选择性别'))
+                }
+            };
             return {
                 formatTimes:formatTimes,
+                textLen:textLen,
                 formData:{
                     name:'',
                     id:'',
@@ -181,9 +228,32 @@
                     total:0
                 },
                 dataDialogForm:{
+                    picFromID:'',
+                    noType:'',
+                    no:'',
+                    type:'',
+                    name:'',
+                    sex:'',
                     uploadFaceDialog:false,
                 },
                 imageUrl: '',
+                DialogRules:{
+                    name:[
+                        {validator:name,trigger:['blur','change']}
+                    ],
+                    noType:[
+                        {validator:noType,trigger:['blur','change']}
+                    ],
+                    picFromID:[
+                        {validator:picFromID,trigger:['blur','change']}
+                    ],
+                    type:[
+                        {validator:type,trigger:['blur','change']}
+                    ],
+                    sex:[
+                        {validator:sex,trigger:['blur','change']}
+                    ]
+                }
             }
         },
         methods: {
@@ -219,8 +289,8 @@
                 };
                 this.search();
             },
-            see(){
-
+            see(row){
+                this.$router.push({path:'/Index/addGroup',query:{id:row.id,type:'see'}})
             },
             editGroup(){
 
@@ -237,19 +307,47 @@
                 this.search()
             },
             handleAvatarSuccess(res, file) {
-                this.imageUrl = URL.createObjectURL(file.raw);
+                var that = this;
+                var reader = new FileReader();
+                reader.readAsDataURL(file[0].raw);
+                reader.onload = function(e){
+                    this.result; // base64编码
+                    that.imageUrl = this.result;
+                };
             },
             beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
+                const isJPG = file.type === 'image/jpg' || file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/x-ms-bmp";
+                const isLt2M = file.size / 1024 / 1024 < 5;
 
                 if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                    this.$message.error('上传头像图片只能是 JPG JPEG PNG BMP 格式!');
                 }
                 if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    this.$message.error('上传头像图片大小不能超过 5MB!');
                 }
                 return isJPG && isLt2M;
+            },
+            commitFaceImage(){
+                this.$refs['dataDialogForm'].validate((valid) => {
+                    if (valid) {
+                        if(this.imageUrl == ''){
+                            this.$message.warning('请上传人脸图片');
+                            return;
+                        }
+
+                        /*createUser(params).then(({data})=>{
+                            if(data.success){
+                                this.$message.success('添加成功');
+                                this.search();
+                                this.userListAddDialog = false;
+                            }else{
+                                this.$message.warning(data.errorInfo)
+                            }
+                        })*/
+                    } else {
+                        return false;
+                    }
+                });
             }
         },
         mounted(){
@@ -335,8 +433,9 @@
                     display: -webkit-flex;
                     align-items: center;
                     justify-content: space-around;
+
                     img{
-                        width: 100%;
+                        /*width: 100%;*/
                         height: 100%;
                         overflow: hidden;
                     }

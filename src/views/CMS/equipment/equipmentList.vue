@@ -76,8 +76,10 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="name"
                         label="设备名称">
+                        <template slot-scope="scope">
+                            {{textLen(scope.row.name,10)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         align="center"
@@ -243,11 +245,13 @@
 </template>
 
 <script>
+    import { textLen } from '@/lib/utils'
     import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea,getEquipmentDetail } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
         data(){
             return{
+                textLen:textLen,
                 formData:{
                     company:'',//公司
                     department:'',//部门
@@ -577,6 +581,14 @@
             getEquipment(){
                 //获取设别位置列表
                 getEquipmentLocation({}).then(({data})=>{
+                    if(data.data){
+                        data.data.forEach((item,index)=>{
+                            this.companyList.push();
+                        })
+                    }
+
+
+
                     this.companyList = data.data.list;
                     this.siteOne = data.data ? data.data.list:[];
                 });

@@ -22,3 +22,9 @@ export const formatTimes = (param, noNeedTime) => {
 
     return noNeedTime ? _date : _dateTime;
 };
+export const textLen = (params, len) => {
+    if (params.length > len) {
+        return params.substr(0, len) + '...'
+    }
+    return params
+};

@@ -10,10 +10,10 @@
                 <div class="set_group">
                     <h3>设置分组</h3>
                     <div class="set_group_inp">
-                        <el-form :inline="true" label-width="100px">
+                        <el-form :inline="true" :disabled="isSee" label-width="100px">
                             <el-form-item label="分组名称" required>
-                                <el-input :maxlength="11" v-model="groupData.name" placeholder="请输入人脸分组名称"></el-input>
-                                <el-button type="primary" @click="">保存</el-button>
+                                <el-input :maxlength="20" v-model="groupData.name" placeholder="请输入人脸分组名称"></el-input>
+                                <el-button type="primary" :disabled="groupData.name==''" @click="createGroup">保存</el-button>
                             </el-form-item>
                             <el-form-item label="分组ID" required>
                                 <el-input v-model="groupData.id" :disabled="true"></el-input>
@@ -24,33 +24,35 @@
                 <div class="set_child_group">
                     <h3>设置子分组 <span>请注意一级分组不可添加图片</span></h3>
                     <div class="set_group_childinp">
-                        <el-form :inline="true" label-width="110px">
+                        <el-form :inline="true" :disabled="isSee" label-width="110px">
                             <el-form-item label="一级分组名称" required>
                                 <el-input :maxlength="20" v-model="groupChildData.oneName" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" @click="addGroupOne">保存</el-button>
-                                <el-button type="primary" @click="deleteGroupOne">删除</el-button>
+                                <el-button type="primary" :disabled="groupData.id==''" @click="addGroupOne">保存</el-button>
+                                <el-button type="primary" :disabled="groupChildData.oneId==''" @click="deleteGroupOne">删除</el-button>
                             </el-form-item>
                             <el-form-item label="二级分组名称" required>
                                 <el-input :maxlength="20" v-model="groupChildData.twoName" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" @click="addGroupTwo">保存</el-button>
-                                <el-button type="primary" @click="deleteGroupTwo">删除</el-button>
+                                <el-button type="primary" :disabled="groupChildData.oneId==''" @click="addGroupTwo">保存</el-button>
+                                <el-button type="primary" :disabled="groupChildData.twoId==''" @click="deleteGroupTwo">删除</el-button>
                             </el-form-item>
                         </el-form>
                         <div class="group_list">
                             <div class="group_item_list">
                                 <div class="item">
-                                    <p v-for="item in groupOneList">
-                                        <span>{{item.title}}</span>
+                                    <p v-if="groupOneList.length" v-for="item in groupOneList" @click="ClickGroupOne(item)">
+                                        <span>{{item.name}}</span>
                                     </p>
+                                    <p v-if="!groupOneList.length">暂未创建一级子分组</p>
                                 </div>
 
                             </div>
                             <div class="group_item_list">
                                 <div class="item">
-                                    <p v-for="item in groupTwoList">
-                                        <span>{{item.title}}</span>
-                                        <span>{{item.face}}</span>
+                                    <p v-if="groupTwoList.length" v-for="item in groupTwoList" @click="ClickGroupTwo(item)">
+                                        <span>{{item.name}}</span>
+                                        <span>{{item.count}}</span>
                                     </p>
+                                    <p v-if="!groupTwoList.length">暂未创建二级子分组</p>
                                 </div>
 
                             </div>
@@ -66,19 +68,23 @@
                 <div class="steptwo_from">
                     <el-form :inline="true">
                         <el-form-item label="选择分组">
-                            <el-select v-model="stepTwoForm.one" placeholder="请选择一级分组">
-                                <el-option label="国美员工" value="0"></el-option>
-                                <el-option label="国美会员" value="1"></el-option>
-                                <el-option label="游客" value="3"></el-option>
+                            <el-select v-model="stepTwoForm.one" @change="ChangeTwoFormOne" placeholder="请选择一级分组">
+                                <el-option v-for="item in groupOneList"
+                                           :label="item.name"
+                                           :value="item.id"
+                                           :key="item.id">
+                                </el-option>
                             </el-select>
                             <el-select v-model="stepTwoForm.two" placeholder="请选择二级分组">
-                                <el-option label="国美员工" value="0"></el-option>
-                                <el-option label="国美会员" value="1"></el-option>
-                                <el-option label="游客" value="3"></el-option>
+                                <el-option v-for="item in groupTwoList"
+                                           :label="item.name"
+                                           :value="item.id"
+                                           :key="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="addGroupFace = true;">添加人像</el-button>
+                            <el-button type="primary" :disabled="isSee" @click="getFaceShowList">添加人像</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -258,35 +264,27 @@
 </template>
 
 <script>
-    import { createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo } from '@/HttpApi/face/face'
+    import { createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo,createFaceGroup,getFaceShow,getFacedetails } from '@/HttpApi/face/face'
     export default {
         name: "addGroup",
         data(){
             return{
                 step:1,
-                groupData:{
+                groupData:{//分组名称和id
                     name:'',
                     id:''
                 },
-                groupChildData:{
+                groupChildData:{//子分组
                     oneId:'',
                     oneName:'',
                     twoId:'',
                     twoName:''
                 },
-                groupOneList:[{
-                    title:'adadfasf'
-                },{
-                    title:'adadfasf'
-                }],
-                groupTwoList:[{
-                    title:'adadfasf',
-                    face:12
-                },{
-                    title:'adadfasf',
-                    face:12
-                }],
-                stepTwoForm:{
+                groupOneList:[],//子分组一级列表
+                groupTwoList:[],//子分组二级列表
+
+
+                stepTwoForm:{//人脸筛选
                     one:'',
                     two:'',
                 },
@@ -400,6 +398,11 @@
 
             }
         },
+        computed:{
+            isSee(){
+                return this.$route.query.type == 'see' ? true : false;
+            }
+        },
         methods:{
             nextStep(){
                 this.step = 2;
@@ -407,36 +410,70 @@
             lastStep(){
                 this.step = 1;
             },
-
+            createGroup(){
+                //创建分组
+                let params = {
+                    name:this.groupData.name
+                };
+                createFaceGroup(params).then(({data})=>{
+                    if(data.success){
+                        this.$message.success('创建成功');
+                        this.groupData.id = data.data.id;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
             addGroupOne(){
                 //创建一级分组
                 if(!this.groupChildData.oneName){
                     return;
                 }
-                createGroupOne({name:this.groupChildData.oneName}).then(({data})=>{
+                let params = {
+                    faceGroupID:this.groupData.id,
+                    name:this.groupChildData.oneName
+                };
+                createGroupOne(params).then(({data})=>{
                     if(data.success){
                         this.$message.success('创建成功');
-                        this.getGroup();
                         this.groupChildData.oneName = '';
+                        this.getGroupOneList()
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
                 })
             },
             addGroupTwo(){
+                //创建二级分组
                 if(!this.groupChildData.twoName){
                     this.$message.warning('请输入文字');
                     return;
                 }
-                createGroupTwo({name:this.groupChildData.twoName}).then(({data})=>{
+                let params = {
+                    faceGroupID:this.groupData.id,
+                    name:this.groupChildData.twoName,
+                    sub1:this.groupChildData.oneId
+                };
+                createGroupTwo(params).then(({data})=>{
                     if(data.success){
                         this.$message.success('创建成功');
-                        this.getGroup();
                         this.groupChildData.twoName = '';
+                        this.getGroupTwoList();
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
                 })
+            },
+            ClickGroupOne(item){
+                this.groupChildData.oneId = item.id;
+                this.groupChildData.oneName = item.name;
+                this.groupChildData.twoId = '';
+                this.groupChildData.twoName = '';
+                this.getGroupTwoList();
+            },
+            ClickGroupTwo(item){
+                this.groupChildData.twoId = item.id;
+                this.groupChildData.twoName = item.name;
             },
             deleteGroupOne(){
                 if(!this.groupChildData.oneId){
@@ -446,7 +483,7 @@
                 deleteGroupOne().then(({data})=>{
                     if(data.success){
                         this.$message.success('删除成功');
-                        this.getGroup();
+                        // this.getGroupTwoList();
                         this.groupChildData.oneId = '';
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -468,6 +505,59 @@
                     }
                 })
             },
+            getGroupOneList(){
+                let params = {
+                    faceGroupID:this.groupData.id
+                };
+                getGroupOne(params).then(({data})=>{
+                    if(data.success){
+                        this.groupOneList = data.data ? data.data.list:[];
+                    }else{
+                        this.groupOneList = []
+                    }
+                });
+            },
+            getGroupTwoList(){
+                let params = {
+                    faceGroupID:this.groupData.id,
+                    sub1:this.groupChildData.oneId
+                };
+                getGroupTwo(params).then(({data})=>{
+                    if(data.success){
+                        this.groupTwoList = data.data ? data.data.list:[];
+                    }else{
+                        this.groupTwoList = []
+                    }
+                })
+            },
+            ChangeTwoFormOne(){
+                let params = {
+                    faceGroupID:this.groupData.id,
+                    sub1:this.stepTwoForm.one
+                };
+                getGroupTwo(params).then(({data})=>{
+                    if(data.success){
+                        this.groupTwoList = data.data ? data.data.list:[];
+                    }else{
+                        this.groupTwoList = []
+                    }
+                })
+            },
+            getFaceShowList(){
+                //添加人脸
+                let params = {
+
+                };
+
+
+                this.addGroupFace = true;
+                getFaceShow().then(({data})=>{
+
+                })
+
+
+            },
+
 
             handleSelectionChange(){
                 // 选中
@@ -487,17 +577,31 @@
             reset(){
 
             },
-            getGroup(){
-                getGroupOne().then(({data})=>{
 
-                });
-                getGroupTwo().then(({data})=>{
-
+            /*
+            * 查看分组
+            * */
+            getDetails(){
+                let params = {
+                    faceGroupID:this.$route.query.id
+                };
+                getFacedetails(params).then(({data})=>{
+                    if(data.success){
+                        this.groupData.id = data.data.data.id;
+                        this.groupData.name = data.data.data.name;
+                        this.getGroupOneList();
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
                 })
             }
+
         },
         mounted(){
-            this.getGroup();
+            this.getGroupOneList();
+            if(this.$route.query.type == 'see'){
+                this.getDetails();
+            }
         }
     }
 </script>
@@ -640,6 +744,12 @@
                                 justify-content: space-between;
                                 line-height: 30px;
                                 cursor: pointer;
+                                -webkit-box-sizing: border-box;
+                                -moz-box-sizing: border-box;
+                                box-sizing: border-box;
+                                &:hover{
+                                    background: rgba(64,158,255,0.1);
+                                }
                             }
                         }
 

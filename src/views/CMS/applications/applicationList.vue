@@ -58,8 +58,10 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="name"
                         label="应用名称">
+                        <template slot-scope="scope">
+                            {{textLen(scope.row.name,10)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         align="center"
@@ -164,13 +166,14 @@
 </template>
 
 <script>
-    import {formatTimes} from "../../../lib/utils";
+    import {formatTimes,textLen} from "../../../lib/utils";
     import {getAppList,disableApplication,delApplication,auditApplication,getAapplicationState,getApplicationReviewState } from '@/HttpApi/application/application';
     export default {
         name: "applicationList",
         data() {
             return {
                 formatTimes:formatTimes,
+                textLen:textLen,
                 formData: {
                     name:'',
                     id:'',

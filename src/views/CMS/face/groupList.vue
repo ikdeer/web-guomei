@@ -9,16 +9,20 @@
                 :data="tableData"
                 style="width: 100%">
                 <el-table-column
-                    prop="name"
                     label="一级分组名称">
+                    <template slot-scope="scope">
+                        {{textLen(scope.row.name,16)}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="phoneNum"
                     label="一级分组ID">
                 </el-table-column>
                 <el-table-column
-                    prop="mail"
                     label="二级分组名称">
+                    <template slot-scope="scope">
+                        {{textLen(scope.row.name,16)}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="mail"
@@ -57,10 +61,13 @@
 </template>
 
 <script>
+    import {formatTimes,textLen} from "../../../lib/utils";
     export default {
         name: "groupList",
         data(){
             return{
+                formatTimes:formatTimes,
+                textLen:textLen,
                 tableData:[],
                 page:{
                     page:1,

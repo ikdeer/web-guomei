@@ -240,8 +240,15 @@
                     if(data.success){
                         this.dataForm.name = data.data.data.name;
                         this.dataForm.introduction = data.data.data.introduction;
-                        this.dataForm.typeID = data.data.data.typeID;
-                        this.getInterface(data.data.data.typeID)
+                        this.dataForm.typeID = String(data.data.data.typeID);
+
+                        let apiArray = [];
+                        if(data.data.data.apisList.length){
+                            data.data.data.apisList.forEach((item)=>{
+                                apiArray.push(item.id)
+                            })
+                        }
+                        this.getInterface(data.data.data.typeID,apiArray)
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -253,7 +260,7 @@
                     this.applicationTypes = data.data.list;
                 })
             },
-            getInterface(id){
+            getInterface(id,ArrayId){
                 getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
                     if(data.data){
                         /*给外层一个默认值 内层一个外层index备用*/
@@ -263,9 +270,24 @@
                             item.index = index;
                             if(item.apisList){
                                 item.apisList.forEach((ins,ind)=>{
-                                    ins.checkd = false;
+                                    if(ArrayId){
+                                        if(ArrayId.indexOf(ins.id) < 0 ){
+                                            ins.checkd = false;
+                                        }else {
+                                            ins.checkd = true;
+                                        }
+                                    }else{
+                                        ins.checkd = false;
+                                    }
                                     ins.index = index;
-                                })
+                                });
+
+                                if(ArrayId){
+                                    if(ArrayId.length == item.apisList.length){
+                                        item.checkd = true;
+                                    }
+                                }
+
                             }
                         });
                         this.InterfaceApi = data.data.list;
