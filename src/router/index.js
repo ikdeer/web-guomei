@@ -112,7 +112,7 @@ const router = new Router({
           name: '概览',
           component: overview,
           meta: {
-            title:'概览',
+            title:'国美人脸认证管理后台',
             code:1
           },
         },
@@ -121,56 +121,56 @@ const router = new Router({
           name: '用户管理',
           component: userList,
           meta: {
-            title:'用户管理',
+            title:'国美人脸认证管理后台',
             code:2
           },
         },
         {
           path: '/Index/userInfo',
-          name: 'userInfo',
+          name: '用户基本信息',
           component:userInfo ,
           meta: {
-            title:'userInfo',
+            title:'国美人脸认证管理后台',
             code:2
           },
         },{
           path: '/Index/applicationList',
-          name: 'applicationList',
+          name: '应用列表',
           component:applicationList ,
           meta: {
-            title:'applicationList',
+            title:'国美人脸认证管理后台',
             code:3
           },
         },{
           path: '/Index/addApplication',
-          name: 'addApplication',
+          name: '创建应用',
           component:addApplication ,
           meta: {
-            title:'addApplication',
+            title:'国美人脸认证管理后台',
             code:3
           },
         },{
           path: '/Index/applicationDetail',
-          name: 'applicationDetail',
+          name: '应用详情',
           component:applicationDetail ,
           meta: {
-              title:'applicationDetail',
+              title:'国美人脸认证管理后台',
               code:3
           },
       },{
         path: '/Index/faceList',
-        name: 'faceList',
+        name: '人脸分组列表',
         component: faceList,
         meta: {
-            title:'faceList',
+            title:'国美人脸认证管理后台',
             code:4
           }
       },{
         path: '/Index/addGroup',
-        name: 'addGroup',
+        name: '人脸创建分组',
         component: addGroup,
         meta: {
-          title:'addGroup',
+          title:'国美人脸认证管理后台',
           code:4
         }
       },{
@@ -178,31 +178,31 @@ const router = new Router({
         name: 'groupList',
         component: groupList,
         meta: {
-          title:'groupList',
+          title:'国美人脸认证管理后台',
           code:4
         }
       },{
         path: '/Index/equipmentList',
-        name: 'equipmentList',
+        name: '设备管理',
         component: equipmentList,
         meta: {
-            title:'equipmentList',
+            title:'国美人脸认证管理后台',
             code:5
         }
       },{
         path: '/Index/statement',
-        name: 'statement',
+        name: '监控报表',
         component: statement,
         meta: {
-          title:'statement',
+          title:'国美人脸认证管理后台',
           code:6
         }
       },{
         path: '/Index/log',
-        name: 'log',
+        name: '操作日志',
         component: log,
         meta: {
-          title:'log',
+          title:'国美人脸认证管理后台',
           code:7
         }
       },
@@ -211,7 +211,7 @@ const router = new Router({
           name: '技术文档',
           component: TCFApi,
           meta: {
-            title:'TCFApi',
+            title:'国美人脸认证管理后台',
             code:8
           }
         },
