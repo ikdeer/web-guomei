@@ -55,6 +55,14 @@ export const addEquipment = ({ belongComID,createrID,faceGroupID,gmAreaID,name,n
     data:{ belongComID,createrID,faceGroupID,gmAreaID,name,no,type,id,positionType }
 });
 
+//修改设备
+export const editEquipment = ({ belongComID,createrID,faceGroupID,gmAreaID,name,no,type,id,positionType }) => AxIos({
+    url: '/device/modify',
+    method: 'post',
+    data:{ belongComID,createrID,faceGroupID,gmAreaID,name,no,type,id,positionType }
+});
+
+
 //启用禁用设备  enable 0-停用，1-启用
 export const disableEquipment = ({ deviceID,enable }) => AxIos({
     url: '/device/disable/dev',
@@ -69,3 +77,23 @@ export const lineEquipment = ({ deviceID,onOffLine }) => AxIos({
     data:{ deviceID,onOffLine }
 });
 
+//获取人脸分组列表
+export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }) => AxIos({
+    url: '/faceGroup/show',
+    method: 'get',
+    params: { page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }
+});
+
+//获取第一子分组
+export const getFaceGroupOne = ({faceGroupID}) => AxIos({
+    url: '/faceGroup/getSubFaceGroup1',
+    method: 'post',
+    data:{faceGroupID}
+});
+
+//获取第二子分组
+export const getFaceGroupTwo = ({faceGroupID,sub1}) => AxIos({
+    url: '/faceGroup/getSubFaceGroup2',
+    method: 'post',
+    data:{faceGroupID,sub1}
+});

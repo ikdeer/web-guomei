@@ -10,8 +10,8 @@
                                     placeholder="请选择所属公司">
                             <el-option v-for="item in companyList"
                                        :label="item.name"
-                                       :value="item.id"
-                                       :key="item.id">
+                                       :value="item.index"
+                                       :key="item.index">
                             </el-option>
                         </el-select>
                         <el-select v-model="formData.department"
@@ -19,8 +19,8 @@
                                     placeholder="请选择所属部门">
                             <el-option v-for="item in departmentList"
                                        :label="item.name"
-                                       :value="item.id"
-                                       :key="item.id">
+                                       :value="item.index"
+                                       :key="item.index">
                             </el-option>
                         </el-select>
                         <el-select v-model="formData.floor"
@@ -142,13 +142,13 @@
                 <span :class="equipmentDialogInfo.type===1?'active':''">第一步 填写设备信息</span>
                 <span :class="equipmentDialogInfo.type===2?'active':''">第二步 绑定人脸分组</span>
             </div>
-            <div v-if="equipmentDialogInfo.type===1">
-                <el-form label-width="80px" :disabled="this.equipmentDialogInfo.isSee">
-                    <el-form-item label="设备编号" required>
+            <div v-show="equipmentDialogInfo.type===1">
+                <el-form label-width="80px" :rules="dialogOne" :model="dialogInfo" ref="dialogOne" :disabled="this.equipmentDialogInfo.isSee">
+                    <el-form-item label="设备编号" prop="no" required>
                         <el-input :maxlength="30" v-model="dialogInfo.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
-                    <el-form-item label="设备类型" required>
-                        <el-select v-model="dialogInfo.type"  class="user_list_form_status" placeholder="请选择设备类型">
+                    <el-form-item label="设备类型" prop="type" required>
+                        <el-select v-model="dialogInfo.type" class="user_list_form_status" placeholder="请选择设备类型">
                             <el-option v-for="item in dialogType"
                                        :label="item.name"
                                        :value="item.id"
@@ -157,57 +157,57 @@
                         </el-select>
                     </el-form-item>
                     </el-form-item>
-                    <el-form-item label="设备名称" required>
+                    <el-form-item label="设备名称" prop="name" required>
                         <el-input :maxlength="25" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
-                    <el-form-item label="设备位置" required>
+                    <el-form-item label="设备位置" prop="siteThree" required>
                         <el-select v-model="dialogInfo.siteOne" @change="Clicksite(1)" placeholder="请选择所属公司">
                             <el-option v-for="item in siteOne"
                                        :label="item.name"
-                                       :value="item.id"
-                                       :key="item.id">
+                                       :value="item.index"
+                                       :key="item.index">
                             </el-option>
                         </el-select>
                         <el-select v-model="dialogInfo.siteTwo" @change="Clicksite(2)" class="marginTop" placeholder="请选择所属部门">
                             <el-option v-for="item in siteTwo"
                                        :label="item.name"
-                                       :value="item.id"
-                                       :key="item.id">
+                                       :value="item.index"
+                                       :key="item.index">
                             </el-option>
                         </el-select>
                         <el-select v-model="dialogInfo.siteThree" class="marginTop" placeholder="请选择所属楼层">
                             <el-option v-for="item in siteThree"
-                                       :label="item.name"
+                                       :label="item.floorName"
                                        :value="item.id"
                                        :key="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="选择门店" required>
+                    <el-form-item label="选择门店" prop="shopFour" required>
                         <el-select v-model="dialogInfo.shopOne" @change="ClickShop(1)" placeholder="请选择所属大区">
                             <el-option v-for="item in shopOne"
                                        :label="item.name"
-                                       :value="item.id"
-                                       :key="item.id">
+                                       :value="item.index"
+                                       :key="item.index">
                             </el-option>
                         </el-select>
                         <el-select v-model="dialogInfo.shopTwo" @change="ClickShop(2)" class="marginTop" placeholder="请选择所属分部">
                             <el-option v-for="item in shopTwo"
                                        :label="item.name"
-                                       :value="item.id"
-                                       :key="item.id">
+                                       :value="item.index"
+                                       :key="item.index">
                             </el-option>
                         </el-select>
                         <el-select v-model="dialogInfo.shopThree" @change="ClickShop(3)" class="marginTop" placeholder="请选择所属二级分部">
                             <el-option v-for="item in shopThree"
                                        :label="item.name"
-                                       :value="item.id"
-                                       :key="item.id">
+                                       :value="item.index"
+                                       :key="item.index">
                             </el-option>
                         </el-select>
                         <el-select v-model="dialogInfo.shopFour"  class="marginTop" placeholder="请选择所属门店">
                             <el-option v-for="item in shopFour"
-                                       :label="item.name"
+                                       :label="item.storeName"
                                        :value="item.id"
                                        :key="item.id">
                             </el-option>
@@ -216,17 +216,29 @@
                 </el-form>
             </div>
 
-            <div v-if="equipmentDialogInfo.type===2">
-                <el-form label-width="80px" :disabled="this.equipmentDialogInfo.isSee">
-                    <el-form-item label="人脸分组" required>
-                        <el-select v-model="dialogInfo.status" placeholder="请选择人脸分组">
-
+            <div v-show="equipmentDialogInfo.type===2">
+                <el-form label-width="80px" :rules="dialogTwo" :model="dialogFace" ref="dialogTwo" :disabled="this.equipmentDialogInfo.isSee">
+                    <el-form-item label="人脸分组"  prop="faceChildTwo" required>
+                        <el-select v-model="dialogFace.faceGroup" @change="getFaceGroupChildOne" placeholder="请选择人脸分组">
+                            <el-option v-for="item in faceGroup"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择一级子分组">
-
+                        <el-select v-model="dialogFace.faceChildOne" @change="getFaceGroupChildTwo" class="marginTop" placeholder="请选择一级子分组">
+                            <el-option v-for="item in faceChildOne"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.status" class="marginTop" placeholder="请选择二级子分组">
-
+                        <el-select v-model="dialogFace.faceChildTwo" class="marginTop" placeholder="请选择二级子分组">
+                            <el-option v-for="item in faceChildTwo"
+                                       :label="item.name"
+                                       :value="item.id"
+                                       :key="item.id">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
@@ -246,10 +258,54 @@
 
 <script>
     import { textLen } from '@/lib/utils'
-    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea,getEquipmentDetail } from '@/HttpApi/equipment/equipment'
+    import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea,getEquipmentDetail,getFaceGroupOne,getFaceGroupTwo,getFaceList,addEquipment,editEquipment } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
         data(){
+
+            let no = (rule, value, callback) => {
+                if(value){
+                    return callback()
+                }else{
+                    return callback(new Error('请输入设备编号'))
+                }
+            };
+            let name = (rule, value, callback) => {
+                if(value){
+                    return callback()
+                }else{
+                    return callback(new Error('请输入设备名称'))
+                }
+            };
+            let type = (rule, value, callback) => {
+                if(this.dialogInfo.type == ''){
+                    return callback(new Error('请选择设备类型'))
+                }else{
+                    return callback()
+                }
+            };
+            let siteThree = (rule, value, callback) => {
+                if(this.dialogInfo.siteThree == ''){
+                    return callback(new Error('请选择设备位置'))
+                }else{
+                    return callback()
+                }
+            };
+
+            let shopFour = (rule, value, callback) => {
+                if(this.dialogInfo.shopFour == ''){
+                    return callback(new Error('请选择设备位置'))
+                }else{
+                    return callback()
+                }
+            };
+            let faceChildTwo = (rule, value, callback) => {
+                if(this.dialogFace.faceChildTwo == ''){
+                    return callback(new Error('请选择人脸分组'))
+                }else{
+                    return callback()
+                }
+            };
             return{
                 textLen:textLen,
                 formData:{
@@ -283,6 +339,7 @@
                     dialog:false,
                     type:1,
                     isSee:false,
+                    isEdit:false,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 },
@@ -297,10 +354,14 @@
                     shopTwo:'',
                     shopThree:'',
                     shopFour:'',
-
+                    faceGroup:'',//人脸分组123
+                    faceChildOne:'',
+                    faceChildTwo:''
                 },
                 dialogFace:{
-
+                    faceGroup:'',//人脸分组123
+                    faceChildOne:'',
+                    faceChildTwo:''
                 },
 
                 dialogType:[],//弹窗设备类型
@@ -317,29 +378,43 @@
                 faceGroup:[],//人脸分组
                 faceChildOne:[],//人脸一级分组
                 faceChildTwo:[],//人脸二级分组
+                dialogOne:{
+                    no:[
+                        {validator:no,trigger:['blur','change']}
+                    ],
+                    name:[
+                        {validator:name,trigger:['blur','change']}
+                    ],
+                    type:[
+                        {validator:type,trigger:['blur','change']}
+                    ],
+                    siteThree:[
+                        {validator:siteThree,trigger:['blur','change']}
+                    ],
+                    shopFour:[
+                        {validator:shopFour,trigger:['blur','change']}
+                    ],
+                },
+                dialogTwo:{
+                    faceChildTwo:[
+                        {validator:faceChildTwo,trigger:['blur','change']}
+                    ]
+                }
             }
         },
         methods:{
             choosedCompany(index){
                 // 选中公司 部门
-                let params = {};
-                if(index===1){
-                    params.id = this.formData.company
-                }else{
-                    params.id = this.formData.department
+                if(index == 1){
+                    this.departmentList = this.companyList[this.formData.company].list;
+                    this.formData.floor = '';
+                    this.formData.department = '';
+                    this.floorList = [];
                 }
-                getEquipmentLocation(params).then(({data})=>{
-                    if(index===1){
-                        this.departmentList = data.data ? data.data.list:[];
-                        this.formData.floor = '';
-                        this.formData.department = '';
-                        this.floorList = [];
-                    }
-                    if(index===2){
-                        this.floorList = data.data? data.data.list:[];
-                        this.formData.floor = '';
-                    }
-                })
+                if(index == 2){
+                    this.formData.floor = '';
+                    this.floorList = this.departmentList[this.formData.department].list;
+                }
             },
             addEquiment(){//添加设备
                 this.dialogInfo = {
@@ -354,11 +429,17 @@
                     shopThree:'',
                     shopFour:'',
                 };
+                this.dialogFace = {
+                    faceGroup:'',//人脸分组123
+                    faceChildOne:'',
+                    faceChildTwo:''
+                };
                 this.equipmentDialogInfo={
                     title:'新建设备',
                     dialog:false,
                     type:1,
                     isSee:false,
+                    isEdit:false,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 };
@@ -367,6 +448,7 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
+                    belongComID:this.formData.floor,
                 };
                 getEquipmentList(params).then(({data})=>{
                     if(data.success){
@@ -400,11 +482,30 @@
             },
             see(row) {
                 //查看操作
+                this.dialogInfo = {
+                    no:'',//设备编号
+                    name:'',//设备名称
+                    type:'',//设备类型
+                    siteOne:'',//设备位置123
+                    siteTwo:'',
+                    siteThree:'',
+                    shopOne:'',//门店1234
+                    shopTwo:'',
+                    shopThree:'',
+                    shopFour:'',
+                };
+                this.dialogFace = {
+                    faceGroup:'',//人脸分组123
+                    faceChildOne:'',
+                    faceChildTwo:''
+                };
                 this.equipmentDialogInfo = {
                     title:'查看设备',
                     dialog:true,
                     type:1,
                     isSee:true,
+                    isEdit:false,
+                    id:row.id,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:' 下一步 '
                 };
@@ -412,16 +513,34 @@
             },
             edit(row){
                 //修改操作
+                this.dialogInfo = {
+                    no:'',//设备编号
+                    name:'',//设备名称
+                    type:'',//设备类型
+                    siteOne:'',//设备位置123
+                    siteTwo:'',
+                    siteThree:'',
+                    shopOne:'',//门店1234
+                    shopTwo:'',
+                    shopThree:'',
+                    shopFour:'',
+                };
+                this.dialogFace = {
+                    faceGroup:'',//人脸分组123
+                    faceChildOne:'',
+                    faceChildTwo:''
+                };
                 this.equipmentDialogInfo = {
                     title:'编辑设备',
                     dialog:true,
                     type:1,
                     isSee:false,
+                    isEdit:true,
+                    id:row.id,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 };
                 this.getDetail(row.id);
-                this.getDialogEquType();
             },
             on(row){
                 //上线操作
@@ -467,15 +586,11 @@
                     title:'编辑设备',
                     dialog:true,
                     type:2,
+                    isSee:false,
+                    isEdit:false,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:' 确 定 '
                 }
-            },
-            getDialogEquType(){
-                //获取设备类型
-                getEquipmentType().then(({data})=>{
-                    this.dialogType = data.data ? data.data.list:[];
-                });
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
@@ -489,17 +604,60 @@
                 getEquipmentDetail({id:id}).then(({data})=>{
                     if(data.success){
                         this.dialogInfo = {
-                            no:data.data.no,//设备编号
-                            name:data.data.name,//设备名称
-                            type:data.data.type,//设备类型
+                            no:data.data.device.no,//设备编号
+                            name:data.data.device.name,//设备名称
+                            type:data.data.device.type,//设备类型
                             siteOne:'',//设备位置123
                             siteTwo:'',
-                            siteThree:'',
+                            siteThree: data.data.device.gmAreaID,
                             shopOne:'',//门店1234
                             shopTwo:'',
                             shopThree:'',
-                            shopFour:'',
-                        }
+                            shopFour:data.data.device.belongComID,
+                        };
+                        //处理设备位置反显
+                        /*
+                        * 返回值问题
+                        * 只能做这样的处理 包括此页面所有的多级下拉框都有这个问题
+                        * fuck
+                        * 要问为什么 我tm也不知道
+                        * */
+                        this.siteOne.forEach((item)=>{
+                            item.list.forEach((ins)=>{
+                                ins.list.forEach((i)=>{
+                                    if(i.id == data.data.device.gmAreaID){
+
+                                        this.dialogInfo.siteOne = item.index;
+                                        this.siteTwo = item.list;
+
+                                        this.dialogInfo.siteTwo = ins.index;
+                                        this.siteThree = ins.list;
+                                    }
+                                })
+                            })
+                        });
+
+                        //处理门店反显
+                        this.shopOne.forEach((item)=>{
+                            item.list.forEach((ins)=>{
+                                ins.list.forEach((i)=>{
+                                    i.list.forEach((j)=>{
+                                        if(j.id == data.data.device.belongComID){
+
+                                            this.dialogInfo.shopOne = item.index;
+                                            this.shopTwo = item.list;
+
+                                            this.dialogInfo.shopTwo = ins.index;
+                                            this.shopThree = ins.list;
+
+                                            this.dialogInfo.shopThree = i.index;
+                                            this.shopFour = i.list;
+                                        }
+
+                                    })
+                                })
+                            })
+                        })
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -507,75 +665,144 @@
             },
             goStepsOne(){
                 this.equipmentDialogInfo.type=1;
-                this.equipmentDialogInfo.btnInfo='保存并下一步';
+                if(this.equipmentDialogInfo.isSee){
+                    this.equipmentDialogInfo.btnInfo =' 下一步 ';
+                    this.equipmentDialogInfo.btnShow = true;
+                }else{
+                    this.equipmentDialogInfo.btnInfo='保存并下一步';
+                }
 
             },
             submitTableDialog(){
                 if(this.equipmentDialogInfo.type === 1){
-                    this.equipmentDialogInfo.type=2;
-                    this.equipmentDialogInfo.btnInfo=' 确 定 ';
+                    this.$refs['dialogOne'].validate((valid) => {
+                        if (valid) {
+                            this.equipmentDialogInfo.type=2;
+                            this.equipmentDialogInfo.btnInfo=' 确 定 ';
+                            if(this.equipmentDialogInfo.isSee){
+                                this.equipmentDialogInfo.btnShow = false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    });
                 }else{
                     //请求保存接口，发送ajax
+                    if(this.equipmentDialogInfo.isSee){//查看不发送
+                        this.equipmentDialogInfo.dialog = false;
+                        return ;
+                    }
+                    if (this.equipmentDialogInfo.isEdit) {
+                        /*编辑接口调用*/
+                        this.$refs['dialogTwo'].validate((valid) => {
+                            if (valid) {
+                                let pams = {
+                                    ...this.dialogInfo,
+                                    id:this.equipmentDialogInfo.id,
+                                    belongComID:this.dialogInfo.shopFour,
+                                    gmAreaID:this.dialogInfo.siteThree,
+                                    faceGroupID:this.dialogFace.faceChildTwo,
+                                };
+                                editEquipment(pams).then(({data}) => {
+                                    if(data.success){
+                                        this.$message.success('修改成功');
+                                        this.search();
+                                        this.equipmentDialogInfo.dialog = false;
+                                    }else{
+                                        this.$message.warning(data.errorInfo)
+                                    }
+                                })
 
+                            } else {
+                                return false;
+                            }
+                        });
+                    }else{
+                        /*新增接口调用*/
+
+                        this.$refs['dialogTwo'].validate((valid) => {
+                            if (valid) {
+                                let params = {
+                                    ...this.dialogInfo,
+                                    belongComID:this.dialogInfo.shopFour,
+                                    gmAreaID:this.dialogInfo.siteThree,
+                                    faceGroupID:this.dialogFace.faceChildTwo,
+                                };
+                                addEquipment(params).then(({data})=>{
+                                    if(data.success){
+                                        this.$message.success('添加成功');
+                                        this.search();
+                                        this.equipmentDialogInfo.dialog = false;
+                                    }else{
+                                        this.$message.warning(data.errorInfo)
+                                    }
+                                })
+                            } else {
+                                return false;
+                            }
+                        });
+                    }
                 }
+            },
+            getFaceGroupChildOne(){
+                let params = {
+                    faceGroupID:this.dialogFace.faceGroup
+                };
+                this.dialogFace.faceChildOne = '';
+                this.dialogFace.faceChildTwo = '';
+                this.faceChildOne = [];
+                this.faceChildTwo = [];
+                getFaceGroupOne(params).then(({data})=>{
+                    this.faceChildOne = data.data.list;
+                })
+            },
+            getFaceGroupChildTwo(){
+                let params = {
+                    faceGroupID:this.dialogFace.faceGroup,
+                    sub1:this.dialogFace.faceChildOne
+                };
+                this.dialogFace.faceChildTwo = '';
+                getFaceGroupTwo(params).then(({data})=>{
+                    this.faceChildTwo = data.data.list;
+                })
             },
             goGroup(){
                 this.$router.push({path: '/Index/faceList'})
             },
             Clicksite(index){
-               //点击选择设备位置
-                let params = {};
-                if(index===1){
-                    params.id = this.dialogInfo.siteOne;
+               //点击选择设备位置dialogInfo.siteOne
+                if(index == 1){
+                    this.siteTwo = this.siteOne[this.dialogInfo.siteOne].list;
+                    this.dialogInfo.siteTwo = '';
+                    this.dialogInfo.siteThree = '';
+                    this.siteThree = [];
                 }
-                if(index===2){
-                    params.id = this.dialogInfo.siteTwo;
+                if(index == 2){
+                    this.dialogInfo.siteThree = '';
+                    this.siteThree = this.siteTwo[this.dialogInfo.siteTwo].list;
                 }
-                getEquipmentLocation(params).then(({data})=>{
-                    if(index===1){
-                        this.siteTwo = data.data ? data.data.list:[];
-                        this.siteThree = [];
-                        this.dialogInfo.siteTwo = '';
-                        this.dialogInfo.siteThree = '';
-                    }
-                    if(index===2){
-                        this.dialogInfo.siteThree = '';
-                        this.siteThree = data.data? data.data.list:[];
-                    }
-                })
             },
             ClickShop(index){
                 //点击选择门店大区
-                let params = {};
                 if(index===1){
-                    params.id = this.dialogInfo.shopOne;
+                    this.shopTwo = this.shopOne[this.dialogInfo.shopOne].list;
+                    this.shopThree = [];
+                    this.shopFour = [];
+                    this.dialogInfo.shopTwo = '';
+                    this.dialogInfo.shopThree = '';
+                    this.dialogInfo.shopFour = '';
                 }
                 if(index===2){
-                    params.id = this.dialogInfo.shopTwo;
+                    this.shopThree = this.shopTwo[this.dialogInfo.shopTwo].list;
+                    this.shopFour = [];
+                    this.dialogInfo.shopThree = '';
+                    this.dialogInfo.shopFour = '';
                 }
                 if(index===3){
-                    params.id = this.dialogInfo.shopThree;
+                    this.shopFour = this.shopThree[this.dialogInfo.shopThree].list;
+                    this.dialogInfo.shopFour = '';
                 }
-                getEquipmentArea(params).then(({data})=>{
-                    if(index===1){
-                        this.shopTwo = data.data ? data.data.list:[];
-                        this.shopThree = [];
-                        this.shopFour = [];
-                        this.dialogInfo.shopTwo = '';
-                        this.dialogInfo.shopThree = '';
-                        this.dialogInfo.shopFour = '';
-                    }
-                    if(index===2){
-                        this.shopThree = data.data ? data.data.list:[];
-                        this.shopFour = [];
-                        this.dialogInfo.shopThree = '';
-                        this.dialogInfo.shopFour = '';
-                    }
-                    if(index===3){
-                        this.shopFour = data.data ? data.data.list:[];
-                        this.dialogInfo.shopFour = '';
-                    }
-                })
+
             },
 
             getEquipment(){
@@ -583,14 +810,17 @@
                 getEquipmentLocation({}).then(({data})=>{
                     if(data.data){
                         data.data.forEach((item,index)=>{
-                            this.companyList.push();
-                        })
+                            item.index = index;
+                            item.list.forEach((ins,idx)=>{
+                                ins.index = idx;
+                            })
+                        });
+                        this.companyList = data.data;
+                        this.siteOne = data.data;
+                    }else{
+                        this.companyList = [];
+                        this.siteOne = []
                     }
-
-
-
-                    this.companyList = data.data.list;
-                    this.siteOne = data.data ? data.data.list:[];
                 });
                 //获取设备类型
                 getEquipmentType().then(({data})=>{
@@ -598,7 +828,8 @@
                         id: '',
                         name: "全部"
                     });*/
-                    this.EquipmentType =data.data ? data.data.list:[];
+                    this.EquipmentType = data.data ? data.data.list:[];
+                    this.dialogType = data.data ? data.data.list:[];
                 });
                 //获取设备状态
                 getEquipmentState().then(({data})=>{
@@ -610,14 +841,30 @@
                 });
                 // 获取门店
                 getEquipmentArea({}).then(({data})=>{
-                    this.shopOne = data.data ? data.data.list:[];
+                    if(data.data){
+                        data.data.forEach((item,index)=>{
+                            item.index = index;
+                            item.list.forEach((ins,ind)=>{
+                                ins.index = ind;
+                                ins.list.forEach((i,idx)=>{
+                                    i.index = idx;
+                                })
+                            })
+                        });
+                        this.shopOne = data.data;
+                    }else{
+                    }
+                });
+                //获取人脸分组下拉框
+                getFaceList({page:1, pageSize:100}).then(({data})=>{
+                    this.faceGroup = data.data.list;
                 })
             },
         },
         mounted(){
             this.search();
             this.getEquipment();
-            // this.getEquipmentType();
+            this.getFaceGroup();
             // this.getEquipmentState()
         }
     }

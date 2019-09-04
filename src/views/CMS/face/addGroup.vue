@@ -22,7 +22,12 @@
                     </div>
                 </div>
                 <div class="set_child_group">
-                    <h3>设置子分组 <span>请注意一级分组不可添加图片</span></h3>
+                    <div class="child_top">
+                        <h3>设置子分组 <span>请注意一级分组不可添加图片</span></h3>
+                        <div>
+                            <el-button type="primary" size="mini" @click="goChildren">查看子分组列表</el-button>
+                        </div>
+                    </div>
                     <div class="set_group_childinp">
                         <el-form :inline="true" :disabled="isSee" label-width="110px">
                             <el-form-item label="一级分组名称" required>
@@ -108,11 +113,11 @@
                             label="性别">
                         </el-table-column>
                         <el-table-column
-                            prop="address"
+                            prop="id"
                             label="PersonID">
                         </el-table-column>
                         <el-table-column
-                            prop="type"
+                            prop="number"
                             label="人员类型">
                         </el-table-column>
                         <el-table-column
@@ -124,7 +129,7 @@
                             label="编号">
                         </el-table-column>
                         <el-table-column
-                            prop="img"
+                            prop="on"
                             label="图片来源">
                         </el-table-column>
                         <el-table-column
@@ -134,12 +139,12 @@
                         <el-table-column
                             label="操作">
                             <temalate slot-scope="scope">
-                                <el-button type="text" @click="">删除</el-button>
+                                <el-button type="text" @click="removeFaceImg(scope.row)">删除</el-button>
                             </temalate>
                         </el-table-column>
                     </el-table>
                     <div class="steptwo_table_footer">
-                        <el-button @click="">批量删除</el-button>
+                        <el-button @click="removeAll">批量删除</el-button>
                         <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
@@ -214,9 +219,9 @@
                     </div>
                 </div>
                 <div class="content">
-                    <div class="list" v-for="item in faceList">
+                    <div class="list" v-for="item in faceList" @click="ClickFaceImage(item)">
                         <div class="list_img">
-                            <el-checkbox size="" class="checkbox"></el-checkbox>
+                            <el-checkbox v-model="item.select"  class="checkbox"></el-checkbox>
                             <img :src="item.img">
                         </div>
                         <div class="list_info">
@@ -306,6 +311,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -315,6 +321,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -324,6 +331,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -333,6 +341,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -342,6 +351,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -351,6 +361,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -360,6 +371,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -369,6 +381,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -378,6 +391,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 },{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
@@ -387,6 +401,7 @@
                     type:'pds',
                     number:'adfaf',
                     on:'信息',
+                    select:false,
                     time:'2019-12-31 12:12:22'
                 }
                 ],
@@ -423,6 +438,10 @@
                         this.$message.warning(data.errorInfo)
                     }
                 })
+            },
+            goChildren(){
+                //取子分组列表
+                this.$router.push({path:'/Index/groupList',query:{id:this.groupData.id}})
             },
             addGroupOne(){
                 //创建一级分组
@@ -480,11 +499,16 @@
                     this.$message.warning('请选中要删除的分组');
                     return;
                 }
-                deleteGroupOne().then(({data})=>{
+                deleteGroupOne({
+                    faceGroupID:this.groupData.id,
+                    id:this.groupChildData.oneId,
+                    name:this.groupChildData.oneName,
+                }).then(({data})=>{
                     if(data.success){
                         this.$message.success('删除成功');
-                        // this.getGroupTwoList();
+                        this.getGroupOneList();
                         this.groupChildData.oneId = '';
+                        this.groupChildData.oneName = '';
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -495,11 +519,17 @@
                     this.$message.warning('请选中要删除的分组');
                     return;
                 }
-                deleteGroupTwo({name:this.groupChildData.twoName}).then(({data})=>{
+                deleteGroupTwo({
+                    faceGroupID:this.groupData.id,
+                    id:this.groupChildData.twoId,
+                    name:this.groupChildData.twoName,
+                    sub1:this.groupChildData.oneId
+                }).then(({data})=>{
                     if(data.success){
                         this.$message.success('删除成功');
-                        this.getGroup();
+                        this.getGroupTwoList();
                         this.groupChildData.twoId = '';
+                        this.groupChildData.twoName = '';
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -558,9 +588,31 @@
 
             },
 
-
+            ClickFaceImage(item){
+                if(item.select){
+                    item.select = false;
+                }else{
+                    item.select = true;
+                }
+            },
             handleSelectionChange(){
                 // 选中
+            },
+            removeFaceImg(row){
+                // this.stepTwoTableData = this.stepTwoTableData.filter(item => row.id != item.id);
+                let count;
+                this.stepTwoTableData.forEach((item,index)=>{
+                    if(item.id == row.id){
+                        count = index + 1;
+                    }
+                });
+                if(count){
+                    this.stepTwoTableData.splice(count-1, 1);
+                }
+                console.log(this.stepTwoTableData);
+            },
+            removeAll(){
+                this.stepTwoTableData = [];
             },
             handleSizeChange(val){
                 this.page.pageCount = val;
@@ -570,6 +622,13 @@
             },
             addGroupFaceDialog(){
                 // 确认添加人脸
+                this.stepTwoTableData = [];
+                this.faceList.forEach((item)=>{
+                    if(item.select){
+                        this.stepTwoTableData.push(item);
+                    }
+                })
+                this.addGroupFace = false;
             },
             search(){
 
@@ -599,7 +658,7 @@
         },
         mounted(){
             this.getGroupOneList();
-            if(this.$route.query.type == 'see'){
+            if(this.$route.query.type == 'see' || this.$route.query.type == 'edit'){
                 this.getDetails();
             }
         }
@@ -685,6 +744,7 @@
         .stepone{
             .set_group{
                 .el-form{
+                    border-top: 1px solid #EEEEEE;
                     padding: .3rem;
                     .el-form-item{
                         width: 48%;
@@ -696,13 +756,22 @@
             }
 
             .set_child_group{
-                h3{
-                    span{
-                        font-size: 12px;
-                        color: #F56C6C;
-                        margin-left: 10px;
+                .child_top{
+                    height: 50px;
+                    display: flex;
+                    display: -webkit-flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #eeeeee;
+                    h3{
+                        span{
+                            font-size: 12px;
+                            color: #F56C6C;
+                            margin-left: 10px;
+                        }
                     }
                 }
+
                 .el-form{
                     padding:0.1rem .3rem;
                     .el-form-item{
@@ -814,7 +883,7 @@
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
                 border-radius: 4px;
-
+                cursor: pointer;
                 padding: .2rem;
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;

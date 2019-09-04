@@ -44,24 +44,25 @@
                     </template>
                 </el-table-column>
             </el-table>
-        </div>
-        <div class="group_list_footer">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="page.page"
-                :page-sizes="[10, 20, 30, 50, 100]"
-                :page-size="page.pageCount"
-                background
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="page.total">
-            </el-pagination>
+            <div class="group_list_footer">
+                <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="page.page"
+                    :page-sizes="[10, 20, 30, 50, 100]"
+                    :page-size="page.pageSize"
+                    background
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="page.total">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import {formatTimes,textLen} from "../../../lib/utils";
+    import { geteGrouplist } from '@/HttpApi/face/face'
     export default {
         name: "groupList",
         data(){
@@ -71,20 +72,30 @@
                 tableData:[],
                 page:{
                     page:1,
-                    pageCount:10,
+                    pageSize:10,
                     total:0
                 }
             }
         },
         methods:{
             search(){
-
+                let params = {
+                    faceGroupID:this.$route.query.id,
+                    ...this.page
+                };
+                geteGrouplist(params).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data;
+                    }else{
+                        this.$message.warning(data.errorInfo);
+                    }
+                })
             },
             addChildGroup(){
-
+                console.log(this.$route.query.id);
             },
             handleSizeChange(val){
-                this.page.pageCount = val;
+                this.page.pageSize = val;
                 this.search()
             },
             handleCurrentChange(val){
@@ -93,7 +104,7 @@
             },
         },
         mounted(){
-
+            this.search()
         }
     }
 </script>

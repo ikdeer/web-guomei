@@ -108,16 +108,21 @@
                 </el-form-item>
                 <el-form-item label="编号" prop="noType" required>
                     <el-select v-model="dataDialogForm.noType" placeholder="请选择编号系统">
-                        <el-option label="PS" value="1"></el-option>
-                        <el-option label="SAP" value="2"></el-option>
+                        <el-option v-for="item in dataDialogForm.faceNoType"
+                                   :label="item.name"
+                                   :value="item.id"
+                                   :key="item.id">
+                        </el-option>
                     </el-select>
                     <el-input :maxlength="20" v-model="dataDialogForm.no" placeholder="请输入编号"></el-input>
                 </el-form-item>
                 <el-form-item label="类型" prop="type" required>
                     <el-select v-model="dataDialogForm.type" placeholder="请选择类型">
-                        <el-option label="国美员工" value="1"></el-option>
-                        <el-option label="国美会员" value="2"></el-option>
-                        <el-option label="游客" value="3"></el-option>
+                        <el-option v-for="item in dataDialogForm.faceType"
+                                   :label="item.name"
+                                   :value="item.id"
+                                   :key="item.id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="姓名" prop="name" required>
@@ -125,17 +130,18 @@
                 </el-form-item>
                 <el-form-item label="性别" prop="sex" required>
                     <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
-                        <el-option label="男" value="0"></el-option>
-                        <el-option label="女" value="1"></el-option>
+                        <el-option label="男" value="男"></el-option>
+                        <el-option label="女" value="女"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
             <div class="upload_face">
                 <h3>上传图片</h3>
                 <div class="upload">
+                    <!--  action="https://jsonplaceholder.typicode.com/posts/"-->
                     <el-upload
                         class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
+                        action=""
                         accept="image/jpg,image/jpeg,image/png,image/x-ms-bmp"
                         :show-file-list="false"
                         :auto-upload="false"
@@ -154,7 +160,7 @@
             </div>
             <span slot="footer">
                 <el-button type="primary" @click="commitFaceImage">确 定</el-button>
-                <el-button @click="userListAddDialog = false">取 消</el-button>
+                <el-button @click="dataDialogForm.uploadFaceDialog = false">取 消</el-button>
             </span>
         </el-dialog>
 
@@ -165,7 +171,7 @@
 
 <script>
     import {formatTimes,textLen} from '@/lib/utils'
-    import {getFaceList} from '@/HttpApi/face/face'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -235,8 +241,11 @@
                     name:'',
                     sex:'',
                     uploadFaceDialog:false,
+                    faceType:[],
+                    faceNoType:[],
                 },
-                imageUrl: '',
+                imageUrl: '',//base64图片url
+                faceImgUrl:'',//发送后端url
                 DialogRules:{
                     name:[
                         {validator:name,trigger:['blur','change']}
@@ -258,7 +267,39 @@
         },
         methods: {
             updateFace(){
+                this.dataDialogForm= {
+                    picFromID:'',
+                        noType:'',
+                        no:'',
+                        type:'',
+                        name:'',
+                        sex:'',
+                        uploadFaceDialog:false,
+                        faceType:[],
+                        faceNoType:[],
+                };
+                this.imageUrl = '';
+                this.faceImgUrl = '';
                 this.dataDialogForm.uploadFaceDialog = true;
+                //获取图片来源
+
+
+                //获取图片编号
+                getFaceNoType().then(({data})=>{
+                    if(data.success){
+                        this.dataDialogForm.faceNoType = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取图片编号列表失败')
+                    }
+                });
+                //获取类型
+                getFaceType().then(({data})=>{
+                    if(data.success){
+                        this.dataDialogForm.faceType = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取类型列表失败')
+                    }
+                })
             },
             addGroup(){
                 this.$router.push({path:'/Index/addGroup',query:{type:''}})
@@ -292,8 +333,8 @@
             see(row){
                 this.$router.push({path:'/Index/addGroup',query:{id:row.id,type:'see'}})
             },
-            editGroup(){
-
+            editGroup(row){
+                this.$router.push({path:'/Index/addGroup',query:{id:row.id,type:'edit'}})
             },
             addFace(){
 
@@ -308,12 +349,23 @@
             },
             handleAvatarSuccess(res, file) {
                 var that = this;
+                var imgurl = '';
                 var reader = new FileReader();
-                reader.readAsDataURL(file[0].raw);
+                reader.readAsDataURL(res.raw);
                 reader.onload = function(e){
                     this.result; // base64编码
-                    that.imageUrl = this.result;
+                    imgurl = this.result;
+                    uploadFaceImage({imageBase64:this.result}).then(({data})=>{
+                        if(data.success){
+                            that.faceImgUrl = data.data.url;
+                            that.imageUrl = imgurl;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                        console.log(that.faceImgUrl);
+                    })
                 };
+
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpg' || file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/x-ms-bmp";
@@ -328,6 +380,7 @@
                 return isJPG && isLt2M;
             },
             commitFaceImage(){
+                console.log(this.imageUrl);
                 this.$refs['dataDialogForm'].validate((valid) => {
                     if (valid) {
                         if(this.imageUrl == ''){
