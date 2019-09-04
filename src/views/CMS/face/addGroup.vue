@@ -1,5 +1,12 @@
 <template>
     <div class="add_group">
+      <!-- 面包屑导航栏 -->
+      <nav class="nav-Type">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
+          <el-breadcrumb-item>创建分组</el-breadcrumb-item>
+        </el-breadcrumb>
+      </nav>
         <h3>创建分组</h3>
         <div class="add_group_content">
             <div class="addgroup_top">

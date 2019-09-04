@@ -1,5 +1,31 @@
 <template>
     <div class="statement">
+      <!-- 面包屑导航栏从概览过来  -->
+      <template v-if="Breadcrumb == 'overview'">
+        <nav class="nav-Type">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{path:'/Index/overview'}">概览</el-breadcrumb-item>
+            <el-breadcrumb-item>监控报表</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
+      </template>
+      <!-- 面包屑导航栏从应用列表过来  -->
+      <template v-if="Breadcrumb == 'applicationList'">
+        <nav class="nav-Type">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{path:'/Index/applicationList'}">应用列表</el-breadcrumb-item>
+            <el-breadcrumb-item>监控报表</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
+      </template>
+      <!-- 本级过来 -->
+      <template v-if="Breadcrumb == null">
+        <nav class="nav-Type">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item>监控报表</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
+      </template>
         <h3>监控报表</h3>
         <div class="statement_content">
             <div class="statement_form">
@@ -143,7 +169,8 @@
                     callSucessCount: 0
                 },
                 lineCharts: null,
-                lineOption: {}
+                lineOption: {},
+                Breadcrumb:null,//面包屑导航栏
             }
         },
         methods:{
@@ -228,6 +255,7 @@
             },
         },
         mounted(){
+            this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
             this.$nextTick(() => {
                 this.lineCharts = this.$echarts.init(document.getElementById('MyEcharts'))
                 this.lineCharts.setOption(this.lineOption);

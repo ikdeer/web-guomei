@@ -141,12 +141,12 @@
             this.loginForm.disabled=true;
             setTimeout(function(){
               _this.UserMsgCode();
-              this.setTime = setInterval(() => {
+              _this.setTime = setInterval(() => {
                 _this.loginForm.time=_this.loginForm.outTime--;
                 _this.loginForm.codeText=_this.loginForm.time+'S后发送';
                 if(_this.loginForm.time <= 0){
-                  _this.loginForm.outTime =60;
                   clearInterval(_this.setTime);
+                  _this.loginForm.outTime =60;
                   _this.loginForm.disabled = false;
                   _this.loginForm.codeText = '获取验证码';
                 }
