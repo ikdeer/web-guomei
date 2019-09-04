@@ -24,7 +24,8 @@ import log from '@/views/CMS/operationLog/log'
 import applicationList from '@/views/CMS/applications/applicationList'
 import addApplication from '@/views/CMS/applications/addApplication'
 import applicationDetail from '@/views/CMS/applications/applicationDetail'
-import TCFApi from '@/views/CMS/tcf/TCFApi'
+import TCFApiList from '@/views/CMS/tcf/TCFApiList'
+import TCFApiAdd from '@/views/CMS/tcf/TCFApi'
 
 //控制跳转同一个路由报错
 const originalPush = Router.prototype.push;
@@ -207,9 +208,18 @@ const router = new Router({
         }
       },
         {
-          path: '/Index/TCFApi',
-          name: '技术文档',
-          component: TCFApi,
+          path: '/Index/TCFApiList',
+          name: '技术文档列表',
+          component: TCFApiList,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:8
+          }
+        },
+        {
+          path: '/Index/TCFApiAdd',
+          name: '新增技术文档',
+          component: TCFApiAdd,
           meta: {
             title:'国美人脸认证管理后台',
             code:8

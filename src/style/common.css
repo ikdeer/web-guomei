@@ -38,6 +38,10 @@ ol,li,ul,dl,dt,dd{
   font-weight: 600 !important;
   cursor: pointer !important;
 }
+/*富文本编辑框高度*/
+.ql-editor{
+  height:4.5rem;
+}
 h3{
     color: #333333;
     font-weight: 600;

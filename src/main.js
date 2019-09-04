@@ -6,8 +6,16 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import md5 from 'js-md5'
 import Cookie from 'js-cookie'
+//引入echarts
+import echarts from 'echarts';
+//富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 import './style/common.css'
 import 'babel-polyfill'
+
 //头部组件
 import Header from '@/views/CMS/component/header/header.vue'
 import layout from '@/views/CMS/component/layout/layout.vue'
@@ -16,15 +24,17 @@ Vue.prototype.$md5 = md5;
 
 Vue.prototype.Cookies = Cookie;
 
+Vue.prototype.$echarts = echarts;
+
+Vue.use(VueQuillEditor);
+
 Vue.use(ElementUI,{
     size:'small'
 });
-//引入echarts
-import echarts from 'echarts';
-Vue.prototype.$echarts = echarts;
 
 //注册全局组件
 Vue.component('layout-Header',Header)
+
 Vue.component('layout-Sider',layout)
 
 Vue.config.productionTip = false;
