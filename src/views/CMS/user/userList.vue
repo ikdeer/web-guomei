@@ -6,7 +6,7 @@
         <h3>用户列表</h3>
         <div class="userlist_content">
             <div class="user_list_form">
-                <el-form :inline="true">
+                <el-form :inline="true" ref="userlistform">
                     <el-form-item label="手机号">
                         <el-input :maxlength="200" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
                     </el-form-item>
@@ -271,14 +271,15 @@
         },
         methods: {
             adduser(){//新增用户
-                this.dataDialogForm = {
+                /*this.dataDialogForm = {
                     username:'',
                     phoneNum:'',
                     mail:'',
                     passwordstart:'',
                     passwordend:'',
-                };
+                };*/
                 this.userListAddDialog = true;
+                this.$refs['dataDialogForm'].resetFields();
             },
             search(){
                 let params = {
@@ -297,7 +298,7 @@
                     }
                 });
             },
-            reset(){
+            reset(form){
                 this.formData = {
                     phoneNums:'',
                     mails:'',
@@ -362,7 +363,7 @@
                             }else{
                                 this.$message.warning(data.errorInfo)
                             }
-                        })
+                        });
                     } else {
                         return false;
                     }

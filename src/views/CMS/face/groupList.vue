@@ -57,6 +57,38 @@
                 </el-pagination>
             </div>
         </div>
+
+        <el-dialog
+            title="创建分组"
+            class="user_list_add_dialog"
+            :visible.sync="groupChildData.dialog"
+            width="460px">
+            <el-form :model="groupChildData" ref="groupChildData" label-width="80px">
+                <el-form-item label="分组名称" required>
+                    <el-input type="text" v-model="groupChildData.name" :maxlength="20" placeholder="请输入20以内的汉字" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分组层级" required>
+                    <el-select v-model="groupChildData.status" placeholder="请选择分组层级">
+                        <el-option label="一级分组" value="1"></el-option>
+                        <el-option label="二级分组" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="上级分组" prop="mail" v-if="groupChildData.status == 2" required>
+                    <el-select v-model="groupChildData.oneId" placeholder="请选择一级分组">
+                        <el-option v-for="item in groupOneList"
+                                   :label="item.name"
+                                   :value="item.id"
+                                   :key="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer">
+                <el-button type="primary" @click="addGroupOne">立即创建</el-button>
+                <el-button @click="groupChildData.dialog = false">取 消</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -74,6 +106,13 @@
                     page:1,
                     pageSize:10,
                     total:0
+                },
+                groupOneList:[],
+                groupChildData:{
+                    dialog:false,
+                    name:'',
+                    status:'1',
+                    oneId:''
                 }
             }
         },
@@ -93,6 +132,7 @@
             },
             addChildGroup(){
                 console.log(this.$route.query.id);
+                this.groupChildData.dialog = true;
             },
             handleSizeChange(val){
                 this.page.pageSize = val;

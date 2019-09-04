@@ -23,13 +23,75 @@
                 </div>
                 <div class="set_child_group">
                     <div class="child_top">
-                        <h3>设置子分组 <span>请注意一级分组不可添加图片</span></h3>
+                        <h3>设置子分组 <span>请注意一级子分组不可添加图片</span></h3>
                         <div>
                             <el-button type="primary" size="mini" @click="goChildren">查看子分组列表</el-button>
                         </div>
                     </div>
                     <div class="set_group_childinp">
-                        <el-form :inline="true" :disabled="isSee" label-width="110px">
+
+                        <div class="set_group_childinp_top">
+                            <div>
+                                <span>一级子分组列表</span>
+                                <el-button type="primary" size="mini" @click="addChildGroup('1')">添加一级子分组</el-button>
+                            </div>
+                            <div>
+                                <span>二级子分组列表</span>
+                                <el-button type="primary" size="mini" @click="addChildGroup('2')">添加二级子分组</el-button>
+                            </div>
+                        </div>
+                        <div class="set_group_childinp_btm">
+                            <div>
+                                <el-table
+                                    ref="multipleTable"
+                                    :data="groupOneList"
+                                    empty-text="暂未创建一级子分组"
+                                    tooltip-effect="dark"
+                                    style="width: 100%">
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="分组名称">
+                                    </el-table-column>
+                                    <el-table-column
+                                        align="center"
+                                        label="操作">
+                                        <temalate slot-scope="scope">
+                                            <el-button type="text" @click="ClickGroupOne(scope.row)">查看二级子分组</el-button>
+                                            <el-button type="text" @click="deleteGroupOne(scope.row)">删除</el-button>
+                                        </temalate>
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                            <div>
+                                <el-table
+                                    ref="multipleTable"
+                                    :data="groupTwoList"
+                                    empty-text="暂未创建二级子分组"
+                                    tooltip-effect="dark"
+                                    style="width: 100%">
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="分组名称">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="count"
+                                        align="center"
+                                        label="人像数">
+                                    </el-table-column>
+                                    <el-table-column
+                                        align="center"
+                                        label="操作">
+                                        <temalate slot-scope="scope">
+                                            <el-button type="text" @click="deleteGroupTwo(scope.row)">删除</el-button>
+                                        </temalate>
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </div>
+
+                        <!--<el-form :inline="true" :disabled="isSee" label-width="110px">
                             <el-form-item label="一级分组名称" required>
                                 <el-input :maxlength="20" v-model="groupChildData.oneName" placeholder="20汉字以内"></el-input>
                                 <el-button type="primary" :disabled="groupData.id==''" @click="addGroupOne">保存</el-button>
@@ -61,7 +123,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 <div class="add_group_footer">
@@ -163,6 +225,37 @@
                 </div>
             </div>
         </div>
+
+        <el-dialog
+            title="创建分组"
+            class="user_list_add_dialog"
+            :visible.sync="groupChildData.dialog"
+            width="460px">
+            <el-form :model="groupChildData" ref="groupChildData" label-width="80px">
+                <el-form-item label="分组名称" required>
+                    <el-input type="text" v-model="groupChildData.name" :maxlength="20" placeholder="请输入20以内的汉字" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="分组层级" required>
+                    <el-select v-model="groupChildData.status" placeholder="请选择分组层级">
+                        <el-option label="一级分组" value="1"></el-option>
+                        <el-option label="二级分组" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="上级分组" prop="mail" v-if="groupChildData.status == 2" required>
+                    <el-select v-model="groupChildData.oneId" placeholder="请选择一级分组">
+                        <el-option v-for="item in groupOneList"
+                                   :label="item.name"
+                                   :value="item.id"
+                                   :key="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <span slot="footer">
+                <el-button type="primary" @click="addGroupOne">立即创建</el-button>
+                <el-button @click="groupChildData.dialog = false">取 消</el-button>
+            </span>
+        </el-dialog>
 
 
         <el-dialog
@@ -280,13 +373,16 @@
                     id:''
                 },
                 groupChildData:{//子分组
-                    oneId:'',
+                    oneId:'',//一级分组id
                     oneName:'',
                     twoId:'',
-                    twoName:''
+                    twoName:'',
+                    name:'',
+                    status:'1',
+                    dialog:false,
                 },
-                groupOneList:[],//子分组一级列表
-                groupTwoList:[],//子分组二级列表
+                groupOneList:[{},{}],//子分组一级列表
+                groupTwoList:[{},{}],//子分组二级列表
 
 
                 stepTwoForm:{//人脸筛选
@@ -443,26 +539,56 @@
                 //取子分组列表
                 this.$router.push({path:'/Index/groupList',query:{id:this.groupData.id}})
             },
+            addChildGroup(index){
+                this.groupChildData.name = '';
+                this.groupChildData.status = index;
+                this.groupChildData.dialog = true;
+            },
             addGroupOne(){
-                //创建一级分组
-                if(!this.groupChildData.oneName){
+                if(this.groupChildData.name==''){
+                    this.$message.warning('请输入分组名称')
                     return;
                 }
-                let params = {
-                    faceGroupID:this.groupData.id,
-                    name:this.groupChildData.oneName
-                };
-                createGroupOne(params).then(({data})=>{
-                    if(data.success){
-                        this.$message.success('创建成功');
-                        this.groupChildData.oneName = '';
-                        this.getGroupOneList()
-                    }else{
-                        this.$message.warning(data.errorInfo)
+                if(!this.groupChildData.status == '2' && this.groupChildData.oneId == ''){
+                    this.$message.warning('请选择上级分组')
+                    return;
+                }
+                if(this.groupChildData.status == 1){
+                    //创建一级分组
+                    let params = {
+                        faceGroupID:this.groupData.id,
+                        name:this.groupChildData.name
+                    };
+                    createGroupOne(params).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('创建成功');
+                            this.getGroupOneList();
+                            this.groupChildData.dialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }
+                if(this.groupChildData.status == 2){
+                    //创建二级分组
+                    let parm = {
+                        faceGroupID:this.groupData.id,
+                        name:this.groupChildData.twoName,
+                        sub1:this.groupChildData.oneId
                     }
-                })
+                    createGroupTwo(params).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('创建成功');
+                            this.getGroupTwoList();
+                            this.groupChildData.dialog = false;
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+
+                }
             },
-            addGroupTwo(){
+            /*addGroupTwo(){
                 //创建二级分组
                 if(!this.groupChildData.twoName){
                     this.$message.warning('请输入文字');
@@ -482,54 +608,54 @@
                         this.$message.warning(data.errorInfo)
                     }
                 })
-            },
+            },*/
             ClickGroupOne(item){
                 this.groupChildData.oneId = item.id;
-                this.groupChildData.oneName = item.name;
-                this.groupChildData.twoId = '';
-                this.groupChildData.twoName = '';
+                // this.groupChildData.oneName = item.name;
+                /*this.groupChildData.twoId = '';
+                this.groupChildData.twoName = '';*/
                 this.getGroupTwoList();
             },
-            ClickGroupTwo(item){
+            /*ClickGroupTwo(item){
                 this.groupChildData.twoId = item.id;
                 this.groupChildData.twoName = item.name;
-            },
-            deleteGroupOne(){
-                if(!this.groupChildData.oneId){
+            },*/
+            deleteGroupOne(row){
+               /* if(!this.groupChildData.oneId){
                     this.$message.warning('请选中要删除的分组');
                     return;
-                }
+                }*/
                 deleteGroupOne({
                     faceGroupID:this.groupData.id,
-                    id:this.groupChildData.oneId,
-                    name:this.groupChildData.oneName,
+                    id:row.id,
+                    name:row.name,
                 }).then(({data})=>{
                     if(data.success){
                         this.$message.success('删除成功');
                         this.getGroupOneList();
-                        this.groupChildData.oneId = '';
-                        this.groupChildData.oneName = '';
+                        /*this.groupChildData.oneId = '';
+                        this.groupChildData.oneName = '';*/
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
                 })
             },
-            deleteGroupTwo(){
-                if(!this.groupChildData.twoId){
+            deleteGroupTwo(row){
+                /*if(!this.groupChildData.twoId){
                     this.$message.warning('请选中要删除的分组');
                     return;
-                }
+                }*/
                 deleteGroupTwo({
                     faceGroupID:this.groupData.id,
-                    id:this.groupChildData.twoId,
-                    name:this.groupChildData.twoName,
+                    id:row.id,
+                    name:row.name,
                     sub1:this.groupChildData.oneId
                 }).then(({data})=>{
                     if(data.success){
                         this.$message.success('删除成功');
                         this.getGroupTwoList();
-                        this.groupChildData.twoId = '';
-                        this.groupChildData.twoName = '';
+                        /*this.groupChildData.twoId = '';
+                        this.groupChildData.twoName = '';*/
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -657,7 +783,7 @@
 
         },
         mounted(){
-            this.getGroupOneList();
+            // this.getGroupOneList();
             if(this.$route.query.type == 'see' || this.$route.query.type == 'edit'){
                 this.getDetails();
             }
@@ -772,7 +898,39 @@
                     }
                 }
 
-                .el-form{
+                /*start*/
+
+                .set_group_childinp{
+                    .set_group_childinp_top{
+                        height: 50px;
+                        display: flex;
+                        display: -webkit-flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        div{
+                            width: 49%;
+                            span{
+                                color: #666666;
+                                font-size: 14px;
+                                margin-right: 8px;
+                            }
+                        }
+                    }
+                    .set_group_childinp_btm{
+                        display: flex;
+                        display: -webkit-flex;
+                        justify-content: space-between;
+                        height: 320px;
+                        div{
+                            border: 1px solid #eeeeee;
+                            width: 49%;
+                        }
+                    }
+                }
+
+                /*end*/
+
+                /*.el-form{
                     padding:0.1rem .3rem;
                     .el-form-item{
                         width: 48%;
@@ -780,8 +938,8 @@
                     .el-input{
                         width: 280px;
                     }
-                }
-                .group_list{
+                }*/
+                /*.group_list{
                     display: flex;
                     display: -webkit-flex;
 
@@ -823,7 +981,7 @@
                         }
 
                     }
-                }
+                }*/
             }
 
             .add_group_footer{
