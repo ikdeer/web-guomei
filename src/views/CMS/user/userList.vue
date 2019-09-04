@@ -295,6 +295,7 @@
                 getUserList(params).then(({data})=>{
                     if(data.success){
                         this.tableData = data.data.list || [];
+                        this.page.total = data.pagerManager.totalResults;
                     }else{
                         this.tableData = [];
                         // this.$message.warning(data.errorInfo)

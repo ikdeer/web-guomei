@@ -219,14 +219,16 @@
                 }
             },
             edit(row){
-                this.dataDialogForm={
+                /*this.dataDialogForm={
                     name:row.name,
                     phone:row.phoneNum,
                     email:row.mail,
                     id:row.id,
                     isEdit:true,
-                };
+                };*/
                 this.userInfoAddDialog = true;
+                this.$refs['dataDialogForm'].resetFields();
+                this.dataDialogForm.id = row.id;
             },
             remove(row){
                 this.$confirm('此操作将删除该联系人, 是否继续?', '提示', {
@@ -244,14 +246,16 @@
                 }).catch(() => {});
             },
             adduser(){
-                this.dataDialogForm={
+                /*this.dataDialogForm={
                     name:'',
                     phone:'',
                     email:'',
                     id:this.id,
                     isEdit:false,
-                };
+                };*/
                 this.userInfoAddDialog = true;
+                this.$refs['dataDialogForm'].resetFields();
+                this.dataDialogForm.id = this.id;
             },
             addContact(){
                 this.$refs['dataDialogForm'].validate((valid) => {

@@ -388,9 +388,8 @@
                     status:'1',
                     dialog:false,
                 },
-                groupOneList:[{},{}],//子分组一级列表
-                groupTwoList:[{},{}],//子分组二级列表
-
+                groupOneList:[],//子分组一级列表
+                groupTwoList:[],//子分组二级列表
 
                 stepTwoForm:{//人脸筛选
                     one:'',
