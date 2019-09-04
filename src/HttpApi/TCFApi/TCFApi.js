@@ -22,6 +22,18 @@ export const getImageUploadNormalImage = (params) => {
   })
 }
 /**
+ * 技术文档列表
+ * page
+ * pageSize
+ **/
+export const getTechDocContentShow = (params) => {
+  return new Promise(resolve => {
+    AxIos.get('/techDoc/contentShow', params).then(response => {
+      resolve(response)
+    })
+  })
+}
+/**
  * 创建技术文档
  * "name": 0,
  * "title1": 0,

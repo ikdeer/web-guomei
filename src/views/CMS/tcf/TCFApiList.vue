@@ -31,7 +31,7 @@
           <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
             <el-table-column prop="userName" align="center" label="apiID"></el-table-column>
             <el-table-column prop="logDesc" align="center" label="api标题"></el-table-column>
-            <el-table-column prop="createDate" align="center" label="api编号"></el-table-column>
+            <el-table-column prop="createDate" align="center" label="创建时间"></el-table-column>
             <el-table-column prop="createDate" align="center" label="操作">
               <el-button type="text">编辑</el-button>
               <el-button type="text">查看</el-button>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-
+  import {getTechDocContentShow} from "../../../HttpApi/TCFApi/TCFApi";
   export default {
     name: "TCFApiList",
     data(){
@@ -77,8 +77,13 @@
       }
     },
     methods:{
-      search(){
-
+      getTechDocContentShow(){
+        getTechDocContentShow({
+          page:this.page.currentPage,
+          pageSize:this.page.pageSize,
+        }).then(response => {
+          console.log(response);
+        })
       },
       handleSizeChange(val){
         this.page.pageSize = val;
@@ -90,7 +95,7 @@
       },
     },
     mounted(){
-
+      this.getTechDocContentShow();
     }
   }
 </script>
