@@ -1,0 +1,279 @@
+<template>
+    <div class="TCF-api">
+      <!-- 面包屑导航栏 -->
+      <nav class="nav-Type">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item :to="{path:'/Index/TCFApiList'}">技术文档</el-breadcrumb-item>
+          <el-breadcrumb-item>新增技术文档</el-breadcrumb-item>
+        </el-breadcrumb>
+      </nav>
+      <div class="api-content">
+        <h4 class="api-TextH4">技术文档</h4>
+        <div class="api-center">
+          <div class="api-quill">
+            <el-form :model="catalogText"
+                     :label-position="labelPosition"
+                     :rules="rules"
+                     size="small"
+                     ref="catalogText"
+                     label-width="130px"
+                     class="demo-dynamic">
+              <el-form-item label="标题" prop="Title">
+                <div class="api-OneLevel">
+                  <el-input v-model="catalogText.Title" placeholder="请输入标题"></el-input>
+                </div>
+              </el-form-item>
+              <el-form-item label="目录名称" prop="catalog">
+                <div class="api-OneLevel">
+                  <el-input v-model="catalogText.catalog" placeholder="请输入目录名称"></el-input>
+                </div>
+              </el-form-item>
+              <el-form-item label="目录层级" prop="selectLevelType">
+                <div class="api-OneLevel">
+                  <el-select v-model="catalogText.selectLevelType"
+                             @change="selectLeve(catalogText.selectLevelType)"
+                             placeholder="请输选择目录层级">
+                    <el-option
+                      v-for="item in catalogText.selectLevelData"
+                      :key="item.LevelType"
+                      :label="item.LevelText"
+                      :value="item.LevelType">
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item label="上级目录" prop="superiorLevel" v-if="catalogText.isSelectLevel">
+                <div class="api-OneLevel">
+                  <el-select v-model="catalogText.superiorLevel" placeholder="请输选择上级目录">
+                    <el-option
+                      v-for="item in catalogText.selectLevelData"
+                      :key="item.LevelType"
+                      :label="item.LevelText"
+                      :value="item.LevelType">
+                    </el-option>
+                  </el-select>
+                </div>
+              </el-form-item>
+              <el-form-item  label="API内容" prop="bbsContent">
+                <!-- 图片上传组件辅助-->
+                <el-upload
+                  class="avatar-uploader"
+                  action=""
+                  :show-file-list="false"
+                  :auto-upload="false"
+                  :on-change="getFile"
+                  :before-upload="beforeUpload">
+                </el-upload>
+                <el-row v-loading="catalogText.quillUpdateImg">
+                  <el-col :span="24">
+                    <quill-editor
+                      v-model="catalogText.bbsContent"
+                      ref="myQuillEditor"
+                      :options="editorOption">
+                    </quill-editor>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item>
+                <div class="api-editor">
+                  <el-button type="primary" @click.stop="addDomain">保存并发布</el-button>
+                  <el-button type="success"
+                             :disabled="catalogText.isThreeLevel"
+                             @click.stop="catalogText.isThreeLevel = true">新增类目</el-button>
+                  <el-button>重置</el-button>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+  import {getImageUploadNormalImage,getTechDocCreate} from "../../../HttpApi/TCFApi/TCFApi";
+  const toolbarOptions =[
+    ['bold', 'italic', 'underline', 'strike'],    //加粗，斜体，下划线，删除线
+    ['blockquote', 'code-block'],     //引用，代码块
+    [{ 'header': 1 }, { 'header': 2 }],        // 标题，键值对的形式；1、2表示字体大小
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],     //列表
+    [{ 'script': 'sub'}, { 'script': 'super' }],   // 上下标
+    [{ 'indent': '-1'}, { 'indent': '+1' }],     // 缩进
+    [{ 'direction': 'rtl' }],             // 文本方向
+    [{ 'size': ['small', false, 'large', 'huge'] }], // 字体大小
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],     //几级标题
+    [{ 'color': [] }, { 'background': [] }],     // 字体颜色，字体背景颜色
+    [{ 'font': [] }],     //字体
+    [{ 'align': [] }],    //对齐方式
+    ['image']    //上传图片
+  ];
+export default {
+  name: "TCFApi",
+  data(){
+    return {
+      catalogText:{
+        Title:'',//标题
+        catalog:'',//类目
+        selectLevelType:'',//选择类目层级
+        selectLevelData:[
+          {LevelText:'一级目录',LevelType:'1'},
+          {LevelText:'二级目录',LevelType:'2'}
+        ],
+        superiorLevel:'',//上级类目内容
+        isSelectLevel:false,//上级类目状态
+        bbsContent:'',//文本内容
+        quillUpdateImg:'',//图片上传动画
+      },
+      labelPosition:'right',//form对其方式
+      editorOption: {
+        theme: 'snow',  // or 'bubble'
+        placeholder: '请填写要发布的公告版内容...',
+        modules: {
+          toolbar: {
+            container: toolbarOptions,  // 工具栏
+            handlers:{
+              'image':function(value){
+                if(value){
+                  // 触发input框选择图片文件
+                  document.querySelector('.avatar-uploader input').click();
+                }else{
+                  this.quill.format('image', false);
+                }
+              }
+            }
+          }
+        },
+      },
+      rules:{
+        Title:[
+          { required: true, message: '请输入api标题', trigger: 'blur' },
+        ],
+        catalog:[
+          { required: true, message: '请输入类目', trigger: 'blur' },
+        ],
+        superiorLevel:[
+          { required: true, message: '请选择上级类目', trigger: 'blur' },
+        ],
+        bbsContent:[
+          { required: true, message: '请填写要发布的API公告版内容', trigger: 'blur,change' }
+        ]
+      }
+    }
+  },
+  methods:{
+    // 上传图片前
+    beforeUpload(res,file) {
+      //显示loading动画
+      this.catalogText.quillUpdateImg = true;
+    },
+    //图片上传
+    getFile(file,fileList){
+      let _this = this;
+      _this.getBase64(file.raw).then(resBase64Img => {
+        getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+          if(response.data.success){
+            let quill = this.$refs.myQuillEditor.quill;
+            // 获取光标所在位置
+            let length = quill.getSelection().index;
+            // 插入图片  res.data为服务器返回的图片地址
+            quill.insertEmbed(length, 'image', resBase64Img);
+            // 调整光标到最后
+            quill.setSelection(length + 1);
+            // loading动画消失
+            this.catalogText.quillUpdateImg = false;
+          }else{
+            this.$message.error(response.data.pagerManager);
+          }
+        })
+      })
+    },
+    //转换Base64
+    getBase64(file) {
+      return new Promise(function(resolve, reject) {
+        let reader = new FileReader();
+        let imgResult = "";
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+          imgResult = reader.result;
+        };
+        reader.onerror = function(error) {
+          reject(error);
+        };
+        reader.onloadend = function() {
+          resolve(imgResult);
+        };
+      });
+    },
+    //选择层级
+    selectLeve(item){
+      if(item == '2'){
+        this.catalogText.isSelectLevel = true;
+      }else{
+        this.catalogText.isSelectLevel = false;
+      }
+    },
+    //保存并发布
+    addDomain(){
+      this.$refs.catalogText.validate((valid) => {
+        if(valid){
+          getTechDocCreate({
+            name:this.catalogText.Title,
+            title1:this.catalogText.OneLevel,
+            title2:this.catalogText.secondLevel,
+            title3:this.catalogText.threeLevel,
+            txt:this.catalogText.bbsContent,
+          }).then(response => {
+              console.log(response);
+          })
+        }
+      })
+    },
+  },
+  mounted(){
+
+  }
+}
+</script>
+
+<style scoped lang="scss">
+
+.TCF-api{
+  width: 100%;
+  .api-content{
+    width: 100%;
+    .api-TextH4{
+      font-size: 0.18rem;
+      color: #333333;
+      font-weight: 600;
+      padding-top: 0.2rem;
+      padding-bottom: 0.2rem;
+    }
+    .api-center{
+      width: 100%;
+      min-height: 8rem;
+      background: #ffffff;
+      box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
+      border-radius:0.1rem;
+      .api-quill{
+        padding:0.5rem 0.3rem;
+        .api-OneLevel{
+          width: 40%;
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .avatar-uploader{
+          display: none;
+        }
+        .api-editor{
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
+</style>

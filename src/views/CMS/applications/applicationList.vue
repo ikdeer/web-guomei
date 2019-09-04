@@ -1,5 +1,22 @@
 <template>
     <div class="application_list">
+      <!-- 面包屑导航栏从概览过来  -->
+      <template v-if="Breadcrumb == 'overview'">
+        <nav class="nav-Type">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{path:'/Index/overview'}">概览</el-breadcrumb-item>
+            <el-breadcrumb-item>应用列表</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
+      </template>
+      <!-- 本级过来 -->
+      <template v-if="Breadcrumb == null">
+        <nav class="nav-Type">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item>应用列表</el-breadcrumb-item>
+          </el-breadcrumb>
+        </nav>
+      </template>
         <h3>应用列表</h3>
         <div class="application_list_content">
             <div class="application_list_form">
@@ -206,11 +223,12 @@
                     info:''
                 },
                 groupID:'',//用户登录信息
+                Breadcrumb:null,//面包屑导航栏
             }
         },
         methods: {
             addapplication() {
-                this.$router.push({path: '/Index/addApplication', query: {type: 'add'}})
+                this.$router.push({path: '/Index/addApplication', query: {type: 'add',NavType:'VIS-A-VIS'}})
             },
             search() {
                 //查询应用列表
@@ -242,7 +260,7 @@
             },
             statement(row) {
                 //查看报表
-                this.$router.push({path: '/Index/statement', query: {id: row.id}})
+                this.$router.push({path: '/Index/statement', query: {id: row.id,NavType:'applicationList'}})
             },
             see(row) {
                 //查看应用详情
@@ -250,7 +268,7 @@
             },
             edit(row) {
                 //编辑应用
-                this.$router.push({path: '/Index/addApplication', query: {type: 'edit',id:row.id}})
+                this.$router.push({path: '/Index/addApplication', query: {type: 'edit',id:row.id,NavType:'VIS-A-VIS'}})
             },
             audit(row){
                 this.applicationInfo={
@@ -428,6 +446,7 @@
         },
         mounted() {
             this.groupID = JSON.parse(this.Cookies.get('userInfo')).groupID;
+            this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
             this.search();
             this.getAapplicationState();
             this.getApplicationReviewState();

@@ -1,8 +1,11 @@
 <template>
     <div class="userlist">
-        <nav class="overIew-nav">
-            <breadcrumb></breadcrumb>
-        </nav>
+      <!-- 面包屑导航栏 -->
+      <nav class="nav-Type">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        </el-breadcrumb>
+      </nav>
         <h3>用户列表</h3>
         <div class="userlist_content">
             <div class="user_list_form">

@@ -21,13 +21,14 @@
             </div>
             <div class="login-form">
               <el-form-item prop="code">
-                <el-input placeholder="请输入验证码" v-model="loginForm.code">
-                  <el-button slot="append">图片验证码？</el-button>
-                </el-input>
+                <div class="login-code">
+                  <el-input placeholder="请输入验证码" v-model="loginForm.code"></el-input>
+                  <img src="http://139.196.161.174:8090/gm/generating/code" alt="">
+                </div>
               </el-form-item>
             </div>
             <div class="login-itemText">
-              <span>帐号或密码错误，请重新输入</span>
+              <span></span>
               <span>忘记密码</span>
             </div>
             <div class="login-button">
@@ -41,7 +42,7 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
-  import {getUserLogin} from '@/HttpApi/login/loginApi'
+  import {getUserLogin,getGeneraTingCode} from '@/HttpApi/login/loginApi'
     export default {
         name: "login",
         components:{Header_Nav},
@@ -66,6 +67,9 @@
               ],
               password:[
                 { required: true, message: '请输入密码', trigger: 'blur' },
+              ],
+              code:[
+                { required: true, message: '请输入验证码', trigger: 'blur' },
               ]
             }
           }
@@ -76,7 +80,11 @@
             let _this = this;
             this.$refs.loginForm.validate((valid) => {
               if(valid){
-                getUserLogin({'username':this.loginForm.username,'password':this.$md5(this.loginForm.password)})
+                getUserLogin({
+                  'username':this.loginForm.username,
+                  'password':this.$md5(this.loginForm.password),
+                  'code':this.loginForm.code,
+                })
                   .then(response => {
                     if(response.data.success){
                       this.Cookies.set('token',response.data.data.token);
@@ -93,6 +101,8 @@
                           _this.$router.push({path: '/Company/CompanyHome'});
                         }
                       },500)
+                    }else{
+                      _this.$message.error(response.data.errorInfo);
                     }
                   })
               }
@@ -155,6 +165,20 @@
           height: 0.5rem !important;
           input{
             height: 0.5rem !important;
+          }
+        }
+        .login-code{
+          display: flex;
+          display: -webkit-flex;
+          align-items: center;
+          position: relative;
+          img{
+            height:32px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            border-bottom-right-radius: 4px;
+            border-top-right-radius: 4px;
           }
         }
       }
