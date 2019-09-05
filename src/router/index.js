@@ -16,7 +16,8 @@ import overview from '@/views/CMS/overview/overview'
 import userList from '@/views/CMS/user/userList'
 import userInfo from '@/views/CMS/user/userInfo'
 import faceList from '@/views/CMS/face/faceList'
-import addGroup from '@/views/CMS/face/addGroup'
+import addGroupOne from '@/views/CMS/face/addGroupOne'
+import addGroupTwo from '@/views/CMS/face/addGroupTwo'
 import groupList from '@/views/CMS/face/groupList'
 import equipmentList from '@/views/CMS/equipment/equipmentList'
 import statement from '@/views/CMS/statement/statement'
@@ -167,13 +168,21 @@ const router = new Router({
             code:4
           }
       },{
-        path: '/Index/addGroup',
+        path: '/Index/addgroupone',
         name: '人脸创建分组',
-        component: addGroup,
+        component: addGroupOne,
         meta: {
           title:'国美人脸认证管理后台',
           code:4
         }
+      },{
+         path: '/Index/addgrouptwo',
+         name: '人脸创建分组',
+         component: addGroupTwo,
+         meta: {
+           title:'国美人脸认证管理后台',
+           code:4
+         }
       },{
         path: '/Index/groupList',
         name: 'groupList',

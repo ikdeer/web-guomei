@@ -11,10 +11,10 @@
             <div class="user_list_form">
                 <el-form :inline="true" ref="userlistform">
                     <el-form-item label="手机号">
-                        <el-input :maxlength="200" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
+                        <el-input :maxlength="100" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱">
-                        <el-input :maxlength="200" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
+                        <el-input :maxlength="100" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="账号状态">
                         <el-select v-model="formData.disenable"  class="user_list_form_status" placeholder="请选择状态">
@@ -160,7 +160,7 @@
 <script>
     import breadcrumb from '@/views/CMS/component/header/BoxHeader';
     import {formatTimes} from '@/lib/utils'
-    import { getUserList,createUser,removeUser,enableUser } from '@/HttpApi/user/user';
+    import { getUserList,createUser,removeUser,enableUser,phoneNumCheck } from '@/HttpApi/user/user';
     export default {
         name: "userList",
         components:{breadcrumb},
@@ -179,9 +179,20 @@
             let phone = (rule, value, callback) => {
                 if(value){
                     if(!/^(13|14|15|16|17|18|19)\d{9}$/.test(value)){
-                        return callback(new Error('手机号错误，请输入11位手机号'));
+                        return callback(new Error('手机号不符合规则'));
                     }else{
-                        return callback()
+                        phoneNumCheck({phoneNum:value}).then(({data})=>{
+                            if(data.success){
+                                if(data.data.success == 0){
+                                    return callback(new Error(data.data.msg));
+                                }else{
+                                    return callback()
+                                }
+                            }else{
+                                return callback()
+                            }
+                        });
+
                     }
                 }else{
                     return callback(new Error('请输入手机号'))
@@ -191,7 +202,7 @@
                 if(value){
                     if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value)){
                         console.log(value)
-                        return callback(new Error('邮箱格式错误'));
+                        return callback(new Error('邮箱不符合规则'));
                     }else{
                         return callback()
                     }
@@ -202,7 +213,7 @@
             let passwordstart = (rule, value, callback) => {
                 if(value){
                     if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/.test(value)){
-                        return callback(new Error('密码设置错误'));
+                        return callback(new Error('密码不符合规则'));
                     }else{
                         return callback()
                     }
@@ -219,7 +230,7 @@
                         return callback()
                     }
                 }else{
-                    return callback(new Error('请确认登录密码'))
+                    return callback(new Error('请确认设置登录密码'))
                 }
             };
 

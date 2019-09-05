@@ -308,7 +308,7 @@
                 })
             },
             addGroup(){
-                this.$router.push({path:'/Index/addGroup',query:{type:''}})
+                this.$router.push({path:'/Index/addgroupone',query:{type:''}})
             },
             search(){
                 let params = {
@@ -337,10 +337,10 @@
                 this.search();
             },
             see(row){
-                this.$router.push({path:'/Index/addGroup',query:{id:row.id,type:'see'}})
+                this.$router.push({path:'/Index/addgroupone',query:{id:row.id,type:'see'}})
             },
             editGroup(row){
-                this.$router.push({path:'/Index/addGroup',query:{id:row.id,type:'edit'}})
+                this.$router.push({path:'/Index/addgroupone',query:{id:row.id,type:'edit'}})
             },
             addFace(){
 
