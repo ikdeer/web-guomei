@@ -285,13 +285,6 @@
         },
         methods: {
             adduser(){//新增用户
-                /*this.dataDialogForm = {
-                    username:'',
-                    phoneNum:'',
-                    mail:'',
-                    passwordstart:'',
-                    passwordend:'',
-                };*/
                 this.userListAddDialog = true;
                 this.$refs['dataDialogForm'].resetFields();
             },

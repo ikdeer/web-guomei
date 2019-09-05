@@ -24,7 +24,7 @@
                                            :key="item.id">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="stepTwoForm.two" placeholder="请选择二级分组">
+                            <el-select v-model="stepTwoForm.two" @change="getFaceGroupShowList" placeholder="请选择二级分组">
                                 <el-option v-for="item in groupTwoList"
                                            :label="item.name"
                                            :value="item.id"
@@ -40,7 +40,7 @@
                 <div class="steptwo_table">
                     <el-table
                         ref="multipleTable"
-                        :data="stepTwoTableData"
+                        :data="tableData"
                         tooltip-effect="dark"
                         style="width: 100%"
                         @selection-change="handleSelectionChange">
@@ -83,7 +83,7 @@
                         <el-table-column
                             label="操作">
                             <temalate slot-scope="scope">
-                                <el-button type="text" @click="removeFaceImg(scope.row)">删除</el-button>
+                                <el-button type="text" :disabled="isSee" @click="removeFaceImg(scope.row)">删除</el-button>
                             </temalate>
                         </el-table-column>
                     </el-table>
@@ -163,9 +163,9 @@
                     </div>
                 </div>
                 <div class="content">
-                    <div class="list" v-for="item in faceList" @click="ClickFaceImage(item)">
+                    <div class="list" v-for="item in faceList">
                         <div class="list_img">
-                            <el-checkbox v-model="item.select"  class="checkbox"></el-checkbox>
+                            <el-checkbox v-model="item.select" @change="ClickFaceImage(item)" class="checkbox"></el-checkbox>
                             <img :src="item.img">
                         </div>
                         <div class="list_info">
@@ -212,7 +212,7 @@
 </template>
 
 <script>
-    import { getGroupOne,getGroupTwo,getFaceShow } from '@/HttpApi/face/face'
+    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup } from '@/HttpApi/face/face'
     export default {
         name: "addGroupTwo",
         data(){
@@ -225,7 +225,8 @@
                 },
                 groupOneList:[],//一级分组列表
                 groupTwoList:[],//二级分组列表
-                stepTwoTableData:[],//人像列表
+                tableData:[],//人像列表
+                selectionData:[],//全选值
                 page:{
                     page:1,
                     pageCount:10,
@@ -235,7 +236,8 @@
                 dataDialogForm:{
 
                 },
-                faceList:[],
+                faceList:[],//人脸集合
+                faceListBirge:[],//选中集合
                 facePage:{
                     page:1,
                     pageCount:10,
@@ -258,22 +260,54 @@
                 this.addGroupFace = true;
                 this.dialogSearch();
             },
-            handleSelectionChange(){
+            handleSelectionChange(val){
                 //选中
-
+                this.selectionData = val;
             },
             removeFaceImg(row){
                 //删除
+                let params = {
+                    faceGroupID:this.groupid,
+                    sub1:this.stepTwoForm.one,
+                    sub2:this.stepTwoForm.two,
+                    ids:[item.id]
+                };
+                deleteFaceGroup(params).then(({data})=>{
+                    if(data.success){
+                        this.$message.warning('删除成功')
+                        this.getFaceGroupShowList();
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
-            removeAll(row){
+            removeAll(){
                 //删除全部
+                let arr = [];
+                this.selectionData.forEach((item)=>{
+                    arr.push(item.id);
+                });
+                let params = {
+                    faceGroupID:this.groupid,
+                    sub1:this.stepTwoForm.one,
+                    sub2:this.stepTwoForm.two,
+                    ids:arr
+                };
+                deleteFaceGroup(params).then(({data})=>{
+                    if(data.success){
+                        this.$message.warning('删除成功');
+                        this.getFaceGroupShowList();
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             ClickFaceImage(item){
                 //点击图片
                 if(item.select){
-                    item.select = false;
+                    this.faceListBirge.push(item.id);
                 }else{
-                    item.select = true;
+                    this.faceListBirge = this.faceListBirge.filter( ins => item.id != ins )
                 }
             },
             lastStep(){
@@ -309,7 +343,38 @@
             },
             addGroupFaceDialog(){
                 //确认添加人脸 发送添加关闭弹窗
-                this.addGroupFace = false;
+
+                let params = {
+                    faceGroupID:this.groupid,
+                    faceID:this.faceListBirge,
+                    sub1:this.stepTwoForm.one,
+                    sub2:this.stepTwoForm.two
+                };
+                addFace(params).then(({data})=>{
+                    if(data.success){
+                        this.faceListBirge = [];
+                        this.getFaceGroupShowList();
+                        this.addGroupFace = false;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                });
+            },
+            getFaceGroupShowList(){
+                let params = {
+                    ...this.page,
+                    faceGroupID:this.groupid,
+                    sub1:this.stepTwoForm.one,
+                    sub2:this.stepTwoForm.two
+                };
+                getFaceGroupShow(params).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data;
+                    }else{
+                        this.tableData = [];
+                        // this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             handleSizeChange(val){
                 this.page.pageCount = val;
@@ -367,7 +432,7 @@
         padding: 30px;
         box-sizing: border-box;
         .addgroup_top{
-            height: .6rem;
+            height: 50px;
             display: flex;
             display: -webkit-flex;
             div{
@@ -375,17 +440,18 @@
                 background: #EFEDED;
                 width: 48%;
                 color: #666666;
+                font-size: 14px;
                 display: flex;
                 display: -webkit-flex;
                 justify-content: center;
                 align-items: center;
                 span{
                     text-align: center;
-                    line-height: 0.28rem;
-                    width: 0.28rem;
-                    height: 0.28rem;
+                    line-height: 24px;
+                    width: 24px;
+                    height: 24px;
                     font-weight: 600;
-                    margin-right: 0.1rem;
+                    margin-right: 10px;
                     -webkit-border-radius: 100%;
                     -moz-border-radius: 100%;
                     border-radius: 100%;
@@ -394,20 +460,20 @@
                 &:after{
                     content: '';
                     display: block;
-                    border-top: 0.3rem solid transparent;
-                    border-bottom: 0.3rem solid transparent;
-                    border-left: 0.4rem solid #EFEDED;
+                    border-top: 25px solid transparent;
+                    border-bottom: 25px solid transparent;
+                    border-left: 30px solid #EFEDED;
                     position: absolute;
-                    right: -0.4rem;
+                    right: -30px;
                     top: 0;
                     z-index: 10;
                 }
                 &:before{
                     content: '';
                     display: block;
-                    border-top: 0.3rem solid #EFEDED;
-                    border-bottom: 0.3rem solid #EFEDED;
-                    border-left: 0.4rem solid white;
+                    border-top: 25px solid #EFEDED;
+                    border-bottom: 25px solid #EFEDED;
+                    border-left: 30px solid white;
                     position: absolute;
                     left: 0;
                     top: 0;
@@ -423,11 +489,11 @@
                     color: #409EFF;
                 }
                 &:after{
-                    border-left: 0.4rem solid #409EFF;
+                    border-left: 30px solid #409EFF;
                 }
                 &:before{
-                    border-top: 0.3rem solid #409EFF;
-                    border-bottom: 0.3rem solid #409EFF;
+                    border-top: 25px solid #409EFF;
+                    border-bottom: 25px solid #409EFF;
                 }
             }
         }
