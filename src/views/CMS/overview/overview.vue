@@ -30,7 +30,7 @@
                     <router-link :to="{path:'/Index/applicationList',query:{NavType:'overview'}}">
                       <el-button class="button-bluer" type="primary">管理应用</el-button>
                     </router-link>
-                    <router-link :to="{path:'/Index/addApplication',query:{type:'add',NavType:'overview'}}">
+                    <router-link v-if="groupID == '20'" :to="{path:'/Index/addApplication',query:{type:'add',NavType:'overview'}}">
                       <el-button class="button-red">创建应用</el-button>
                     </router-link>
                   </div>
@@ -123,7 +123,7 @@
             <div class="ListPad-scene">
               <div class="ListPad-scene_center">
                 <img src="/static/images/attendance_icon@2x.png" alt="">
-                <p class="scene-Title">涮脸考勤</p>
+                <p class="scene-Title">刷脸考勤</p>
                 <p class="scene-Text">包括人脸检测、人脸比对、人脸属性分析、1：n人脸检索、1：1人脸检索及人脸库管理</p>
                 <div class="scene-Text_span">
                   <span>主要服务：</span>
@@ -134,7 +134,7 @@
             <div class="ListPad-scene ListPad-RKE">
               <div class="ListPad-scene_center">
                 <img src="/static/images/guard_icon@2x.png" alt="">
-                <p class="scene-Title">涮脸门禁考勤</p>
+                <p class="scene-Title">刷脸门禁考勤</p>
                 <p class="scene-Text">支持应用终端、服务端的人脸动作活体检测</p>
                 <div class="scene-Text_span">
                   <span>主要服务：</span>
@@ -174,6 +174,7 @@ export default {
           top:5,//用量数量条数
         },
         tableData: [],//列表数据
+        groupID:'',//登录人员身份
       }
     },
     methods:{
@@ -237,6 +238,7 @@ export default {
       }
     },
     mounted(){
+      this.groupID = JSON.parse(this.Cookies.get('userInfo')).groupID;
       this.getAppAudit();
       this.getApisConSumpTion();
     }

@@ -18,38 +18,30 @@
                      ref="catalogText"
                      label-width="130px"
                      class="demo-dynamic">
-              <el-form-item label="标题" prop="Title">
+              <el-form-item label="一级目录" prop="OneLevel">
                 <div class="api-OneLevel">
-                  <el-input v-model="catalogText.Title" placeholder="请输入标题"></el-input>
-                </div>
-              </el-form-item>
-              <el-form-item label="目录名称" prop="catalog">
-                <div class="api-OneLevel">
-                  <el-input v-model="catalogText.catalog" placeholder="请输入目录名称"></el-input>
-                </div>
-              </el-form-item>
-              <el-form-item label="目录层级" prop="selectLevelType">
-                <div class="api-OneLevel">
-                  <el-select v-model="catalogText.selectLevelType"
-                             @change="selectLeve(catalogText.selectLevelType)"
-                             placeholder="请输选择目录层级">
+                  <el-input v-model="catalogText.OneLevel" placeholder="请选择/输入一级目录名称"></el-input>
+                  <el-select v-model="catalogText.OneLevelType"
+                             @change="selectLeve(catalogText.OneLevelType)"
+                             placeholder="请选择一级目录">
                     <el-option
-                      v-for="item in catalogText.selectLevelData"
-                      :key="item.LevelType"
-                      :label="item.LevelText"
-                      :value="item.LevelType">
+                      v-for="item in catalogText.OneLevelData"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
                     </el-option>
                   </el-select>
                 </div>
               </el-form-item>
-              <el-form-item label="上级目录" prop="superiorLevel" v-if="catalogText.isSelectLevel">
+              <el-form-item label="二级目录" prop="secondLevel">
                 <div class="api-OneLevel">
-                  <el-select v-model="catalogText.superiorLevel" placeholder="请输选择上级目录">
+                  <el-input v-model="catalogText.secondLevel" placeholder="请选择/输入二级目录名称"></el-input>
+                  <el-select v-model="catalogText.secondLevelType" placeholder="请选择二级目录">
                     <el-option
-                      v-for="item in catalogText.selectLevelData"
-                      :key="item.LevelType"
-                      :label="item.LevelText"
-                      :value="item.LevelType">
+                      v-for="item in catalogText.secondLevelData"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id">
                     </el-option>
                   </el-select>
                 </div>
@@ -77,9 +69,6 @@
               <el-form-item>
                 <div class="api-editor">
                   <el-button type="primary" @click.stop="addDomain">保存并发布</el-button>
-                  <el-button type="success"
-                             :disabled="catalogText.isThreeLevel"
-                             @click.stop="catalogText.isThreeLevel = true">新增类目</el-button>
                   <el-button>重置</el-button>
                 </div>
               </el-form-item>
@@ -91,7 +80,12 @@
 </template>
 
 <script>
-  import {getImageUploadNormalImage,getTechDocCreate} from "../../../HttpApi/TCFApi/TCFApi";
+  import {
+    getImageUploadNormalImage,
+    getTechDocCreate,
+    getTechDocTitleShow,
+    getTechDocTitle2Show
+  } from "../../../HttpApi/TCFApi/TCFApi";
   const toolbarOptions =[
     ['bold', 'italic', 'underline', 'strike'],    //加粗，斜体，下划线，删除线
     ['blockquote', 'code-block'],     //引用，代码块
@@ -112,15 +106,12 @@ export default {
   data(){
     return {
       catalogText:{
-        Title:'',//标题
-        catalog:'',//类目
-        selectLevelType:'',//选择类目层级
-        selectLevelData:[
-          {LevelText:'一级目录',LevelType:'1'},
-          {LevelText:'二级目录',LevelType:'2'}
-        ],
-        superiorLevel:'',//上级类目内容
-        isSelectLevel:false,//上级类目状态
+        OneLevel:'',//一级目录
+        OneLevelType:'',//选择类目层级
+        OneLevelData:[],
+        secondLevel:'',//二级目录
+        secondLevelType:'',//选择类目层级
+        secondLevelData:[],
         bbsContent:'',//文本内容
         quillUpdateImg:'',//图片上传动画
       },
@@ -145,14 +136,11 @@ export default {
         },
       },
       rules:{
-        Title:[
-          { required: true, message: '请输入api标题', trigger: 'blur' },
+        OneLevel:[
+          { required: true, message: '请选择/输入一级类目', trigger: 'blur' },
         ],
-        catalog:[
-          { required: true, message: '请输入类目', trigger: 'blur' },
-        ],
-        superiorLevel:[
-          { required: true, message: '请选择上级类目', trigger: 'blur' },
+        secondLevel:[
+          { required: true, message: '请选择/输入二级类目', trigger: 'blur' },
         ],
         bbsContent:[
           { required: true, message: '请填写要发布的API公告版内容', trigger: 'blur,change' }
@@ -161,6 +149,26 @@ export default {
     }
   },
   methods:{
+    //一级目录
+    getTechDocTitleShow(){
+      getTechDocTitleShow().then(response => {
+        if(response.data.errorCode == 200){
+          this.catalogText.OneLevelData = response.data.data.list;
+        }else{
+          this.$message.error(response.data.errorInfo);
+        }
+      })
+    },
+    //二级目录
+    getTechDocTitle2Show(){
+      getTechDocTitle2Show({id:'id'}).then(response => {
+        if(response.data.errorCode == 200){
+          this.catalogText.selectLevelData = response.data.data.list;
+        }else{
+          this.$message.error(response.data.errorInfo);
+        }
+      })
+    },
     // 上传图片前
     beforeUpload(res,file) {
       //显示loading动画
@@ -182,7 +190,7 @@ export default {
             // loading动画消失
             this.catalogText.quillUpdateImg = false;
           }else{
-            this.$message.error(response.data.pagerManager);
+            this.$message.error(response.data.errorInfo);
           }
         })
       })
@@ -204,23 +212,19 @@ export default {
         };
       });
     },
-    //选择层级
+    //选择一级层级
     selectLeve(item){
-      if(item == '2'){
-        this.catalogText.isSelectLevel = true;
-      }else{
-        this.catalogText.isSelectLevel = false;
-      }
+
     },
     //保存并发布
     addDomain(){
       this.$refs.catalogText.validate((valid) => {
         if(valid){
           getTechDocCreate({
-            name:this.catalogText.Title,
-            title1:this.catalogText.OneLevel,
-            title2:this.catalogText.secondLevel,
-            title3:this.catalogText.threeLevel,
+            titleID1:'0',
+            titleName1:this.catalogText.OneLevel,
+            titleID2:'0',
+            titleName2:'',
             txt:this.catalogText.bbsContent,
           }).then(response => {
               console.log(response);
@@ -230,7 +234,7 @@ export default {
     },
   },
   mounted(){
-
+    this.getTechDocTitleShow();
   }
 }
 </script>

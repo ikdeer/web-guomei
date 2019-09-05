@@ -7,11 +7,11 @@
         </div>
         <div class="header-right">
           <img class="header-issue" src="/static/images/Shape_btn@2x.png" alt="">
-          <div class="header-name">
-            <img src="/static/images/meizhi.JPG" alt="">
-            <span>{{userInfo.userName}}</span>
-          </div>
-          <el-dropdown @command="handleCommand">
+          <el-dropdown @command="handleCommand" placement="top">
+            <div class="header-name">
+              <img src="/static/images/meizhi.JPG" alt="">
+              <span>{{userInfo.userName}}</span>
+            </div>
             <span class="el-icon-arrow-right gm-sbc" @click="userInfo.isUserShow =! userInfo.isUserShow"></span>
             <div class="gm-popUp">
               <el-dropdown-menu slot="dropdown">
@@ -41,7 +41,7 @@
       handleCommand(command){
         let _this = this;
         if(command == 'Quit'){
-          this.$confirm('此操作将退出登陆, 是否继续?', '提示', {
+          this.$confirm('此操作将退出登录, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             customClass:'gm-config',
@@ -52,7 +52,7 @@
                 _this.Cookies.remove('token');
                 _this.$message({
                   type: 'success',
-                  message: '退出登陆成功!'
+                  message: '退出登录成功!'
                 });
                 setTimeout(()=>{
                   _this.$router.push({path:'/Company/CompanyHome'});
@@ -118,6 +118,11 @@
     margin-right: 0.3rem;
     cursor: pointer;
     position: relative;
+    .el-dropdown{
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+    }
     .header-issue{
       width: 0.2rem;
       height: 0.2rem;

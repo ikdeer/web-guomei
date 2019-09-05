@@ -26,9 +26,20 @@ export const getImageUploadNormalImage = (params) => {
  * page
  * pageSize
  **/
-export const getTechDocContentShow = (params) => {
+export const getTechDoc = (params) => {
   return new Promise(resolve => {
-    AxIos.get('/techDoc/contentShow', params).then(response => {
+    AxIos.get('/techDoc/show', params).then(response => {
+      resolve(response)
+    })
+  })
+}
+/**
+ * 技术文档列表删除
+ * id
+ **/
+export const getTechDocDel = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/techDoc/del', params).then(response => {
       resolve(response)
     })
   })
@@ -44,6 +55,29 @@ export const getTechDocContentShow = (params) => {
 export const getTechDocCreate = (params) => {
   return new Promise(resolve => {
     AxIos.post('/techDoc/create', params).then(response => {
+      resolve(response)
+    })
+  })
+}
+/**
+ * 一级目录列表
+ * token
+ **/
+export const getTechDocTitleShow = (params) => {
+  return new Promise(resolve => {
+    AxIos.get('/techDoc/title1Show',params).then(response => {
+      resolve(response)
+    })
+  })
+}
+/**
+ * 二级目录列表
+ * id
+ * token
+ **/
+export const getTechDocTitle2Show = (params) => {
+  return new Promise(resolve => {
+    AxIos.get('/techDoc/title2Show',params).then(response => {
       resolve(response)
     })
   })

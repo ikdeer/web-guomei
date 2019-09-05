@@ -31,7 +31,7 @@
       <router-link :to="{path:'/Company/userLogin'}">
         <el-button type="text" class="button-login">注册</el-button>
       </router-link>
-      <el-button type="text" class="button-register" @click="ClickLogout">登陆</el-button>
+      <el-button type="text" class="button-register" @click="ClickLogout">登录</el-button>
       <el-button class="button-console" @click="ClickWhetherLogin">控制台</el-button>
     </div>
   </nav>
@@ -88,7 +88,7 @@
         if(this.Cookies.get('token')){
           this.$notify({
             title: '成功',
-            message: '登陆成功,请勿重复登陆',
+            message: '登录成功,请勿重复登陆',
             type: 'success'
           });
         }else{
@@ -100,7 +100,7 @@
           this.$router.push({path: '/Index/overview'});
         }else{
           this.$message({
-            message: '你还没有登陆,请先登陆~~~',
+            message: '你还没有登录,请先登陆~~~',
             type: 'warning'
           });
           this.$router.push({path: '/Company/login',query:{console:'overview'}});
