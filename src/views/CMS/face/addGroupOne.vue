@@ -72,7 +72,7 @@
                 </div>
                 <div class="add_group_footer">
                     <el-button type="primary" @click="nextStep">下一步</el-button>
-                    <el-button @click="$router.back()">取 消</el-button>
+                    <el-button @click="cancel()">取 消</el-button>
                 </div>
             </div>
         </div>
@@ -85,6 +85,7 @@
         name: "addGroupOne",
         data(){
             return{
+                type:'1',
                 groupData:{
                     name:'',
                     id:''
@@ -102,7 +103,7 @@
         },
         computed:{
             isSee(){
-                return this.$route.query.type == 'see' ? true : false;
+                return this.$route.query.type == '2' ? true : false;
             }
         },
         methods:{
@@ -115,7 +116,7 @@
                     if(data.success){
                         this.$message.success('创建成功');
                         this.groupData.id = data.data.id;
-                        this.$router.push({path:'/Index/addgroupone',query:{id:this.groupData.id}})
+                        this.$router.push({path:'/Index/addgroupone',query:{id:this.groupData.id,type:this.type}})
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -123,7 +124,7 @@
             },
             goChildren(){
                 //去子分组列表
-                this.$router.push({path:'/Index/groupList',query:{id:this.groupData.id}})
+                this.$router.push({path:'/Index/groupList',query:{id:this.groupData.id,type:this.type}})
             },
             addGroupOne(){
                 //保存一级子分组
@@ -261,7 +262,10 @@
             },
             nextStep(){
                 //下一步
-                this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id}})
+                this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id,type:this.type}})
+            },
+            cancel(){
+                this.$router.push({path:'/Index/faceList'})
             },
             /*
            * 查看分组
@@ -282,8 +286,9 @@
             }
         },
         mounted(){
-            this.groupData.id = this.$route.query.id;
-            if(this.$route.query.type == 'see' || this.$route.query.type == 'edit'){
+            this.groupData.id = this.$route.query.id || '';
+            this.type = this.$route.query.type || '1';
+            if(this.$route.query.type != '1'){
                 this.getDetails();
             }
         }

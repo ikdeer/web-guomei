@@ -218,6 +218,7 @@
         data(){
             return{
                 groupid:'',
+                type:'1',
                 stepTwoForm:{
                     one:'',
                     two:''
@@ -244,7 +245,7 @@
         },
         computed:{
             isSee(){
-                return this.$route.query.type == 'see' ? true : false;
+                return this.$route.query.type == '2' ? true : false;
             }
         },
         methods:{
@@ -276,7 +277,7 @@
                 }
             },
             lastStep(){
-                this.$router.push({path:'/Index/addgroupone',query:{id:this.groupid}})
+                this.$router.push({path:'/Index/addgroupone',query:{id:this.groupid,type:this.type}})
             },
             ok(){
                 //关闭所有
@@ -350,6 +351,7 @@
         },
         mounted(){
             this.groupid = this.$route.query.id;
+            this.type = this.$route.query.type || '1';
             this.getGroupOneList();
         }
     }
