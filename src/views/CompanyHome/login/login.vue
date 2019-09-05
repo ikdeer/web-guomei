@@ -23,7 +23,9 @@
               <el-form-item prop="code">
                 <div class="login-code">
                   <el-input placeholder="请输入验证码" v-model="loginForm.code"></el-input>
-                  <img src="http://139.196.161.174:8090/gm/generating/code" alt="">
+                  <a href="javascript:;" @click="changeCodeImg()">
+                    <img :src="loginForm.codeImg" alt="图片加载失败">
+                  </a>
                 </div>
               </el-form-item>
             </div>
@@ -52,6 +54,7 @@
               username:'',//用户名
               password:'',//密码
               code:'',//图片验证码
+              codeImg:'http://139.196.161.174:8090/gm/generating/code',
             },
             userInfo:{
               userName:'',//用户姓名
@@ -75,6 +78,12 @@
           }
         },
         methods:{
+          //图片验证码
+          changeCodeImg(){
+            //生成一个随机数（防止缓存）
+            let num = Math.ceil(Math.random()*10);
+            this.loginForm.codeImg=`${this.loginForm.codeImg}?${num}`;
+          },
           //登陆
           ClickUserLogin(){
             let _this = this;
@@ -93,7 +102,7 @@
                       this.userInfo.uid = response.data.data.uid;
                       this.userInfo.groupID = response.data.data.groupID;
                       this.Cookies.set('userInfo',JSON.stringify(this.userInfo));
-                      this.$message({message: '登陆成功', type: 'success'});
+                      this.$message({message: '登录成功', type: 'success'});
                       setTimeout(()=>{
                         if(_this.$route.query.console == 'overview'){
                           _this.$router.push({path: '/Index/overview'});

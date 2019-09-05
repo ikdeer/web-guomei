@@ -29,8 +29,8 @@ export default [
           },
           {
             iconText:'设备管理',
-            iconImgShow:'/static/images/management_selected_icon@2x.png',
-            iconImgHide:'/static/images/management_unselected_icon@2x.png',
+            iconImgShow:'/static/images/management-facility-icon@2x.png',
+            iconImgHide:'/static/images/management-facility-icon@2x_1.png',
             iconRouter:'/Index/equipmentList',
             code:5,
           },

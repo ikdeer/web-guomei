@@ -17,7 +17,7 @@
             <el-input :maxlength="20" v-model="formData.ip" placeholder="请输入api公告标题"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="search">查询</el-button>
+            <el-button type="primary">查询</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -29,13 +29,32 @@
         </div>
         <div class="api-tableColumn">
           <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
-            <el-table-column prop="userName" align="center" label="apiID"></el-table-column>
-            <el-table-column prop="logDesc" align="center" label="api标题"></el-table-column>
-            <el-table-column prop="createDate" align="center" label="创建时间"></el-table-column>
-            <el-table-column prop="createDate" align="center" label="操作">
-              <el-button type="text">编辑</el-button>
-              <el-button type="text">查看</el-button>
-              <el-button type="text">删除</el-button>
+            <el-table-column align="center" label="apiID">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="api标题">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="创建时间">
+              <template slot-scope="scope">
+                <span>{{ scope.row.createTime}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="最后修改时间">
+              <template slot-scope="scope">
+                <span>{{ scope.row.lastModifyTime}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+              <template slot-scope="scope">
+                <el-button type="text">编辑</el-button>
+                <el-button type="text">查看</el-button>
+                <el-button type="text" @click="ClickDelete(scope.row.id)">删除</el-button>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -58,7 +77,7 @@
 </template>
 
 <script>
-  import {getTechDocContentShow} from "../../../HttpApi/TCFApi/TCFApi";
+  import {getTechDoc,getTechDocDel} from "../../../HttpApi/TCFApi/TCFApi";
   export default {
     name: "TCFApiList",
     data(){
@@ -77,30 +96,54 @@
       }
     },
     methods:{
-      getTechDocContentShow(){
-        getTechDocContentShow({
-          page:this.page.currentPage,
-          pageSize:this.page.pageSize,
-        }).then(response => {
-          console.log(response);
+      //技术文档列表
+      getTechDoc(){
+        getTechDoc({page:this.page.currentPage,pageSize:this.page.pageSize}).then(response => {
+          if(response.data.errorCode == 200){
+            this.tableData = response.data.data.list;
+            this.page.total = response.data.pagerManager.totalResults;//总条数
+          }else{
+            this.$message.warning(response.data.errorInfo);
+          }
         })
+      },
+      //删除
+      ClickDelete(typeId){
+        this.$confirm('此操作将永久删除这条数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          customClass:'gm-configItem',
+          type: 'warning'
+        }).then(() => {
+          getTechDocDel({id:typeId}).then(response => {
+            if(response.data.errorCode == 200){
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+              this.getTechDoc();
+            }else{
+              this.$message.warning(response.data.errorInfo);
+            }
+          })
+        }).catch(() => {});
       },
       handleSizeChange(val){
         this.page.pageSize = val;
-        this.search()
+        this.getTechDoc();
       },
       handleCurrentChange(val){
         this.page.currentPage = val;
-        this.search()
+        this.getTechDoc();
       },
     },
     mounted(){
-      this.getTechDocContentShow();
+      this.getTechDoc();
     }
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .api-list{
     font-size: 0.16rem;
     .api-content{
@@ -129,6 +172,19 @@
         text-align: right;
       }
 
+    }
+  }
+  .gm-configItem{
+    .el-message-box__content{
+      padding: 0.3rem 0.3rem;
+      color: #333333;
+      font-weight: 600;
+      text-align: left;
+    }
+    .el-message-box__btns{
+      button{
+        padding: 0.09rem 0.25rem;
+      }
     }
   }
 </style>
