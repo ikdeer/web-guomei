@@ -38,19 +38,19 @@
                     border
                     tooltip-effect="dark">
                     <el-table-column
-                        prop="userName"
+                        prop="name"
                         label="用户名">
                     </el-table-column>
                     <el-table-column
-                        prop="logDesc"
+                        prop="createBy"
                         label="操作记录">
                     </el-table-column>
                     <el-table-column
-                        prop="createDate"
+                        prop="lastModifyTime"
                         label="操作时间">
                     </el-table-column>
                     <el-table-column
-                        prop="clientIp"
+                        prop="id"
                         label="访问IP">
                     </el-table-column>
                 </el-table>
@@ -59,7 +59,7 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="page.currentPage"
+                    :current-page="page.page"
                     :page-sizes="[10, 20, 30, 50, 100]"
                     :page-size="page.pageSize"
                     background
@@ -73,10 +73,13 @@
 </template>
 
 <script>
+    import {formatTimes} from '@/lib/utils'
+    import { getLogList } from '@/HttpApi/log/log'
     export default {
         name: "log",
         data(){
             return {
+                formatTimes:formatTimes,
                 formData:{
                     user:'',
                     ip:'',
@@ -84,27 +87,41 @@
                 },
                 tableData:[],
                 page:{
-                    currentPage:1,
+                    page:1,
                     pageSize:10,
-                    total:500
+                    total:0
                 }
             }
         },
         methods:{
             search(){
-
+                let params = {
+                    ...this.formData,...this.page,
+                    createTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
+                    createTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):'',
+                };
+                getLogList(params).then(({data})=>{
+                    if(data.success){
+                        this.tableData = data.data.list;
+                        this.page.total = data.pagerManager.totalResults;
+                    }else{
+                        this.tableData =[];
+                        this.page.total = 0;
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
                 this.search()
             },
             handleCurrentChange(val){
-                this.page.currentPage = val;
+                this.page.page = val;
                 this.search()
             },
         },
         mounted(){
-
+            this.search()
         }
     }
 </script>

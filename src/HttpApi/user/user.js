@@ -72,3 +72,10 @@ export const delContactInfo = ({ id }) => AxIos({
     method: 'post',
     data: { id }
 });
+
+//检验手机号
+export const phoneNumCheck = ({ phoneNum }) => AxIos({
+    url: '/user/phoneNumCheck',
+    method: 'post',
+    data: { phoneNum }
+});

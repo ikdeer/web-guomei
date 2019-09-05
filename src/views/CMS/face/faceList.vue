@@ -308,7 +308,7 @@
                 })
             },
             addGroup(){
-                this.$router.push({path:'/Index/addGroup',query:{type:''}})
+                this.$router.push({path:'/Index/addgroupone',query:{type:'1'}})
             },
             search(){
                 let params = {
@@ -337,13 +337,13 @@
                 this.search();
             },
             see(row){
-                this.$router.push({path:'/Index/addGroup',query:{id:row.id,type:'see'}})
+                this.$router.push({path:'/Index/addgroupone',query:{id:row.id,type:'2'}})
             },
             editGroup(row){
-                this.$router.push({path:'/Index/addGroup',query:{id:row.id,type:'edit'}})
+                this.$router.push({path:'/Index/addgroupone',query:{id:row.id,type:'3'}})
             },
-            addFace(){
-
+            addFace(row){
+                this.$router.push({path:'/Index/addgrouptwo',query:{id:row.id,type:'3'}})
             },
             handleSizeChange(val){
                 this.page.pageSize = val;

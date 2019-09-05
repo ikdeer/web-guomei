@@ -773,7 +773,11 @@
                 })
             },
             goGroup(){
-                this.$router.push({path: '/Index/faceList'})
+                let routeData = this.$router.resolve({
+                    path: '/Index/faceList',
+                });
+                window.open(routeData.href, '_blank');
+                // this.$router.push({path: '/Index/faceList'})
             },
             Clicksite(index){
                //点击选择设备位置dialogInfo.siteOne

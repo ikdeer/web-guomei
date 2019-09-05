@@ -32,7 +32,7 @@
                     <div class="child_top">
                         <h3>设置子分组 <span>请注意一级子分组不可添加图片</span></h3>
                         <div>
-                            <el-button type="primary" size="mini" @click="goChildren">查看子分组列表</el-button>
+                            <el-button type="primary" size="mini" :disabled="isSee" @click="goChildren">查看子分组列表</el-button>
                         </div>
                     </div>
                     <div class="set_group_childinp">
@@ -40,11 +40,11 @@
                         <div class="set_group_childinp_top">
                             <div>
                                 <span>一级子分组列表</span>
-                                <el-button type="primary" size="mini" @click="addChildGroup('1')">添加一级子分组</el-button>
+                                <el-button type="primary" :disabled="isSee" size="mini" @click="addChildGroup('1')">添加一级子分组</el-button>
                             </div>
                             <div>
                                 <span>二级子分组列表</span>
-                                <el-button type="primary" size="mini" @click="addChildGroup('2')">添加二级子分组</el-button>
+                                <el-button type="primary" :disabled="isSee" size="mini" @click="addChildGroup('2')">添加二级子分组</el-button>
                             </div>
                         </div>
                         <div class="set_group_childinp_btm">
@@ -65,7 +65,7 @@
                                         label="操作">
                                         <temalate slot-scope="scope">
                                             <el-button type="text" @click="ClickGroupOne(scope.row)">查看二级子分组</el-button>
-                                            <el-button type="text" @click="deleteGroupOne(scope.row)">删除</el-button>
+                                            <el-button type="text" :disabled="isSee" @click="deleteGroupOne(scope.row)">删除</el-button>
                                         </temalate>
                                     </el-table-column>
                                 </el-table>
@@ -91,7 +91,7 @@
                                         align="center"
                                         label="操作">
                                         <temalate slot-scope="scope">
-                                            <el-button type="text" @click="deleteGroupTwo(scope.row)">删除</el-button>
+                                            <el-button type="text" :disabled="isSee" @click="deleteGroupTwo(scope.row)">删除</el-button>
                                         </temalate>
                                     </el-table-column>
                                 </el-table>
@@ -158,7 +158,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" :disabled="isSee" @click="getFaceShowList">添加人像</el-button>
+                            <el-button type="primary" :disabled="isSee || stepTwoForm.two == ''" @click="getFaceShowList">添加人像</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -213,7 +213,7 @@
                         </el-table-column>
                     </el-table>
                     <div class="steptwo_table_footer">
-                        <el-button @click="removeAll">批量删除</el-button>
+                        <el-button :disabled="isSee" @click="removeAll">批量删除</el-button>
                         <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
@@ -325,23 +325,23 @@
                             <img :src="item.img">
                         </div>
                         <div class="list_info">
-                            <span>姓名：{{item.username}}</span>
+                            <span>姓名：{{item.name}}</span>
                             <span>{{item.sex}}</span>
                         </div>
                         <div class="list_info">
                             <span>PersonID：{{item.id}}</span>
                         </div>
                         <div class="list_info">
-                            <span>类型：{{item.type}}</span>
+                            <span>类型：{{item.typeName}}</span>
                         </div>
                         <div class="list_info">
-                            <span>编号：{{item.number}}&emsp;{{item.number}}</span>
+                            <span>编号：{{item.number}}&emsp;{{item.no}}</span>
                         </div>
                         <div class="list_info">
                             <span>图片来源：{{item.on}}</span>
                         </div>
                         <div class="list_info">
-                            <span>入库时间：{{item.time}}</span>
+                            <span>入库时间：{{item.createTime}}</span>
                         </div>
                     </div>
                 </div>
@@ -402,10 +402,18 @@
                     total:0
                 },
                 addGroupFace:false,
-                dataDialogForm:{
-
+                dataDialogForm: {
+                    "ids": "", //图片ID列表
+                    "names": "", //名字列表
+                    "noType": 0,// 编号类型
+                    "nos": "", //编号列表
+                    "page": 0,
+                    "pageSize": 0,
+                    "picFromIDs": "", //来源列表
+                    "sex": "", //性别
+                    "types": "" //类型列表
                 },
-                faceList:[{
+                faceList:[/*{
                     img:'https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_e5fd338671b6409bbbf1b0dd40862eff.jpg',
                     username:'dafaf123',
                     sex:'男',
@@ -505,7 +513,7 @@
                     on:'信息',
                     select:false,
                     time:'2019-12-31 12:12:22'
-                }
+                }*/
                 ],
                 facePage:{
                     page:1,
@@ -699,6 +707,7 @@
                 };
                 getGroupTwo(params).then(({data})=>{
                     if(data.success){
+                        this.stepTwoForm.two = '';
                         this.groupTwoList = data.data ? data.data.list:[];
                     }else{
                         this.groupTwoList = []
@@ -708,12 +717,24 @@
             getFaceShowList(){
                 //添加人脸
                 let params = {
+                    // ...this.dataDialogForm,
+                    ...this.facePage,
 
                 };
-
-
                 this.addGroupFace = true;
-                getFaceShow().then(({data})=>{
+                getFaceShow(params).then(({data})=>{
+                    if(data.success){
+                        if(data.data){
+                            data.data.list.forEach((item)=>{
+                                item.select = false;
+                            });
+                            this.faceList = data.data.list;
+                        }else{
+                            this.faceList = [];
+                        }
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
 
                 })
 
@@ -1038,12 +1059,12 @@
         .content{
             display: flex;
             display: -webkit-flex;
-            justify-content: space-between;
+            /*justify-content: space-between;*/
             flex-wrap: wrap;
 
             .list{
                 width: 19%;
-                margin: .1rem 0;
+                margin: .1rem 0.5%;
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
                 border-radius: 4px;

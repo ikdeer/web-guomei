@@ -83,6 +83,7 @@
                     <el-table-column
                         align="center"
                         prop="appTypeName"
+                        width="80"
                         label="应用类型">
                     </el-table-column>
                     <el-table-column
@@ -93,26 +94,31 @@
                     <el-table-column
                         align="center"
                         prop="createTime"
+                        width="140"
                         label="创建时间">
                     </el-table-column>
                     <el-table-column
                         align="center"
                         prop="lastModifyTime"
+                        width="140"
                         label="最后修改时间">
                     </el-table-column>
                     <el-table-column
                         align="center"
                         prop="createrName"
+                        width="80"
                         label="创建人">
                     </el-table-column>
                     <el-table-column
                         align="center"
                         prop="showEnable"
+                        width="80"
                         label="应用状态">
                     </el-table-column>
                     <el-table-column
                         align="center"
                         prop="showReviewState"
+                        width="80"
                         label="审核状态">
                     </el-table-column>
                     <el-table-column
