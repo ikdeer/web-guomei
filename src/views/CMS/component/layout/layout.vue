@@ -1,7 +1,9 @@
 <template>
     <div class="sider">
       <ul class="sider-ul">
-        <li v-for="(item,index) in dataIcon" :class="{'sider-li':$route.meta.code == item.code}" @click="clickRouter(item)">
+        <li v-for="(item,index) in dataIcon"
+            :class="{'sider-li':$route.meta.code == item.code}"
+            @click="clickRouter(item)">
           <img :src="$route.meta.code == item.code ? item.iconImgShow : item.iconImgHide">
            <span>{{item.iconText}}</span>
         </li>

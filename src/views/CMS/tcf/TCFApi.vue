@@ -18,6 +18,11 @@
                      ref="catalogText"
                      label-width="130px"
                      class="demo-dynamic">
+              <el-form-item label="一级目录" prop="Title">
+                <div class="api-OneLevel">
+                  <el-input v-model="catalogText.Title" placeholder="请输入标题名称"></el-input>
+                </div>
+              </el-form-item>
               <el-form-item label="一级目录" prop="OneLevel">
                 <div class="api-OneLevel">
                   <el-input v-model="catalogText.OneLevel" placeholder="请选择/输入一级目录名称"></el-input>
@@ -106,6 +111,7 @@ export default {
   data(){
     return {
       catalogText:{
+        Title:'',//标题
         OneLevel:'',//一级目录
         OneLevelType:'',//选择类目层级
         OneLevelData:[],
@@ -136,11 +142,11 @@ export default {
         },
       },
       rules:{
+        Title:[
+          { required: true, message: '请输入标题名称', trigger: 'blur' },
+        ],
         OneLevel:[
           { required: true, message: '请选择/输入一级类目', trigger: 'blur' },
-        ],
-        secondLevel:[
-          { required: true, message: '请选择/输入二级类目', trigger: 'blur' },
         ],
         bbsContent:[
           { required: true, message: '请填写要发布的API公告版内容', trigger: 'blur,change' }
@@ -221,10 +227,9 @@ export default {
       this.$refs.catalogText.validate((valid) => {
         if(valid){
           getTechDocCreate({
-            titleID1:'0',
-            titleName1:this.catalogText.OneLevel,
-            titleID2:'0',
-            titleName2:'',
+            name:this.catalogText.Title,
+            title1:this.catalogText.OneLevel,
+            title2:this.catalogText.secondLevel,
             txt:this.catalogText.bbsContent,
           }).then(response => {
               console.log(response);

@@ -26,6 +26,7 @@ import addApplication from '@/views/CMS/applications/addApplication'
 import applicationDetail from '@/views/CMS/applications/applicationDetail'
 import TCFApiList from '@/views/CMS/tcf/TCFApiList'
 import TCFApiAdd from '@/views/CMS/tcf/TCFApi'
+import categories from '@/views/CMS/categories/categories'
 
 //控制跳转同一个路由报错
 const originalPush = Router.prototype.push;
@@ -223,6 +224,15 @@ const router = new Router({
           meta: {
             title:'国美人脸认证管理后台',
             code:8
+          }
+        },
+        {
+          path: '/Index/categories',
+          name: '栏目管理',
+          component: categories,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:10
           }
         },
       ],
