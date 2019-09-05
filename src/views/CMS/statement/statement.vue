@@ -100,8 +100,10 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
-                        prop="appName"
                         label="应用名称">
+                        <template slot-scope="scope">
+                            {{textLen(scope.row.appName,10)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         align="center"
@@ -146,13 +148,14 @@
 </template>
 
 <script>
-    import {formatTimes} from '@/lib/utils'
+    import {formatTimes,textLen} from '@/lib/utils'
     import { getStatement } from '@/HttpApi/statement/statement'
     export default {
         name: "statement",
         data(){
             return{
                 formatTimes:formatTimes,
+                textLen:textLen,
                 formData:{
                     createName:'',//创建人名称
                     apiIds:'',//api ID

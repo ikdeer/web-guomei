@@ -77,7 +77,7 @@
                         align="center"
                         label="应用名称">
                         <template slot-scope="scope">
-                            {{textLen(scope.row.name,10)}}
+                            <span @click="see(scope.row)" style="color:#409EFF;cursor: pointer;">{{textLen(scope.row.name,10)}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
