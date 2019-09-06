@@ -25,7 +25,7 @@
             <div :class="itemS.isText ? 'menu-itm menu-itmShow' : 'menu-itm'"
                  @click.stop="ClickThreeLevel(itemSS)"
                  v-for="(itemSS,indexSS) in itemS.DataText">
-              <span class="menu-text">{{itemSS.text}}</span>
+              <span :class="itemSS.isText ? 'menu-textBgColor' : 'menu-text'">{{itemSS.text}}</span>
             </div>
           </div>
         </div>
@@ -80,24 +80,24 @@
             if(response.data.errorCode == 200){
               //数据拼接
               let arrData = [{text:'技术文档',isText:true,DataText:[]}];
-              for(let i = 0; i < response.data.data.list.length; i++){
+              for(let i = 0; i < response.data.data.length; i++){
                 arrData[0].DataText.push({
-                  id:response.data.data.list[i].id,
-                  text:response.data.data.list[i].title1,
-                  isText:false,
-                  //判断二级目录是否有数据
-                  isDataText:response.data.data.list[i].title2 ? true : false,
-                  DataText:[]
+                  id:response.data.data[i].id,
+                  text:response.data.data[i].title1,
+                  isText:response.data.data[0].title2 ? true : false,
+                  isDataText:response.data.data[i].title2 ? true : false, //判断二级目录是否有数据
+                  DataText:[],
                 });
-                if(response.data.data.list[i].title2){
+                if(response.data.data[i].title2){
                  arrData[0].DataText[i].DataText.push({
-                    id:response.data.data.list[i].id,
-                    text:response.data.data.list[i].title2,
-                    isText:false,
+                    id:response.data.data[i].id,
+                    text:response.data.data[i].title2,
+                    isText:response.data.data[0].title2 ? true : false,
                   })
                 }
               }
               this.dataList = arrData;
+              console.log(this.dataList);
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -144,9 +144,20 @@
             }
             items.isText = true;
           }
+          if(!items.DataText.length){
+            this.getTechDocDetails(items.id);
+          }
         },
         //三级目录
         ClickThreeLevel(itemSS){
+          for(let i =0; i < this.dataList.length; i++){
+            for(let j =0; j < this.dataList[i].DataText.length; j++){
+              for(let k = 0; k < this.dataList[i].DataText[j].DataText.length; k++){
+                this.dataList[i].DataText[j].DataText[k].isText = false;
+              }
+            }
+          }
+          itemSS.isText = true;
           this.getTechDocDetails(itemSS.id);
         },
       },
@@ -270,6 +281,12 @@
             .menu-text{
               font-size: 0.16rem;
               color: #666666;
+              font-weight: 500;
+              margin-left: 1.06rem;
+            }
+            .menu-textBgColor{
+              font-size: 0.16rem;
+              color:#036FE2;
               font-weight: 500;
               margin-left: 1.06rem;
             }
