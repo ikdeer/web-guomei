@@ -60,6 +60,7 @@
 
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
+    import {getTechDocConTentShow} from "../../../HttpApi/TCFApi/TCFApi"
     export default {
       name: "APITCF",
       components:{Header_Nav},
@@ -104,12 +105,18 @@
       },
       created(){
         this.getHeight();
+        this.getTechDocConTentShow();
         window.addEventListener('resize', this.getHeight);
-
       },
       methods:{
         getHeight(){
           this.contentStyleObj.height = window.innerHeight - 120+'px';
+        },
+        //技术文档列表
+        getTechDocConTentShow(){
+          getTechDocConTentShow().then(response => {
+            console.log(response);
+          });
         },
         //一级目录
         ClickMenu(item,index){

@@ -2,7 +2,9 @@
   <nav class="header-nav">
     <div class="header-nav_Left">
       <div class="header-navLeft">
-        <img class="navLeft-Img" src="/static/images/logo_image@2x.png" alt="">
+        <router-link :to="{path:'/Company/CompanyHome'}">
+          <img class="navLeft-Img" src="/static/images/logo_image@2x.png" alt="">
+        </router-link>
         <div class="navLeft-Text">
           <span></span>
           <p>人脸认证开放平台</p>

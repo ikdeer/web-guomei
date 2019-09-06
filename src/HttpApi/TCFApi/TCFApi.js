@@ -97,3 +97,11 @@ export const getTechDocModify = (params) => {
     })
   })
 }
+/**
+ * 首页技术文档目录列表
+ **/
+export const getTechDocConTentShow = (params) => AxIos({
+  url: '/techDoc/contentShow',
+  method: 'get',
+  params: params || {},
+});
