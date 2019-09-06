@@ -26,7 +26,9 @@ import applicationList from '@/views/CMS/applications/applicationList'
 import addApplication from '@/views/CMS/applications/addApplication'
 import applicationDetail from '@/views/CMS/applications/applicationDetail'
 import TCFApiList from '@/views/CMS/tcf/TCFApiList'
-import TCFApiAdd from '@/views/CMS/tcf/TCFApi'
+import TCFApiAdd from '@/views/CMS/tcf/TCFApiAdd'
+import TCFApiDetails from '@/views/CMS/tcf/TCFApiDetails'
+import TCFApiEdit from '@/views/CMS/tcf/TCFApiEdit'
 import categories from '@/views/CMS/categories/categories'
 
 //控制跳转同一个路由报错
@@ -230,6 +232,24 @@ const router = new Router({
           path: '/Index/TCFApiAdd',
           name: '新增技术文档',
           component: TCFApiAdd,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:8
+          }
+        },
+        {
+          path: '/Index/TCFApiEdit',
+          name: '编辑技术文档',
+          component:TCFApiEdit,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:8
+          }
+        },
+        {
+          path: '/Index/TCFApiDetails',
+          name: '查看技术文档',
+          component: TCFApiDetails,
           meta: {
             title:'国美人脸认证管理后台',
             code:8

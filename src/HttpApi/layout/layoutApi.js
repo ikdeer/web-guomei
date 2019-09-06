@@ -6,7 +6,7 @@ import AxIos from "../HttpApi";
 */
 export const getMenuList = (params) => {
   return new Promise(resolve => {
-    AxIos.post('/menu/list', params || {}).then(response => {
+    AxIos.get('/menu/list', params || {}).then(response => {
       resolve(response)
     })
   })

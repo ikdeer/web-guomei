@@ -18,35 +18,33 @@
                      ref="catalogText"
                      label-width="130px"
                      class="demo-dynamic">
-              <el-form-item label="一级目录" prop="Title">
+              <el-form-item label="标题" prop="Title">
                 <div class="api-OneLevel">
                   <el-input v-model="catalogText.Title" placeholder="请输入标题名称"></el-input>
                 </div>
               </el-form-item>
               <el-form-item label="一级目录" prop="OneLevel">
                 <div class="api-OneLevel">
-                  <el-input v-model="catalogText.OneLevel" placeholder="请选择/输入一级目录名称"></el-input>
-                  <el-select v-model="catalogText.OneLevelType"
-                             @change="selectLeve(catalogText.OneLevelType)"
+                  <el-select v-model="catalogText.OneLevel"
+                             @change="getTechDocTitle2Show"
                              placeholder="请选择一级目录">
                     <el-option
                       v-for="item in catalogText.OneLevelData"
-                      :key="item.id"
+                      :key="item.name"
                       :label="item.name"
-                      :value="item.id">
+                      :value="item.name">
                     </el-option>
                   </el-select>
                 </div>
               </el-form-item>
-              <el-form-item label="二级目录" prop="secondLevel">
+              <el-form-item label="二级目录">
                 <div class="api-OneLevel">
-                  <el-input v-model="catalogText.secondLevel" placeholder="请选择/输入二级目录名称"></el-input>
-                  <el-select v-model="catalogText.secondLevelType" placeholder="请选择二级目录">
+                  <el-select v-model="catalogText.secondLevel" placeholder="请选择二级目录">
                     <el-option
                       v-for="item in catalogText.secondLevelData"
-                      :key="item.id"
+                      :key="item.name"
                       :label="item.name"
-                      :value="item.id">
+                      :value="item.name">
                     </el-option>
                   </el-select>
                 </div>
@@ -113,10 +111,8 @@ export default {
       catalogText:{
         Title:'',//标题
         OneLevel:'',//一级目录
-        OneLevelType:'',//选择类目层级
         OneLevelData:[],
         secondLevel:'',//二级目录
-        secondLevelType:'',//选择类目层级
         secondLevelData:[],
         bbsContent:'',//文本内容
         quillUpdateImg:'',//图片上传动画
@@ -142,15 +138,9 @@ export default {
         },
       },
       rules:{
-        Title:[
-          { required: true, message: '请输入标题名称', trigger: 'blur' },
-        ],
-        OneLevel:[
-          { required: true, message: '请选择/输入一级类目', trigger: 'blur' },
-        ],
-        bbsContent:[
-          { required: true, message: '请填写要发布的API公告版内容', trigger: 'blur,change' }
-        ]
+        Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
+        OneLevel:[{ required: true, message: '请选择一级类目', trigger: 'blur' }],
+        bbsContent:[{ required: true, message: '请填写要发布的API公告版内容', trigger: 'blur,change' }]
       }
     }
   },
@@ -167,9 +157,15 @@ export default {
     },
     //二级目录
     getTechDocTitle2Show(){
-      getTechDocTitle2Show({id:'id'}).then(response => {
+      this.catalogText.secondLevel = '';
+      this.catalogText.secondLevelData = [];
+      getTechDocTitle2Show({title1:this.catalogText.OneLevel}).then(response => {
         if(response.data.errorCode == 200){
-          this.catalogText.selectLevelData = response.data.data.list;
+          if(response.data.data.list.length != 0){
+            this.catalogText.secondLevelData = response.data.data.list;
+          }else{
+            this.catalogText.secondLevelData = null;
+          }
         }else{
           this.$message.error(response.data.errorInfo);
         }
@@ -218,22 +214,51 @@ export default {
         };
       });
     },
-    //选择一级层级
-    selectLeve(item){
-
-    },
     //保存并发布
     addDomain(){
+      let _this = this;
       this.$refs.catalogText.validate((valid) => {
         if(valid){
-          getTechDocCreate({
-            name:this.catalogText.Title,
-            title1:this.catalogText.OneLevel,
-            title2:this.catalogText.secondLevel,
-            txt:this.catalogText.bbsContent,
-          }).then(response => {
-              console.log(response);
-          })
+          if(this.catalogText.secondLevelData != null && this.catalogText.secondLevel != ''){
+            getTechDocCreate({
+              name:this.catalogText.Title,
+              title1:this.catalogText.OneLevel,
+              title2:this.catalogText.secondLevel,
+              txt:this.catalogText.bbsContent,
+            }).then(response => {
+              if(response.data.success){
+                this.$message({message: '创建成功~~~',type: 'success'});
+                setTimeout(()=>{
+                  _this.router.push({path:'/Index/TCFApiList'})
+                },300)
+              }else{
+                this.$message.error(response.data.errorInfo);
+              }
+            })
+          }else{
+            if(this.catalogText.secondLevelData == null){
+              getTechDocCreate({
+                name:this.catalogText.Title,
+                title1:this.catalogText.OneLevel,
+                title2:this.catalogText.secondLevel,
+                txt:this.catalogText.bbsContent,
+              }).then(response => {
+                if(response.data.success){
+                  this.$message({message: '创建成功~~~',type: 'success'});
+                  setTimeout(()=>{
+                    _this.router.push({path:'/Index/TCFApiList'})
+                  },300)
+                }else{
+                  this.$message.error(response.data.errorInfo);
+                }
+              })
+            }else{
+              this.$message({
+                message: '二级目录必选项！！！',
+                type: 'warning'
+              });
+            }
+          }
         }
       })
     },
@@ -271,6 +296,10 @@ export default {
           display: -webkit-flex;
           align-items: center;
           justify-content: space-between;
+          .el-select{
+            width: 100%;
+            display: block;
+          }
         }
         .avatar-uploader{
           display: none;
