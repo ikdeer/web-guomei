@@ -101,10 +101,10 @@ export const getFaceShow = ({ page,pageSize,no,noType,picFromID,sex,type,sub1,su
 });
 
 //弹层添加人脸分组
-export const addFace = ({ faceGroupID,faceID,id,sub1,sub2 }) => AxIos({
+export const addFace = ({ faceGroupID,ids,id,sub1,sub2 }) => AxIos({
     url: '/face2Group/add',
     method: 'post',
-    data:{ faceGroupID,faceID,id,sub1,sub2 }
+    data:{ faceGroupID,ids,id,sub1,sub2 }
 });
 
 //获取当前分组绑定人脸列表
@@ -115,8 +115,8 @@ export const getFaceGroupShow = ({ page,pageSize,faceGroupID,id,sub1,sub2 }) => 
 });
 
 //删除人脸绑定数据
-export const deleteFaceGroup = ({ faceGroupID,ids,sub1,sub2 }) => AxIos({
+export const deleteFaceGroup = ({ ids }) => AxIos({
     url: '/face2Group/del',
     method: 'post',
-    data:{ faceGroupID,ids,sub1,sub2 }
+    data:{ids }
 });

@@ -164,10 +164,16 @@
                     </el-upload>
                 </div>
             </div>
-            <span slot="footer">
-                <el-button type="primary" @click="commitFaceImage">确 定</el-button>
-                <el-button @click="dataDialogForm.uploadFaceDialog = false">取 消</el-button>
-            </span>
+            <div class="face_list_dialog_footer">
+                <div>
+                    <el-button type="primary" @click="">批量添加</el-button>
+                    <el-button type="text" @click="">下载批量添加模板</el-button>
+                </div>
+                <div>
+                    <el-button type="primary" @click="commitFaceImage">确 定</el-button>
+                    <el-button @click="dataDialogForm.uploadFaceDialog = false">取 消</el-button>
+                </div>
+            </div>
         </el-dialog>
 
 
@@ -531,5 +537,18 @@
             }
         }
 
+        .face_list_dialog_footer{
+            height: 50px;
+            line-height: 50px;
+            margin-top: 15px;
+            padding: 10px 0 15px 0;
+            border-top: 1px solid #eeeeee;
+            display: flex;
+            display: -webkit-flex;
+            div{
+                width: 46%;
+            }
+
+        }
     }
 </style>

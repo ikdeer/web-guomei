@@ -49,7 +49,7 @@
                             width="55">
                         </el-table-column>
                         <el-table-column
-                            prop="username"
+                            prop="name"
                             label="姓名">
                         </el-table-column>
                         <el-table-column
@@ -61,23 +61,23 @@
                             label="PersonID">
                         </el-table-column>
                         <el-table-column
-                            prop="number"
+                            prop="typeName"
                             label="人员类型">
                         </el-table-column>
                         <el-table-column
-                            prop="id"
+                            prop="noTypeName"
                             label="编号系统">
                         </el-table-column>
                         <el-table-column
-                            prop="ids"
+                            prop="no"
                             label="编号">
                         </el-table-column>
                         <el-table-column
-                            prop="on"
+                            prop="picFromName"
                             label="图片来源">
                         </el-table-column>
                         <el-table-column
-                            prop="time"
+                            prop="createTime"
                             label="添加时间">
                         </el-table-column>
                         <el-table-column
@@ -267,10 +267,7 @@
             removeFaceImg(row){
                 //删除
                 let params = {
-                    faceGroupID:this.groupid,
-                    sub1:this.stepTwoForm.one,
-                    sub2:this.stepTwoForm.two,
-                    ids:[item.id]
+                    ids:[row.id]
                 };
                 deleteFaceGroup(params).then(({data})=>{
                     if(data.success){
@@ -343,15 +340,16 @@
             },
             addGroupFaceDialog(){
                 //确认添加人脸 发送添加关闭弹窗
-
+                console.log(this.faceListBirge);
                 let params = {
                     faceGroupID:this.groupid,
-                    faceID:this.faceListBirge,
+                    ids:this.faceListBirge,
                     sub1:this.stepTwoForm.one,
                     sub2:this.stepTwoForm.two
                 };
                 addFace(params).then(({data})=>{
                     if(data.success){
+                        this.$message.success('添加成功');
                         this.faceListBirge = [];
                         this.getFaceGroupShowList();
                         this.addGroupFace = false;
@@ -369,7 +367,7 @@
                 };
                 getFaceGroupShow(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data;
+                        this.tableData = data.data.list;
                     }else{
                         this.tableData = [];
                         // this.$message.warning(data.errorInfo)
