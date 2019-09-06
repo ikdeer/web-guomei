@@ -143,6 +143,7 @@
             :title="equipmentDialogInfo.title"
             class="equipment_list_dialog"
             :visible.sync="equipmentDialogInfo.dialog"
+            @close="closeDialog"
             width="500px">
             <div class="equipment_list_steps">
                 <span :class="equipmentDialogInfo.type===1?'active':''">第一步 填写设备信息</span>
@@ -341,6 +342,7 @@
                     total:0
                 },
                 equipmentDialogInfo:{
+                    id:'',
                     title:'新建设备',
                     dialog:false,
                     type:1,
@@ -405,6 +407,12 @@
                     faceChildTwo:[
                         {validator:faceChildTwo,trigger:['blur','change']}
                     ]
+                },
+                userInfo:{
+                    groupID:'',
+                    uid: '',
+                    userImg: "",
+                    userName: ""
                 }
             }
         },
@@ -422,7 +430,7 @@
                     this.floorList = this.departmentList[this.formData.department].list;
                 }
             },
-            addEquiment(){//添加设备
+            closeDialog(){
                 this.dialogInfo = {
                     no:'',//设备编号
                     name:'',//设备名称
@@ -440,16 +448,21 @@
                     faceChildOne:'',
                     faceChildTwo:''
                 };
+                this.$refs['dialogOne'].clearValidate();
+                this.$refs['dialogTwo'].clearValidate();
+            },
+            addEquiment(){//添加设备
                 this.equipmentDialogInfo={
+                    id:'',
                     title:'新建设备',
-                    dialog:false,
+                    dialog:true,
                     type:1,
                     isSee:false,
                     isEdit:false,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 };
-                this.equipmentDialogInfo.dialog = true;
+
             },
             search(){
                 let params = {
@@ -488,23 +501,6 @@
             },
             see(row) {
                 //查看操作
-                this.dialogInfo = {
-                    no:'',//设备编号
-                    name:'',//设备名称
-                    type:'',//设备类型
-                    siteOne:'',//设备位置123
-                    siteTwo:'',
-                    siteThree:'',
-                    shopOne:'',//门店1234
-                    shopTwo:'',
-                    shopThree:'',
-                    shopFour:'',
-                };
-                this.dialogFace = {
-                    faceGroup:'',//人脸分组123
-                    faceChildOne:'',
-                    faceChildTwo:''
-                };
                 this.equipmentDialogInfo = {
                     title:'查看设备',
                     dialog:true,
@@ -519,23 +515,6 @@
             },
             edit(row){
                 //修改操作
-                this.dialogInfo = {
-                    no:'',//设备编号
-                    name:'',//设备名称
-                    type:'',//设备类型
-                    siteOne:'',//设备位置123
-                    siteTwo:'',
-                    siteThree:'',
-                    shopOne:'',//门店1234
-                    shopTwo:'',
-                    shopThree:'',
-                    shopFour:'',
-                };
-                this.dialogFace = {
-                    faceGroup:'',//人脸分组123
-                    faceChildOne:'',
-                    faceChildTwo:''
-                };
                 this.equipmentDialogInfo = {
                     title:'编辑设备',
                     dialog:true,
@@ -587,16 +566,18 @@
                 }).catch(() => {});
             },
             binding(row){
-              //绑定人脸操作
+                //绑定人脸操作
                 this.equipmentDialogInfo = {
+                    id:row.id,
                     title:'编辑设备',
                     dialog:true,
                     type:2,
                     isSee:false,
-                    isEdit:false,
+                    isEdit:true,
                     btnShow:true,//取消按钮显示隐藏
                     btnInfo:' 确 定 '
-                }
+                };
+                this.getDetail(row.id);
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
@@ -620,6 +601,21 @@
                             shopTwo:'',
                             shopThree:'',
                             shopFour:data.data.device.belongComID,
+                        };
+                        //处理分组反显
+                        getFaceGroupOne({faceGroupID:data.data.device.faceGroupID}).then(({data})=>{
+                            this.faceChildOne = data.data.list;
+                        });
+                        getFaceGroupTwo({
+                            faceGroupID:data.data.device.faceGroupID,
+                            sub1:data.data.device.sub1
+                        }).then(({data})=>{
+                            this.faceChildTwo = data.data.list;
+                        });
+                        this.dialogFace = {
+                            faceGroup:data.data.device.faceGroupID,//人脸分组123
+                            faceChildOne:data.data.device.sub1,
+                            faceChildTwo:data.data.device.sub2
                         };
                         //处理设备位置反显
                         /*
@@ -708,6 +704,8 @@
                                     belongComID:this.dialogInfo.shopFour,
                                     gmAreaID:this.dialogInfo.siteThree,
                                     faceGroupID:this.dialogFace.faceChildTwo,
+                                    createrID:this.userInfo.uid,
+                                    positionType:1
                                 };
                                 editEquipment(pams).then(({data}) => {
                                     if(data.success){
@@ -733,6 +731,8 @@
                                     belongComID:this.dialogInfo.shopFour,
                                     gmAreaID:this.dialogInfo.siteThree,
                                     faceGroupID:this.dialogFace.faceChildTwo,
+                                    createrID:this.userInfo.uid,
+                                    positionType:1
                                 };
                                 addEquipment(params).then(({data})=>{
                                     if(data.success){
@@ -874,8 +874,9 @@
         mounted(){
             this.search();
             this.getEquipment();
-            this.getFaceGroup();
+            // this.getFaceGroup();
             // this.getEquipmentState()
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
         }
     }
 </script>

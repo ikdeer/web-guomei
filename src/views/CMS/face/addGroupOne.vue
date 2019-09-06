@@ -306,7 +306,7 @@
         box-sizing: border-box;
 
         .addgroup_top{
-            height: .6rem;
+            height: 50px;
             display: flex;
             display: -webkit-flex;
             div{
@@ -314,17 +314,18 @@
                 background: #EFEDED;
                 width: 48%;
                 color: #666666;
+                font-size: 14px;
                 display: flex;
                 display: -webkit-flex;
                 justify-content: center;
                 align-items: center;
                 span{
                     text-align: center;
-                    line-height: 0.28rem;
-                    width: 0.28rem;
-                    height: 0.28rem;
+                    line-height: 24px;
+                    width: 24px;
+                    height: 24px;
                     font-weight: 600;
-                    margin-right: 0.1rem;
+                    margin-right: 10px;
                     -webkit-border-radius: 100%;
                     -moz-border-radius: 100%;
                     border-radius: 100%;
@@ -333,20 +334,20 @@
                 &:after{
                     content: '';
                     display: block;
-                    border-top: 0.3rem solid transparent;
-                    border-bottom: 0.3rem solid transparent;
-                    border-left: 0.4rem solid #EFEDED;
+                    border-top: 25px solid transparent;
+                    border-bottom: 25px solid transparent;
+                    border-left: 30px solid #EFEDED;
                     position: absolute;
-                    right: -0.4rem;
+                    right: -30px;
                     top: 0;
                     z-index: 10;
                 }
                 &:before{
                     content: '';
                     display: block;
-                    border-top: 0.3rem solid #EFEDED;
-                    border-bottom: 0.3rem solid #EFEDED;
-                    border-left: 0.4rem solid white;
+                    border-top: 25px solid #EFEDED;
+                    border-bottom: 25px solid #EFEDED;
+                    border-left: 30px solid white;
                     position: absolute;
                     left: 0;
                     top: 0;
@@ -362,11 +363,11 @@
                     color: #409EFF;
                 }
                 &:after{
-                    border-left: 0.4rem solid #409EFF;
+                    border-left: 30px solid #409EFF;
                 }
                 &:before{
-                    border-top: 0.3rem solid #409EFF;
-                    border-bottom: 0.3rem solid #409EFF;
+                    border-top: 25px solid #409EFF;
+                    border-bottom: 25px solid #409EFF;
                 }
             }
         }

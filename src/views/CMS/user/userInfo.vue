@@ -74,6 +74,7 @@
             :title="dataDialogForm.isEdit?'编辑联系人':'新增联系人'"
             class="user_info_add_dialog"
             :visible.sync="userInfoAddDialog"
+            @close="closeDialog"
             width="30%">
             <el-form :model="dataDialogForm" :rules="adduserDialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="姓名" prop="name" required>
@@ -218,16 +219,18 @@
                     this.$message.warning('邮箱格式不正确！');
                 }
             },
+            closeDialog(){
+                this.dataDialogForm = {
+                    name: row.name,
+                    phone: row.phoneNum,
+                    email: row.mail,
+                    id: row.id,
+                    isEdit: true,
+                };
+                this.$refs['dataDialogForm'].clearValidate();
+            },
             edit(row){
-                /*this.dataDialogForm={
-                    name:row.name,
-                    phone:row.phoneNum,
-                    email:row.mail,
-                    id:row.id,
-                    isEdit:true,
-                };*/
                 this.userInfoAddDialog = true;
-                this.$refs['dataDialogForm'].resetFields();
                 this.dataDialogForm.id = row.id;
             },
             remove(row){
@@ -246,15 +249,7 @@
                 }).catch(() => {});
             },
             adduser(){
-                /*this.dataDialogForm={
-                    name:'',
-                    phone:'',
-                    email:'',
-                    id:this.id,
-                    isEdit:false,
-                };*/
                 this.userInfoAddDialog = true;
-                this.$refs['dataDialogForm'].resetFields();
                 this.dataDialogForm.id = this.id;
             },
             addContact(){
