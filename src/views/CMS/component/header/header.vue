@@ -1,7 +1,9 @@
 <template>
     <div class="header">
         <div class="header-left">
-          <img src="/static/images/logo_image@2x.png" alt="">
+          <router-link  tag="div" :to="{path:'/Company/CompanyHome'}">
+            <img src="/static/images/logo_image@2x.png" alt="">
+          </router-link>
           <span></span>
           <p>人脸认证开放平台</p>
         </div>
@@ -92,10 +94,11 @@
     display: -webkit-flex;
     align-items: center;
     margin-left: 0.3rem;
-    >img{
+    img{
       width: 0.9rem;
       height: 0.3rem;
       display: block;
+      cursor: pointer;
     }
     >span{
       width: 2px;

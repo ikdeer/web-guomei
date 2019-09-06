@@ -158,12 +158,10 @@
 </template>
 
 <script>
-    import breadcrumb from '@/views/CMS/component/header/BoxHeader';
     import {formatTimes} from '@/lib/utils'
     import { getUserList,createUser,removeUser,enableUser,phoneNumCheck } from '@/HttpApi/user/user';
     export default {
         name: "userList",
-        components:{breadcrumb},
         data() {
             let username = (rule, value, callback) => {
                 if(value){

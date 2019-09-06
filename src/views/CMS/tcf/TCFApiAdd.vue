@@ -72,7 +72,7 @@
               <el-form-item>
                 <div class="api-editor">
                   <el-button type="primary" @click.stop="addDomain">保存并发布</el-button>
-                  <el-button>重置</el-button>
+                  <el-button @click.stop="cancel">重置</el-button>
                 </div>
               </el-form-item>
             </el-form>
@@ -214,6 +214,10 @@ export default {
         };
       });
     },
+    //重置
+    cancel(){
+      this.$refs.catalogText.resetFields();
+    },
     //保存并发布
     addDomain(){
       let _this = this;
@@ -229,7 +233,7 @@ export default {
               if(response.data.success){
                 this.$message({message: '创建成功~~~',type: 'success'});
                 setTimeout(()=>{
-                  _this.router.push({path:'/Index/TCFApiList'})
+                  _this.$router.push({path:'/Index/TCFApiList'})
                 },300)
               }else{
                 this.$message.error(response.data.errorInfo);
@@ -246,7 +250,7 @@ export default {
                 if(response.data.success){
                   this.$message({message: '创建成功~~~',type: 'success'});
                   setTimeout(()=>{
-                    _this.router.push({path:'/Index/TCFApiList'})
+                    _this.$router.push({path:'/Index/TCFApiList'})
                   },300)
                 }else{
                   this.$message.error(response.data.errorInfo);

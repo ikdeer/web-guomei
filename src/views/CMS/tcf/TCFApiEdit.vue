@@ -242,7 +242,7 @@
                 if(response.data.success){
                   this.$message({message: '编辑成功~~~',type: 'success'});
                   setTimeout(()=>{
-                    _this.router.push({path:'/Index/TCFApiList'})
+                    _this.$router.push({path:'/Index/TCFApiList'})
                   },300)
                 }else{
                   this.$message.error(response.data.errorInfo);
@@ -255,7 +255,7 @@
                   if(response.data.success){
                     this.$message({message: '编辑成功~~~',type: 'success'});
                     setTimeout(()=>{
-                      _this.router.push({path:'/Index/TCFApiList'})
+                      _this.$router.push({path:'/Index/TCFApiList'})
                     },300)
                   }else{
                     this.$message.error(response.data.errorInfo);

@@ -114,10 +114,10 @@
         <div class="overIew-scene">
           <div class="scene-top">
             <p class="scene-topText">常用应用场景</p>
-            <div class="overIew-fixed">
+            <router-link class="overIew-fixed" tag="div" :to="{path:'/Company/solution'}">
               <span>更多</span>
               <i class="el-icon-arrow-right"></i>
-            </div>
+            </router-link>
           </div>
           <div class="scene-ListPad">
             <div class="ListPad-scene">
@@ -482,7 +482,7 @@ export default {
             font-weight: 500;
           }
           .el-icon-arrow-right{
-            font-size:0.16rem;
+            font-size:0.18rem;
           }
         }
       }
