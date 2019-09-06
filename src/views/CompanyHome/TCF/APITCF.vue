@@ -9,19 +9,23 @@
           <i class="el-icon-s-fold"></i>
         </div>
         <div class="menu-list" v-for="(item,index) in dataList">
-          <div class="menu-gm" @click="ClickMenu(item,index)">
+          <!-- 一级目录 -->
+          <div class="menu-gm" @click.stop="ClickMenu(item,index)">
             <span class="menu-text">{{item.text}}</span>
             <i class="el-icon-arrow-down gm-sbc"></i>
           </div>
           <div :class="item.isText ? 'menu-levelShow menu-level' : 'menu-level'"
-               v-for="(items,indexs) in item.DataText">
-            <div class="level-gm" @click="ClickLevel(items,indexs)">
-              <span class="menu-text">{{items.text}}</span>
-              <i class="el-icon-arrow-down gm-sbc"></i>
+               v-for="(itemS,indexS) in item.DataText">
+            <!-- 二级目录 -->
+            <div class="level-gm" @click.stop="ClickLevel(itemS)">
+              <span class="menu-text">{{itemS.text}}</span>
+              <i v-if="itemS.isDataText" class="el-icon-arrow-down gm-sbc"></i>
             </div>
-            <div :class="items.isText ? 'menu-itm menu-itmShow' : 'menu-itm'"
-                 v-for="(itemss,index) in items.DataText">
-              <span class="menu-text">{{itemss.text}}</span>
+            <!-- 三级目录 -->
+            <div :class="itemS.isText ? 'menu-itm menu-itmShow' : 'menu-itm'"
+                 @click.stop="ClickThreeLevel(itemSS)"
+                 v-for="(itemSS,indexSS) in itemS.DataText">
+              <span class="menu-text">{{itemSS.text}}</span>
             </div>
           </div>
         </div>
@@ -38,19 +42,7 @@
         <div class="gm-contentPad">
           <h4 class="gm-contentPadText">人脸检测</h4>
           <div class="gm-contentArea">
-            <div class="contentArea-left" :style="contentStyleObj"></div>
-            <div class="contentArea-right">
-              <div class="contentArea-catalogue">
-                <h4 class="catalogue-h4">文本目录</h4>
-                <p class="catalogue-p">人脸检测与属性分析</p>
-                <div class="catalogue-list">
-                  <span>能力介绍</span>
-                  <span>调用方式</span>
-                  <span>请求说明</span>
-                  <span>返回说明</span>
-                </div>
-              </div>
-            </div>
+            <div class="contentArea-left" :style="contentStyleObj" v-html="bbsContent"></div>
           </div>
         </div>
       </div>
@@ -60,44 +52,14 @@
 
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
-    import {getTechDocConTentShow} from "../../../HttpApi/TCFApi/TCFApi"
+    import {getTechDocConTentShow,getTechDocDetails} from "../../../HttpApi/TCFApi/TCFApi"
     export default {
       name: "APITCF",
       components:{Header_Nav},
       data(){
         return {
-          dataList:[
-            {
-              'text':'技术文档',
-              'isText':false,
-              'DataText':[
-                {
-                  'text':'API文档1',
-                  'isText':false,
-                  'DataText':[
-                    {'text':'人脸检测'}
-                  ]
-                },
-                {
-                  'text':'SDK',
-                  'isText':false,
-                }
-              ]
-            },
-            {
-              'text':'技术大咖',
-              'isText':false,
-              'DataText':[
-                {
-                  'text':'API文档2',
-                  'isText':false,
-                  'DataText':[
-                    {'text':'人员追踪'}
-                  ]
-                }
-              ]
-            }
-          ],
+          dataList:[],
+          bbsContent:'',//文本内容
           contentStyleObj:{
             height:''
           }
@@ -115,8 +77,41 @@
         //技术文档列表
         getTechDocConTentShow(){
           getTechDocConTentShow().then(response => {
-            console.log(response);
+            if(response.data.errorCode == 200){
+              //数据拼接
+              let arrData = [{text:'技术文档',isText:true,DataText:[]}];
+              for(let i = 0; i < response.data.data.list.length; i++){
+                arrData[0].DataText.push({
+                  id:response.data.data.list[i].id,
+                  text:response.data.data.list[i].title1,
+                  isText:false,
+                  //判断二级目录是否有数据
+                  isDataText:response.data.data.list[i].title2 ? true : false,
+                  DataText:[]
+                });
+                if(response.data.data.list[i].title2){
+                 arrData[0].DataText[i].DataText.push({
+                    id:response.data.data.list[i].id,
+                    text:response.data.data.list[i].title2,
+                    isText:false,
+                  })
+                }
+              }
+              this.dataList = arrData;
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
           });
+        },
+        //技术文档详情
+        getTechDocDetails(id){
+          getTechDocDetails({id:id}).then(response => {
+            if(response.data.errorCode == 200){
+              this.bbsContent = response.data.data.techDoc.txt;
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
         },
         //一级目录
         ClickMenu(item,index){
@@ -133,13 +128,27 @@
           }
         },
         //二级目录
-        ClickLevel(items,indexs){
+        ClickLevel(items){
           if(items.isText){
+            for(let i =0; i < this.dataList.length; i++){
+              for(let j =0; j < this.dataList[i].DataText.length; j++){
+                this.dataList[i].DataText[j].isText = false;
+              }
+            }
             items.isText = false;
           }else{
+            for(let i =0; i < this.dataList.length; i++){
+              for(let j =0; j < this.dataList[i].DataText.length; j++){
+                this.dataList[i].DataText[j].isText = false;
+              }
+            }
             items.isText = true;
           }
-        }
+        },
+        //三级目录
+        ClickThreeLevel(itemSS){
+          this.getTechDocDetails(itemSS.id);
+        },
       },
       destroyed() {
         window.removeEventListener('resize', this.getHeight)
@@ -260,7 +269,7 @@
             background: #F8F8F8;
             .menu-text{
               font-size: 0.16rem;
-              color: #036FE2;
+              color: #666666;
               font-weight: 500;
               margin-left: 1.06rem;
             }
@@ -303,7 +312,7 @@
           display: -webkit-flex;
           justify-content: space-between;
           .contentArea-left{
-            width: 85%;
+            width: 100%;
             background: #ffffff;
             box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
             border-radius:0.1rem;
