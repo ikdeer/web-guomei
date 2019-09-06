@@ -30,7 +30,10 @@ export const getFaceType = () => AxIos({
     method: 'get',
 });
 //获取图片来源
-
+export const getPicList = () => AxIos({
+    url: '/app/nameList',
+    method: 'get',
+});
 
 
 

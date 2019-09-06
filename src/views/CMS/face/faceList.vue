@@ -107,9 +107,11 @@
             <el-form :inline="true" :model="dataDialogForm" :rules="DialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="图片来源" prop="picFromID" required>
                     <el-select v-model="dataDialogForm.picFromID" placeholder="请选择图片来源">
-                        <el-option label="美办" value="0"></el-option>
-                        <el-option label="考勤" value="1"></el-option>
-                        <el-option label="监控" value="2"></el-option>
+                        <el-option v-for="item in dataDialogForm.picList"
+                                   :label="item.name"
+                                   :value="item.id"
+                                   :key="item.id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="编号" prop="noType" required>
@@ -183,7 +185,7 @@
 
 <script>
     import {formatTimes,textLen} from '@/lib/utils'
-    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType } from '@/HttpApi/face/face'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -253,6 +255,7 @@
                     name:'',
                     sex:'',
                     uploadFaceDialog:false,
+                    picList:[],
                     faceType:[],
                     faceNoType:[],
                 },
@@ -294,8 +297,13 @@
                 this.faceImgUrl = '';
                 this.dataDialogForm.uploadFaceDialog = true;
                 //获取图片来源
-
-
+                getPicList().then(({data})=>{
+                    if(data.success){
+                        this.dataDialogForm.picList = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取图片来源列表失败')
+                    }
+                });
                 //获取图片编号
                 getFaceNoType().then(({data})=>{
                     if(data.success){
