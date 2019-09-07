@@ -11,10 +11,10 @@
             <div class="user_list_form">
                 <el-form :inline="true" ref="userlistform">
                     <el-form-item label="手机号">
-                        <el-input :maxlength="100" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
+                        <el-input :maxlength="200" v-model="formData.phoneNums" placeholder="请输入手机号"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱">
-                        <el-input :maxlength="100" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
+                        <el-input :maxlength="200" v-model="formData.mails" placeholder="请输入邮箱"></el-input>
                     </el-form-item>
                     <el-form-item label="账号状态">
                         <el-select v-model="formData.disenable"  class="user_list_form_status" placeholder="请选择状态">
@@ -29,6 +29,7 @@
                             v-model="formData.dataTime"
                             type="daterange"
                             range-separator="至"
+                            value-format="yyyy-MM-dd"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
                         </el-date-picker>
@@ -87,9 +88,9 @@
                     <el-table-column
                         label="操作" align="center">
                         <template slot-scope="scope">
-                            <el-button type="text" @click="see(scope.row)">查看</el-button>
-                            <el-button type="text" v-if="scope.row.accountState === 1" style="color: #E56565;" @click="down(scope.row)">停用</el-button>
-                            <el-button type="text" v-if="scope.row.accountState === 0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                            <el-button type="text" v-if="userInfo.groupID ==1 || userInfo.groupID==10 " @click="see(scope.row)">查看</el-button>
+                            <el-button type="text" v-if="scope.row.state === 1" style="color: #E56565;" @click="down(scope.row)">停用</el-button>
+                            <el-button type="text" v-if="scope.row.state === 0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
                             <el-button type="text" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
@@ -278,6 +279,12 @@
                     passwordend:[
                         {validator:passwordend,trigger:['blur','change']}
                     ]
+                },
+                userInfo:{
+                    userName:'',//用户姓名
+                    userImg:'',//用户头头像
+                    uid:'',//用户ID
+                    groupID:'',//用户身份
                 }
             }
         },
@@ -289,8 +296,8 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
-                    createTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
-                    createTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
+                    createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 if(this.formData.disenable) params.enable = this.formData.disenable;
 
@@ -413,6 +420,7 @@
             },
         },
         mounted(){
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             this.search();
         },
         filters:{
@@ -463,12 +471,8 @@
                 margin-top: 10px;
                 text-align: right;
             }
-
-
         }
     }
-
-
     .user_list_add_dialog{
         .el-form{
             padding: 0 30px;

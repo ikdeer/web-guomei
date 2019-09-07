@@ -31,14 +31,14 @@
             <div class="statement_form">
                 <el-form label-width="80px">
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" style="width: 200px" v-model="formData.createName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="选择应用">
-                        <el-select v-model="formData.appIds" multiple placeholder="请选择">
+                        <el-select v-model="formData.appIds" @change="getApiSelectList" placeholder="请选择">
                             <el-option
-                                v-for="item in formData.categoryList"
+                                v-for="item in formData.appList"
                                 :key="item.id"
-                                :label="item.name+' '+item.id"
+                                :label="item.name"
                                 :value="item.id">
                             </el-option>
                         </el-select>
@@ -46,21 +46,21 @@
                     <el-form-item label="选择API">
                         <el-select v-model="formData.apiIds"  class="user_list_form_status" placeholder="请选择状态">
                             <el-option
-                                v-for="item in formData.categoryList"
+                                v-for="item in formData.apiList"
                                 :key="item.id"
                                 :label="item.name+' '+item.id"
                                 :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="统计项">
+                    <!--<el-form-item label="统计项">
                         <el-radio-group v-model="formData.radio">
                             <el-radio :label="1">调用量</el-radio>
                             <el-radio :label="2">QPS</el-radio>
                         </el-radio-group>
-                    </el-form-item>
+                    </el-form-item>-->
                     <el-form-item label="监控项">
-                        <el-checkbox-group v-model="formData.checkList">
+                        <el-checkbox-group v-model="formData.monitorItems">
                             <el-checkbox label="1">调用成功</el-checkbox>
                             <el-checkbox label="2">调用失败</el-checkbox>
                         </el-checkbox-group>
@@ -70,7 +70,7 @@
                             class="user_list_form_time"
                             v-model="formData.dataTime"
                             type="daterange"
-                            range-separator="-"
+                            value-format="yyyy-MM-dd"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
                         </el-date-picker>
@@ -88,8 +88,10 @@
                         <span>调用失败：<span style="color:#409EFF;">{{callData.callFailCount}}</span></span>
                     </div>
                     <div>
-                        <el-radio v-model="radio" label="1">按日</el-radio>
-                        <el-radio v-model="radio" label="2">按时</el-radio>
+                        <el-radio-group @change="ClickRadio" v-model="radio">
+                            <el-radio label="1">按日</el-radio>
+                            <el-radio label="2">按时</el-radio>
+                        </el-radio-group>
                     </div>
                 </div>
                 <div id="MyEcharts" class="echartsbox"></div>
@@ -141,6 +143,18 @@
                         label="最后调用时间">
                     </el-table-column>
                 </el-table>
+                <div class="statement_list_footer">
+                    <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="page.page"
+                        :page-sizes="[10, 20, 30, 50, 100]"
+                        :page-size="page.pageSize"
+                        background
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="page.total">
+                    </el-pagination>
+                </div>
             </div>
 
         </div>
@@ -148,21 +162,22 @@
 </template>
 
 <script>
-    import {formatTimes,textLen} from '@/lib/utils'
-    import { getStatement } from '@/HttpApi/statement/statement'
+    import {textLen} from '@/lib/utils'
+    import { getStatement,getAppList,getApiList } from '@/HttpApi/statement/statement'
     export default {
         name: "statement",
         data(){
             return{
-                formatTimes:formatTimes,
                 textLen:textLen,
                 formData:{
                     createName:'',//创建人名称
                     apiIds:'',//api ID
                     appIds:'',//app ID
                     statisItems:'',//统计项 1-调用量 2-qps
+                    monitorItems:'1',//监控项
                     dataTime:null,
-                    checkList:[]
+                    appList:[],
+                    apiList:[]
                 },
                 tableData:[],
                 radio:'1',
@@ -174,22 +189,32 @@
                 lineCharts: null,
                 lineOption: {},
                 Breadcrumb:null,//面包屑导航栏
+                userInfo:{
+                    userName:'',//用户姓名
+                    userImg:'',//用户头头像
+                    uid:'',//用户ID
+                    groupID:'',//用户身份
+                },
+                page:{
+                    page:1,
+                    pageSize:10,
+                    total:0
+                },
             }
         },
         methods:{
             search(){
                 let params = {
-                    ...this.formData,
-                    monitorItems:this.formData.checkList.length?this.formData.checkList.join():'',
-                    timeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
-                    timeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):'',
+                    ...this.formData,...this.page,
+                    timeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    timeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                     timeType:this.radio,
                 };
                 getStatement(params).then(({data}) => {
                     if(data.success){
                         this.callData = data.data.data.callData;
                         this.tableData = data.data.data.appStatisApiList;
-
+                        this.page.total = data.data.data.pagerManager? data.data.data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
                         data.data.data.charStaticApiList.forEach((item,index)=>{
                             days.push(item.days);
@@ -253,17 +278,55 @@
                     }
                 })
             },
+            ClickRadio(){
+                this.search()
+            },
+            handleSizeChange(val){
+                this.page.pageSize = val;
+                this.search()
+            },
+            handleCurrentChange(val){
+                this.page.page = val;
+                this.search()
+            },
             handleResize() {
                 this.lineCharts.resize()
             },
+            getStateList(){
+                //获取应用下拉
+                getAppList().then(({data})=>{
+                    if(data.success){
+                        this.formData.appList = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                });
+            },
+            getApiSelectList(){
+                getApiList({
+                    appID:this.formData.appIds
+                }).then(({data})=>{
+                    if(data.success){
+                        this.formData.apiList = data.data?data.data.data.apisList:[];
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+
+                })
+            }
         },
         mounted(){
             this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
+            if(this.userInfo.groupID==20){
+                this.formData.createName = this.userInfo.userName;
+            }
             this.$nextTick(() => {
                 this.lineCharts = this.$echarts.init(document.getElementById('MyEcharts'))
                 this.lineCharts.setOption(this.lineOption);
                 window.addEventListener('resize', this.handleResize)
             });
+            this.getStateList();
             this.search();
         },
         beforeDestroy() {
@@ -283,6 +346,16 @@
         padding: 30px;
         box-sizing: border-box;
 
+        .statement_form{
+            .el-form{
+                .el-input{
+                    width: 250px;
+                }
+                .el-select{
+                    width: 250px;
+                }
+            }
+        }
 
         .statement_echarts{
             height: 470px;
@@ -312,6 +385,13 @@
                 box-sizing: border-box;
             }
 
+        }
+
+        .statement_table{
+            .statement_list_footer{
+                margin-top: 10px;
+                text-align: right;
+            }
         }
 
     }

@@ -14,11 +14,11 @@
           <nav class="nav-Type">
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{path:'/Index/applicationList'}">应用列表</el-breadcrumb-item>
-              <el-breadcrumb-item>创建应用</el-breadcrumb-item>
+              <el-breadcrumb-item>{{type ?'修改应用':'创建应用'}}</el-breadcrumb-item>
             </el-breadcrumb>
           </nav>
         </template>
-        <h3>创建应用</h3>
+        <h3>{{type ?'修改应用':'创建应用'}}</h3>
         <div class="add_application_content">
             <el-form :model="dataForm" ref="dataForm" :rules="dataFormRules" label-width="80px">
                 <el-form-item label="应用名称" prop="name" required >
@@ -26,7 +26,7 @@
                               :disabled="type"   autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="应用类型" prop="typeID" required>
-                    <el-select v-model="dataForm.typeID" @change="getInterface" placeholder="请选择应用类型">
+                    <el-select v-model="dataForm.typeID" :disabled="type" @change="getInterface" placeholder="请选择应用类型">
                         <el-option
                             v-for="item in applicationTypes"
                             :key="item.id"
@@ -66,8 +66,8 @@
                     </el-select>
                 </el-form-item>-->
                 <el-form-item>
-                    <el-button type="primary" @click="create">{{type?'编辑应用':'立即创建'}}</el-button>
-                    <el-button @click="$router.back()">&emsp;取消&emsp;</el-button>
+                    <el-button type="primary" @click="create">{{type?'修改':'立即创建'}}</el-button>
+                    <el-button @click="$router.back()">取消</el-button>
                 </el-form-item>
             </el-form>
 
@@ -84,19 +84,19 @@
             let name = (rule, value, callback) => {
                 if(value){
                     if(/[^\u4e00-\u9fa5]/.test(value)){
-                        return callback(new Error('请输入20位以内的汉字'));
+                        return callback(new Error('请填写20位以内的汉字'));
                     }else{
                         return callback()
                     }
                 }else{
-                    return callback(new Error('请输入应用名称'))
+                    return callback(new Error('请填写应用名称'))
                 }
             };
             let introduction = (rule, value, callback) => {
                 if(value){
                     return callback()
                 }else{
-                    return callback(new Error('请输入应用描述'))
+                    return callback(new Error('请填写应用描述'))
                 }
             };
             /*let amountLimit = (rule, value, callback) => {
@@ -294,6 +294,7 @@
                                             ins.checkd = false;
                                         }else {
                                             ins.checkd = true;
+                                            item.isIndeterminate = true;
                                         }
                                     }else{
                                         ins.checkd = false;

@@ -1,5 +1,12 @@
 <template>
     <div class="group_list">
+        <!-- 面包屑导航栏 -->
+        <nav class="nav-Type">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
+                <el-breadcrumb-item>人脸子分组列表</el-breadcrumb-item>
+            </el-breadcrumb>
+        </nav>
         <h3>子分组列表</h3>
         <div class="group_list_table">
             <div class="group_list_table_btn">
@@ -61,13 +68,12 @@
 </template>
 
 <script>
-    import {formatTimes,textLen} from "../../../lib/utils";
+    import {textLen} from "../../../lib/utils";
     import { geteGrouplist } from '@/HttpApi/face/face'
     export default {
         name: "groupList",
         data(){
             return{
-                formatTimes:formatTimes,
                 textLen:textLen,
                 tableData:[],
                 page:{

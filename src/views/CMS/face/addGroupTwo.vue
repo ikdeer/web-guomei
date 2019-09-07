@@ -10,7 +10,7 @@
         <h3>创建分组</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
-                <div><span>1</span>第一步 设置分组</div>
+                <div @click="lastStep"><span>1</span>第一步 设置分组</div>
                 <div class="active"><span>2</span>第二步 添加人像</div>
             </div>
             <div class="steptwo">
@@ -49,7 +49,7 @@
                             width="55">
                         </el-table-column>
                         <el-table-column
-                            prop="username"
+                            prop="name"
                             label="姓名">
                         </el-table-column>
                         <el-table-column
@@ -61,23 +61,23 @@
                             label="PersonID">
                         </el-table-column>
                         <el-table-column
-                            prop="number"
+                            prop="typeName"
                             label="人员类型">
                         </el-table-column>
                         <el-table-column
-                            prop="id"
+                            prop="noTypeName"
                             label="编号系统">
                         </el-table-column>
                         <el-table-column
-                            prop="ids"
+                            prop="no"
                             label="编号">
                         </el-table-column>
                         <el-table-column
-                            prop="on"
+                            prop="picFromName"
                             label="图片来源">
                         </el-table-column>
                         <el-table-column
-                            prop="time"
+                            prop="createTime"
                             label="添加时间">
                         </el-table-column>
                         <el-table-column
@@ -118,37 +118,44 @@
                 <div class="from">
                     <el-form :inline="true" ref="dataDialogForm" label-width="80px">
                         <el-form-item label="图片来源">
-                            <el-select v-model="dataDialogForm.status" placeholder="请选择图片来源">
-                                <el-option label="美办" value="0"></el-option>
-                                <el-option label="考勤" value="1"></el-option>
-                                <el-option label="监控" value="2"></el-option>
+                            <el-select v-model="dataDialogForm.picFromIDs" placeholder="请选择图片来源">
+                                <el-option v-for="item in picList"
+                                           :label="item.name"
+                                           :value="item.id"
+                                           :key="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="编号">
-                            <el-select v-model="dataDialogForm.status" placeholder="请选择编号系统">
-                                <el-option label="PS" value="0"></el-option>
-                                <el-option label="SAP" value="1"></el-option>
+                            <el-select v-model="dataDialogForm.noType" placeholder="请选择编号系统">
+                                <el-option v-for="item in faceNoType"
+                                           :label="item.name"
+                                           :value="item.id"
+                                           :key="item.id">
+                                </el-option>
                             </el-select>
-                            <el-input :maxlength="20" v-model="dataDialogForm.name" placeholder="请输入编号"></el-input>
+                            <el-input :maxlength="200" v-model="dataDialogForm.nos" placeholder="请输入编号"></el-input>
                         </el-form-item>
                         <el-form-item label="类型">
-                            <el-select v-model="dataDialogForm.status" placeholder="请选择类型">
-                                <el-option label="国美员工" value="0"></el-option>
-                                <el-option label="国美会员" value="1"></el-option>
-                                <el-option label="游客" value="3"></el-option>
+                            <el-select v-model="dataDialogForm.types" placeholder="请选择类型">
+                                <el-option v-for="item in faceType"
+                                           :label="item.name"
+                                           :value="item.id"
+                                           :key="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="姓名">
-                            <el-input :maxlength="10" v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
+                            <el-input :maxlength="200" v-model="dataDialogForm.names" placeholder="请输入姓名"></el-input>
                         </el-form-item>
                         <el-form-item label="性别">
-                            <el-select v-model="dataDialogForm.status" placeholder="请选择性别">
-                                <el-option label="男" value="0"></el-option>
-                                <el-option label="女" value="1"></el-option>
+                            <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
+                                <el-option label="男" value="男"></el-option>
+                                <el-option label="女" value="女"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="PersonID">
-                            <el-input :maxlength="10" v-model="dataDialogForm.name" placeholder="请输入PersonID"></el-input>
+                            <el-input :maxlength="200" v-model="dataDialogForm.ids" placeholder="请输入PersonID"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -212,7 +219,7 @@
 </template>
 
 <script>
-    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup } from '@/HttpApi/face/face'
+    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType } from '@/HttpApi/face/face'
     export default {
         name: "addGroupTwo",
         data(){
@@ -234,7 +241,13 @@
                 },
                 addGroupFace:false,
                 dataDialogForm:{
-
+                    names:'',
+                    ids:'',
+                    nos:'',
+                    noType:'',
+                    picFromIDs:'',
+                    sex:'',
+                    types:'',
                 },
                 faceList:[],//人脸集合
                 faceListBirge:[],//选中集合
@@ -242,7 +255,10 @@
                     page:1,
                     pageCount:10,
                     total:0
-                }
+                },
+                picList:[],//图片来源
+                faceType:[],//人脸类型
+                faceNoType:[],//编号系统
             }
         },
         computed:{
@@ -257,8 +273,19 @@
             },
             getFaceShowList(){
                 //添加人像
-                this.addGroupFace = true;
+                this.dataDialogForm = {
+                    names:'',
+                    ids:'',
+                    nos:'',
+                    noType:'',
+                    picFromIDs:'',
+                    sex:'',
+                    types:'',
+                };
+                this.faceList = [];
+                this.faceListBirge = [];
                 this.dialogSearch();
+                this.addGroupFace = true;
             },
             handleSelectionChange(val){
                 //选中
@@ -267,10 +294,7 @@
             removeFaceImg(row){
                 //删除
                 let params = {
-                    faceGroupID:this.groupid,
-                    sub1:this.stepTwoForm.one,
-                    sub2:this.stepTwoForm.two,
-                    ids:[item.id]
+                    ids:[row.id]
                 };
                 deleteFaceGroup(params).then(({data})=>{
                     if(data.success){
@@ -320,7 +344,7 @@
             dialogSearch(){
                 //弹窗查询
                 let params = {
-                    // ...this.dataDialogForm,
+                    ...this.dataDialogForm,
                     ...this.facePage,
                 };
                 getFaceShow(params).then(({data})=>{
@@ -330,6 +354,8 @@
                                 item.select = false;
                             });
                             this.faceList = data.data.list;
+                            this.facePage.total = data.pagerManager.totalResults
+
                         }else{
                             this.faceList = [];
                         }
@@ -340,18 +366,29 @@
             },
             dialogReset(){
                 //弹窗清空
+                this.dataDialogForm = {
+                    names:'',
+                    ids:'',
+                    nos:'',
+                    noType:'',
+                    picFromIDs:'',
+                    sex:'',
+                    types:'',
+                };
+                this.dialogSearch();
             },
             addGroupFaceDialog(){
                 //确认添加人脸 发送添加关闭弹窗
-
+                console.log(this.faceListBirge);
                 let params = {
                     faceGroupID:this.groupid,
-                    faceID:this.faceListBirge,
+                    ids:this.faceListBirge,
                     sub1:this.stepTwoForm.one,
                     sub2:this.stepTwoForm.two
                 };
                 addFace(params).then(({data})=>{
                     if(data.success){
+                        this.$message.success('添加成功');
                         this.faceListBirge = [];
                         this.getFaceGroupShowList();
                         this.addGroupFace = false;
@@ -369,7 +406,7 @@
                 };
                 getFaceGroupShow(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data;
+                        this.tableData = data.data?data.data.list:[];
                     }else{
                         this.tableData = [];
                         // this.$message.warning(data.errorInfo)
@@ -399,6 +436,31 @@
                         this.groupOneList = []
                     }
                 });
+
+                //获取图片来源
+                getPicList().then(({data})=>{
+                    if(data.success){
+                        this.dataDialogForm.picList = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取图片来源列表失败')
+                    }
+                });
+                //获取图片编号
+                getFaceNoType().then(({data})=>{
+                    if(data.success){
+                        this.dataDialogForm.faceNoType = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取图片编号列表失败')
+                    }
+                });
+                //获取类型
+                getFaceType().then(({data})=>{
+                    if(data.success){
+                        this.dataDialogForm.faceType = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取类型列表失败')
+                    }
+                })
             },
             getGroupTwoList(){
                 let params = {
@@ -445,6 +507,7 @@
                 display: -webkit-flex;
                 justify-content: center;
                 align-items: center;
+                cursor: pointer;
                 span{
                     text-align: center;
                     line-height: 24px;
@@ -550,7 +613,6 @@
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
                 border-radius: 4px;
-                cursor: pointer;
                 padding: .2rem;
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;

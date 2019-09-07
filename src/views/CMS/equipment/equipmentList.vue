@@ -57,11 +57,11 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="设备编号">
-                        <el-input :maxlength="30" v-model="formData.no" placeholder="请输入设备编号"></el-input>
+                        <el-input :maxlength="200" v-model="formData.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
                     </el-form-item>
                     <el-form-item label="设备名称">
-                        <el-input :maxlength="30" v-model="formData.name" placeholder="请输入设备名称"></el-input>
+                        <el-input :maxlength="200" v-model="formData.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
                 </el-form>
                 <div class="equipment_form_btn">
@@ -146,16 +146,16 @@
             @close="closeDialog"
             width="500px">
             <div class="equipment_list_steps">
-                <span :class="equipmentDialogInfo.type===1?'active':''">第一步 填写设备信息</span>
-                <span :class="equipmentDialogInfo.type===2?'active':''">第二步 绑定人脸分组</span>
+                <span :class="equipmentDialogInfo.type===1?'active':''" @click="goStepsOne">第一步 填写设备信息</span>
+                <span :class="equipmentDialogInfo.type===2?'active':''" @click="submitTableDialog">第二步 绑定人脸分组</span>
             </div>
             <div v-show="equipmentDialogInfo.type===1">
                 <el-form label-width="80px" :rules="dialogOne" :model="dialogInfo" ref="dialogOne" :disabled="this.equipmentDialogInfo.isSee">
                     <el-form-item label="设备编号" prop="no" required>
-                        <el-input :maxlength="30" v-model="dialogInfo.no" placeholder="请输入设备编号"></el-input>
+                        <el-input :maxlength="50" v-model="dialogInfo.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
                     <el-form-item label="设备类型" prop="type" required>
-                        <el-select v-model="dialogInfo.type" class="user_list_form_status" placeholder="请选择设备类型">
+                        <el-select v-model="dialogInfo.type" placeholder="请选择设备类型">
                             <el-option v-for="item in dialogType"
                                        :label="item.name"
                                        :value="item.id"
@@ -165,9 +165,11 @@
                     </el-form-item>
                     </el-form-item>
                     <el-form-item label="设备名称" prop="name" required>
-                        <el-input :maxlength="25" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
+                        <el-tooltip effect="dark" content="建议名称中带有填写具体位置便于查看" hide-after="2000" placement="top">
+                            <el-input :maxlength="50" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
+                        </el-tooltip>
                     </el-form-item>
-                    <el-form-item label="设备位置" prop="siteThree" required>
+                    <el-form-item label="设备位置" required>
                         <el-select v-model="dialogInfo.siteOne" @change="Clicksite(1)" placeholder="请选择所属公司">
                             <el-option v-for="item in siteOne"
                                        :label="item.name"
@@ -175,14 +177,18 @@
                                        :key="item.index">
                             </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.siteTwo" @change="Clicksite(2)" class="marginTop" placeholder="请选择所属部门">
+                    </el-form-item>
+                    <el-form-item required>
+                        <el-select v-model="dialogInfo.siteTwo" @change="Clicksite(2)" placeholder="请选择所属部门">
                             <el-option v-for="item in siteTwo"
                                        :label="item.name"
                                        :value="item.index"
                                        :key="item.index">
                             </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.siteThree" class="marginTop" placeholder="请选择所属楼层">
+                    </el-form-item>
+                    <el-form-item prop="siteThree" required>
+                        <el-select v-model="dialogInfo.siteThree" placeholder="请选择所属楼层">
                             <el-option v-for="item in siteThree"
                                        :label="item.floorName"
                                        :value="item.id"
@@ -190,7 +196,9 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="选择门店" prop="shopFour" required>
+
+                    <!--设备位置如果是 国美电器展示门店-->
+                    <el-form-item label="选择门店" v-if="dialogInfo.siteTwo=='国美电器'" required>
                         <el-select v-model="dialogInfo.shopOne" @change="ClickShop(1)" placeholder="请选择所属大区">
                             <el-option v-for="item in shopOne"
                                        :label="item.name"
@@ -198,21 +206,27 @@
                                        :key="item.index">
                             </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.shopTwo" @change="ClickShop(2)" class="marginTop" placeholder="请选择所属分部">
+                    </el-form-item>
+                    <el-form-item v-if="dialogInfo.siteTwo=='国美电器'" required>
+                        <el-select v-model="dialogInfo.shopTwo" @change="ClickShop(2)" placeholder="请选择所属分部">
                             <el-option v-for="item in shopTwo"
                                        :label="item.name"
                                        :value="item.index"
                                        :key="item.index">
                             </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.shopThree" @change="ClickShop(3)" class="marginTop" placeholder="请选择所属二级分部">
+                    </el-form-item>
+                    <el-form-item v-if="dialogInfo.siteTwo=='国美电器'" required>
+                        <el-select v-model="dialogInfo.shopThree" @change="ClickShop(3)" placeholder="请选择所属二级分部">
                             <el-option v-for="item in shopThree"
                                        :label="item.name"
                                        :value="item.index"
                                        :key="item.index">
                             </el-option>
                         </el-select>
-                        <el-select v-model="dialogInfo.shopFour"  class="marginTop" placeholder="请选择所属门店">
+                    </el-form-item>
+                    <el-form-item v-if="dialogInfo.siteTwo=='国美电器'" prop="shopFour" required>
+                        <el-select v-model="dialogInfo.shopFour" placeholder="请选择所属门店">
                             <el-option v-for="item in shopFour"
                                        :label="item.storeName"
                                        :value="item.id"
@@ -225,7 +239,7 @@
 
             <div v-show="equipmentDialogInfo.type===2">
                 <el-form label-width="80px" :rules="dialogTwo" :model="dialogFace" ref="dialogTwo" :disabled="this.equipmentDialogInfo.isSee">
-                    <el-form-item label="人脸分组"  prop="faceChildTwo" required>
+                    <el-form-item label="人脸分组" required>
                         <el-select v-model="dialogFace.faceGroup" @change="getFaceGroupChildOne" placeholder="请选择人脸分组">
                             <el-option v-for="item in faceGroup"
                                        :label="item.name"
@@ -233,14 +247,18 @@
                                        :key="item.id">
                             </el-option>
                         </el-select>
-                        <el-select v-model="dialogFace.faceChildOne" @change="getFaceGroupChildTwo" class="marginTop" placeholder="请选择一级子分组">
+                    </el-form-item>
+                    <el-form-item>
+                        <el-select v-model="dialogFace.faceChildOne" @change="getFaceGroupChildTwo" placeholder="请选择一级子分组">
                             <el-option v-for="item in faceChildOne"
                                        :label="item.name"
                                        :value="item.id"
                                        :key="item.id">
                             </el-option>
                         </el-select>
-                        <el-select v-model="dialogFace.faceChildTwo" class="marginTop" placeholder="请选择二级子分组">
+                    </el-form-item>
+                    <el-form-item prop="faceChildTwo" required>
+                        <el-select v-model="dialogFace.faceChildTwo" placeholder="请选择二级子分组">
                             <el-option v-for="item in faceChildTwo"
                                        :label="item.name"
                                        :value="item.id"
@@ -272,7 +290,11 @@
 
             let no = (rule, value, callback) => {
                 if(value){
-                    return callback()
+                    if(!/[a-zA-Z0-9]+$/.test(value)){
+                        return callback(new Error('请输入英文或数字'));
+                    }else{
+                        return callback()
+                    }
                 }else{
                     return callback(new Error('请输入设备编号'))
                 }
@@ -285,10 +307,10 @@
                 }
             };
             let type = (rule, value, callback) => {
-                if(this.dialogInfo.type == ''){
-                    return callback(new Error('请选择设备类型'))
-                }else{
+                if(value){
                     return callback()
+                }else{
+                    return callback(new Error('请选择设备类型'))
                 }
             };
             let siteThree = (rule, value, callback) => {
@@ -448,6 +470,14 @@
                     faceChildOne:'',
                     faceChildTwo:''
                 };
+                this.siteTwo = [];// 弹窗设备位置二级
+                this.siteThree = [];// 弹窗设备位置三级
+                this.shopTwo = [];//弹窗门店分部
+                this.shopThree = [];//弹窗门店二级分部
+                this.shopFour = [];//弹窗所属门店
+                this.faceChildOne = [];//人脸一级分组
+                this.faceChildTwo = [];//人脸二级分组
+
                 this.$refs['dialogOne'].clearValidate();
                 this.$refs['dialogTwo'].clearValidate();
             },
@@ -705,7 +735,7 @@
                                     gmAreaID:this.dialogInfo.siteThree,
                                     faceGroupID:this.dialogFace.faceChildTwo,
                                     createrID:this.userInfo.uid,
-                                    positionType:1
+                                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
                                 };
                                 editEquipment(pams).then(({data}) => {
                                     if(data.success){
@@ -732,7 +762,7 @@
                                     gmAreaID:this.dialogInfo.siteThree,
                                     faceGroupID:this.dialogFace.faceChildTwo,
                                     createrID:this.userInfo.uid,
-                                    positionType:1
+                                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
                                 };
                                 addEquipment(params).then(({data})=>{
                                     if(data.success){
@@ -931,6 +961,7 @@
                 color: #666666;
                 text-align: center;
                 padding-left: 30px;
+                cursor: pointer;
                 &:after{
                     content: '';
                     display: block;
@@ -975,9 +1006,6 @@
             }
             .el-select{
                 width: 280px;
-            }
-            .marginTop{
-                margin-top: 10px;
             }
         }
     }

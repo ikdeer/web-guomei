@@ -46,10 +46,10 @@ export const editUserInfo = ({ id,mail,phoneNum }) => AxIos({
 
 
 //获取联系人列表
-export const userContactList = ({ id }) => AxIos({
+export const userContactList = ({ userID,page,pageSize }) => AxIos({
     url: '/user/contact/list',
     method: 'post',
-    data: { id }
+    data: { userID,page,pageSize }
 });
 
 //新增联系人

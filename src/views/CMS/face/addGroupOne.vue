@@ -4,14 +4,14 @@
         <nav class="nav-Type">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
-                <el-breadcrumb-item>创建分组</el-breadcrumb-item>
+                <el-breadcrumb-item>{{isSee?'查看分组':'创建分组'}}</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>
-        <h3>创建分组</h3>
+        <h3>{{isSee?'查看分组':'创建分组'}}</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
                 <div class="active"><span>1</span>第一步 设置分组</div>
-                <div><span>2</span>第二步 添加人像</div>
+                <div @click="nextStep"><span>2</span>第二步 添加人像</div>
             </div>
             <div class="stepone">
                 <div class="set_group">
@@ -19,7 +19,7 @@
                     <div class="set_group_inp">
                         <el-form :inline="true" :disabled="isSee" label-width="100px">
                             <el-form-item label="分组名称" required>
-                                <el-input :maxlength="20" :disabled="groupData.id!=''" v-model="groupData.name" placeholder="请输入人脸分组名称"></el-input>
+                                <el-input :maxlength="20" v-model="groupData.name" placeholder="请输入人脸分组名称"></el-input>
                                 <el-button type="primary" :disabled="groupData.name=='' || groupData.id!=''" @click="createGroup">保存</el-button>
                             </el-form-item>
                             <el-form-item label="分组ID" required>
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-    import { createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo,getFacedetails } from '@/HttpApi/face/face'
+    import { createFaceGroup,editFaceGroup,createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo,getFacedetails,editeGroupOne,editeGroupTwo } from '@/HttpApi/face/face'
     export default {
         name: "addGroupOne",
         data(){
@@ -109,18 +109,37 @@
         methods:{
             createGroup(){
                 //保存分组
-                let params = {
-                    name:this.groupData.name
-                };
-                createFaceGroup(params).then(({data})=>{
-                    if(data.success){
-                        this.$message.success('创建成功');
-                        this.groupData.id = data.data.id;
-                        this.$router.push({path:'/Index/addgroupone',query:{id:this.groupData.id,type:this.type}})
-                    }else{
-                        this.$message.warning(data.errorInfo)
-                    }
-                })
+                if(/[^\u4e00-\u9fa5]/.test(this.groupData.name)){
+                    this.$message.warning('请填写20位以内的汉字');
+                    return false;
+                }
+                if(this.groupData.id != ''){
+                    //修改人脸分组
+                    editFaceGroup({
+                        name:this.groupData.name,
+                        id:this.groupData.id
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('修改成功');
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }else{
+                    //创建人脸分组
+                    createFaceGroup({
+                        name:this.groupData.name
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('创建成功');
+                            this.groupData.id = data.data.id;
+                            this.$router.push({path:'/Index/addgroupone',query:{id:this.groupData.id,type:this.type}})
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }
+
             },
             goChildren(){
                 //去子分组列表
@@ -132,18 +151,50 @@
                     this.$message.warning('请输入分组名称')
                     return;
                 }
-                let params = {
-                    faceGroupID:this.groupData.id,
-                    name:this.groupChildData.name1
-                };
-                createGroupOne(params).then(({data})=>{
-                    if(data.success){
-                        this.$message.success('创建成功');
-                        this.getGroupOneList();
-                    }else{
-                        this.$message.warning(data.errorInfo)
-                    }
-                })
+                if(/[^\u4e00-\u9fa5]/.test(this.groupChildData.name1)){
+                    this.$message.warning('请填写20位以内的汉字');
+                    return false;
+                }
+
+                if(this.groupChildData.id1 != ''){
+                    //修改一级子分组
+                    editeGroupOne({
+                        faceGroupID:this.groupData.id,
+                        name:this.groupChildData.name1,
+                        id:this.groupChildData.id1
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('修改成功');
+                            this.getGroupOneList();
+                            this.groupChildData = {
+                                id1:'',
+                                id2:'',
+                                name1:'',
+                                name2:''
+                            }
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }else{
+                    createGroupOne({
+                        faceGroupID:this.groupData.id,
+                        name:this.groupChildData.name1
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('创建成功');
+                            this.getGroupOneList();
+                            this.groupChildData = {
+                                id1:'',
+                                id2:'',
+                                name1:'',
+                                name2:''
+                            }
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }
             },
             addGroupTwo(){
                 //保存二级子分组
@@ -151,25 +202,50 @@
                     this.$message.warning('请输入分组名称');
                     return;
                 }
+                if(/[^\u4e00-\u9fa5]/.test(this.groupChildData.name2)){
+                    this.$message.warning('请填写20位以内的汉字');
+                    return false;
+                }
                 if(this.groupChildData.id1 == ''){
                     this.$message.warning('请选择要关联的一级子分组名称');
                     return;
                 }
-                let params = {
-                    faceGroupID:this.groupData.id,
-                    name:this.groupChildData.name2,
-                    sub1:this.groupChildData.id1
-                };
-                createGroupTwo(params).then(({data})=>{
-                    if(data.success){
-                        this.$message.success('创建成功');
-                        this.getGroupTwoList();
-                        this.groupChildData.dialog = false;
-                    }else{
-                        this.$message.warning(data.errorInfo)
-                    }
-                })
 
+                if(this.groupChildData.id2 != ''){
+                    //修改子分组
+                    editeGroupOne({
+                        faceGroupID:this.groupData.id,
+                        name:this.groupChildData.name2,
+                        sub1:this.groupChildData.id1,
+                        id:this.groupChildData.id2
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('修改成功');
+                            this.getGroupTwoList();
+                            this.groupChildData.id2 = '';
+                            this.groupChildData.name2 = '';
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+
+                }else{
+                    //创建子分组
+                    createGroupTwo({
+                        faceGroupID:this.groupData.id,
+                        name:this.groupChildData.name2,
+                        sub1:this.groupChildData.id1
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('创建成功');
+                            this.getGroupTwoList();
+                            this.groupChildData.id2 = '';
+                            this.groupChildData.name2 = '';
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }
             },
             deleteGroupOne(){
                 //删除一级子分组
@@ -177,24 +253,29 @@
                     this.$message.warning('请选中要删除的分组');
                     return;
                 }
-                deleteGroupOne({
-                    faceGroupID:this.groupData.id,
-                    id:this.groupChildData.id1,
-                    name:this.groupChildData.name1,
-                }).then(({data})=>{
-                    if(data.success){
-                        this.$message.success('删除成功');
-                        this.getGroupOneList();
-                        this.groupChildData = {
-                            id1:'',
-                            id2:'',
-                            name1:'',
-                            name2:''
-                        };
-                    }else{
-                        this.$message.warning(data.errorInfo)
-                    }
-                })
+                this.$confirm('删除一级分组，该分组下的二级分组将被一同删除', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(() => {
+                    deleteGroupOne({
+                        faceGroupID:this.groupData.id,
+                        id:this.groupChildData.id1,
+                        name:this.groupChildData.name1,
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('删除成功');
+                            this.getGroupOneList();
+                            this.groupChildData = {
+                                id1:'',
+                                id2:'',
+                                name1:'',
+                                name2:''
+                            };
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }).catch(() => {});
             },
             deleteGroupTwo(){
                 //删除二级子分组
@@ -202,25 +283,29 @@
                     this.$message.warning('请选中要删除的分组');
                     return;
                 }
-                deleteGroupTwo({
-                    faceGroupID:this.groupData.id,
-                    id:this.groupChildData.id2,
-                    name:this.groupChildData.name2,
-                    sub1:this.groupChildData.id1
-                }).then(({data})=>{
-                    if(data.success){
-                        this.$message.success('删除成功');
-                        this.getGroupTwoList();
-                        this.groupChildData.id2 = '';
-                        this.groupChildData.name2 = '';
-                    }else{
-                        this.$message.warning(data.errorInfo)
-                    }
-                })
+                this.$confirm('删除二级分组，该分组下人像将被一同删除', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(() => {
+                    deleteGroupTwo({
+                        faceGroupID:this.groupData.id,
+                        id:this.groupChildData.id2,
+                        name:this.groupChildData.name2,
+                        sub1:this.groupChildData.id1
+                    }).then(({data})=>{
+                        if(data.success){
+                            this.$message.success('删除成功');
+                            this.getGroupTwoList();
+                            this.groupChildData.id2 = '';
+                            this.groupChildData.name2 = '';
+                        }else{
+                            this.$message.warning(data.errorInfo)
+                        }
+                    })
+                }).catch(() => {});
             },
             ClickGroupOne(item){
                 //点击一级子分组
-                console.log(item);
                 this.groupChildData = {
                     id1:item.id,
                     id2:'',
@@ -262,6 +347,9 @@
             },
             nextStep(){
                 //下一步
+                if(this.groupData.id == ''){
+                    return false;
+                }
                 this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id,type:this.type}})
             },
             cancel(){
@@ -319,6 +407,7 @@
                 display: -webkit-flex;
                 justify-content: center;
                 align-items: center;
+                cursor: pointer;
                 span{
                     text-align: center;
                     line-height: 24px;

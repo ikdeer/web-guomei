@@ -7,4 +7,16 @@ export const getStatement = ({ apiIds,appIds,createName,monitorItems,statisItems
     params: { apiIds,appIds,createName,monitorItems,statisItems,timeEnd,timeStart,timeType,top,page,pageSize }
 });
 
+//获取应用列表
+export const getAppList = () => AxIos({
+    url: '/app/nameList',
+    method: 'get',
+});
 
+//获取api列表
+
+export const getApiList = ({ appID }) => AxIos({
+    url: '/app/details',
+    method: 'get',
+    params: { appID }
+});

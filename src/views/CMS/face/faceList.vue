@@ -1,11 +1,11 @@
 <template>
     <div class="facelist">
-      <!-- 面包屑导航栏 -->
-      <nav class="nav-Type">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item>人脸分组列表</el-breadcrumb-item>
-        </el-breadcrumb>
-      </nav>
+        <!-- 面包屑导航栏 -->
+        <nav class="nav-Type">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>人脸分组列表</el-breadcrumb-item>
+            </el-breadcrumb>
+        </nav>
         <div class="face_top">
             <h3>人脸分组列表</h3>
             <el-button type="primary" @click="updateFace">上传人脸图片</el-button>
@@ -14,13 +14,13 @@
             <div class="face_list_form">
                 <el-form :inline="true">
                     <el-form-item label="人脸分组名称">
-                        <el-input :maxlength="11" v-model="formData.name" placeholder="请输入人脸分组名称"></el-input>
+                        <el-input :maxlength="400" v-model="formData.name" placeholder="请输入人脸分组名称"></el-input>
                     </el-form-item>
                     <el-form-item label="人脸分组ID">
-                        <el-input :maxlength="20" v-model="formData.id" placeholder="请输入人脸分组ID"></el-input>
+                        <el-input :maxlength="400" v-model="formData.id" placeholder="请输入人脸分组ID"></el-input>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="400" :disabled="userInfo.groupID==20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -28,6 +28,7 @@
                             v-model="formData.dataTime"
                             type="daterange"
                             range-separator="至"
+                            value-format="yyyy-MM-dd"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
                         </el-date-picker>
@@ -107,9 +108,11 @@
             <el-form :inline="true" :model="dataDialogForm" :rules="DialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="图片来源" prop="picFromID" required>
                     <el-select v-model="dataDialogForm.picFromID" placeholder="请选择图片来源">
-                        <el-option label="美办" value="0"></el-option>
-                        <el-option label="考勤" value="1"></el-option>
-                        <el-option label="监控" value="2"></el-option>
+                        <el-option v-for="item in dataDialogForm.picList"
+                                   :label="item.name"
+                                   :value="item.id"
+                                   :key="item.id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="编号" prop="noType" required>
@@ -132,7 +135,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="姓名" prop="name" required>
-                    <el-input :maxlength="10" v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
+                    <el-input :maxlength="6" v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex" required>
                     <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
@@ -164,10 +167,16 @@
                     </el-upload>
                 </div>
             </div>
-            <span slot="footer">
-                <el-button type="primary" @click="commitFaceImage">确 定</el-button>
-                <el-button @click="dataDialogForm.uploadFaceDialog = false">取 消</el-button>
-            </span>
+            <div class="face_list_dialog_footer">
+                <div>
+                    <el-button type="primary" @click="">批量添加</el-button>
+                    <el-button type="text" @click="">下载批量添加模板</el-button>
+                </div>
+                <div>
+                    <el-button type="primary" @click="commitFaceImage">确 定</el-button>
+                    <el-button @click="dataDialogForm.uploadFaceDialog = false">取 消</el-button>
+                </div>
+            </div>
         </el-dialog>
 
 
@@ -176,8 +185,8 @@
 </template>
 
 <script>
-    import {formatTimes,textLen} from '@/lib/utils'
-    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType } from '@/HttpApi/face/face'
+    import {textLen} from '@/lib/utils'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -225,7 +234,6 @@
                 }
             };
             return {
-                formatTimes:formatTimes,
                 textLen:textLen,
                 formData:{
                     name:'',
@@ -247,6 +255,7 @@
                     name:'',
                     sex:'',
                     uploadFaceDialog:false,
+                    picList:[],
                     faceType:[],
                     faceNoType:[],
                 },
@@ -268,6 +277,12 @@
                     sex:[
                         {validator:sex,trigger:['blur','change']}
                     ]
+                },
+                userInfo:{
+                    userName:'',//用户姓名
+                    userImg:'',//用户头头像
+                    uid:'',//用户ID
+                    groupID:'',//用户身份
                 }
             }
         },
@@ -288,8 +303,13 @@
                 this.faceImgUrl = '';
                 this.dataDialogForm.uploadFaceDialog = true;
                 //获取图片来源
-
-
+                getPicList().then(({data})=>{
+                    if(data.success){
+                        this.dataDialogForm.picList = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取图片来源列表失败')
+                    }
+                });
                 //获取图片编号
                 getFaceNoType().then(({data})=>{
                     if(data.success){
@@ -316,12 +336,13 @@
                     faceGroupNames :this.formData.name/* ? this.formData.name.split(',') : ''*/,
                     faceGroupIds:this.formData.id/* ? this.formData.id.split(','):''*/,
                     faceGroupCreators:this.formData.createName /*?this.formData.createName.split(","):''*/,
-                    creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
-                    creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
+                    creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getFaceList(params).then(({data})=>{
                     if(data.success){
                         this.tableData = data.data.list;
+                        this.page.total = data.pagerManager.totalResults;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -334,6 +355,9 @@
                     createrName:'',
                     dataTime:null
                 };
+                if(this.userInfo.groupID==20){
+                    this.formData.createName = this.userInfo.userName;
+                }
                 this.search();
             },
             see(row){
@@ -366,9 +390,8 @@
                             that.faceImgUrl = data.data.url;
                             that.imageUrl = imgurl;
                         }else{
-                            this.$message.warning(data.errorInfo)
+                            that.$message.warning(data.errorInfo)
                         }
-                        console.log(that.faceImgUrl);
                     })
                 };
 
@@ -410,6 +433,10 @@
             }
         },
         mounted(){
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
+            if(this.userInfo.groupID==20){
+                this.formData.createName = this.userInfo.userName;
+            }
             this.search();
         }
     }
@@ -531,5 +558,18 @@
             }
         }
 
+        .face_list_dialog_footer{
+            height: 50px;
+            line-height: 50px;
+            margin-top: 15px;
+            padding: 10px 0 15px 0;
+            border-top: 1px solid #eeeeee;
+            display: flex;
+            display: -webkit-flex;
+            div{
+                width: 46%;
+            }
+
+        }
     }
 </style>
