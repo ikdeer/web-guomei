@@ -30,6 +30,8 @@ import TCFApiAdd from '@/views/CMS/tcf/TCFApiAdd'
 import TCFApiDetails from '@/views/CMS/tcf/TCFApiDetails'
 import TCFApiEdit from '@/views/CMS/tcf/TCFApiEdit'
 import instructionsList from '@/views/CMS/instructions/instructionsList'
+import instructionsAdd from '@/views/CMS/instructions/instructionsAdd'
+import instructionsDetails from '@/views/CMS/instructions/instructionsDetails'
 import categories from '@/views/CMS/categories/categories'
 
 //控制跳转同一个路由报错
@@ -211,14 +213,6 @@ const router = new Router({
           title:'国美人脸认证管理后台',
           code:6
         }
-      },{
-        path: '/Index/log',
-        name: '操作日志',
-        component: log,
-        meta: {
-          title:'国美人脸认证管理后台',
-          code:7
-        }
       },
         {
           path: '/Index/TCFApiList',
@@ -226,7 +220,7 @@ const router = new Router({
           component: TCFApiList,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:7
           }
         },
         {
@@ -235,7 +229,7 @@ const router = new Router({
           component: TCFApiAdd,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:7
           }
         },
         {
@@ -244,7 +238,7 @@ const router = new Router({
           component:TCFApiEdit,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:7
           }
         },
         {
@@ -253,7 +247,7 @@ const router = new Router({
           component: TCFApiDetails,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:7
           }
         },
         {
@@ -262,9 +256,36 @@ const router = new Router({
           component: instructionsList,
           meta: {
             title:'国美人脸认证管理后台',
-            code:12
+            code:8
           }
         },
+        {
+          path: '/Index/instructionsAdd',
+          name: '新增接入须知',
+          component: instructionsAdd,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:8
+          }
+        },
+        {
+          path: '/Index/instructionsDetails',
+          name: '查看接入须知',
+          component: instructionsDetails,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:8
+          }
+        },
+        {
+        path: '/Index/log',
+        name: '操作日志',
+        component: log,
+        meta: {
+          title:'国美人脸认证管理后台',
+          code:9
+        }
+      },
         {
           path: '/Index/categories',
           name: '栏目管理',

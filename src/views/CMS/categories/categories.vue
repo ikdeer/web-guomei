@@ -12,7 +12,9 @@
           <el-tab-pane label="技术文档栏目配置">
             <categoriesModule></categoriesModule>
           </el-tab-pane>
-          <el-tab-pane label="接入须知栏目配置">角色管理</el-tab-pane>
+          <el-tab-pane label="接入须知栏目配置">
+            <categoriewsExplain></categoriewsExplain>
+          </el-tab-pane>
           <el-tab-pane label="首页tab栏目配置">消息中心</el-tab-pane>
         </el-tabs>
       </div>
@@ -21,9 +23,13 @@
 
 <script>
   import categoriesModule from './component/categoriesModule'
+  import categoriewsExplain from './component/categoriewsExplain'
   export default {
     name: "categories",
-    components:{categoriesModule},
+    components:{
+      categoriesModule,
+      categoriewsExplain
+    },
     data(){
       return {
 

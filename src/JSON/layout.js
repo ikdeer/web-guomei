@@ -42,27 +42,30 @@ export default [
     code:6,
   },
   {
-    iconText:'操作日志',
-    iconImgShow:'/static/images/operation_selected_icon@2x.png',
-    iconImgHide:'/static/images/operation_unselected_icon@2x.png',
-    iconRouter:'/Index/log',
-    code:7,
-  },
-  {
     iconText:'技术文档',
     iconImgShow:'/static/images/document_selected_icon@2x.png',
     iconImgHide:'/static/images/document_unselected_icon@2x.png',
     iconRouter:'/Index/TCFApiList',
+    code:7,
+
+  },
+  {
+    iconText:'接入须知',
+    iconImgShow:'/static/images/document_selected_icon@2x.png',
+    iconImgHide:'/static/images/document_unselected_icon@2x.png',
+    iconRouter:'/Index/instructionsList',
     code:8,
 
   },
   {
-    iconText:'SDK下载',
-    iconImgShow:'/static/images/download_selected_icon@2x.png',
-    iconImgHide:'/static/images/download_unselected_icon@2x.png',
-    iconRouter:'',
+    iconText:'操作日志',
+    iconImgShow:'/static/images/operation_selected_icon@2x.png',
+    iconImgHide:'/static/images/operation_unselected_icon@2x.png',
+    iconRouter:'/Index/log',
     code:9,
   },
+
+
   {
     iconText:'栏目管理',
     iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
@@ -76,5 +79,12 @@ export default [
     iconImgHide:'/static/images/lanmuguanli_unselected_icon@2x.png',
     iconRouter:'',
     code:11,
-  }
+  },
+  {
+    iconText:'SDK下载',
+    iconImgShow:'/static/images/download_selected_icon@2x.png',
+    iconImgHide:'/static/images/download_unselected_icon@2x.png',
+    iconRouter:'',
+    code:12,
+  },
 ]

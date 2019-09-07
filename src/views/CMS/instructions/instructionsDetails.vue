@@ -4,28 +4,27 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Index/instructionsList'}">接入须知</el-breadcrumb-item>
-        <el-breadcrumb-item>新增接入须知</el-breadcrumb-item>
+        <el-breadcrumb-item>查看接入须知</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
     <div class="api-content">
-      <h4 class="api-TextH4">接入须知</h4>
+      <h4 class="api-TextH4">技术文档</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
                    :label-position="labelPosition"
-                   :rules="rules"
                    size="small"
                    ref="catalogText"
                    label-width="130px"
                    class="demo-dynamic">
             <el-form-item label="标题" prop="Title">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.Title" placeholder="请输入标题名称"></el-input>
+                <el-input v-model="catalogText.Title" :disabled="true" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="目录" prop="OneLevel">
+            <el-form-item label="一级目录" prop="OneLevel">
               <div class="api-OneLevel">
-                <el-select v-model="catalogText.OneLevel" placeholder="请选择目录">
+                <el-select v-model="catalogText.OneLevel" :disabled="true" placeholder="请选择一级目录">
                   <el-option
                     v-for="item in catalogText.OneLevelData"
                     :key="item.name"
@@ -35,31 +34,29 @@
                 </el-select>
               </div>
             </el-form-item>
+            <el-form-item label="二级目录">
+              <div class="api-OneLevel">
+                <el-select v-model="catalogText.secondLevel" :disabled="true" placeholder="请选择二级目录">
+                  <el-option
+                    v-for="item in catalogText.secondLevelData"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.name">
+                  </el-option>
+                </el-select>
+              </div>
+            </el-form-item>
             <el-form-item  label="API内容" prop="bbsContent">
-              <!-- 图片上传组件辅助-->
-              <el-upload
-                class="avatar-uploader"
-                action=""
-                :show-file-list="false"
-                :auto-upload="false"
-                :on-change="getFile"
-                :before-upload="beforeUpload">
-              </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
                   <quill-editor
                     v-model="catalogText.bbsContent"
                     ref="myQuillEditor"
+                    :disabled="true"
                     :options="editorOption">
                   </quill-editor>
                 </el-col>
               </el-row>
-            </el-form-item>
-            <el-form-item>
-              <div class="api-editor">
-                <el-button type="primary" @click.stop="addDomain">保存并发布</el-button>
-                <el-button @click.stop="cancel">重置</el-button>
-              </div>
             </el-form-item>
           </el-form>
         </div>
@@ -69,16 +66,8 @@
 </template>
 
 <script>
-  import {
-    getAccessNoteCreate,
-    getAccessNoteTitleShow,
-    getImageUploadNormalImage
-  } from "../../../HttpApi/instructions/instructionsListAPi";
-  //引入编辑器
-  import * as Quill from 'quill';
-  import { ImageDrop } from 'quill-image-drop-module';
-  //quill图片可拖拽改变大小
-  import ImageResize from 'quill-image-resize-module';
+  import {getApplicationDetail} from "../../../HttpApi/application/application"
+  import * as Quill from 'quill'  //引入编辑器
   //quill编辑器的字体
   var fonts = ['SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman','sans-serif'];
   var fontSize = ['10px', '12px', '14px', '16px', '20px', '24px', '36px'];
@@ -88,28 +77,27 @@
   Font.whitelist = fonts;
   fontSizeStyle.whitelist = fontSize;
   Quill.register(Font, true);
-  Quill.register(fontSizeStyle, true);
-  Quill.register('modules/imageDrop', ImageDrop);
-  Quill.register('modules/imageResize', ImageResize);
   export default {
-    name: "instructionsAdd",
+    name: "TCFApi",
     data(){
       return {
         catalogText:{
           Title:'',//标题
-          OneLevel:'',//目录
+          OneLevel:'',//一级目录
           OneLevelData:[],
+          secondLevel:'',//二级目录
+          secondLevelData:[],
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
         labelPosition:'right',//form对其方式
         editorOption: {
-          theme: 'snow',
+          theme: 'snow',  // or 'bubble'
           placeholder: '请填写要发布的公告版内容...',
           modules: {
             toolbar: {
               // 工具栏
-              container: [
+              container:[
                 ['bold', 'italic', 'underline', 'strike'],        //加粗，斜体，下划线，删除线
                 ['blockquote', 'code-block'],         //引用，代码块
                 [{ 'header': 1 }, { 'header': 2 }],               // 标题，键值对的形式；1、2表示字体大小
@@ -123,7 +111,7 @@
                 [{ 'font': fonts }],         //字体
                 [{ 'align': [] }],        //对齐方式
                 ['clean'],        //清除字体样式
-                ['image','video']        //上传图片、上传视频
+                ['image','video'] //上传图片、上传视频
               ],
               handlers:{
                 'image':function(value){
@@ -135,103 +123,33 @@
                   }
                 }
               }
-            },
-            imageResize: {}
+            }
           },
         },
-        rules:{
-          Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-          OneLevel:[{ required: true, message: '请选择类目', trigger: 'blur' }],
-          bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
-        }
       }
     },
     methods:{
-      //一级目录
-      getAccessNoteTitleShow(){
-        getAccessNoteTitleShow().then(response => {
+      //技术文档详情
+      getTechDocDetails(){
+        getTechDocDetails({id:this.$route.query.id}).then(response => {
           if(response.data.errorCode == 200){
-            this.catalogText.OneLevelData = response.data.data.list;
+            this.catalogText.Title = response.data.data.techDoc.name;//标题
+            this.catalogText.OneLevel = response.data.data.techDoc.title1;//一级目录
+            this.catalogText.secondLevel = response.data.data.techDoc.title2;//二级目录
+            this.catalogText.bbsContent = response.data.data.techDoc.txt;//文本内容
           }else{
             this.$message.error(response.data.errorInfo);
           }
-        })
-      },
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
-      //图片上传
-      getFile(file,fileList){
-        let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
-          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
-              // 获取光标所在位置
-              let length = quill.getSelection().index;
-              // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
-              // 调整光标到最后
-              quill.setSelection(length + 1);
-              // loading动画消失
-              this.catalogText.quillUpdateImg = false;
-            }else{
-              this.$message.error(response.data.errorInfo);
-            }
-          })
-        })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
         });
-      },
-      //重置
-      cancel(){
-        this.$refs.catalogText.resetFields();
-      },
-      //保存并发布
-      addDomain(){
-        let _this = this;
-        this.$refs.catalogText.validate((valid) => {
-          if(valid){
-            getAccessNoteCreate({name:this.catalogText.Title,sort:0,title1:this.catalogText.OneLevel,txt:this.catalogText.bbsContent})
-              .then(response => {
-              if(response.data.success){
-                this.$message({message: '创建成功~~~',type: 'success'});
-                setTimeout(()=>{
-                  _this.$router.push({path:'/Index/instructionsList'})
-                },300)
-              }else{
-                this.$message.error(response.data.errorInfo);
-              }
-            })
-          }
-        })
-      },
+      }
     },
     mounted(){
-      this.getAccessNoteTitleShow();
+      this.getTechDocDetails();
     }
   }
 </script>
 
 <style scoped lang="scss">
-
   .TCF-api{
     width: 100%;
     .api-content{
