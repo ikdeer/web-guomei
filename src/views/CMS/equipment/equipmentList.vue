@@ -146,8 +146,8 @@
             @close="closeDialog"
             width="500px">
             <div class="equipment_list_steps">
-                <span :class="equipmentDialogInfo.type===1?'active':''">第一步 填写设备信息</span>
-                <span :class="equipmentDialogInfo.type===2?'active':''">第二步 绑定人脸分组</span>
+                <span :class="equipmentDialogInfo.type===1?'active':''" @click="goStepsOne">第一步 填写设备信息</span>
+                <span :class="equipmentDialogInfo.type===2?'active':''" @click="submitTableDialog">第二步 绑定人脸分组</span>
             </div>
             <div v-show="equipmentDialogInfo.type===1">
                 <el-form label-width="80px" :rules="dialogOne" :model="dialogInfo" ref="dialogOne" :disabled="this.equipmentDialogInfo.isSee">
@@ -165,7 +165,9 @@
                     </el-form-item>
                     </el-form-item>
                     <el-form-item label="设备名称" prop="name" required>
-                        <el-input :maxlength="50" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
+                        <el-tooltip effect="dark" content="建议名称中带有填写具体位置便于查看" hide-after="2000" placement="top">
+                            <el-input :maxlength="50" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
+                        </el-tooltip>
                     </el-form-item>
                     <el-form-item label="设备位置" required>
                         <el-select v-model="dialogInfo.siteOne" @change="Clicksite(1)" placeholder="请选择所属公司">
@@ -959,6 +961,7 @@
                 color: #666666;
                 text-align: center;
                 padding-left: 30px;
+                cursor: pointer;
                 &:after{
                     content: '';
                     display: block;

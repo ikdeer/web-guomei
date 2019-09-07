@@ -18,7 +18,7 @@
             </el-breadcrumb>
           </nav>
         </template>
-        <h3>创建应用</h3>
+        <h3>{{type ?'修改应用':'创建应用'}}</h3>
         <div class="add_application_content">
             <el-form :model="dataForm" ref="dataForm" :rules="dataFormRules" label-width="80px">
                 <el-form-item label="应用名称" prop="name" required >

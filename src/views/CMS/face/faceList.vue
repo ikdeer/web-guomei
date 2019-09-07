@@ -342,6 +342,7 @@
                 getFaceList(params).then(({data})=>{
                     if(data.success){
                         this.tableData = data.data.list;
+                        this.page.total = data.pagerManager.totalResults;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -389,9 +390,8 @@
                             that.faceImgUrl = data.data.url;
                             that.imageUrl = imgurl;
                         }else{
-                            this.$message.warning(data.errorInfo)
+                            that.$message.warning(data.errorInfo)
                         }
-                        console.log(that.faceImgUrl);
                     })
                 };
 
