@@ -1,11 +1,11 @@
 <template>
     <div class="facelist">
-      <!-- 面包屑导航栏 -->
-      <nav class="nav-Type">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item>人脸分组列表</el-breadcrumb-item>
-        </el-breadcrumb>
-      </nav>
+        <!-- 面包屑导航栏 -->
+        <nav class="nav-Type">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item>人脸分组列表</el-breadcrumb-item>
+            </el-breadcrumb>
+        </nav>
         <div class="face_top">
             <h3>人脸分组列表</h3>
             <el-button type="primary" @click="updateFace">上传人脸图片</el-button>
@@ -14,13 +14,13 @@
             <div class="face_list_form">
                 <el-form :inline="true">
                     <el-form-item label="人脸分组名称">
-                        <el-input :maxlength="11" v-model="formData.name" placeholder="请输入人脸分组名称"></el-input>
+                        <el-input :maxlength="400" v-model="formData.name" placeholder="请输入人脸分组名称"></el-input>
                     </el-form-item>
                     <el-form-item label="人脸分组ID">
-                        <el-input :maxlength="20" v-model="formData.id" placeholder="请输入人脸分组ID"></el-input>
+                        <el-input :maxlength="400" v-model="formData.id" placeholder="请输入人脸分组ID"></el-input>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="400" :disabled="userInfo.groupID==20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -28,6 +28,7 @@
                             v-model="formData.dataTime"
                             type="daterange"
                             range-separator="至"
+                            value-format="yyyy-MM-dd"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
                         </el-date-picker>
@@ -134,7 +135,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="姓名" prop="name" required>
-                    <el-input :maxlength="10" v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
+                    <el-input :maxlength="6" v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
                 </el-form-item>
                 <el-form-item label="性别" prop="sex" required>
                     <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
@@ -184,7 +185,7 @@
 </template>
 
 <script>
-    import {formatTimes,textLen} from '@/lib/utils'
+    import {textLen} from '@/lib/utils'
     import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList } from '@/HttpApi/face/face'
     export default {
         name: "userList",
@@ -233,7 +234,6 @@
                 }
             };
             return {
-                formatTimes:formatTimes,
                 textLen:textLen,
                 formData:{
                     name:'',
@@ -277,6 +277,12 @@
                     sex:[
                         {validator:sex,trigger:['blur','change']}
                     ]
+                },
+                userInfo:{
+                    userName:'',//用户姓名
+                    userImg:'',//用户头头像
+                    uid:'',//用户ID
+                    groupID:'',//用户身份
                 }
             }
         },
@@ -330,8 +336,8 @@
                     faceGroupNames :this.formData.name/* ? this.formData.name.split(',') : ''*/,
                     faceGroupIds:this.formData.id/* ? this.formData.id.split(','):''*/,
                     faceGroupCreators:this.formData.createName /*?this.formData.createName.split(","):''*/,
-                    creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
-                    creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
+                    creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getFaceList(params).then(({data})=>{
                     if(data.success){
@@ -348,6 +354,9 @@
                     createrName:'',
                     dataTime:null
                 };
+                if(this.userInfo.groupID==20){
+                    this.formData.createName = this.userInfo.userName;
+                }
                 this.search();
             },
             see(row){
@@ -424,6 +433,10 @@
             }
         },
         mounted(){
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
+            if(this.userInfo.groupID==20){
+                this.formData.createName = this.userInfo.userName;
+            }
             this.search();
         }
     }

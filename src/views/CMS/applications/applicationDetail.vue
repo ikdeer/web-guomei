@@ -78,7 +78,6 @@
 </template>
 
 <script>
-    import {formatTimes} from "../../../lib/utils";
     import { getApplicationDetail,enableApplicationApi } from '@/HttpApi/application/application';
     export default {
         name: "applicationDetail",
@@ -133,7 +132,7 @@
                         this.InfoOne[2].content = data.data.data.id || '————';
                         this.InfoOne[3].content = data.data.data.apiKey || '————';
                         this.InfoOne[4].content = data.data.data.secretKey || '————';
-                        this.InfoOne[5].content = data.data.data.showEnable || '————';
+                        this.InfoOne[5].content = data.data.data.showState || '————';
                         this.InfoOne[6].content = data.data.data.showReviewState || '————';
                         this.InfoOne[7].content = data.data.data.createTime || '————';
                         this.InfoOne[8].content = data.data.data.lastModifyTime || '————';
@@ -199,8 +198,16 @@
                 color: #666666;
                 div{
                     height: .5rem;
-                    line-height: .5rem;
+                    /*line-height: .5rem;*/
+                    padding: 10px;
+                    display: flex;
+                    display: -webkit-flex;
+                    align-items: center;
+                    justify-content: center;
                     box-sizing: border-box;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    overflow: hidden;
                     &:nth-child(1){
                         background: #F1F1F1;
                         font-weight: 600;

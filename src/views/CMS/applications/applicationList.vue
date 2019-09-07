@@ -22,10 +22,10 @@
             <div class="application_list_form">
                 <el-form :inline="true" label-width="80px">
                     <el-form-item label="应用名称">
-                        <el-input :maxlength="20" v-model="formData.name" placeholder="请输入应用名称"></el-input>
+                        <el-input :maxlength="400" v-model="formData.name" placeholder="请输入应用名称"></el-input>
                     </el-form-item>
                     <el-form-item label="APPID">
-                        <el-input :maxlength="20" v-model="formData.id" placeholder="请输入APPID"></el-input>
+                        <el-input :maxlength="400" v-model="formData.id" placeholder="请输入APPID"></el-input>
                     </el-form-item>
                     <el-form-item label="应用状态">
                         <el-select v-model="formData.state" placeholder="请选择状态">
@@ -46,7 +46,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="400" :disabled="userInfo.groupID==20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -54,6 +54,7 @@
                             v-model="formData.dataTime"
                             type="daterange"
                             range-separator="至"
+                            value-format="yyyy-MM-dd"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
                         </el-date-picker>
@@ -61,7 +62,7 @@
                 </el-form>
                 <div class="application_list_btn">
                     <div>
-                        <el-button type="primary" @click="addapplication">创建应用</el-button>
+                        <el-button type="primary" :disabled="userInfo.groupID!=20" @click="addapplication">创建应用</el-button>
                     </div>
                     <div>
                         <el-button type="primary" @click="search">查询</el-button>
@@ -77,7 +78,10 @@
                         align="center"
                         label="应用名称">
                         <template slot-scope="scope">
-                            <span @click="see(scope.row)" style="color:#409EFF;cursor: pointer;">{{textLen(scope.row.name,10)}}</span>
+                            <el-tooltip placement="top">
+                                <div slot="content">{{scope.row.name}}<!--<br/>{{scope.row.name}}--></div>
+                                <span @click="see(scope.row)" style="color:#409EFF;cursor: pointer;">{{textLen(scope.row.name,10)}}</span>
+                            </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -111,27 +115,39 @@
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="showEnable"
+                        prop="showState"
                         width="80"
                         label="应用状态">
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="showReviewState"
                         width="80"
                         label="审核状态">
+                        <template slot-scope="scope">
+                            <div v-if="scope.row.reviewState==20">
+                                <el-tooltip placement="top">
+                                    <div slot="content">{{scope.row.rejectReason}}</div>
+                                    <span>{{scope.row.showReviewState}}</span>
+                                </el-tooltip>
+                            </div>
+                            <div v-else>{{scope.row.showReviewState}}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         label="操作" align="center">
                         <template slot-scope="scope">
                             <el-button type="text" @click="statement(scope.row)">报表</el-button>
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
-                            <el-button type="text" v-if="scope.row.reviewState !== 21 && scope.row.reviewState !== 1" @click="audit(scope.row)">审核</el-button>
-                            <el-button type="text" v-if="scope.row.reviewState === 1" @click="commitAudit(scope.row)">提交审核</el-button>
-                            <el-button type="text" v-if="" @click="edit(scope.row)">修改</el-button>
-                            <el-button type="text" v-if="scope.row.enable === 0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                            <el-button type="text" v-if="scope.row.enable === 1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
-                            <el-button type="text" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+
+                            <!--用户可操作-->
+                            <el-button type="text" v-if="scope.row.reviewState == 1 && userInfo.groupID==20" @click="commitAudit(scope.row)">提交审核</el-button>
+                            <el-button type="text" v-if="userInfo.groupID==20" @click="edit(scope.row)">修改</el-button>
+
+                            <!--超管可操作-->
+                            <el-button type="text" v-if="scope.row.reviewState ==10 && userInfo.groupID ==1" @click="audit(scope.row)">审核</el-button>
+                            <el-button type="text" v-if="scope.row.enable == 0 && userInfo.groupID ==1" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                            <el-button type="text" v-if="scope.row.enable === 1&& userInfo.groupID ==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                            <el-button type="text" v-if="userInfo.groupID ==1" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -189,13 +205,12 @@
 </template>
 
 <script>
-    import {formatTimes,textLen} from "../../../lib/utils";
+    import {textLen} from "../../../lib/utils";
     import {getAppList,disableApplication,delApplication,auditApplication,getAapplicationState,getApplicationReviewState } from '@/HttpApi/application/application';
     export default {
         name: "applicationList",
         data() {
             return {
-                formatTimes:formatTimes,
                 textLen:textLen,
                 formData: {
                     name:'',
@@ -228,7 +243,12 @@
                     radio:0,
                     info:''
                 },
-                groupID:'',//用户登录信息
+                userInfo:{
+                    userName:'',//用户姓名
+                    userImg:'',//用户头头像
+                    uid:'',//用户ID
+                    groupID:'',//用户身份
+                },//用户登录信息
                 Breadcrumb:null,//面包屑导航栏
             }
         },
@@ -240,8 +260,8 @@
                 //查询应用列表
                 let params = {
                     ...this.page,...this.formData,
-                    creatTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
-                    creatTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):''
+                    creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getAppList(params).then(({data})=>{
                     if(data.success){
@@ -259,9 +279,11 @@
                     appID:'',
                     appState:'',
                     reviewState:'',
-                    createBy:'',
                     dataTime:null
                 };
+                if(this.userInfo.groupID==20){
+                    this.formData.createName = this.userInfo.userName;
+                }
                 this.search();
             },
             statement(row) {
@@ -451,7 +473,10 @@
             }
         },
         mounted() {
-            this.groupID = JSON.parse(this.Cookies.get('userInfo')).groupID;
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
+            if(this.userInfo.groupID==20){
+                this.formData.createName = this.userInfo.userName;
+            }
             this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
             this.search();
             this.getAapplicationState();

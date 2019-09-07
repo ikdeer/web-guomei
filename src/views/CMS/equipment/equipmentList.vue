@@ -57,11 +57,11 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="设备编号">
-                        <el-input :maxlength="30" v-model="formData.no" placeholder="请输入设备编号"></el-input>
+                        <el-input :maxlength="200" v-model="formData.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
                     </el-form-item>
                     <el-form-item label="设备名称">
-                        <el-input :maxlength="30" v-model="formData.name" placeholder="请输入设备名称"></el-input>
+                        <el-input :maxlength="200" v-model="formData.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
                 </el-form>
                 <div class="equipment_form_btn">
@@ -152,7 +152,7 @@
             <div v-show="equipmentDialogInfo.type===1">
                 <el-form label-width="80px" :rules="dialogOne" :model="dialogInfo" ref="dialogOne" :disabled="this.equipmentDialogInfo.isSee">
                     <el-form-item label="设备编号" prop="no" required>
-                        <el-input :maxlength="30" v-model="dialogInfo.no" placeholder="请输入设备编号"></el-input>
+                        <el-input :maxlength="50" v-model="dialogInfo.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
                     <el-form-item label="设备类型" prop="type" required>
                         <el-select v-model="dialogInfo.type" placeholder="请选择设备类型">
@@ -165,7 +165,7 @@
                     </el-form-item>
                     </el-form-item>
                     <el-form-item label="设备名称" prop="name" required>
-                        <el-input :maxlength="25" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
+                        <el-input :maxlength="50" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
                     <el-form-item label="设备位置" required>
                         <el-select v-model="dialogInfo.siteOne" @change="Clicksite(1)" placeholder="请选择所属公司">
@@ -288,7 +288,11 @@
 
             let no = (rule, value, callback) => {
                 if(value){
-                    return callback()
+                    if(!/[a-zA-Z0-9]+$/.test(value)){
+                        return callback(new Error('请输入英文或数字'));
+                    }else{
+                        return callback()
+                    }
                 }else{
                     return callback(new Error('请输入设备编号'))
                 }

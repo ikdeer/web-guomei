@@ -41,7 +41,7 @@
         <h3>联系人</h3>
         <div class="user_table">
             <div class="user_table_btn">
-                <el-button type="primary" size="small" @click="adduser"> 新增 </el-button>
+                <el-button type="primary" v-if="userInfo.groupID==1" size="small" @click="adduser"> 新增 </el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -98,7 +98,6 @@
 </template>
 
 <script>
-    import {formatTimes} from '@/lib/utils'
     import {userDetail,userContactList,delContactInfo,addUserContact,editUserContact,editUserInfo} from '@/HttpApi/user/user';
     export default {
         name: "userInfo",
@@ -117,7 +116,7 @@
             let phone = (rule, value, callback) => {
                 if(value){
                     if(!/^(13|14|15|16|17|18|19)\d{9}$/.test(value)){
-                        return callback(new Error('手机号错误，请输入11位手机号'));
+                        return callback(new Error('手机号不符合规则'));
                     }else{
                         return callback()
                     }
@@ -128,7 +127,7 @@
             let email = (rule, value, callback) => {
                 if(value){
                     if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value)){
-                        return callback(new Error('邮箱格式错误'));
+                        return callback(new Error('邮箱格式不符合规则'));
                     }else{
                         return callback()
                     }
@@ -138,7 +137,6 @@
             };
 
             return {
-                formatTimes:formatTimes,
                 id:'',
                 info:{
                     name:'',
@@ -169,6 +167,12 @@
                     email:[
                         {validator:email,trigger:['blur','change']}
                     ],
+                },
+                userInfo:{
+                    userName:'',//用户姓名
+                    userImg:'',//用户头头像
+                    uid:'',//用户ID
+                    groupID:'',//用户身份
                 }
             }
         },
@@ -230,8 +234,14 @@
                 this.$refs['dataDialogForm'].clearValidate();
             },
             edit(row){
+                this.dataDialogForm = {
+                    name:row.name,
+                    phone:row.phoneNum,
+                    email:row.mail,
+                    id:row.id,
+                    isEdit:true
+                };
                 this.userInfoAddDialog = true;
-                this.dataDialogForm.id = row.id;
             },
             remove(row){
                 this.$confirm('此操作将删除该联系人, 是否继续?', '提示', {
@@ -303,7 +313,7 @@
                 })
             },
             getContactList(){//获取联系人列表
-                userContactList({id:this.id}).then(({data})=>{
+                userContactList({userID:this.id,page:1,pageSize:200}).then(({data})=>{
                     if(data.success){
                         this.tableData = data.data
                     }else{
@@ -314,6 +324,7 @@
         },
         mounted(){
             this.id = this.$route.query.id;
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             this.getUserDetail();
             this.getContactList();
         },

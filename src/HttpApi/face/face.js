@@ -43,6 +43,12 @@ export const createFaceGroup = ({ name }) => AxIos({
     method: 'post',
     data: { name }
 });
+//修改人脸分组
+export const editFaceGroup = ({ name }) => AxIos({
+    url: '/faceGroup/modify',
+    method: 'post',
+    data: { name }
+});
 
 //创建第一子分组
 export const createGroupOne = ({ faceGroupID,name }) => AxIos({
@@ -57,6 +63,21 @@ export const createGroupTwo = ({ faceGroupID,sub1,name }) => AxIos({
     method: 'post',
     data: { faceGroupID,sub1,name }
 });
+
+//修改第一子分组
+export const editeGroupOne = ({ faceGroupID,id,name }) => AxIos({
+    url: '/faceGroup/modifySubFaceGroup1',
+    method: 'post',
+    data: { faceGroupID,id,name }
+});
+
+//修改第二子分组
+export const editeGroupTwo = ({ faceGroupID,id,name,sub1 }) => AxIos({
+    url: '/faceGroup/modifySubFaceGroup1',
+    method: 'post',
+    data: { faceGroupID,id,name,sub1 }
+});
+
 
 //删除第一子分组
 export const deleteGroupOne = ({ faceGroupID,id,name }) => AxIos({
@@ -97,10 +118,10 @@ export const getGroupTwo = ({faceGroupID,sub1}) => AxIos({
 
 
 //人脸列表
-export const getFaceShow = ({ page,pageSize,no,noType,picFromID,sex,type,sub1,sub2 }) => AxIos({
+export const getFaceShow = ({ page,pageSize,names,ids,nos,noType,picFromIDs,sex,types,sub1,sub2 }) => AxIos({
     url: '/face/show',
     method: 'get',
-    params: { page,pageSize,no,noType,picFromID,sex,type,sub1,sub2 }
+    params: { page,pageSize,names,ids,nos,noType,picFromIDs,sex,types,sub1,sub2 }
 });
 
 //弹层添加人脸分组

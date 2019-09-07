@@ -22,6 +22,7 @@
                             v-model="formData.dataTime"
                             type="daterange"
                             range-separator="至"
+                            value-format="yyyy-MM-dd"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
                         </el-date-picker>
@@ -73,13 +74,11 @@
 </template>
 
 <script>
-    import {formatTimes} from '@/lib/utils'
     import { getLogList } from '@/HttpApi/log/log'
     export default {
         name: "log",
         data(){
             return {
-                formatTimes:formatTimes,
                 formData:{
                     user:'',
                     ip:'',
@@ -97,8 +96,8 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
-                    createTimeStart:this.formData.dataTime?this.formatTimes(this.formData.dataTime[0]):'',
-                    createTimeEnd:this.formData.dataTime?this.formatTimes(this.formData.dataTime[1]):'',
+                    createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                 };
                 getLogList(params).then(({data})=>{
                     if(data.success){
