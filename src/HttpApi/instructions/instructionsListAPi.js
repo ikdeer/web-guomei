@@ -78,3 +78,13 @@ export const getAccessNoteModify = (params) => {
   })
 }
 
+/**
+ * 接入须知目录列表
+ **/
+export const getAccessNoteContentShow = (params) => {
+  return new Promise(resolve => {
+    AxIos.get('/accessNote/contentShow',{params}).then(response => {
+      resolve(response)
+    })
+  })
+}

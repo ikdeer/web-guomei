@@ -190,7 +190,7 @@
       background: #ffffff;
       position: absolute;
       left: 0;
-      box-shadow:0 0.02rem 0.04rem 0 rgba(0,0,0,0.1);
+     /* box-shadow:0 0.02rem 0.04rem 0 rgba(0,0,0,0.1);*/
       z-index: 100;
       cursor: pointer;
       .menu-introduction{

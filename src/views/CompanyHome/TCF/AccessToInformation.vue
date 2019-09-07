@@ -8,20 +8,16 @@
           <span class="menu-text">文档目录</span>
           <i class="el-icon-s-fold"></i>
         </div>
-        <div class="menu-list" v-for="(item,index) in dataList">
-          <div class="menu-gm" @click="ClickMenu(item,index)">
-            <span class="menu-text">{{item.text}}</span>
+        <div class="menu-list">
+          <!-- 一级目录 -->
+          <div class="menu-gm" @click.stop="ClickMenu">
+            <span class="menu-text">接入须知</span>
             <i class="el-icon-arrow-down gm-sbc"></i>
           </div>
-          <div :class="item.isText ? 'menu-levelShow menu-level' : 'menu-level'"
-               v-for="(items,indexs) in item.DataText">
-            <div class="level-gm" @click="ClickLevel(items,indexs)">
-              <span class="menu-text">{{items.text}}</span>
-              <i class="el-icon-arrow-down gm-sbc"></i>
-            </div>
-            <div :class="items.isText ? 'menu-itm menu-itmShow' : 'menu-itm'"
-                 v-for="(itemss,index) in items.DataText">
-              <span class="menu-text">{{itemss.text}}</span>
+          <div :class="isLevelShow ? 'menu-level menu-levelShow' : 'menu-level'">
+            <!-- 二级目录 -->
+            <div class="level-gm" v-for="(item,index) in dataList" @click.stop="ClickLevel(item)">
+              <span :class="item.isText ? 'menu-textColor' : 'menu-text'">{{item.Title}}</span>
             </div>
           </div>
         </div>
@@ -29,28 +25,13 @@
       <div class="gm-content">
         <nav class="gm-nav">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item>首页</el-breadcrumb-item>
-            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+            <el-breadcrumb-item>技术文档</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
         <div class="gm-contentPad">
-          <h4 class="gm-contentPadText">人脸检测</h4>
+          <h4 class="gm-contentPadText">{{bbsTopTitle}}</h4>
           <div class="gm-contentArea">
-            <div class="contentArea-left" :style="contentStyleObj"></div>
-            <div class="contentArea-right">
-              <div class="contentArea-catalogue">
-                <h4 class="catalogue-h4">文本目录</h4>
-                <p class="catalogue-p">人脸检测与属性分析</p>
-                <div class="catalogue-list">
-                  <span>能力介绍</span>
-                  <span>调用方式</span>
-                  <span>请求说明</span>
-                  <span>返回说明</span>
-                </div>
-              </div>
-            </div>
+            <div class="contentArea-left" v-html="bbsContent"></div>
           </div>
         </div>
       </div>
@@ -60,82 +41,74 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
+  import {getAccessNoteContentShow,getAccessNoteDetails} from "../../../HttpApi/instructions/instructionsListAPi";
+
   export default {
     name: "AccessToInformation",
     components:{Header_Nav},
     data(){
       return {
-        dataList:[
-          {
-            'text':'技术文档',
-            'isText':false,
-            'DataText':[
-              {
-                'text':'API文档1',
-                'isText':false,
-                'DataText':[
-                  {'text':'人脸检测'}
-                ]
-              },
-              {
-                'text':'SDK',
-                'isText':false,
-              }
-            ]
-          },
-          {
-            'text':'技术大咖',
-            'isText':false,
-            'DataText':[
-              {
-                'text':'API文档2',
-                'isText':false,
-                'DataText':[
-                  {'text':'人员追踪'}
-                ]
-              }
-            ]
-          }
-        ],
-        contentStyleObj:{
-          height:''
-        }
+        dataList:[],
+        bbsContent:'',//文本内容
+        bbsTopTitle:'',//标题
+        breadcrumb:[],
+        isLevelShow:false,//二级目录显示
       }
     },
     created(){
-      this.getHeight();
-      window.addEventListener('resize', this.getHeight);
-
+      this.getAccessNoteContentShow();
     },
     methods:{
-      getHeight(){
-        this.contentStyleObj.height = window.innerHeight - 120+'px';
+      //技术文档列表
+      getAccessNoteContentShow(){
+        getAccessNoteContentShow().then(response => {
+          if(response.data.errorCode == 200){
+            //数据拼接
+            let List = response.data.data.list || [];
+            let arrData = [];
+            for(let i = 0; i < List.length; i++){
+              arrData.push({isText:false,Title:List[i].title1,id:List[i].id});
+            }
+            arrData[0].isText = true;
+            this.isLevelShow = true;
+            this.getAccessNoteDetails(arrData[0].id);
+            this.dataList = arrData;
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        });
+      },
+      //技术文档详情
+      getAccessNoteDetails(id){
+        getAccessNoteDetails({id:id}).then(response => {
+          if(response.data.errorCode == 200){
+            this.bbsTopTitle = response.data.data.accessNote.name;
+            this.bbsContent = response.data.data.accessNote.txt;
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        })
       },
       //一级目录
-      ClickMenu(item,index){
-        if(item.isText){
-          for(let i =0; i < this.dataList[index].DataText.length; i++){
-            this.dataList[index].DataText[i].isText = false;
-          }
-          item.isText = false;
-        }else{
+      ClickMenu(){
+        this.isLevelShow =! this.isLevelShow;
+        if(!this.isLevelShow){
           for(let i =0; i < this.dataList.length; i++){
             this.dataList[i].isText = false;
           }
-          item.isText = true;
+        }else{
+          this.dataList[0].isText = true;
+          this.getAccessNoteDetails(this.dataList[0].id);
         }
       },
       //二级目录
-      ClickLevel(items,indexs){
-        if(items.isText){
-          items.isText = false;
-        }else{
-          items.isText = true;
+      ClickLevel(item){
+        for(let i =0; i < this.dataList.length; i++){
+          this.dataList[i].isText = false;
         }
-      }
-    },
-    destroyed() {
-      window.removeEventListener('resize', this.getHeight)
+        item.isText = true;
+        this.getAccessNoteDetails(item.id);
+      },
     }
   }
 </script>
@@ -156,7 +129,7 @@
         background: #ffffff;
         position: absolute;
         left: 0;
-        box-shadow:0 0.02rem 0.04rem 0 rgba(0,0,0,0.1);
+       /* box-shadow:0 0.02rem 0.04rem 0 rgba(0,0,0,0.1);*/
         z-index: 100;
         cursor: pointer;
         .menu-introduction{
@@ -227,6 +200,11 @@
                 color: #666666;
                 font-weight: 500;
               }
+              .menu-textColor{
+                font-size: 0.16rem;
+                font-weight: 500;
+                color:#036FE2;
+              }
               .gm-sbc{
                 font-size: 0.2rem;
                 color: #dddddd;
@@ -253,7 +231,13 @@
               background: #F8F8F8;
               .menu-text{
                 font-size: 0.16rem;
-                color: #036FE2;
+                color: #666666;
+                font-weight: 500;
+                margin-left: 1.06rem;
+              }
+              .menu-textBgColor{
+                font-size: 0.16rem;
+                color:#036FE2;
                 font-weight: 500;
                 margin-left: 1.06rem;
               }
@@ -263,11 +247,11 @@
       }
       .gm-content{
         width: 86%;
-        height: 100%;
         position: absolute;
         right: 0;
         left: 2.6rem;
         background: #F8F8F8;
+        padding-bottom: 0.3rem;
         .gm-nav{
           width: auto;
           height: 0.56rem;
@@ -296,11 +280,12 @@
             display: -webkit-flex;
             justify-content: space-between;
             .contentArea-left{
-              width: 85%;
+              width: 100%;
               background: #ffffff;
               box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
               border-radius:0.1rem;
               overflow-x: hidden;
+              padding: 0.5rem 0.3rem;
             }
             .contentArea-right{
               width: 15%;

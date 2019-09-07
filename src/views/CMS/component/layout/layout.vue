@@ -30,9 +30,10 @@
             let arr = [];
             getMenuList().then(response => {
               if(response.data.success){
+                let list = response.data.data || [];
                 for(let i = 0; i < layout.length; i++){
-                  for(let j = 0; j < response.data.data.length; j++){
-                    if(layout[i].code == response.data.data[j].id){
+                  for(let j = 0; j < list.length; j++){
+                    if(layout[i].code == list[j].id){
                       arr.push(layout[i]);
                     }
                   }

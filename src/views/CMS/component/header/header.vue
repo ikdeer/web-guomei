@@ -52,6 +52,7 @@
             getUserLogout().then(response => {
               if(response.data.success){
                 _this.Cookies.remove('token');
+                _this.Cookies.remove('userInfo');
                 _this.$message({
                   type: 'success',
                   message: '退出登录成功!'
