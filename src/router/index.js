@@ -29,6 +29,7 @@ import TCFApiList from '@/views/CMS/tcf/TCFApiList'
 import TCFApiAdd from '@/views/CMS/tcf/TCFApiAdd'
 import TCFApiDetails from '@/views/CMS/tcf/TCFApiDetails'
 import TCFApiEdit from '@/views/CMS/tcf/TCFApiEdit'
+import instructionsList from '@/views/CMS/instructions/instructionsList'
 import categories from '@/views/CMS/categories/categories'
 
 //控制跳转同一个路由报错
@@ -253,6 +254,15 @@ const router = new Router({
           meta: {
             title:'国美人脸认证管理后台',
             code:8
+          }
+        },
+        {
+          path: '/Index/instructionsList',
+          name: '接入须知列表',
+          component: instructionsList,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:12
           }
         },
         {

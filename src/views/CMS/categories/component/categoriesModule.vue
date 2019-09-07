@@ -10,7 +10,7 @@
           <div class="Module-fromPad">
             <el-select v-model="form.categoryLevel"
                        @change="changeCategoryLevel"
-                       placeholder="请选择活动区域">
+                       placeholder="请选择类目层级">
               <el-option label="一级类目" value="1"></el-option>
               <el-option label="二级类目" value="2"></el-option>
             </el-select>
@@ -19,7 +19,7 @@
         <template v-if="form.isParentCategeryDisabled">
           <el-form-item label="上级类目" prop="superior">
             <div class="Module-fromPad">
-              <el-select v-model="form.superior" placeholder="请选择活动区域">
+              <el-select v-model="form.superior" placeholder="请选择上级类目">
                 <el-option
                   v-for="item in form.TechDocTitleData"
                   :key="item.name"

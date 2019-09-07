@@ -18,7 +18,7 @@
                v-for="(itemS,indexS) in item.DataText">
             <!-- 二级目录 -->
             <div class="level-gm" @click.stop="ClickLevel(itemS)">
-              <span class="menu-text">{{itemS.text}}</span>
+              <span :class="itemS.isText && !itemS.isDataText ? 'menu-textColor' : 'menu-text'">{{itemS.text}}</span>
               <i v-if="itemS.isDataText" class="el-icon-arrow-down gm-sbc"></i>
             </div>
             <!-- 三级目录 -->
@@ -33,14 +33,11 @@
       <div class="gm-content">
         <nav class="gm-nav">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item>首页</el-breadcrumb-item>
-            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+            <el-breadcrumb-item>技术文档</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
         <div class="gm-contentPad">
-          <h4 class="gm-contentPadText">人脸检测</h4>
+          <h4 class="gm-contentPadText">{{bbsTopTitle}}</h4>
           <div class="gm-contentArea">
             <div class="contentArea-left" :style="contentStyleObj" v-html="bbsContent"></div>
           </div>
@@ -60,6 +57,8 @@
         return {
           dataList:[],
           bbsContent:'',//文本内容
+          bbsTopTitle:'',//标题
+          breadcrumb:[],
           contentStyleObj:{
             height:''
           }
@@ -72,7 +71,7 @@
       },
       methods:{
         getHeight(){
-          this.contentStyleObj.height = window.innerHeight - 120+'px';
+          //this.contentStyleObj.height = window.innerHeight - 120+'px';
         },
         //技术文档列表
         getTechDocConTentShow(){
@@ -80,24 +79,31 @@
             if(response.data.errorCode == 200){
               //数据拼接
               let arrData = [{text:'技术文档',isText:true,DataText:[]}];
-              for(let i = 0; i < response.data.data.length; i++){
+              for(let i = 0; i < response.data.data.list.length; i++){
                 arrData[0].DataText.push({
-                  id:response.data.data[i].id,
-                  text:response.data.data[i].title1,
-                  isText:response.data.data[0].title2 ? true : false,
-                  isDataText:response.data.data[i].title2 ? true : false, //判断二级目录是否有数据
+                  id:response.data.data.list[i].id,
+                  text:response.data.data.list[i].title1,
+                  isText:i == 0 ? true : false,
+                  isDataText:response.data.data.list[i].title2 ? true : false, //判断二级目录是否有数据
                   DataText:[],
                 });
-                if(response.data.data[i].title2){
+                if(response.data.data.list[i].title2){
                  arrData[0].DataText[i].DataText.push({
-                    id:response.data.data[i].id,
-                    text:response.data.data[i].title2,
-                    isText:response.data.data[0].title2 ? true : false,
+                    id:response.data.data.list[i].id,
+                    text:response.data.data.list[i].title2,
+                    isText:false,
                   })
                 }
               }
+              if(!arrData[0].DataText[0].DataText.length){
+                arrData[0].DataText[0].isText = true;
+                this.getTechDocDetails(arrData[0].DataText[0].id);
+              }else{
+                arrData[0].DataText[0].isText = true;
+                arrData[0].DataText[0].DataText[0].isText = true;
+                this.getTechDocDetails(arrData[0].DataText[0].DataText[0].id);
+              }
               this.dataList = arrData;
-              console.log(this.dataList);
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -108,6 +114,7 @@
           getTechDocDetails({id:id}).then(response => {
             if(response.data.errorCode == 200){
               this.bbsContent = response.data.data.techDoc.txt;
+              this.bbsTopTitle = response.data.data.techDoc.name;
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -254,6 +261,11 @@
               color: #666666;
               font-weight: 500;
             }
+            .menu-textColor{
+              font-size: 0.16rem;
+              font-weight: 500;
+              color:#036FE2;
+            }
             .gm-sbc{
               font-size: 0.2rem;
               color: #dddddd;
@@ -296,11 +308,11 @@
     }
     .gm-content{
       width: 86%;
-      height: 100%;
       position: absolute;
       right: 0;
       left: 2.6rem;
       background: #F8F8F8;
+      padding-bottom: 0.3rem;
       .gm-nav{
         width: auto;
         height: 0.56rem;
@@ -334,6 +346,7 @@
             box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
             border-radius:0.1rem;
             overflow-x: hidden;
+            padding: 0.5rem 0.3rem;
           }
           .contentArea-right{
             width: 15%;

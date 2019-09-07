@@ -254,9 +254,8 @@
         let _this = this;
         this.$refs.catalogText.validate((valid) => {
           if(valid){
-            if(this.catalogText.secondLevelData != null && this.catalogText.secondLevel != ''){
-              getTechDocModify({id:this.$route.query.id,name:this.catalogText.Title,txt:this.catalogText.bbsContent})
-                .then(response => {
+            getTechDocModify({id:this.$route.query.id,name:this.catalogText.Title,txt:this.catalogText.bbsContent})
+              .then(response => {
                 if(response.data.success){
                   this.$message({message: '编辑成功~~~',type: 'success'});
                   setTimeout(()=>{
@@ -266,26 +265,6 @@
                   this.$message.error(response.data.errorInfo);
                 }
               })
-            }else{
-              if(this.catalogText.secondLevelData == null){
-                getTechDocModify({id:this.$route.query.id, name:this.catalogText.Title, txt:this.catalogText.bbsContent})
-                  .then(response => {
-                  if(response.data.success){
-                    this.$message({message: '编辑成功~~~',type: 'success'});
-                    setTimeout(()=>{
-                      _this.$router.push({path:'/Index/TCFApiList'})
-                    },300)
-                  }else{
-                    this.$message.error(response.data.errorInfo);
-                  }
-                })
-              }else{
-                this.$message({
-                  message: '二级目录必选项！！！',
-                  type: 'warning'
-                });
-              }
-            }
           }
         })
       },
