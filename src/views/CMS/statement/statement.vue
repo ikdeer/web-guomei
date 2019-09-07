@@ -214,7 +214,7 @@
                     if(data.success){
                         this.callData = data.data.data.callData;
                         this.tableData = data.data.data.appStatisApiList;
-                        this.page.total = data.data.data.pagerManager.totalResults;
+                        this.page.total = data.data.data.pagerManager? data.data.data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
                         data.data.data.charStaticApiList.forEach((item,index)=>{
                             days.push(item.days);
