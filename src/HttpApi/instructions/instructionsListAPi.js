@@ -66,3 +66,15 @@ export const getAccessNoteDetails = (params) => {
     })
   })
 }
+
+/**
+ * 接入须知详情
+ **/
+export const getAccessNoteModify = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/accessNote/modify',params).then(response => {
+      resolve(response)
+    })
+  })
+}
+

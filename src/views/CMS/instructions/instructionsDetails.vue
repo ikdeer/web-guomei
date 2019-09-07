@@ -8,7 +8,7 @@
       </el-breadcrumb>
     </nav>
     <div class="api-content">
-      <h4 class="api-TextH4">技术文档</h4>
+      <h4 class="api-TextH4">查看接入须知</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
@@ -22,9 +22,9 @@
                 <el-input v-model="catalogText.Title" :disabled="true" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="一级目录" prop="OneLevel">
+            <el-form-item label="目录" prop="OneLevel">
               <div class="api-OneLevel">
-                <el-select v-model="catalogText.OneLevel" :disabled="true" placeholder="请选择一级目录">
+                <el-select v-model="catalogText.OneLevel" :disabled="true" placeholder="请选择目录">
                   <el-option
                     v-for="item in catalogText.OneLevelData"
                     :key="item.name"
@@ -34,19 +34,7 @@
                 </el-select>
               </div>
             </el-form-item>
-            <el-form-item label="二级目录">
-              <div class="api-OneLevel">
-                <el-select v-model="catalogText.secondLevel" :disabled="true" placeholder="请选择二级目录">
-                  <el-option
-                    v-for="item in catalogText.secondLevelData"
-                    :key="item.name"
-                    :label="item.name"
-                    :value="item.name">
-                  </el-option>
-                </el-select>
-              </div>
-            </el-form-item>
-            <el-form-item  label="API内容" prop="bbsContent">
+            <el-form-item  label="内容" prop="bbsContent">
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
                   <quill-editor
@@ -66,7 +54,7 @@
 </template>
 
 <script>
-  import {getApplicationDetail} from "../../../HttpApi/application/application"
+  import {getAccessNoteDetails} from "../../../HttpApi/instructions/instructionsListAPi";
   import * as Quill from 'quill'  //引入编辑器
   //quill编辑器的字体
   var fonts = ['SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman','sans-serif'];
@@ -85,8 +73,6 @@
           Title:'',//标题
           OneLevel:'',//一级目录
           OneLevelData:[],
-          secondLevel:'',//二级目录
-          secondLevelData:[],
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
@@ -130,13 +116,12 @@
     },
     methods:{
       //技术文档详情
-      getTechDocDetails(){
-        getTechDocDetails({id:this.$route.query.id}).then(response => {
+      getAccessNoteDetails(){
+        getAccessNoteDetails({id:this.$route.query.id}).then(response => {
           if(response.data.errorCode == 200){
-            this.catalogText.Title = response.data.data.techDoc.name;//标题
-            this.catalogText.OneLevel = response.data.data.techDoc.title1;//一级目录
-            this.catalogText.secondLevel = response.data.data.techDoc.title2;//二级目录
-            this.catalogText.bbsContent = response.data.data.techDoc.txt;//文本内容
+            this.catalogText.Title = response.data.data.accessNote.name;//标题
+            this.catalogText.OneLevel = response.data.data.accessNote.title1;//目录
+            this.catalogText.bbsContent = response.data.data.accessNote.txt;//文本内容
           }else{
             this.$message.error(response.data.errorInfo);
           }
@@ -144,7 +129,7 @@
       }
     },
     mounted(){
-      this.getTechDocDetails();
+      this.getAccessNoteDetails();
     }
   }
 </script>

@@ -8,7 +8,7 @@
         </el-breadcrumb>
       </nav>
       <div class="api-content">
-        <h4 class="api-TextH4">技术文档</h4>
+        <h4 class="api-TextH4">新增技术文档</h4>
         <div class="api-center">
           <div class="api-quill">
             <el-form :model="catalogText"

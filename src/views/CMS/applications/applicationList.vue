@@ -79,7 +79,7 @@
                         label="应用名称">
                         <template slot-scope="scope">
                             <el-tooltip placement="top">
-                                <div slot="content">{{scope.row.name}}<!--<br/>{{scope.row.name}}--></div>
+                                <div slot="content">{{scope.row.name}}</div>
                                 <span @click="see(scope.row)" style="color:#409EFF;cursor: pointer;">{{textLen(scope.row.name,10)}}</span>
                             </el-tooltip>
                         </template>

@@ -51,13 +51,13 @@
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
-                <router-link :to="{path:'/Index/TCFApiEdit',query:{id:scope.row.id}}">
-                  <el-button type="text">编辑</el-button>
-                </router-link>
                 <router-link :to="{path:'/Index/TCFApiDetails',query:{id:scope.row.id}}">
                   <el-button type="text">查看</el-button>
                 </router-link>
-                <el-button type="text" @click="ClickDelete(scope.row.id)">删除</el-button>
+                <router-link :to="{path:'/Index/TCFApiEdit',query:{id:scope.row.id}}">
+                  <el-button type="text" style="color:#e6a23c">编辑</el-button>
+                </router-link>
+                <el-button type="text" style="color:#f56c6c" @click="ClickDelete(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>

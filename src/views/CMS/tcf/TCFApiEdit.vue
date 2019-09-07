@@ -8,7 +8,7 @@
       </el-breadcrumb>
     </nav>
     <div class="api-content">
-      <h4 class="api-TextH4">技术文档</h4>
+      <h4 class="api-TextH4">编辑技术文档</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
@@ -75,7 +75,11 @@
             <el-form-item>
               <div class="api-editor">
                 <el-button type="primary" @click.stop="addDomain">保存并发布</el-button>
-                <el-button>重置</el-button>
+                <router-link tag="button"
+                             class="el-button el-button--default el-button--small"
+                             :to="{path:'/Index/TCFApiList'}">
+                  <span>取消</span>
+                </router-link>
               </div>
             </el-form-item>
           </el-form>

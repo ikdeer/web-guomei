@@ -4,11 +4,11 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Index/instructionsList'}">接入须知</el-breadcrumb-item>
-        <el-breadcrumb-item>新增接入须知</el-breadcrumb-item>
+        <el-breadcrumb-item>编辑接入须知</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
     <div class="api-content">
-      <h4 class="api-TextH4">新增接入须知</h4>
+      <h4 class="api-TextH4">编辑接入须知</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
@@ -25,7 +25,9 @@
             </el-form-item>
             <el-form-item label="目录" prop="OneLevel">
               <div class="api-OneLevel">
-                <el-select v-model="catalogText.OneLevel" placeholder="请选择目录">
+                <el-select v-model="catalogText.OneLevel"
+                           :disabled="true"
+                           placeholder="请选择目录">
                   <el-option
                     v-for="item in catalogText.OneLevelData"
                     :key="item.name"
@@ -35,7 +37,7 @@
                 </el-select>
               </div>
             </el-form-item>
-            <el-form-item  label="API内容" prop="bbsContent">
+            <el-form-item  label="内容" prop="bbsContent">
               <!-- 图片上传组件辅助-->
               <el-upload
                 class="avatar-uploader"
@@ -58,7 +60,11 @@
             <el-form-item>
               <div class="api-editor">
                 <el-button type="primary" @click.stop="addDomain">保存并发布</el-button>
-                <el-button @click.stop="cancel">重置</el-button>
+                <router-link tag="button"
+                             class="el-button el-button--default el-button--small"
+                             :to="{path:'/Index/instructionsList'}">
+                  <span>取消</span>
+                </router-link>
               </div>
             </el-form-item>
           </el-form>
@@ -70,9 +76,10 @@
 
 <script>
   import {
-    getAccessNoteCreate,
+    getAccessNoteModify,
     getAccessNoteTitleShow,
-    getImageUploadNormalImage
+    getImageUploadNormalImage,
+    getAccessNoteDetails
   } from "../../../HttpApi/instructions/instructionsListAPi";
   //引入编辑器
   import * as Quill from 'quill';
@@ -86,25 +93,24 @@
   var Font = Quill.import('formats/font');
   //将字体加入到白名单
   Font.whitelist = fonts;
-  fontSizeStyle.whitelist = fontSize;
   Quill.register(Font, true);
-  Quill.register(fontSizeStyle, true);
+  fontSizeStyle.whitelist = fontSize;
   Quill.register('modules/imageDrop', ImageDrop);
   Quill.register('modules/imageResize', ImageResize);
   export default {
-    name: "instructionsAdd",
+    name: "TCFApiEdit",
     data(){
       return {
         catalogText:{
           Title:'',//标题
-          OneLevel:'',//目录
+          OneLevel:'',//一级目录
           OneLevelData:[],
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
         labelPosition:'right',//form对其方式
         editorOption: {
-          theme: 'snow',
+          theme: 'snow',  // or 'bubble'
           placeholder: '请填写要发布的公告版内容...',
           modules: {
             toolbar: {
@@ -123,7 +129,7 @@
                 [{ 'font': fonts }],         //字体
                 [{ 'align': [] }],        //对齐方式
                 ['clean'],        //清除字体样式
-                ['image','video']        //上传图片、上传视频
+                ['image','video'] //上传图片、上传视频
               ],
               handlers:{
                 'image':function(value){
@@ -141,12 +147,24 @@
         },
         rules:{
           Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-          OneLevel:[{ required: true, message: '请选择类目', trigger: 'blur' }],
-          bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
+          OneLevel:[{ required: true, message: '请选择一级类目', trigger: 'blur' }],
+          bbsContent:[{ required: true, message: '请填写要发布的API公告版内容', trigger: 'blur,change' }]
         }
       }
     },
     methods:{
+      //技术文档详情
+      getAccessNoteDetails(){
+        getAccessNoteDetails({id:this.$route.query.id}).then(response => {
+          if(response.data.errorCode == 200){
+            this.catalogText.Title = response.data.data.accessNote.name;//标题
+            this.catalogText.OneLevel = response.data.data.accessNote.title1;//目录
+            this.catalogText.bbsContent = response.data.data.accessNote.txt;//文本内容
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        });
+      },
       //一级目录
       getAccessNoteTitleShow(){
         getAccessNoteTitleShow().then(response => {
@@ -200,31 +218,28 @@
           };
         });
       },
-      //重置
-      cancel(){
-        this.$refs.catalogText.resetFields();
-      },
       //保存并发布
       addDomain(){
         let _this = this;
         this.$refs.catalogText.validate((valid) => {
           if(valid){
-            getAccessNoteCreate({name:this.catalogText.Title,sort:0,title1:this.catalogText.OneLevel,txt:this.catalogText.bbsContent})
+            getAccessNoteModify({id:this.$route.query.id,sort: 0,name:this.catalogText.Title,txt:this.catalogText.bbsContent})
               .then(response => {
-              if(response.data.success){
-                this.$message({message: '创建成功~~~',type: 'success'});
-                setTimeout(()=>{
-                  _this.$router.push({path:'/Index/instructionsList'})
-                },300)
-              }else{
-                this.$message.error(response.data.errorInfo);
-              }
-            })
+                if(response.data.success){
+                  this.$message({message: '编辑成功~~~',type: 'success'});
+                  setTimeout(()=>{
+                    _this.$router.push({path:'/Index/instructionsList'})
+                  },300)
+                }else{
+                  this.$message.error(response.data.errorInfo);
+                }
+              })
           }
         })
       },
     },
     mounted(){
+      this.getAccessNoteDetails();
       this.getAccessNoteTitleShow();
     }
   }
