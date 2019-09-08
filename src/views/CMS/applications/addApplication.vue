@@ -37,8 +37,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
+                <span style="font-size: 11px;color: #FE023F;margin-left: 80px;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span>
                 <el-form-item label="接口选择" prop="api" required>
-                    <span style="font-size: 11px;color: #FE023F;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span><br/>
                     <template v-for="item in InterfaceApi">
                         <div class="left">
                             <el-checkbox :indeterminate="item.isIndeterminate" @change="outerCheck(item)" v-model="item.checkd" :label="item.name"></el-checkbox>

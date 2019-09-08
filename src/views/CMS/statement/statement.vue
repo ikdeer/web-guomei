@@ -63,7 +63,7 @@
                         </el-radio-group>
                     </el-form-item>-->
                     <el-form-item label="监控项">
-                        <el-checkbox-group v-model="formData.monitorItems">
+                        <el-checkbox-group v-model="formData.monitor">
                             <el-checkbox label="1">调用成功</el-checkbox>
                             <el-checkbox label="2">调用失败</el-checkbox>
                         </el-checkbox-group>
@@ -177,7 +177,7 @@
                     apiIds:'',//api ID
                     appIds:'',//app ID
                     statisItems:'',//统计项 1-调用量 2-qps
-                    monitorItems:'1',//监控项
+                    monitor:['1'],//监控项
                     dataTime:null,
                     appList:[],
                     apiList:[]
@@ -213,6 +213,11 @@
                     timeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                     timeType:this.radio,
                 };
+                if(this.formData.monitor.length == 1){
+                    params.monitorItems = this.formData.monitor[0];
+                }else{
+                    params.monitorItems = ''
+                }
                 getStatement(params).then(({data}) => {
                     if(data.success){
                         this.callData = data.data.data.callData;
