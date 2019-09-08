@@ -198,7 +198,7 @@
                         }
                     })
                 }else{
-                    this.$message.warning('手机号格式不正确！');
+                    this.$message.warning('手机号不符合规则！');
                 }
             },
             editEmail(){
@@ -221,7 +221,7 @@
                         }
                     })
                 }else{
-                    this.$message.warning('邮箱格式不正确！');
+                    this.$message.warning('邮箱格式不符合规则！');
                 }
             },
             closeDialog(){

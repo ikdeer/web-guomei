@@ -28,15 +28,14 @@ ol,li,ul,dl,dt,dd{
     border-bottom: 1px dashed #979797;
 }
 .nav-Type .el-breadcrumb__inner{
-  font-size: 0.14rem;
-  font-weight: 600;
-  color: #999999;
+  font-size: 0.14rem!important;
+  font-weight: 600!important;
+  color: #F20A59 !important;
   cursor: pointer;
 }
 .nav-Type .is-link{
-  color:#F20A59 !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
+  color:#999999 !important;
+  font-weight: 400 !important;
 }
 /*富文本编辑框高度*/
 .ql-editor{
