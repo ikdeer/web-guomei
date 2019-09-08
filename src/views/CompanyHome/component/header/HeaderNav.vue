@@ -110,8 +110,9 @@
     },
     mounted(){
       let cookies = this.Cookies.get('token');
+      let userInfoObj = JSON.parse(this.Cookies.get('userInfo'));
       this.token = cookies ? cookies : null;
-      this.userInfo = cookies ? JSON.parse(cookies) : null;
+      this.userInfo = userInfoObj ? userInfoObj : null;
     }
   }
 </script>
