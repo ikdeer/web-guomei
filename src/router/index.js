@@ -55,7 +55,7 @@ const router = new Router({
       children:[
         {
           path: '/Company/login',
-          name: '登陆',
+          name: '登录',
           component: login,
           meta: {
             title:'国美人脸认证开放平台',

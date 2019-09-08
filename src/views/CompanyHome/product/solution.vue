@@ -155,7 +155,7 @@
           if(this.Cookies.get('token')){
             _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
           }else{
-            _this.$message.error('此功能需要登陆过后才能查看');
+            _this.$message.error('此功能需要登录过后才能查看');
             setTimeout(()=>{
               _this.$router.push({path:'/Company/login'});
             },300)

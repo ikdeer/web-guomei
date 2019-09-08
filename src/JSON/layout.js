@@ -51,8 +51,8 @@ export default [
   },
   {
     iconText:'接入须知',
-    iconImgShow:'/static/images/document_selected_icon@2x.png',
-    iconImgHide:'/static/images/document_unselected_icon@2x.png',
+    iconImgShow:'/static/images/xuzhi_selected_icon@2x.png',
+    iconImgHide:'/static/images/xuzhi_unselected_icon@2x.png',
     iconRouter:'/Index/instructionsList',
     code:8,
 

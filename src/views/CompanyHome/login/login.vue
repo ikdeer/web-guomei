@@ -22,7 +22,7 @@
             <div class="login-form">
               <el-form-item prop="code">
                 <div class="login-code">
-                  <el-input placeholder="请输入验证码" v-model="loginForm.code"></el-input>
+                  <el-input placeholder="验证码" v-model="loginForm.code"></el-input>
                   <a href="javascript:;" @click="changeCodeImg()">
                     <img :src="loginForm.codeImg" alt="图片加载失败">
                   </a>
@@ -159,7 +159,7 @@
       width: 3.28rem;
       .login-text{
         font-size: 0.26rem;
-        color: #F20A59;
+        color: #666666;
         font-weight: 600;
         text-align: center;
       }
@@ -171,9 +171,10 @@
         margin-top: 0.3rem;
         .el-form-item{
           width: 100%;
-          height: 0.5rem !important;
-          input{
-            height: 0.5rem !important;
+          div{
+            input{
+              height: 0.5rem !important;
+            }
           }
         }
         .login-code{
@@ -182,12 +183,12 @@
           align-items: center;
           position: relative;
           img{
-            height:32px;
+            height: 36px;
             position: absolute;
-            right: 0;
             bottom: 0;
             border-bottom-right-radius: 4px;
             border-top-right-radius: 4px;
+            right: 0;
           }
         }
       }
@@ -204,7 +205,9 @@
         }
         span:last-child{
           font-size: 0.14rem;
-          color: #EE2323;
+          color:#036FE2;
+          text-decoration: underline;
+          cursor: pointer;
         }
       }
       .login-button{

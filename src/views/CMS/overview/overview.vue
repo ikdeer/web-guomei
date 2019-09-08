@@ -45,6 +45,7 @@
                   <el-date-picker
                     v-model="TimeData.TimeDate"
                     type="datetimerange"
+                    :picker-options="pickerOptions"
                     @change="TimeBluer"
                     range-separator="至"
                     clearable
@@ -168,6 +169,42 @@ export default {
       return {
         newAppsCount:0,//应用总数
         toBeAuditedAppsCount:0,//待审核应用
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              let end = new Date();
+              let start = new Date();
+              start.setTime(start.getTime() - 24 * 60 * 60 * 1000);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              let end = new Date();
+              let start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 2);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近7天',
+            onClick(picker) {
+              let end = new Date();
+              let start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          },
+            {
+              text: '本月',
+              onClick(picker) {
+                let end = new Date();
+                let start = new Date();
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                picker.$emit('pick', [start, end]);
+              }
+            }]
+        },
         TimeData:{
           TimeDate:[],//时间获取
           timeStart:'',//创建开始时间

@@ -90,7 +90,7 @@
         if(this.Cookies.get('token')){
           this.$notify({
             title: '成功',
-            message: '登录成功,请勿重复登陆',
+            message: '登录成功,请勿重复登录',
             type: 'success'
           });
         }else{
@@ -102,7 +102,7 @@
           this.$router.push({path: '/Index/overview'});
         }else{
           this.$message({
-            message: '你还没有登录,请先登陆~~~',
+            message: '你还没有登录,请先登录~~~',
             type: 'warning'
           });
           this.$router.push({path: '/Company/login',query:{console:'overview'}});
