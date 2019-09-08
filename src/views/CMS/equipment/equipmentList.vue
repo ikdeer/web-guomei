@@ -240,7 +240,7 @@
 
             <div v-show="equipmentDialogInfo.type===2">
                 <el-form label-width="80px" ref="dialogTwo" :disabled="this.equipmentDialogInfo.isSee">
-                    <el-form-item label="人脸分组" required>
+                    <el-form-item label="人脸分组">
                         <el-select v-model="dialogFace.faceGroup" @change="getFaceGroupChildOne" placeholder="请选择人脸分组">
                             <el-option v-for="item in faceGroup"
                                        :label="item.name"
