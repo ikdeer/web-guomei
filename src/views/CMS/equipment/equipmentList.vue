@@ -239,7 +239,7 @@
             </div>
 
             <div v-show="equipmentDialogInfo.type===2">
-                <el-form label-width="80px" :rules="dialogTwo" :model="dialogFace" ref="dialogTwo" :disabled="this.equipmentDialogInfo.isSee">
+                <el-form label-width="80px" ref="dialogTwo" :disabled="this.equipmentDialogInfo.isSee">
                     <el-form-item label="人脸分组" required>
                         <el-select v-model="dialogFace.faceGroup" @change="getFaceGroupChildOne" placeholder="请选择人脸分组">
                             <el-option v-for="item in faceGroup"
@@ -258,7 +258,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop="faceChildTwo" required>
+                    <el-form-item>
                         <el-select v-model="dialogFace.faceChildTwo" placeholder="请选择二级子分组">
                             <el-option v-for="item in faceChildTwo"
                                        :label="item.name"
@@ -329,13 +329,13 @@
                     return callback()
                 }
             };
-            let faceChildTwo = (rule, value, callback) => {
+            /*let faceChildTwo = (rule, value, callback) => {
                 if(this.dialogFace.faceChildTwo == ''){
                     return callback(new Error('请选择人脸分组'))
                 }else{
                     return callback()
                 }
-            };
+            };*/
             return{
                 textLen:textLen,
                 formData:{
@@ -426,11 +426,11 @@
                         {validator:shopFour,trigger:['blur','change']}
                     ],
                 },
-                dialogTwo:{
+                /*dialogTwo:{
                     faceChildTwo:[
                         {validator:faceChildTwo,trigger:['blur','change']}
                     ]
-                },
+                },*/
                 userInfo:{
                     groupID:'',
                     uid: '',
@@ -737,10 +737,19 @@
                     }
                     if (this.equipmentDialogInfo.isEdit) {
                         /*编辑接口调用*/
-                        this.$refs['dialogTwo'].validate((valid) => {
+                        if(this.dialogFace.faceChildTwo == ''){
+                            this.$confirm('该设备尚未绑定人脸分组，将无法正常使用，请尽快绑定人脸分组', '提示信息', {
+                                confirmButtonText: '知道了',
+                                showCancelButton:false
+                            }).then(() => {
+                            }).catch(() => {});
+                        }else{
+                            this.editEquipmentDialog();
+                        }
+                        /*this.$refs['dialogTwo'].validate((valid) => {
                             if (valid) {
                                 this.editEquipmentDialog()
-                                /*let pams = {
+                                let pams = {
                                     ...this.dialogInfo,
                                     id:this.equipmentDialogInfo.id,
                                     belongComID:this.dialogInfo.shopFour,
@@ -757,19 +766,26 @@
                                     }else{
                                         this.$message.warning(data.errorInfo)
                                     }
-                                })*/
-
+                                })
                             } else {
                                 return false;
                             }
-                        });
+                        });*/
                     }else{
                         /*新增接口调用*/
-
-                        this.$refs['dialogTwo'].validate((valid) => {
+                        if(this.dialogFace.faceChildTwo == ''){
+                            this.$confirm('该设备尚未绑定人脸分组，将无法正常使用，请尽快绑定人脸分组', '提示信息', {
+                                confirmButtonText: '知道了',
+                                showCancelButton:false
+                            }).then(() => {
+                            }).catch(() => {});
+                        }else{
+                            this.addEquipmentDialog()
+                        }
+                        /*this.$refs['dialogTwo'].validate((valid) => {
                             if (valid) {
                                 this.addEquipmentDialog()
-                                /*let params = {
+                                let params = {
                                     ...this.dialogInfo,
                                     belongComID:this.dialogInfo.shopFour,
                                     gmAreaID:this.dialogInfo.siteThree,
@@ -785,17 +801,11 @@
                                     }else{
                                         this.$message.warning(data.errorInfo)
                                     }
-                                })*/
-
-
-
-
-
-
+                                })
                             } else {
                                 return false;
                             }
-                        });
+                        });*/
                     }
                 }
             },
