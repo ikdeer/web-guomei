@@ -3,11 +3,12 @@
         <!-- 面包屑导航栏 -->
         <nav class="nav-Type">
             <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
                 <el-breadcrumb-item>{{isSee?'查看分组':'创建分组'}}</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>
-        <h3>{{isSee?'查看分组':'创建分组'}}</h3>
+        <h3>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
                 <div class="active"><span>1</span>第一步 设置分组</div>
@@ -19,8 +20,8 @@
                     <div class="set_group_inp">
                         <el-form :inline="true" :disabled="isSee" label-width="100px">
                             <el-form-item label="分组名称" required>
-                                <el-input :maxlength="20" v-model="groupData.name" placeholder="请输入人脸分组名称"></el-input>
-                                <el-button type="primary" :disabled="groupData.name=='' || groupData.id!=''" @click="createGroup">保存</el-button>
+                                <el-input :maxlength="20" v-model="groupData.name" placeholder="20汉字以内"></el-input>
+                                <el-button type="primary" :disabled="groupData.name==''" @click="createGroup">保存</el-button>
                             </el-form-item>
                             <el-form-item label="分组ID" required>
                                 <el-input v-model="groupData.id" :disabled="true"></el-input>
@@ -104,6 +105,9 @@
         computed:{
             isSee(){
                 return this.$route.query.type == '2' ? true : false;
+            },
+            isEdit(){
+                return this.$route.query.type == '3' ? true : false;
             }
         },
         methods:{
@@ -376,7 +380,7 @@
         mounted(){
             this.groupData.id = this.$route.query.id || '';
             this.type = this.$route.query.type || '1';
-            if(this.$route.query.type != '1'){
+            if(this.$route.query.type != '1' || this.groupData.id !=''){
                 this.getDetails();
             }
         }

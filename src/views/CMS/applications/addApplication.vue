@@ -4,6 +4,7 @@
         <template v-if="Breadcrumb == 'overview'">
           <nav class="nav-Type">
             <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
               <el-breadcrumb-item :to="{path:'/Index/overview'}">概览</el-breadcrumb-item>
               <el-breadcrumb-item>创建应用</el-breadcrumb-item>
             </el-breadcrumb>
@@ -13,6 +14,7 @@
         <template v-if="Breadcrumb == 'VIS-A-VIS'">
           <nav class="nav-Type">
             <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
               <el-breadcrumb-item :to="{path:'/Index/applicationList'}">应用列表</el-breadcrumb-item>
               <el-breadcrumb-item>{{type ?'修改应用':'创建应用'}}</el-breadcrumb-item>
             </el-breadcrumb>

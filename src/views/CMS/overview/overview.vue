@@ -3,6 +3,7 @@
       <!-- 面包屑导航栏 -->
       <nav class="nav-Type">
         <el-breadcrumb separator="/">
+          <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
           <el-breadcrumb-item>概览</el-breadcrumb-item>
         </el-breadcrumb>
       </nav>
@@ -16,7 +17,7 @@
                 <div class="use-contentPad">
                   <div class="user-TextNum">
                     <p class="user-contentNum">
-                      已建应用：
+                      &emsp;已建应用：
                       <span>{{newAppsCount}}</span>
                       个
                     </p>

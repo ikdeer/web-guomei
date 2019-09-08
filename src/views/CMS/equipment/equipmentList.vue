@@ -3,6 +3,7 @@
       <!-- 面包屑导航栏 -->
       <nav class="nav-Type">
         <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
           <el-breadcrumb-item>设备管理</el-breadcrumb-item>
         </el-breadcrumb>
       </nav>
@@ -709,17 +710,27 @@
                 if(this.equipmentDialogInfo.type === 1){
                     this.$refs['dialogOne'].validate((valid) => {
                         if (valid) {
-                            this.equipmentDialogInfo.type=2;
-                            this.equipmentDialogInfo.btnInfo=' 确 定 ';
+                            /*this.equipmentDialogInfo.type=2;
+                            this.equipmentDialogInfo.btnInfo=' 确 定 ';*/
                             if(this.equipmentDialogInfo.isSee){
+                                this.equipmentDialogInfo.type=2;
+                                this.equipmentDialogInfo.btnInfo=' 确 定 ';
                                 this.equipmentDialogInfo.btnShow = false;
+                            }else{
+                                if(this.equipmentDialogInfo.isEdit){
+                                    //编辑调用
+                                    this.editEquipmentDialog()
+                                }else{
+                                    //新增调用
+                                    this.addEquipmentDialog()
+                                }
                             }
                         } else {
                             return false;
                         }
                     });
                 }else{
-                    //请求保存接口，发送ajax
+                    //界面二，绑定人脸
                     if(this.equipmentDialogInfo.isSee){//查看不发送
                         this.equipmentDialogInfo.dialog = false;
                         return ;
@@ -728,7 +739,8 @@
                         /*编辑接口调用*/
                         this.$refs['dialogTwo'].validate((valid) => {
                             if (valid) {
-                                let pams = {
+                                this.editEquipmentDialog()
+                                /*let pams = {
                                     ...this.dialogInfo,
                                     id:this.equipmentDialogInfo.id,
                                     belongComID:this.dialogInfo.shopFour,
@@ -745,7 +757,7 @@
                                     }else{
                                         this.$message.warning(data.errorInfo)
                                     }
-                                })
+                                })*/
 
                             } else {
                                 return false;
@@ -756,7 +768,8 @@
 
                         this.$refs['dialogTwo'].validate((valid) => {
                             if (valid) {
-                                let params = {
+                                this.addEquipmentDialog()
+                                /*let params = {
                                     ...this.dialogInfo,
                                     belongComID:this.dialogInfo.shopFour,
                                     gmAreaID:this.dialogInfo.siteThree,
@@ -772,13 +785,58 @@
                                     }else{
                                         this.$message.warning(data.errorInfo)
                                     }
-                                })
+                                })*/
+
+
+
+
+
+
                             } else {
                                 return false;
                             }
                         });
                     }
                 }
+            },
+            addEquipmentDialog(){//新增接口
+                let params = {
+                    ...this.dialogInfo,
+                    belongComID:this.dialogInfo.shopFour,
+                    gmAreaID:this.dialogInfo.siteThree,
+                    faceGroupID:this.dialogFace.faceChildTwo,
+                    createrID:this.userInfo.uid,
+                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
+                };
+                addEquipment(params).then(({data})=>{
+                    if(data.success){
+                        this.$message.success('添加成功');
+                        this.search();
+                        this.equipmentDialogInfo.dialog = false;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
+            },
+            editEquipmentDialog(){//编辑接口
+                let pams = {
+                    ...this.dialogInfo,
+                    id:this.equipmentDialogInfo.id,
+                    belongComID:this.dialogInfo.shopFour,
+                    gmAreaID:this.dialogInfo.siteThree,
+                    faceGroupID:this.dialogFace.faceChildTwo,
+                    createrID:this.userInfo.uid,
+                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
+                };
+                editEquipment(pams).then(({data}) => {
+                    if(data.success){
+                        this.$message.success('修改成功');
+                        this.search();
+                        this.equipmentDialogInfo.dialog = false;
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                })
             },
             getFaceGroupChildOne(){
                 let params = {
@@ -893,6 +951,7 @@
                         });
                         this.shopOne = data.data;
                     }else{
+                        this.shopOne = [];
                     }
                 });
                 //获取人脸分组下拉框
@@ -902,11 +961,9 @@
             },
         },
         mounted(){
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             this.search();
             this.getEquipment();
-            // this.getFaceGroup();
-            // this.getEquipmentState()
-            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
         }
     }
 </script>

@@ -4,6 +4,7 @@
       <template v-if="Breadcrumb == 'overview'">
         <nav class="nav-Type">
           <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
             <el-breadcrumb-item :to="{path:'/Index/overview'}">概览</el-breadcrumb-item>
             <el-breadcrumb-item>监控报表</el-breadcrumb-item>
           </el-breadcrumb>
@@ -13,6 +14,7 @@
       <template v-if="Breadcrumb == 'applicationList'">
         <nav class="nav-Type">
           <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
             <el-breadcrumb-item :to="{path:'/Index/applicationList'}">应用列表</el-breadcrumb-item>
             <el-breadcrumb-item>监控报表</el-breadcrumb-item>
           </el-breadcrumb>
@@ -22,6 +24,7 @@
       <template v-if="Breadcrumb == null">
         <nav class="nav-Type">
           <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
             <el-breadcrumb-item>监控报表</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
@@ -238,7 +241,7 @@
                             toolbox: {
                                 feature: {
                                     saveAsImage: {
-                                        show: false
+                                        show: true
                                     }
                                 }
                             },
@@ -315,8 +318,14 @@
                 })
             }
         },
+        watch:{
+            $route(to){
+                this.formData.appIds = to.query.id ? to.query.id : '';
+            }
+        },
         mounted(){
             this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
+            this.formData.appIds = this.$route.query.id ? this.$route.query.id : '';
             this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             if(this.userInfo.groupID==20){
                 this.formData.createName = this.userInfo.userName;

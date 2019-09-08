@@ -3,6 +3,7 @@
         <!-- 面包屑导航栏 -->
         <nav class="nav-Type">
           <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
             <el-breadcrumb-item>操作日志</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
