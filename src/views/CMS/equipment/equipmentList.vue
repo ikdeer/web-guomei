@@ -922,19 +922,19 @@
                 });
                 //获取设备类型
                 getEquipmentType().then(({data})=>{
-                    /*data.data.list.unshift({
+                    data.data.list.unshift({
                         id: '',
                         name: "全部"
-                    });*/
+                    });
                     this.EquipmentType = data.data ? data.data.list:[];
                     this.dialogType = data.data ? data.data.list:[];
                 });
                 //获取设备状态
                 getEquipmentState().then(({data})=>{
-                    /*data.data.list.unshift({
+                    data.data.list.unshift({
                         id: '',
                         common: "全部"
-                    });*/
+                    });
                     this.EquipmentState = data.data ? data.data.list:[];
                 });
                 // 获取门店

@@ -464,12 +464,20 @@
             getAapplicationState(){
                 //应用状态下拉
                 getAapplicationState().then(({data})=>{
+                    data.data.list.unshift({
+                        id: '',
+                        common: "全部"
+                    });
                     this.AapplicationState = data.data.list;
                 })
             },
             getApplicationReviewState(){
                 //应用审核状态下拉
                 getApplicationReviewState().then(({data})=>{
+                    data.data.list.unshift({
+                        id: '',
+                        common: "全部"
+                    });
                     this.ApplicationReviewState = data.data.list;
                 })
             }
