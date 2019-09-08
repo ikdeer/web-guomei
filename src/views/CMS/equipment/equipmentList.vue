@@ -719,13 +719,11 @@
                             }else{
                                 if(this.equipmentDialogInfo.isEdit){
                                     //编辑调用
-
-
+                                    this.editEquipmentDialog()
                                 }else{
                                     //新增调用
+                                    this.addEquipmentDialog()
                                 }
-
-
                             }
                         } else {
                             return false;
@@ -741,6 +739,7 @@
                         /*编辑接口调用*/
                         this.$refs['dialogTwo'].validate((valid) => {
                             if (valid) {
+                                this.editEquipmentDialog()
                                 /*let pams = {
                                     ...this.dialogInfo,
                                     id:this.equipmentDialogInfo.id,
@@ -769,6 +768,7 @@
 
                         this.$refs['dialogTwo'].validate((valid) => {
                             if (valid) {
+                                this.addEquipmentDialog()
                                 /*let params = {
                                     ...this.dialogInfo,
                                     belongComID:this.dialogInfo.shopFour,

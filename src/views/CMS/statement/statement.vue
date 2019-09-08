@@ -318,6 +318,11 @@
                 })
             }
         },
+        watch:{
+            $route(to){
+                this.formData.appIds = to.query.id ? to.query.id : '';
+            }
+        },
         mounted(){
             this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
             this.formData.appIds = this.$route.query.id ? this.$route.query.id : '';
