@@ -149,7 +149,7 @@
               <div class="ListPad-scene_center">
                 <img src="/static/images/guard_icon@2x.png" alt="">
                 <p class="scene-Title">安防监控</p>
-                <p class="scene-Text">支持身份证、银行卡文字识别、服务端的人脸动作活体检测</p>
+                <p class="scene-Text">支持身份证、银行卡文字识别</p>
                 <div class="scene-Text_span">
                   <span>主要服务：</span>
                   <span class="ListPad-TextRed">人脸检索</span>
@@ -476,10 +476,6 @@ export default {
           .face-Text{
             width: 1.94rem;
             height: 1.32rem;
-            display: flex;
-            display: -webkit-flex;
-            flex-direction: column;
-            justify-content: space-between;
             margin-left: 0.2rem;
             h4{
               margin: 0;
@@ -490,7 +486,7 @@ export default {
             p{
               font-size:0.14rem;
               color:#666666;
-              margin: 0;
+              margin-top: 0.3rem;
             }
           }
         }
