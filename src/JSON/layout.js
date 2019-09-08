@@ -68,15 +68,15 @@ export default [
 
   {
     iconText:'栏目管理',
-    iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
-    iconImgHide:'/static/images/tuwenbianji_icon@2x.png',
+    iconImgShow:'/static/images/lanmuguanli_selected_icon@2x.png',
+    iconImgHide:'/static/images/lanmuguanli_unselected_icon@2x.png',
     iconRouter:'/Index/categories',
     code:10,
   },
   {
     iconText:'图文编辑',
-    iconImgShow:'/static/images/lanmuguanli_selected_icon@2x.png',
-    iconImgHide:'/static/images/lanmuguanli_unselected_icon@2x.png',
+    iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
+    iconImgHide:'/static/images/tuwenbianji_icon@2x.png',
     iconRouter:'',
     code:11,
   },

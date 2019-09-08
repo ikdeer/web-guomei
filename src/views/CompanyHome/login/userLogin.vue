@@ -16,7 +16,7 @@
           </div>
           <div class="loginUser-input">
             <el-form-item prop="phoneNum" label=" ">
-              <el-input placeholder="手机号" type="text" v-model="loginForm.phoneNum"></el-input>
+              <el-input placeholder="手机号" type="text" maxlength="11" v-model="loginForm.phoneNum"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
@@ -63,7 +63,7 @@
         if (value === '') {
           callback(new Error('请输入密码'));
         } else if(value.length < 8 || value.length > 16){
-          callback(new Error('长度在 8 到 16 个字符'));
+          callback(new Error('8到16位字母和数字'));
         }else{
           if (this.loginForm.confirmPassword !== '') {
             this.$refs.loginForm.validateField('confirmPassword');
@@ -170,7 +170,7 @@
               'password':this.loginForm.password,//密码, 非MD5
               'msgCode':this.loginForm.msgCode,//短信验证码
             }).then(response => {
-              if(response.data.errorCode == 200){
+              if(response.data.errorCode == '200'){
                 _this.$message({
                   message: '注册成功~~~',
                   type: 'success'
@@ -179,7 +179,7 @@
                   _this.$router.push({path:'/Company/login'});
                 },500)
               }else{
-                _this.$message.error(response.data.msg);
+                _this.$message.error(response.data.errorInfo);
               }
             })
           }

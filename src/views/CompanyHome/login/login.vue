@@ -156,7 +156,7 @@
     padding-top: 0.35rem;
     padding-bottom: 0.5rem;
     .login-input{
-      width: 3.28rem;
+      width: 3.6rem;
       .login-text{
         font-size: 0.26rem;
         color: #666666;
@@ -164,7 +164,7 @@
         text-align: center;
       }
       .login-form{
-        width: 3.28rem;
+        width: auto;
         height: 0.5rem;
         display: flex;
         display: -webkit-flex;

@@ -58,7 +58,7 @@
               </div>
               <div class="overIew-right_pad">
                 <el-table :data="tableData" header-row-class-name="tableHead" style="width: 100%">
-                  <el-table-column label="API" width="110" align="center">
+                  <el-table-column label="API"  align="center">
                     <template slot-scope="scope">
                       <span>{{scope.row.name}}</span>
                     </template>
@@ -68,12 +68,12 @@
                       <span>{{scope.row.apiCallCount}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" width="110" label="调用失败">
+                  <el-table-column align="center" label="调用失败">
                     <template slot-scope="scope">
                       <span>{{scope.row.apiCallFailCount}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" width="110" label="失败率">
+                  <el-table-column align="center" label="失败率">
                     <template slot-scope="scope">
                       <span>{{scope.row.failureRate}}</span>
                     </template>
