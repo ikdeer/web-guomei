@@ -2,9 +2,7 @@
   <nav class="header-nav">
     <div class="header-nav_Left">
       <div class="header-navLeft">
-        <router-link :to="{path:'/Company/CompanyHome'}">
-          <img class="navLeft-Img" src="/static/images/logo_image@2x.png" alt="">
-        </router-link>
+        <img class="navLeft-Img" src="/static/images/logo_image@2x.png" @click.stop="ClickURL">
         <div class="navLeft-Text">
           <span></span>
           <p>人脸认证开放平台</p>
@@ -17,23 +15,29 @@
                         v-for="(item,index) in stairList"
                         :to="{path:item.stairRouter}">
             <span class="One-LevelText">{{item.stairText}}</span>
-            <div class="navCenter-divMenu" v-if="item.secondList.length != '0'">
+            <!--<div class="navCenter-divMenu" v-if="item.secondList.length != '0'">
               <router-link  tag="div"
                             class="second-level"
                             v-for="(items,indexS) in item.secondList"
                             :to="{path:''}">
                 <span class="second-levelText">{{items.secondText}}</span>
               </router-link>
-            </div>
+            </div>-->
           </router-link>
         </div>
       </div>
     </div>
     <div class="header-navRight">
-      <router-link :to="{path:'/Company/userLogin'}">
-        <el-button type="text" class="button-login">注册</el-button>
-      </router-link>
-      <el-button type="text" class="button-register" @click="ClickLogout">登录</el-button>
+      <div class="header-navName" v-if="token != null">
+        <img src="/static/images/sy_icon_me_64@2x.png" alt="">
+        <span>{{userInfo.userName}}</span>
+      </div>
+      <template v-else>
+        <router-link :to="{path:'/Company/userLogin'}">
+          <el-button type="text" class="button-login">注册</el-button>
+        </router-link>
+        <el-button type="text" class="button-register" @click="ClickLogout">登录</el-button>
+      </template>
       <el-button class="button-console" @click="ClickWhetherLogin">控制台</el-button>
     </div>
   </nav>
@@ -49,20 +53,6 @@
             stairText:'产品服务',
             isStairText:false,
             stairRouter:'/Company/product',
-            secondList:[
-              {
-                secondText:'技术文档',
-                isSecondText:false,
-              },
-              {
-                secondText:'产品服务',
-                isSecondText:false,
-              },
-              {
-                secondText:'接入须知',
-                isSecondText:false,
-              },
-            ]
           },
           {
             stairText:'解决方案',
@@ -82,7 +72,9 @@
             stairRouter:'/Company/AccessToInformation',
             secondList:[]
           },
-        ]
+        ],
+        token:null,//登陆唯一标识token
+        userInfo:null,//登陆用户信息
       }
     },
     methods:{
@@ -107,7 +99,18 @@
           });
           this.$router.push({path: '/Company/login',query:{console:'overview'}});
         }
+      },
+      //跳转首页
+      ClickURL(){
+        let routeData = this.$router.resolve({
+          path: '/Company/CompanyHome',
+        });
+        window.open(routeData.href, '_blank');
       }
+    },
+    mounted(){
+      this.token = this.Cookies.get('token') || null;
+      this.userInfo = JSON.parse(this.Cookies.get('userInfo')) || null;
     }
   }
 </script>
@@ -139,6 +142,7 @@
           height: 0.46rem;
           display: block;
           margin-left: 0.4rem;
+          cursor: pointer;
         }
         .navLeft-Text{
           display: flex;
@@ -229,6 +233,24 @@
       align-items: center;
       justify-content: flex-end;
       margin-right: 0.4rem;
+      .header-navName{
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        margin-right: 0.25rem;
+        img{
+          width: 0.4rem;
+          height: 0.4rem;
+          display: block;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+        span{
+          font-size: 0.14rem;
+          color: #ffffff;
+          margin-left: 0.13rem;
+        }
+      }
       .button-login{
         font-size: 0.16rem;
         color: #ffffff;

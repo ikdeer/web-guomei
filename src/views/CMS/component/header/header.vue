@@ -1,9 +1,9 @@
 <template>
     <div class="header">
         <div class="header-left">
-          <router-link  tag="div" :to="{path:'/Company/CompanyHome'}">
+          <div @click.stop="ClickURL">
             <img src="/static/images/logo_image@2x.png" alt="">
-          </router-link>
+          </div>
           <span></span>
           <p>人脸认证开放平台</p>
         </div>
@@ -11,10 +11,10 @@
           <img class="header-issue" src="/static/images/Shape_btn@2x.png" alt="">
           <el-dropdown @command="handleCommand" placement="top">
             <div class="header-name">
-              <img src="/static/images/meizhi.JPG" alt="">
+              <img src="/static/images/sy_icon_me_64@2x.png" alt="">
               <span>{{userInfo.userName}}</span>
+              <span class="el-icon-arrow-right gm-sbc" @click="userInfo.isUserShow =! userInfo.isUserShow"></span>
             </div>
-            <span class="el-icon-arrow-right gm-sbc" @click="userInfo.isUserShow =! userInfo.isUserShow"></span>
             <div class="gm-popUp">
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item icon="el-icon-user">用户中心</el-dropdown-item>
@@ -68,6 +68,13 @@
         }else{
           this.$router.push({path:'/Index/userInfo',query:{id:this.userInfo.uid}});
         }
+      },
+      //跳转首页
+      ClickURL(){
+        let routeData = this.$router.resolve({
+          path: '/Company/CompanyHome',
+        });
+        window.open(routeData.href, '_blank');
       }
     },
     mounted(){
@@ -144,7 +151,6 @@
         height: 0.3rem;
         border-radius: 50%;
         overflow: hidden;
-        border: 1px solid #ffffff;
       }
       >span{
         font-size: 0.16rem;

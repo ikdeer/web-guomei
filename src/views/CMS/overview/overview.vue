@@ -45,7 +45,7 @@
                   <span class="demonstration">请选择时间</span>
                   <el-date-picker
                     v-model="TimeData.TimeDate"
-                    type="datetimerange"
+                    type="daterange"
                     :picker-options="pickerOptions"
                     @change="TimeBluer"
                     range-separator="至"
@@ -207,7 +207,7 @@ export default {
             }]
         },
         TimeData:{
-          TimeDate:[],//时间获取
+          TimeDate:[new Date(),new Date()],//时间获取
           timeStart:'',//创建开始时间
           timeEnd:'',//创建结束时间
           top:5,//用量数量条数
