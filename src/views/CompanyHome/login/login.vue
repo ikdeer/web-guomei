@@ -168,12 +168,13 @@
         height: 0.5rem;
         display: flex;
         display: -webkit-flex;
-        margin-top: 0.3rem;
+        margin-top: 0.25rem;
         .el-form-item{
           width: 100%;
+          height: 0.45rem !important;
           div{
             input{
-              height: 0.5rem !important;
+              height: 0.45rem !important;
             }
           }
         }
@@ -183,7 +184,7 @@
           align-items: center;
           position: relative;
           img{
-            height: 36px;
+            height: 32px;
             position: absolute;
             bottom: 0;
             border-bottom-right-radius: 4px;
@@ -215,7 +216,7 @@
         display: -webkit-flex;
         align-items: center;
         justify-content: center;
-        margin-top: 0.5rem;
+        margin-top: 0.3rem;
         >button{
           width: 1.6rem;
           line-height: 0.25rem;
