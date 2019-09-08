@@ -10,34 +10,34 @@
         <p class="login-text">注册</p>
         <el-form :model="loginForm" :rules="rules2" ref="loginForm" label-width="20px">
           <div class="loginUser-input">
-            <el-form-item prop="username" label=" " required>
+            <el-form-item prop="username" label=" ">
               <el-input placeholder="用户名(6-20位字母数字)" v-model="loginForm.username"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="phoneNum" label=" " required>
+            <el-form-item prop="phoneNum" label=" ">
               <el-input placeholder="手机号" type="text" v-model="loginForm.phoneNum"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="msgCode" label=" " required>
+            <el-form-item prop="msgCode" label=" ">
               <el-input placeholder="验证码" v-model="loginForm.msgCode">
                 <el-button slot="append"  :disabled='loginForm.disabled'  @click="ClickCode()">{{loginForm.codeText}}</el-button>
               </el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="mail" label=" " required>
+            <el-form-item prop="mail" label=" ">
               <el-input placeholder="邮箱" type="email" v-model="loginForm.mail"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="password" label=" " required>
+            <el-form-item prop="password">
               <el-input placeholder="密码" type="password"  maxlength="16" v-model="loginForm.password"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="confirmPassword" label=" " required>
+            <el-form-item prop="confirmPassword">
               <el-input placeholder="确认登录密码" type="password" maxlength="16" v-model="loginForm.confirmPassword"></el-input>
             </el-form-item>
           </div>
@@ -170,18 +170,14 @@
               'password':this.loginForm.password,//密码, 非MD5
               'msgCode':this.loginForm.msgCode,//短信验证码
             }).then(response => {
-              if(response.data.success){
-                if(response.data.data.errMsgCode != 23){
-                  _this.$message({
-                    message: response.data.data.msg,
-                    type: 'success'
-                  });
-                  setTimeout(()=>{
-                    _this.$router.push({path:'/Company/login'});
-                  },500)
-                }else{
-                  _this.$message.error(response.data.data.msg);
-                }
+              if(response.data.errorCode == 200){
+                _this.$message({
+                  message: '注册成功~~~',
+                  type: 'success'
+                });
+                setTimeout(()=>{
+                  _this.$router.push({path:'/Company/login'});
+                },500)
               }else{
                 _this.$message.error(response.data.msg);
               }

@@ -109,8 +109,9 @@
       }
     },
     mounted(){
-      this.token = this.Cookies.get('token') || null;
-      this.userInfo = JSON.parse(this.Cookies.get('userInfo')) || null;
+      let cookies = this.Cookies.get('token');
+      this.token = cookies ? cookies : null;
+      this.userInfo = cookies ? JSON.parse(cookies) : null;
     }
   }
 </script>

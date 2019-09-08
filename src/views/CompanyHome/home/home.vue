@@ -104,7 +104,7 @@
               <li class="ListUl-li">
                 <div class="ListUl-pad">
                   <div class="listUl-header">
-                    <img src="/static/images/guard_icon@2x.png" alt="">
+                    <img src="/static/images/abckdkd.png" alt="">
                     <span>刷脸门禁考勤</span>
                   </div>
                   <p class="listUl-Text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
