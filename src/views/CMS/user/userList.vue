@@ -183,13 +183,9 @@
                     }else{
                         phoneNumCheck({phoneNum:value}).then(({data})=>{
                             if(data.success){
-                                if(data.data.success == 0){
-                                    return callback(new Error(data.data.msg));
-                                }else{
-                                    return callback()
-                                }
-                            }else{
                                 return callback()
+                            }else{
+                                return callback(new Error(data.errorInfo));
                             }
                         });
 
