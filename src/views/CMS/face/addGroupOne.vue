@@ -262,9 +262,7 @@
                     cancelButtonText: '取消',
                 }).then(() => {
                     deleteGroupOne({
-                        faceGroupID:this.groupData.id,
                         id:this.groupChildData.id1,
-                        name:this.groupChildData.name1,
                     }).then(({data})=>{
                         if(data.success){
                             this.$message.success('删除成功');
@@ -292,10 +290,7 @@
                     cancelButtonText: '取消',
                 }).then(() => {
                     deleteGroupTwo({
-                        faceGroupID:this.groupData.id,
-                        id:this.groupChildData.id2,
-                        name:this.groupChildData.name2,
-                        sub1:this.groupChildData.id1
+                        id:this.groupChildData.id2
                     }).then(({data})=>{
                         if(data.success){
                             this.$message.success('删除成功');
