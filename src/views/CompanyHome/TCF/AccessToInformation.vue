@@ -25,6 +25,7 @@
       <div class="gm-content">
         <nav class="gm-nav">
           <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
             <el-breadcrumb-item>技术文档</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>

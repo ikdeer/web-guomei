@@ -3,11 +3,12 @@
         <!-- 面包屑导航栏 -->
         <nav class="nav-Type">
             <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
                 <el-breadcrumb-item>创建分组</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>
-        <h3>创建分组</h3>
+        <h3>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
                 <div @click="lastStep"><span>1</span>第一步 设置分组</div>
@@ -264,6 +265,9 @@
         computed:{
             isSee(){
                 return this.$route.query.type == '2' ? true : false;
+            },
+            isEdit(){
+                return this.$route.query.type == '3' ? true : false;
             }
         },
         methods:{

@@ -4,6 +4,7 @@
       <template>
         <nav class="nav-Type">
           <el-breadcrumb separator="/">
+              <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
             <el-breadcrumb-item :to="{path:'/Index/applicationList'}">应用列表</el-breadcrumb-item>
             <el-breadcrumb-item>应用详情</el-breadcrumb-item>
           </el-breadcrumb>

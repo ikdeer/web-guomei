@@ -3,6 +3,7 @@
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path:'/Index/TCFApiList'}">技术文档</el-breadcrumb-item>
         <el-breadcrumb-item>编辑技术文档</el-breadcrumb-item>
       </el-breadcrumb>
