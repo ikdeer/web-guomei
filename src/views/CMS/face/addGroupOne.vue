@@ -5,10 +5,10 @@
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
-                <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>
-        <h3>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</h3>
+        <h3>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
                 <div class="active"><span>1</span>第一步 设置分组</div>
@@ -217,7 +217,7 @@
 
                 if(this.groupChildData.id2 != ''){
                     //修改子分组
-                    editeGroupOne({
+                    editeGroupTwo({
                         faceGroupID:this.groupData.id,
                         name:this.groupChildData.name2,
                         sub1:this.groupChildData.id1,

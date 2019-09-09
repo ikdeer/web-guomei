@@ -797,6 +797,7 @@
             addEquipmentDialog(){//新增接口
                 let params = {
                     ...this.dialogInfo,
+                    id:0,
                     belongComID:this.dialogInfo.shopFour,
                     gmAreaID:this.dialogInfo.siteThree,
                     faceGroupID:this.dialogFace.faceChildTwo,

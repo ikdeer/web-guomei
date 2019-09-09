@@ -73,7 +73,7 @@ export const editeGroupOne = ({ faceGroupID,id,name }) => AxIos({
 
 //修改第二子分组
 export const editeGroupTwo = ({ faceGroupID,id,name,sub1 }) => AxIos({
-    url: '/faceGroup/modifySubFaceGroup1',
+    url: '/faceGroup/modifySubFaceGroup2',
     method: 'post',
     data: { faceGroupID,id,name,sub1 }
 });
