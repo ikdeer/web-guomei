@@ -73,9 +73,10 @@
                             class="user_list_form_time"
                             v-model="formData.dataTime"
                             type="daterange"
-                            value-format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             start-placeholder="开始日期"
-                            end-placeholder="结束日期">
+                            end-placeholder="结束日期"
+                            :default-time="['00:00:00', '23:59:59']">
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item>

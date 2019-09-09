@@ -6,7 +6,7 @@
             <el-breadcrumb separator="/">
               <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
               <el-breadcrumb-item :to="{path:'/Index/overview'}">概览</el-breadcrumb-item>
-              <el-breadcrumb-item>创建应用</el-breadcrumb-item>
+              <el-breadcrumb-item>{{type?'修改应用':'创建应用'}}</el-breadcrumb-item>
             </el-breadcrumb>
           </nav>
         </template>
@@ -40,10 +40,12 @@
                 <span style="font-size: 11px;color: #FE023F;margin-left: 80px;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span>
                 <el-form-item label="接口选择" prop="api" required>
                     <template v-for="item in InterfaceApi">
-                        <div class="left">
-                            <el-checkbox :indeterminate="item.isIndeterminate" @change="outerCheck(item)" v-model="item.checkd" :label="item.name"></el-checkbox>
+                        <div class="left" @click="outerCheck(item)">
+                            <i class="el-icon-plus left_icon" v-if="!item.isShow"></i>
+                            <i class="el-icon-minus left_icon" v-if="item.isShow"></i>
+                            {{item.name}}
                         </div>
-                        <div class="right">
+                        <div class="right" v-show="item.isShow">
                             <el-checkbox v-for="api in item.apisList" v-model="api.checkd" @change="innerCheck(api)" :label="api.name" :key="api.id"></el-checkbox>
                         </div>
                     </template>
@@ -53,23 +55,9 @@
                               v-model="dataForm.introduction" placeholder="请输入应用描述"
                               autocomplete="off"></el-input>
                 </el-form-item>
-                <!--<el-form-item label="调用量" prop="amountLimit" required>
-                    <el-select v-model="dataForm.amountLimit" placeholder="请选择调用量">
-                        <el-option label="100" value="100"></el-option>
-                        <el-option label="500" value="500"></el-option>
-                        <el-option label="1000" value="1000"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="QPS限制" prop="qpsLimit" required>
-                    <el-select v-model="dataForm.qpsLimit" placeholder="请选择QPS限制">
-                        <el-option label="10" value="10"></el-option>
-                        <el-option label="50" value="50"></el-option>
-                        <el-option label="100" value="100"></el-option>
-                    </el-select>
-                </el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="create">{{type?'修改':'立即创建'}}</el-button>
-                    <el-button @click="$router.back()">取消</el-button>
+                    <el-button @click="onback">取消</el-button>
                 </el-form-item>
             </el-form>
 
@@ -101,20 +89,6 @@
                     return callback(new Error('请填写应用描述'))
                 }
             };
-            /*let amountLimit = (rule, value, callback) => {
-                if(value){
-                    return callback()
-                }else{
-                    return callback(new Error('请选择调用量'))
-                }
-            };
-            let qpsLimit = (rule, value, callback) => {
-                if(value){
-                   return callback()
-                }else{
-                    return callback(new Error('请选择QPS限制'))
-                }
-            };*/
             let typeID = (rule, value, callback) => {
                 if(value){
                     return callback()
@@ -163,12 +137,6 @@
                     introduction:[
                         {validator:introduction,trigger:['blur','change']}
                     ],
-                    /*amountLimit:[
-                        {validator:amountLimit,trigger:['blur','change']}
-                    ],
-                    qpsLimit:[
-                        {validator:qpsLimit,trigger:['blur','change']}
-                    ],*/
                     typeID:[
                         {validator:typeID,trigger:['blur','change']}
                     ],
@@ -207,7 +175,7 @@
                             editApplication(params).then(({data})=>{
                                 if(data.success){
                                     this.$message.success('编辑成功');
-                                    this.$router.back()
+                                    this.onback()
                                 }else{
                                     this.$message.warning(data.errorInfo)
                                 }
@@ -216,7 +184,7 @@
                             createApplication(params).then(({data})=>{
                                 if(data.success){
                                     this.$message.success('创建成功');
-                                    this.$router.back()
+                                    this.onback()
                                 }else{
                                     this.$message.warning(data.errorInfo)
                                 }
@@ -227,34 +195,18 @@
                     }
                 });
             },
+            onback(){
+                this.$router.push({path:'/Index/applicationList'})
+            },
             outerCheck(item){
-                this.InterfaceApi[item.index].isIndeterminate = false;
-                if(this.InterfaceApi[item.index].apisList){
-                    this.InterfaceApi[item.index].apisList.forEach((ins)=>{
-                        ins.checkd = item.checkd;
-                    })
+                if(item.isShow){
+                    item.isShow = false;
+                }else{
+                    item.isShow = true;
                 }
             },
             innerCheck(ins){
-                if(this.InterfaceApi[ins.index].apisList){
-                    let count = 0;
-                    this.InterfaceApi[ins.index].apisList.forEach((item)=>{
-                        if(item.checkd){
-                            count++
-                        }
-                    });
-                    if(this.InterfaceApi[ins.index].apisList.length === count){
-                        this.InterfaceApi[ins.index].isIndeterminate = false;
-                        this.InterfaceApi[ins.index].checkd = true;
-                    }else{
-                        if(count===0){
-                            this.InterfaceApi[ins.index].checkd = false;
-                            this.InterfaceApi[ins.index].isIndeterminate = false;
-                        }else{
-                            this.InterfaceApi[ins.index].isIndeterminate = true;
-                        }
-                    }
-                }
+                console.log(this.InterfaceApi[ins.index].apisList)
             },
             getDetail(){
                 getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
@@ -286,8 +238,7 @@
                     if(data.data){
                         /*给外层一个默认值 内层一个外层index备用*/
                         data.data.list.forEach((item,index)=>{
-                            item.isIndeterminate = false;
-                            item.checkd = false;
+                            item.isShow = true;
                             item.index = index;
                             if(item.apisList){
                                 item.apisList.forEach((ins,ind)=>{
@@ -296,20 +247,12 @@
                                             ins.checkd = false;
                                         }else {
                                             ins.checkd = true;
-                                            item.isIndeterminate = true;
                                         }
                                     }else{
                                         ins.checkd = false;
                                     }
                                     ins.index = index;
                                 });
-
-                                if(ArrayId){
-                                    if(ArrayId.length == item.apisList.length){
-                                        item.checkd = true;
-                                    }
-                                }
-
                             }
                         });
                         this.InterfaceApi = data.data.list;
@@ -342,8 +285,27 @@
             .el-form {
                 width: 520px;
                 .el-form-item__content{
+                    .left{
+                        cursor: pointer;
+                        display: inline-block;
+                        width: 90px;
+                        color: #666666;
+                        .left_icon{
+                            display: inline-block;
+                            width: 14px;
+                            height: 14px;
+                            font-size: 12px;
+                            text-align: center;
+                            line-height: 14px;
+                            margin-right: 5px;
+                            color: #409EFF;
+                            border:1px solid #409EFF;
+                        }
+                    }
                     .right{
-                        margin-left: 24px;
+                        display: inline-block;
+                        width: calc(100% - 120px);
+                        margin-left: 20px;
                     }
                 }
             }

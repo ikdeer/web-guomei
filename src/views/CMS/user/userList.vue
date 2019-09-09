@@ -30,9 +30,10 @@
                             v-model="formData.dataTime"
                             type="daterange"
                             range-separator="至"
-                            value-format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             start-placeholder="开始日期"
-                            end-placeholder="结束日期">
+                            end-placeholder="结束日期"
+                            :default-time="['00:00:00', '23:59:59']">
                         </el-date-picker>
                     </el-form-item>
                 </el-form>
@@ -134,8 +135,8 @@
                 </el-form-item>
             </el-form>
             <span slot="footer">
-                <el-button @click="userListAddDialog = false">取 消</el-button>
                 <el-button type="primary" @click="createUser">确 定</el-button>
+                <el-button @click="userListAddDialog = false">取 消</el-button>
             </span>
         </el-dialog>
 
@@ -291,6 +292,32 @@
                 this.$refs['dataDialogForm'].resetFields();
             },
             search(){
+                let phoneArr = this.formData.phoneNums.replace('，',',').split(',');
+                let emailArr = this.formData.mails.replace('，',',').split(',');
+                if(!phoneArr[0]==''){
+                    let phoneFlag = false;
+                    phoneArr.forEach((item)=>{
+                        if(!/^(13|14|15|16|17|18|19)\d{9}$/.test(item)){
+                            phoneFlag = true;
+                        }
+                    });
+                    if(phoneFlag){
+                        this.$message.warning('手机号不符合规则')
+                        return;
+                    }
+                }
+                if(!emailArr[0]==''){
+                    let emailFlag = false;
+                    emailArr.forEach((item)=>{
+                        if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(item)){
+                            emailFlag = true;
+                        }
+                    });
+                    if(emailFlag){
+                        this.$message.warning('邮箱不符合规则')
+                        return;
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
@@ -300,10 +327,11 @@
 
                 getUserList(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data.list || [];
-                        this.page.total = data.pagerManager.totalResults;
+                        this.tableData = data.data ? data.data.list : [];
+                        this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
                         this.tableData = [];
+                        this.page.total = 0;
                         // this.$message.warning(data.errorInfo)
                     }
                 });
