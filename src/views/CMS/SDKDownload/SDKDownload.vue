@@ -10,7 +10,7 @@
       <h3>SDK下载</h3>
       <div class="SDK-Content">
         <div class="SDK-table">
-          <el-table :data="tableData" style="width: 100%" size="small">
+          <el-table :data="tableData" style="width: 100%" border size="small">
             <el-table-column label="ID" align="center">
               <template slot-scope="scope">
                 <span>{{scope.row.id}}</span>
@@ -24,6 +24,13 @@
             <el-table-column label="创建时间" align="center">
               <template slot-scope="scope">
                 <span>{{scope.row.createTime}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="下载说明" align="center">
+              <template slot-scope="scope">
+                <span>介绍：云从商用SDK，采用云从科技先进人脸识别算法，拥有多项独家专利技术，
+        为客户提供易集成，高性能的人脸识别相关接口。商用SDK包括人脸检测模块，特征识别模块，
+        提供人脸检测，跟踪，对齐，质量分，特征提取，特征比对，属性识别等接口。</span>
               </template>
             </el-table-column>
             <el-table-column label="下载地址" align="center">
