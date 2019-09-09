@@ -53,10 +53,10 @@ export const userContactList = ({ userID,page,pageSize }) => AxIos({
 });
 
 //新增联系人
-export const addUserContact = ({ id,mail,name,phoneNum }) => AxIos({
+export const addUserContact = ({ userID,mail,name,phoneNum }) => AxIos({
     url: '/user/contact/add',
     method: 'post',
-    data: { id,mail,name,phoneNum }
+    data: { userID,mail,name,phoneNum }
 });
 
 //修改联系人

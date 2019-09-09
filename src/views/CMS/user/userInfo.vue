@@ -261,13 +261,13 @@
             },
             adduser(){
                 this.userInfoAddDialog = true;
-                this.dataDialogForm.id = this.id;
             },
             addContact(){
                 this.$refs['dataDialogForm'].validate((valid) => {
                     if (valid) {
                         let params = {
                             id:this.dataDialogForm.id,
+                            userID:this.id,
                             name:this.dataDialogForm.name,
                             mail:this.dataDialogForm.email,
                             phoneNum:this.dataDialogForm.phone,
@@ -316,7 +316,7 @@
             getContactList(){//获取联系人列表
                 userContactList({userID:this.id,page:1,pageSize:200}).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data
+                        this.tableData = data.data?data.data.list:[];
                     }else{
                         this.$message.warning(data.errorInfo)
                     }

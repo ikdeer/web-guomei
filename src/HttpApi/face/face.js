@@ -144,3 +144,10 @@ export const deleteFaceGroup = ({ ids }) => AxIos({
     method: 'post',
     data:{ids }
 });
+
+//获取第二子分组数量
+export const getGroupChildremTwo = ({ id }) => AxIos({
+    url: '/faceGroup/getSubFaceGroup2Count',
+    method: 'post',
+    data:{id }
+});

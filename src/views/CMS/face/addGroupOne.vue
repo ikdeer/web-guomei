@@ -66,7 +66,6 @@
                                     </p>
                                     <p v-if="!groupTwoList.length">暂未创建二级子分组</p>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -81,7 +80,7 @@
 </template>
 
 <script>
-    import { createFaceGroup,editFaceGroup,createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo,getFacedetails,editeGroupOne,editeGroupTwo } from '@/HttpApi/face/face'
+    import { createFaceGroup,editFaceGroup,createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo,getFacedetails,editeGroupOne,editeGroupTwo,getGroupChildremTwo } from '@/HttpApi/face/face'
     export default {
         name: "addGroupOne",
         data(){
@@ -193,7 +192,8 @@
                                 id2:'',
                                 name1:'',
                                 name2:''
-                            }
+                            };
+                            this.groupTwoList = [];
                         }else{
                             this.$message.warning(data.errorInfo)
                         }
@@ -349,7 +349,18 @@
                 if(this.groupData.id == ''){
                     return false;
                 }
-                this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id,type:this.type}})
+                getGroupChildremTwo({id:this.groupData.id}).then(({data})=>{
+                    if(data.success){
+                        if(data.data.count > 0){
+                            this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id,type:this.type}})
+                        }else{
+
+                        }
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                });
+
             },
             cancel(){
                 this.$router.push({path:'/Index/faceList'})

@@ -276,7 +276,7 @@
             <span slot="footer">
                 <el-button v-if="equipmentDialogInfo.type===2" @click="goStepsOne">上一步</el-button>
                 <el-button type="primary" @click="submitTableDialog">{{equipmentDialogInfo.btnInfo}}</el-button>
-                <el-button v-if="equipmentDialogInfo.btnShow" @click="equipmentDialogInfo.dialog = false"> 取 消 </el-button>
+                <el-button @click="equipmentDialogInfo.dialog = false"> 取 消 </el-button>
             </span>
         </el-dialog>
     </div>
@@ -329,13 +329,6 @@
                     return callback()
                 }
             };
-            /*let faceChildTwo = (rule, value, callback) => {
-                if(this.dialogFace.faceChildTwo == ''){
-                    return callback(new Error('请选择人脸分组'))
-                }else{
-                    return callback()
-                }
-            };*/
             return{
                 textLen:textLen,
                 formData:{
@@ -351,8 +344,8 @@
                 departmentList:[],//部门列表
                 floorList:[],//楼层列表
 
-                EquipmentType:[],//设备类型
-                EquipmentState:[],//设备状态
+                EquipmentType:[{id: "", name: "全部"},{id: "1", name: "抓拍像机-枪机"},{id: "2", name: "抓拍像机-球机"}],//设备类型
+                EquipmentState:[{common: "全部", id: ''},{common: "在线", id: '1'},{common: "离线", id: '0'}],//设备状态
 
                 tableData:[],
                 totalList:{ //在线量
@@ -366,12 +359,11 @@
                 },
                 equipmentDialogInfo:{
                     id:'',
-                    title:'新建设备',
+                    title:'添加设备',
                     dialog:false,
                     type:1,
                     isSee:false,
                     isEdit:false,
-                    btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 },
                 dialogInfo:{
@@ -395,7 +387,7 @@
                     faceChildTwo:''
                 },
 
-                dialogType:[],//弹窗设备类型
+                dialogType:[{id: "1", name: "抓拍像机-枪机"},{id: "2", name: "抓拍像机-球机"}],//弹窗设备类型
 
                 siteOne:[],// 弹窗设备位置一级
                 siteTwo:[],// 弹窗设备位置二级
@@ -485,12 +477,11 @@
             addEquiment(){//添加设备
                 this.equipmentDialogInfo={
                     id:'',
-                    title:'新建设备',
+                    title:'添加设备',
                     dialog:true,
                     type:1,
                     isSee:false,
                     isEdit:false,
-                    btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 };
 
@@ -539,7 +530,6 @@
                     isSee:true,
                     isEdit:false,
                     id:row.id,
-                    btnShow:true,//取消按钮显示隐藏
                     btnInfo:' 下一步 '
                 };
                 this.getDetail(row.id)
@@ -547,13 +537,12 @@
             edit(row){
                 //修改操作
                 this.equipmentDialogInfo = {
-                    title:'编辑设备',
+                    title:'修改设备',
                     dialog:true,
                     type:1,
                     isSee:false,
                     isEdit:true,
                     id:row.id,
-                    btnShow:true,//取消按钮显示隐藏
                     btnInfo:'保存并下一步'
                 };
                 this.getDetail(row.id);
@@ -600,13 +589,12 @@
                 //绑定人脸操作
                 this.equipmentDialogInfo = {
                     id:row.id,
-                    title:'编辑设备',
+                    title:'修改设备',
                     dialog:true,
                     type:2,
                     isSee:false,
                     isEdit:true,
-                    btnShow:true,//取消按钮显示隐藏
-                    btnInfo:' 确 定 '
+                    btnInfo:' 保 存 '
                 };
                 this.getDetail(row.id);
             },
@@ -700,11 +688,9 @@
                 this.equipmentDialogInfo.type=1;
                 if(this.equipmentDialogInfo.isSee){
                     this.equipmentDialogInfo.btnInfo =' 下一步 ';
-                    this.equipmentDialogInfo.btnShow = true;
                 }else{
                     this.equipmentDialogInfo.btnInfo='保存并下一步';
                 }
-
             },
             submitTableDialog(){
                 if(this.equipmentDialogInfo.type === 1){
@@ -717,6 +703,7 @@
                                 this.equipmentDialogInfo.btnInfo=' 确 定 ';
                                 this.equipmentDialogInfo.btnShow = false;
                             }else{
+                                this.equipmentDialogInfo.btnInfo=' 保 存 ';
                                 if(this.equipmentDialogInfo.isEdit){
                                     //编辑调用
                                     this.editEquipmentDialog()
@@ -931,22 +918,22 @@
                     }
                 });
                 //获取设备类型
-                getEquipmentType().then(({data})=>{
+                /*getEquipmentType().then(({data})=>{
                     data.data.list.unshift({
                         id: '',
                         name: "全部"
                     });
                     this.EquipmentType = data.data ? data.data.list:[];
                     this.dialogType = data.data ? data.data.list:[];
-                });
+                });*/
                 //获取设备状态
-                getEquipmentState().then(({data})=>{
+                /*getEquipmentState().then(({data})=>{
                     data.data.list.unshift({
                         id: '',
                         common: "全部"
                     });
                     this.EquipmentState = data.data ? data.data.list:[];
-                });
+                });*/
                 // 获取门店
                 getEquipmentArea({}).then(({data})=>{
                     if(data.data){
