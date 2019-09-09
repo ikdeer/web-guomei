@@ -84,7 +84,7 @@ export default [
     iconText:'SDK下载',
     iconImgShow:'/static/images/download_selected_icon@2x.png',
     iconImgHide:'/static/images/download_unselected_icon@2x.png',
-    iconRouter:'',
+    iconRouter:'/Index/SDKDownload',
     code:12,
   },
 ]
