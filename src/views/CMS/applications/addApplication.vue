@@ -39,16 +39,16 @@
                 </el-form-item>
                 <div style="font-size: 11px;color: #FE023F;margin:0 0 10px 80px;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</div>
                 <el-form-item label="接口选择" prop="api" required>
-                    <template v-for="item in InterfaceApi">
+                    <div v-for="item in InterfaceApi" class="InterfaceApi">
                         <div class="left" @click="outerCheck(item)">
                             <i class="el-icon-plus left_icon" v-if="!item.isShow"></i>
                             <i class="el-icon-minus left_icon" v-if="item.isShow"></i>
                             {{item.name}}
                         </div>
                         <div class="right" v-show="item.isShow">
-                            <el-checkbox v-for="api in item.apisList" v-model="api.checkd" @change="innerCheck(api)" :label="api.name" :key="api.id"></el-checkbox>
+                            <el-checkbox v-for="api in item.apisList" v-model="api.checkd" :disabled="api.disabled" @change="innerCheck(api)" :label="api.name" :key="api.id"></el-checkbox>
                         </div>
-                    </template>
+                    </div>
                 </el-form-item>
                 <el-form-item label="应用描述" prop="introduction" required>
                     <el-input type="textarea" rows="5" show-word-limit :maxlength="100"
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-    import { getApplicationDetail,getApplicationTypes,getApplicationTypesInterface,createApplication,editApplication } from '@/HttpApi/application/application';
+    import { getApplicationDetail,getApplicationTypes,getApplicationTypesInterface,createApplication,editApplication,getApplicationTypesInterfaceList } from '@/HttpApi/application/application';
     export default {
         name: "addApplication",
         data() {
@@ -99,11 +99,13 @@
             let api = (rule, value, callback) => {
                 let ids = [];
                 this.InterfaceApi.forEach((item)=>{
-                    item.apisList.forEach((ins)=>{
-                        if(ins.checkd){
-                            ids.push(ins.id);
-                        }
-                    })
+                    if(item.apisList){
+                        item.apisList.forEach((ins)=>{
+                            if(ins.checkd){
+                                ids.push(ins.id);
+                            }
+                        })
+                    }
                 });
                 if(ids.length === 0){
                     return callback(new Error('请选择接口'))
@@ -122,7 +124,6 @@
                     name:'',//应用名称
                     //qpsLimit:'',//qps限制
                     typeID:'',//APP类型ID
-                    id:'',//APP的ID
                     api:'1'
                 },
 
@@ -158,11 +159,13 @@
                     if (valid) {
                         let ids = [];
                         this.InterfaceApi.forEach((item)=>{
-                            item.apisList.forEach((ins)=>{
-                                if(ins.checkd){
-                                    ids.push(ins.id);
-                                }
-                            })
+                            if(item.apisList){
+                                item.apisList.forEach((ins)=>{
+                                    if(ins.checkd){
+                                        ids.push(ins.id);
+                                    }
+                                })
+                            }
                         });
                         let params = {
                             ...this.dataForm,
@@ -235,24 +238,37 @@
             },
             getInterface(id,ArrayId){
                 getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
+                    console.log(data);
+                });
+
+                getApplicationTypesInterfaceList().then(({data})=>{
                     if(data.data){
                         /*给外层一个默认值 内层一个外层index备用*/
                         data.data.list.forEach((item,index)=>{
                             item.isShow = true;
                             item.index = index;
                             if(item.apisList){
-                                item.apisList.forEach((ins,ind)=>{
-                                    if(ArrayId){
-                                        if(ArrayId.indexOf(ins.id) < 0 ){
+                                if(item.appType == id){
+                                    item.apisList.forEach((ins,ind)=>{
+                                        ins.checkd = true;
+                                        ins.disabled = true;
+                                        ins.index = index;
+                                    });
+                                }else{
+                                    item.apisList.forEach((ins,ind)=>{
+                                        if(ArrayId){
+                                            if(ArrayId.indexOf(ins.id) < 0 ){
+                                                ins.checkd = false;
+                                            }else {
+                                                ins.checkd = true;
+                                            }
+                                        }else{
                                             ins.checkd = false;
-                                        }else {
-                                            ins.checkd = true;
                                         }
-                                    }else{
-                                        ins.checkd = false;
-                                    }
-                                    ins.index = index;
-                                });
+                                        ins.disabled = false;
+                                        ins.index = index;
+                                    });
+                                }
                             }
                         });
                         this.InterfaceApi = data.data.list;
@@ -285,31 +301,37 @@
             .el-form {
                 width: 560px;
                 .el-form-item__content{
-                    .left{
-                        cursor: pointer;
-                        width: 90px;
-                        color: #666666;
-                        float: left;
-                        .left_icon{
-                            display: inline-block;
-                            width: 14px;
-                            height: 14px;
-                            font-size: 12px;
-                            text-align: center;
-                            line-height: 14px;
-                            margin-right: 5px;
-                            color: #409EFF;
-                            border:1px solid #409EFF;
+                    .InterfaceApi{
+                        clear: both;
+                        display: inline-block;
+                        width: 100%;
+                        .left{
+                            cursor: pointer;
+                            width: 90px;
+                            color: #666666;
+                            float: left;
+                            .left_icon{
+                                display: inline-block;
+                                width: 14px;
+                                height: 14px;
+                                font-size: 12px;
+                                text-align: center;
+                                line-height: 14px;
+                                margin-right: 5px;
+                                color: #409EFF;
+                                border:1px solid #409EFF;
+                            }
+                        }
+                        .right{
+                            float: left;
+                            width: calc(100% - 120px);
+                            margin-left: 20px;
+                            .el-checkbox{
+                                width: 90px;
+                            }
                         }
                     }
-                    .right{
-                        float: left;
-                        width: calc(100% - 120px);
-                        margin-left: 20px;
-                        .el-checkbox{
-                            width: 82px;
-                        }
-                    }
+
                 }
             }
         }

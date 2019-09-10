@@ -149,7 +149,6 @@
             <div class="upload_face">
                 <h3>上传图片</h3>
                 <div class="upload">
-                    <!--  action="https://jsonplaceholder.typicode.com/posts/"-->
                     <el-upload
                         class="avatar-uploader"
                         action=""
@@ -171,7 +170,15 @@
             </div>
             <div class="face_list_dialog_footer">
                 <div>
-                    <el-button type="primary" @click="">批量添加</el-button>
+                    <el-upload
+                        class="upload_footer"
+                        :action="uploadUrl"
+                        :show-file-list="false"
+                        :on-success="uploadFillSuccess"
+                        :on-error="uploadFillError"
+                        :on-change="allhandleChange">
+                        <el-button type="primary" @click="">批量添加</el-button>
+                    </el-upload>
                     <el-button type="text" @click="">下载批量添加模板</el-button>
                 </div>
                 <div>
@@ -188,7 +195,7 @@
 
 <script>
     import {textLen} from '@/lib/utils'
-    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo } from '@/HttpApi/face/face'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -237,6 +244,7 @@
             };
             return {
                 textLen:textLen,
+                uploadUrl:uploadUrl,
                 formData:{
                     name:'',
                     id:'',
@@ -421,27 +429,41 @@
                 return isJPG && isLt2M;
             },
             commitFaceImage(){
-                console.log(this.imageUrl);
                 this.$refs['dataDialogForm'].validate((valid) => {
                     if (valid) {
                         if(this.imageUrl == ''){
                             this.$message.warning('请上传人脸图片');
                             return;
                         }
-
-                        /*createUser(params).then(({data})=>{
+                        let params = {
+                            ...this.dataDialogForm,
+                            url:this.faceImgUrl
+                        };
+                        createFace(params).then(({data})=>{
                             if(data.success){
-                                this.$message.success('添加成功');
-                                this.search();
-                                this.userListAddDialog = false;
+                                this.$message.success('上传成功');
+                                this.dataDialogForm.uploadFaceDialog = false
                             }else{
                                 this.$message.warning(data.errorInfo)
                             }
-                        })*/
+                        })
                     } else {
                         return false;
                     }
                 });
+            },
+            allhandleChange(a,b,c,d){
+                // console.log('change',a,b,c,d)
+            },
+            uploadFillSuccess(res,file,fileList){
+               if(res.success){
+
+               }else{
+                   this.$message.warning(res.errorInfo)
+               }
+            },
+            uploadFillError(a,b,c,d){
+
             }
         },
         mounted(){
@@ -581,7 +603,10 @@
             div{
                 width: 46%;
             }
-
+            .upload_footer{
+                display: inline-block;
+                width: 90px;
+            }
         }
     }
 </style>
