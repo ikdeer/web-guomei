@@ -5,10 +5,10 @@
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
-                <el-breadcrumb-item>{{isSee?'查看分组':'创建分组'}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>
-        <h3>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</h3>
+        <h3>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
                 <div class="active"><span>1</span>第一步 设置分组</div>
@@ -217,7 +217,7 @@
 
                 if(this.groupChildData.id2 != ''){
                     //修改子分组
-                    editeGroupOne({
+                    editeGroupTwo({
                         faceGroupID:this.groupData.id,
                         name:this.groupChildData.name2,
                         sub1:this.groupChildData.id1,
@@ -347,6 +347,7 @@
             nextStep(){
                 //下一步
                 if(this.groupData.id == ''){
+                    this.$message.warning('请先创建分组')
                     return false;
                 }
                 getGroupChildremTwo({id:this.groupData.id}).then(({data})=>{
@@ -354,13 +355,12 @@
                         if(data.data.count > 0){
                             this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id,type:this.type}})
                         }else{
-
+                            this.$message.warning('请先创建二级子分组')
                         }
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
                 });
-
             },
             cancel(){
                 this.$router.push({path:'/Index/faceList'})

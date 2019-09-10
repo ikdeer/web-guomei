@@ -288,7 +288,6 @@
     export default {
         name: "equipmentList",
         data(){
-
             let no = (rule, value, callback) => {
                 if(value){
                     if(!/[a-zA-Z0-9]+$/.test(value)){
@@ -321,7 +320,6 @@
                     return callback()
                 }
             };
-
             let shopFour = (rule, value, callback) => {
                 if(this.dialogInfo.shopFour == ''){
                     return callback(new Error('请选择设备位置'))
@@ -799,6 +797,7 @@
             addEquipmentDialog(){//新增接口
                 let params = {
                     ...this.dialogInfo,
+                    id:0,
                     belongComID:this.dialogInfo.shopFour,
                     gmAreaID:this.dialogInfo.siteThree,
                     faceGroupID:this.dialogFace.faceChildTwo,

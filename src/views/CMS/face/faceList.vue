@@ -188,7 +188,7 @@
 
 <script>
     import {textLen} from '@/lib/utils'
-    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList } from '@/HttpApi/face/face'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -369,7 +369,17 @@
                 this.$router.push({path:'/Index/addgroupone',query:{id:row.id,type:'3'}})
             },
             addFace(row){
-                this.$router.push({path:'/Index/addgrouptwo',query:{id:row.id,type:'3'}})
+                getGroupChildremTwo({id:row.id}).then(({data})=>{
+                    if(data.success){
+                        if(data.data.count > 0){
+                            this.$router.push({path:'/Index/addgrouptwo',query:{id:row.id,type:'3'}})
+                        }else{
+                            this.$message.warning('请先创建二级子分组')
+                        }
+                    }else{
+                        this.$message.warning(data.errorInfo)
+                    }
+                });
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
