@@ -120,7 +120,7 @@
                             <el-button type="text" style="color: #E56565;" @click="edit(scope.row)">修改</el-button>
                             <el-button type="text" v-if="scope.row.online === 0" style="color: #67C23A;" @click="on(scope.row)">上线</el-button>
                             <el-button type="text" v-if="scope.row.online === 1" style="color: #67C23A;" @click="down(scope.row)">下线</el-button>
-                            <el-button type="text" style="color: #E56565;" @click="binding(scope.row)">绑定人脸</el-button>
+                            <el-button type="text" style="color: #E56565;" v-if="!scope.row.faceGroupID" @click="binding(scope.row)">绑定人脸</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -615,15 +615,25 @@
                             shopFour:data.data.device.belongComID,
                         };
                         //处理分组反显
-                        getFaceGroupOne({faceGroupID:data.data.device.faceGroupID}).then(({data})=>{
-                            this.faceChildOne = data.data.list;
-                        });
-                        getFaceGroupTwo({
-                            faceGroupID:data.data.device.faceGroupID,
-                            sub1:data.data.device.sub1
-                        }).then(({data})=>{
-                            this.faceChildTwo = data.data.list;
-                        });
+                        if(data.data.device.faceGroupID){
+                            getFaceGroupOne({faceGroupID:data.data.device.faceGroupID}).then(({data})=>{
+                                if(data.success){
+                                    this.faceChildOne = data.data.list;
+                                }else{
+                                    this.$message.warning(data.errorInfo)
+                                }
+                            });
+                            getFaceGroupTwo({
+                                faceGroupID:data.data.device.faceGroupID,
+                                sub1:data.data.device.sub1
+                            }).then(({data})=>{
+                                if(data.success){
+                                    this.faceChildTwo = data.data.list;
+                                }else{
+                                    this.$message.warning(data.errorInfo)
+                                }
+                            });
+                        }
                         this.dialogFace = {
                             faceGroup:data.data.device.faceGroupID,//人脸分组123
                             faceChildOne:data.data.device.sub1,

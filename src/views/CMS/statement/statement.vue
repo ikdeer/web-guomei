@@ -213,19 +213,16 @@
                     timeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
                     timeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                     timeType:this.radio,
+                    monitorItems:this.formData.monitor.join(),
+                    top:10
                 };
-                if(this.formData.monitor.length == 1){
-                    params.monitorItems = this.formData.monitor[0];
-                }else{
-                    params.monitorItems = ''
-                }
                 getStatement(params).then(({data}) => {
                     if(data.success){
-                        this.callData = data.data.data.callData;
-                        this.tableData = data.data.data.appStatisApiList;
+                        this.callData = data.data.data.callData?data.data.data.callData:[];
+                        this.tableData = data.data.data.appStatisApiList?data.data.data.appStatisApiList:[];
                         this.page.total = data.data.data.pagerManager? data.data.data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
-                        data.data.data.charStaticApiList.forEach((item,index)=>{
+                        this.tableData.forEach((item,index)=>{
                             days.push(item.days);
                             callSucessCount.push(item.callSucessCount);
                             callFailCount.push(item.callFailCount);
