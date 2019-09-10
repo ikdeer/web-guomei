@@ -148,7 +148,7 @@
             </div>
             <div class="ListPad-scene ListPad-bgRed">
               <div class="ListPad-scene_center">
-                <img src="/static/images/guard_icon@2x.png" alt="">
+                <img src="/static/images/security_icon@2x.png" alt="">
                 <p class="scene-Title">安防监控</p>
                 <p class="scene-Text">支持身份证、银行卡文字识别</p>
                 <div class="scene-Text_span">
