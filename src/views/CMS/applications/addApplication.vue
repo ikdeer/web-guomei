@@ -37,7 +37,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <span style="font-size: 11px;color: #FE023F;margin-left: 80px;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</span>
+                <div style="font-size: 11px;color: #FE023F;margin:0 0 10px 80px;">注意：所选应用类型包含基本接口已默认勾选并不可取消，您可勾选新增修改其他接口服务</div>
                 <el-form-item label="接口选择" prop="api" required>
                     <template v-for="item in InterfaceApi">
                         <div class="left" @click="outerCheck(item)">
@@ -283,13 +283,13 @@
             padding: 30px;
             box-sizing: border-box;
             .el-form {
-                width: 520px;
+                width: 560px;
                 .el-form-item__content{
                     .left{
                         cursor: pointer;
-                        display: inline-block;
                         width: 90px;
                         color: #666666;
+                        float: left;
                         .left_icon{
                             display: inline-block;
                             width: 14px;
@@ -303,9 +303,12 @@
                         }
                     }
                     .right{
-                        display: inline-block;
+                        float: left;
                         width: calc(100% - 120px);
                         margin-left: 20px;
+                        .el-checkbox{
+                            width: 82px;
+                        }
                     }
                 }
             }
