@@ -416,11 +416,6 @@
                         {validator:shopFour,trigger:['blur','change']}
                     ],
                 },
-                /*dialogTwo:{
-                    faceChildTwo:[
-                        {validator:faceChildTwo,trigger:['blur','change']}
-                    ]
-                },*/
                 userInfo:{
                     groupID:'',
                     uid: '',
@@ -468,7 +463,7 @@
                 this.shopFour = [];//弹窗所属门店
                 this.faceChildOne = [];//人脸一级分组
                 this.faceChildTwo = [];//人脸二级分组
-
+                this.search();//查询应用信息
                 this.$refs['dialogOne'].clearValidate();
                 this.$refs['dialogTwo'].clearValidate();
             },
@@ -694,14 +689,13 @@
                 if(this.equipmentDialogInfo.type === 1){
                     this.$refs['dialogOne'].validate((valid) => {
                         if (valid) {
-                            /*this.equipmentDialogInfo.type=2;
-                            this.equipmentDialogInfo.btnInfo=' 确 定 ';*/
                             if(this.equipmentDialogInfo.isSee){
+                                //查看
                                 this.equipmentDialogInfo.type=2;
                                 this.equipmentDialogInfo.btnInfo=' 确 定 ';
                                 this.equipmentDialogInfo.btnShow = false;
                             }else{
-                                this.equipmentDialogInfo.btnInfo=' 保 存 ';
+                                //处理保存接口
                                 if(this.equipmentDialogInfo.isEdit){
                                     //编辑调用
                                     this.editEquipmentDialog()
@@ -720,77 +714,15 @@
                         this.equipmentDialogInfo.dialog = false;
                         return ;
                     }
-                    if (this.equipmentDialogInfo.isEdit) {
-                        /*编辑接口调用*/
-                        if(this.dialogFace.faceChildTwo == ''){
-                            this.$confirm('该设备尚未绑定人脸分组，将无法正常使用，请尽快绑定人脸分组', '提示信息', {
-                                confirmButtonText: '知道了',
-                                showCancelButton:false
-                            }).then(() => {
-                            }).catch(() => {});
-                        }else{
-                            this.editEquipmentDialog();
-                        }
-                        /*this.$refs['dialogTwo'].validate((valid) => {
-                            if (valid) {
-                                this.editEquipmentDialog()
-                                let pams = {
-                                    ...this.dialogInfo,
-                                    id:this.equipmentDialogInfo.id,
-                                    belongComID:this.dialogInfo.shopFour,
-                                    gmAreaID:this.dialogInfo.siteThree,
-                                    faceGroupID:this.dialogFace.faceChildTwo,
-                                    createrID:this.userInfo.uid,
-                                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
-                                };
-                                editEquipment(pams).then(({data}) => {
-                                    if(data.success){
-                                        this.$message.success('修改成功');
-                                        this.search();
-                                        this.equipmentDialogInfo.dialog = false;
-                                    }else{
-                                        this.$message.warning(data.errorInfo)
-                                    }
-                                })
-                            } else {
-                                return false;
-                            }
-                        });*/
+                    /*编辑接口调用*/
+                    if(this.dialogFace.faceChildTwo == ''){
+                        this.$confirm('该设备尚未绑定人脸分组，将无法正常使用，请尽快绑定人脸分组', '提示信息', {
+                            confirmButtonText: '知道了',
+                            showCancelButton:false
+                        }).then(() => {
+                        }).catch(() => {});
                     }else{
-                        /*新增接口调用*/
-                        if(this.dialogFace.faceChildTwo == ''){
-                            this.$confirm('该设备尚未绑定人脸分组，将无法正常使用，请尽快绑定人脸分组', '提示信息', {
-                                confirmButtonText: '知道了',
-                                showCancelButton:false
-                            }).then(() => {
-                            }).catch(() => {});
-                        }else{
-                            this.addEquipmentDialog()
-                        }
-                        /*this.$refs['dialogTwo'].validate((valid) => {
-                            if (valid) {
-                                this.addEquipmentDialog()
-                                let params = {
-                                    ...this.dialogInfo,
-                                    belongComID:this.dialogInfo.shopFour,
-                                    gmAreaID:this.dialogInfo.siteThree,
-                                    faceGroupID:this.dialogFace.faceChildTwo,
-                                    createrID:this.userInfo.uid,
-                                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
-                                };
-                                addEquipment(params).then(({data})=>{
-                                    if(data.success){
-                                        this.$message.success('添加成功');
-                                        this.search();
-                                        this.equipmentDialogInfo.dialog = false;
-                                    }else{
-                                        this.$message.warning(data.errorInfo)
-                                    }
-                                })
-                            } else {
-                                return false;
-                            }
-                        });*/
+                        this.editEquipmentDialog();
                     }
                 }
             },
@@ -798,17 +730,19 @@
                 let params = {
                     ...this.dialogInfo,
                     id:0,
-                    belongComID:this.dialogInfo.shopFour,
-                    gmAreaID:this.dialogInfo.siteThree,
-                    faceGroupID:this.dialogFace.faceChildTwo,
+                    belongComID:this.dialogInfo.shopFour?this.dialogInfo.shopFour:0,
+                    gmAreaID:this.dialogInfo.siteThree?this.dialogInfo.siteThree:0,
+                    faceGroupID:this.dialogFace.faceChildTwo?this.dialogInfo.faceChildTwo:0,
                     createrID:this.userInfo.uid,
-                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
+                    positionType:1
                 };
                 addEquipment(params).then(({data})=>{
                     if(data.success){
-                        this.$message.success('添加成功');
-                        this.search();
-                        this.equipmentDialogInfo.dialog = false;
+                        /*第一步新增完成改变为编辑类型，为什么变，后端太TM懒*/
+                        this.equipmentDialogInfo.id = data.data.id;
+                        this.equipmentDialogInfo.isEdit = true;
+                        this.equipmentDialogInfo.btnInfo ='保存';
+                        this.equipmentDialogInfo.type=2;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -818,19 +752,30 @@
                 let pams = {
                     ...this.dialogInfo,
                     id:this.equipmentDialogInfo.id,
-                    belongComID:this.dialogInfo.shopFour,
-                    gmAreaID:this.dialogInfo.siteThree,
-                    faceGroupID:this.dialogFace.faceChildTwo,
+                    belongComID:this.dialogInfo.shopFour?this.dialogInfo.shopFour:0,
+                    gmAreaID:this.dialogInfo.siteThree?this.dialogInfo.siteThree:0,
+                    faceGroupID:this.dialogFace.faceChildTwo?this.dialogFace.faceChildTwo:0,
                     createrID:this.userInfo.uid,
-                    positionType:this.dialogInfo.siteTwo == '国美电器' ? 1:0
+                    positionType:1
                 };
                 editEquipment(pams).then(({data}) => {
                     if(data.success){
-                        this.$message.success('修改成功');
-                        this.search();
-                        this.equipmentDialogInfo.dialog = false;
+                        if(this.equipmentDialogInfo.type === 1){//第一步调用编辑
+                            this.equipmentDialogInfo.btnInfo ='保存';
+                            this.equipmentDialogInfo.type=2;
+                        }else{
+                            this.equipmentDialogInfo.dialog = false;
+                        }
                     }else{
-                        this.$message.warning(data.errorInfo)
+                        if(this.equipmentDialogInfo.type === 1){//第一步调用编辑
+                            this.$message.warning(data.errorInfo)
+                        }else{
+                            this.$confirm(data.errorInfo, '提示信息', {
+                                confirmButtonText: '知道了',
+                                showCancelButton:false
+                            }).then(() => {
+                            }).catch(() => {});
+                        }
                     }
                 })
             },
