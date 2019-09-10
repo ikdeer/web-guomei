@@ -45,7 +45,8 @@
                   <span class="demonstration">请选择时间</span>
                   <el-date-picker
                     v-model="TimeData.TimeDate"
-                    type="datetimerange"
+                    type="daterange"
+                    :picker-options="pickerOptions"
                     @change="TimeBluer"
                     range-separator="至"
                     clearable
@@ -58,7 +59,7 @@
               </div>
               <div class="overIew-right_pad">
                 <el-table :data="tableData" header-row-class-name="tableHead" style="width: 100%">
-                  <el-table-column label="API" width="110" align="center">
+                  <el-table-column label="API"  align="center">
                     <template slot-scope="scope">
                       <span>{{scope.row.name}}</span>
                     </template>
@@ -68,12 +69,12 @@
                       <span>{{scope.row.apiCallCount}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" width="110" label="调用失败">
+                  <el-table-column align="center" label="调用失败">
                     <template slot-scope="scope">
                       <span>{{scope.row.apiCallFailCount}}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column align="center" width="110" label="失败率">
+                  <el-table-column align="center" label="失败率">
                     <template slot-scope="scope">
                       <span>{{scope.row.failureRate}}</span>
                     </template>
@@ -147,9 +148,9 @@
             </div>
             <div class="ListPad-scene ListPad-bgRed">
               <div class="ListPad-scene_center">
-                <img src="/static/images/guard_icon@2x.png" alt="">
+                <img src="/static/images/security_icon@2x.png" alt="">
                 <p class="scene-Title">安防监控</p>
-                <p class="scene-Text">支持身份证、银行卡文字识别、服务端的人脸动作活体检测</p>
+                <p class="scene-Text">支持身份证、银行卡文字识别</p>
                 <div class="scene-Text_span">
                   <span>主要服务：</span>
                   <span class="ListPad-TextRed">人脸检索</span>
@@ -170,8 +171,44 @@ export default {
       return {
         newAppsCount:0,//应用总数
         toBeAuditedAppsCount:0,//待审核应用
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              let end = new Date();
+              let start = new Date();
+              start.setTime(start.getTime() - 24 * 60 * 60 * 1000);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              let end = new Date();
+              let start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 2);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近7天',
+            onClick(picker) {
+              let end = new Date();
+              let start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          },
+            {
+              text: '本月',
+              onClick(picker) {
+                let end = new Date();
+                let start = new Date();
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                picker.$emit('pick', [start, end]);
+              }
+            }]
+        },
         TimeData:{
-          TimeDate:[],//时间获取
+          TimeDate:[new Date(),new Date()],//时间获取
           timeStart:'',//创建开始时间
           timeEnd:'',//创建结束时间
           top:5,//用量数量条数
@@ -440,10 +477,6 @@ export default {
           .face-Text{
             width: 1.94rem;
             height: 1.32rem;
-            display: flex;
-            display: -webkit-flex;
-            flex-direction: column;
-            justify-content: space-between;
             margin-left: 0.2rem;
             h4{
               margin: 0;
@@ -454,7 +487,7 @@ export default {
             p{
               font-size:0.14rem;
               color:#666666;
-              margin: 0;
+              margin-top: 0.3rem;
             }
           }
         }

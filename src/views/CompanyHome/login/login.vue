@@ -22,7 +22,7 @@
             <div class="login-form">
               <el-form-item prop="code">
                 <div class="login-code">
-                  <el-input placeholder="请输入验证码" v-model="loginForm.code"></el-input>
+                  <el-input placeholder="验证码" v-model="loginForm.code"></el-input>
                   <a href="javascript:;" @click="changeCodeImg()">
                     <img :src="loginForm.codeImg" alt="图片加载失败">
                   </a>
@@ -95,10 +95,10 @@
                   'code':this.loginForm.code,
                 })
                   .then(response => {
-                    if(response.data.success){
+                    if(response.data.errorCode == 200){
                       this.Cookies.set('token',response.data.data.token);
                       this.userInfo.userName = response.data.data.username;
-                      this.userInfo.userImg = response.data.data.username.substring(0,1);
+                      this.userInfo.userImg = response.data.data.username ? response.data.data.username.substring(0,1) : '';
                       this.userInfo.uid = response.data.data.uid;
                       this.userInfo.groupID = response.data.data.groupID;
                       this.Cookies.set('userInfo',JSON.stringify(this.userInfo));
@@ -156,24 +156,26 @@
     padding-top: 0.35rem;
     padding-bottom: 0.5rem;
     .login-input{
-      width: 3.28rem;
+      width: 3.6rem;
       .login-text{
         font-size: 0.26rem;
-        color: #F20A59;
+        color: #666666;
         font-weight: 600;
         text-align: center;
       }
       .login-form{
-        width: 3.28rem;
+        width: auto;
         height: 0.5rem;
         display: flex;
         display: -webkit-flex;
-        margin-top: 0.3rem;
+        margin-top: 0.25rem;
         .el-form-item{
           width: 100%;
-          height: 0.5rem !important;
-          input{
-            height: 0.5rem !important;
+          height: 0.45rem !important;
+          div{
+            input{
+              height: 0.45rem !important;
+            }
           }
         }
         .login-code{
@@ -182,12 +184,12 @@
           align-items: center;
           position: relative;
           img{
-            height:32px;
+            height: 32px;
             position: absolute;
-            right: 0;
             bottom: 0;
             border-bottom-right-radius: 4px;
             border-top-right-radius: 4px;
+            right: 0;
           }
         }
       }
@@ -204,7 +206,9 @@
         }
         span:last-child{
           font-size: 0.14rem;
-          color: #EE2323;
+          color:#036FE2;
+          text-decoration: underline;
+          cursor: pointer;
         }
       }
       .login-button{
@@ -212,7 +216,7 @@
         display: -webkit-flex;
         align-items: center;
         justify-content: center;
-        margin-top: 0.5rem;
+        margin-top: 0.3rem;
         >button{
           width: 1.6rem;
           line-height: 0.25rem;

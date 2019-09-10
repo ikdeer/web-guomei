@@ -51,8 +51,8 @@ export default [
   },
   {
     iconText:'接入须知',
-    iconImgShow:'/static/images/document_selected_icon@2x.png',
-    iconImgHide:'/static/images/document_unselected_icon@2x.png',
+    iconImgShow:'/static/images/xuzhi_selected_icon@2x.png',
+    iconImgHide:'/static/images/xuzhi_unselected_icon@2x.png',
     iconRouter:'/Index/instructionsList',
     code:8,
 
@@ -68,15 +68,15 @@ export default [
 
   {
     iconText:'栏目管理',
-    iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
-    iconImgHide:'/static/images/tuwenbianji_icon@2x.png',
+    iconImgShow:'/static/images/lanmuguanli_selected_icon@2x.png',
+    iconImgHide:'/static/images/lanmuguanli_unselected_icon@2x.png',
     iconRouter:'/Index/categories',
     code:10,
   },
   {
     iconText:'图文编辑',
-    iconImgShow:'/static/images/lanmuguanli_selected_icon@2x.png',
-    iconImgHide:'/static/images/lanmuguanli_unselected_icon@2x.png',
+    iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
+    iconImgHide:'/static/images/tuwenbianji_icon@2x.png',
     iconRouter:'',
     code:11,
   },
@@ -84,7 +84,7 @@ export default [
     iconText:'SDK下载',
     iconImgShow:'/static/images/download_selected_icon@2x.png',
     iconImgHide:'/static/images/download_unselected_icon@2x.png',
-    iconRouter:'',
+    iconRouter:'/Index/SDKDownload',
     code:12,
   },
 ]

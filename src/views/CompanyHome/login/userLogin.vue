@@ -8,37 +8,37 @@
     <div class="login-center">
       <div class="login-input">
         <p class="login-text">注册</p>
-        <el-form :model="loginForm" :rules="rules2" ref="loginForm">
+        <el-form :model="loginForm" :rules="rules2" ref="loginForm" label-width="20px">
           <div class="loginUser-input">
-            <el-form-item prop="username">
-              <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" v-model="loginForm.username"></el-input>
+            <el-form-item prop="username" label=" ">
+              <el-input placeholder="用户名(6-20位字母数字)" v-model="loginForm.username"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="phoneNum">
-              <el-input placeholder="手机号" type="text" v-model="loginForm.phoneNum"></el-input>
+            <el-form-item prop="phoneNum" label=" ">
+              <el-input placeholder="手机号" type="text" maxlength="11" v-model="loginForm.phoneNum"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="msgCode">
-              <el-input placeholder="请输入验证码" v-model="loginForm.msgCode">
-                <el-button slot="append"  :disabled='loginForm.disabled' @click="ClickCode()">{{loginForm.codeText}}</el-button>
+            <el-form-item prop="msgCode" label=" ">
+              <el-input placeholder="验证码" v-model="loginForm.msgCode">
+                <el-button slot="append"  :disabled='loginForm.disabled'  @click="ClickCode()">{{loginForm.codeText}}</el-button>
               </el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="mail">
+            <el-form-item prop="mail" label=" ">
               <el-input placeholder="邮箱" type="email" v-model="loginForm.mail"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
             <el-form-item prop="password">
-              <el-input placeholder="密码" type="password" v-model="loginForm.password"></el-input>
+              <el-input placeholder="密码" type="password"  maxlength="16" v-model="loginForm.password"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
             <el-form-item prop="confirmPassword">
-              <el-input placeholder="确认密码" type="password" v-model="loginForm.confirmPassword"></el-input>
+              <el-input placeholder="确认登录密码" type="password" maxlength="16" v-model="loginForm.confirmPassword"></el-input>
             </el-form-item>
           </div>
           <div class="login-button">
@@ -62,7 +62,9 @@
       var password = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
-        } else {
+        } else if(value.length < 8 || value.length > 16){
+          callback(new Error('8到16位字母和数字'));
+        }else{
           if (this.loginForm.confirmPassword !== '') {
             this.$refs.loginForm.validateField('confirmPassword');
           }
@@ -86,7 +88,7 @@
           password:'',//密码, 非MD5
           msgCode:'',//短信验证码
           confirmPassword:'',//确认密码
-          codeText:'发送验证码',
+          codeText:'获取验证码',
           disabled:false,
           outTime: 60,//验证码时间
           time:'',//时间
@@ -94,7 +96,7 @@
         },
         rules2:{
           username:[
-            { required: true, message: '用户名(6-20位字母数字)/手机号/邮箱', trigger: 'blur' },
+            { required: true, message: '用户名(6-20位字母数字)', trigger: 'blur' },
             { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
             { pattern: /^\S+$/, message: '用户名不允许有空格', trigger: 'blur' },
           ],
@@ -168,20 +170,16 @@
               'password':this.loginForm.password,//密码, 非MD5
               'msgCode':this.loginForm.msgCode,//短信验证码
             }).then(response => {
-              if(response.data.success){
-                if(response.data.data.errMsgCode != 23){
-                  _this.$message({
-                    message: response.data.data.msg,
-                    type: 'success'
-                  });
-                  setTimeout(()=>{
-                    _this.$router.push({path:'/Company/login'});
-                  },500)
-                }else{
-                  _this.$message.error(response.data.data.msg);
-                }
+              if(response.data.errorCode == '200'){
+                _this.$message({
+                  message: '注册成功~~~',
+                  type: 'success'
+                });
+                setTimeout(()=>{
+                  _this.$router.push({path:'/Company/login'});
+                },500)
               }else{
-                _this.$message.error(response.data.msg);
+                _this.$message.error(response.data.errorInfo);
               }
             })
           }
@@ -226,25 +224,24 @@
       padding-top: 0.3rem;
       padding-bottom: 0.2rem;
       .login-input{
-        width: 3.28rem;
+        width: 3.6rem;
         .login-text{
           font-size: 0.26rem;
-          color: #F20A59;
+          color: #666666;
           font-weight: 600;
           text-align: center;
           padding-bottom: 0.2rem;
         }
         .loginUser-input{
-          width: 3.28rem;
-          height: 0.4rem;
+          width: auto;
           display: flex;
           display: -webkit-flex;
-          padding-bottom: 0.35rem;
           .el-form-item{
             width: 100%;
+            margin-bottom: 0.23rem;
             div{
               input{
-                height: 0.5rem !important;
+                height: 0.43rem !important;
                 font-size: 0.14rem !important;
               }
             }

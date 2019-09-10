@@ -34,6 +34,7 @@ import instructionsAdd from '@/views/CMS/instructions/instructionsAdd'
 import instructionsDetails from '@/views/CMS/instructions/instructionsDetails'
 import instructionsEdit from '@/views/CMS/instructions/instructionsEdit'
 import categories from '@/views/CMS/categories/categories'
+import SDKDownload from '@/views/CMS/SDKDownload/SDKDownload'
 
 //控制跳转同一个路由报错
 const originalPush = Router.prototype.push;
@@ -55,7 +56,7 @@ const router = new Router({
       children:[
         {
           path: '/Company/login',
-          name: '登陆',
+          name: '登录',
           component: login,
           meta: {
             title:'国美人脸认证开放平台',
@@ -303,6 +304,15 @@ const router = new Router({
           meta: {
             title:'国美人脸认证管理后台',
             code:10
+          }
+        },
+        {
+          path: '/Index/SDKDownload',
+          name: 'SDK下载',
+          component: SDKDownload,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:12
           }
         },
       ],

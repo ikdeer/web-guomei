@@ -43,7 +43,7 @@ window.onresize = function () {
   rem();
 }
 rem();
-// 进行rem的计算 因为是已1920px为基准进行计算的，所以为了方便，把1rem等于100px
+//进行rem的计算 因为是已1920px为基准进行计算的，所以为了方便，把1rem等于100px
 function rem() {
   let designSize = 1920; // 设计图尺寸
   let html = document.documentElement;
