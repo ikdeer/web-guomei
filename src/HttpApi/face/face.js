@@ -1,10 +1,10 @@
 import AxIos from "../HttpApi";
 const HttpApi = 'http://139.196.161.174:8090/gm';
 //获取人脸分组列表
-export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }) => AxIos({
+export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,createTimeStart,createTimeEnd }) => AxIos({
     url: '/faceGroup/show',
     method: 'get',
-    params: { page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }
+    params: { page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,createTimeStart,createTimeEnd }
 });
 //人脸分组详情
 export const getFacedetails = ({ faceGroupID }) => AxIos({
