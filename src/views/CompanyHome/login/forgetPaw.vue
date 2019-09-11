@@ -44,7 +44,7 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
-  import {getUserMsgCode,getUserRegister} from '@/HttpApi/login/loginApi'
+  import {geUserResetPassWord,geUserResetPasswordPhoneMsg} from '@/HttpApi/login/loginApi'
   export default {
     name: "forgetPaw",
     components:{Header_Nav},
@@ -102,7 +102,7 @@
     methods:{
       //短信验证码
       UserMsgCode(){
-        getUserMsgCode({'phoneNum':this.loginForm.phoneNum,'clientCode':''}).then(response => {
+        geUserResetPasswordPhoneMsg({'phoneNum':this.loginForm.phoneNum}).then(response => {
           if(response.success){
             this.$message({
               message: '短信验证码发送成功',
@@ -142,16 +142,14 @@
         this.$refs.loginForm.validate((valid) => {
           if(valid){
             //注册用户接口
-            getUserRegister({
-              'username':this.loginForm.username,//用户名
+            geUserResetPassWord({
               'phoneNum':this.loginForm.phoneNum,//手机号码
-              'mail':this.loginForm.mail,//邮箱
               'password':this.loginForm.password,//密码, 非MD5
               'msgCode':this.loginForm.msgCode,//短信验证码
             }).then(response => {
               if(response.data.errorCode == '200'){
                 _this.$message({
-                  message: '注册成功~~~',
+                  message: '密码修改成功~~~',
                   type: 'success'
                 });
                 setTimeout(()=>{

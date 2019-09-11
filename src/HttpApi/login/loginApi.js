@@ -50,3 +50,27 @@ export const getUserLogout = (params) => {
   })
 }
 
+/**
+ * 重置密码
+ * @token 请求头部添加
+ **/
+export const geUserResetPassWord = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/user/resetPassword', params).then(response => {
+      resolve(response)
+    })
+  })
+}
+
+/**
+ * 重置密码短信验证码
+ * @token 请求头部添加
+ **/
+export const geUserResetPasswordPhoneMsg = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/user/resetPasswordPhoneMsg', params).then(response => {
+      resolve(response)
+    })
+  })
+}
+
