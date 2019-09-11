@@ -151,8 +151,9 @@
                         </el-form-item>
                         <el-form-item label="性别">
                             <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
-                                <el-option label="男" value="男"></el-option>
-                                <el-option label="女" value="女"></el-option>
+                                <el-option label="男" value="1"></el-option>
+                                <el-option label="女" value="2"></el-option>
+                                <el-option label="未知" value="0"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="PersonID">
@@ -178,10 +179,10 @@
                         </div>
                         <div class="list_info">
                             <span>姓名：{{item.name}}</span>
-                            <span>{{item.sex}}</span>
+                            <span>{{item.sexName}}</span>
                         </div>
                         <div class="list_info">
-                            <span>PersonID：{{item.id}}</span>
+                            <span>PersonID：{{item.PersonID}}</span>
                         </div>
                         <div class="list_info">
                             <span>类型：{{item.typeName}}</span>
@@ -190,7 +191,7 @@
                             <span>编号：{{item.number}}&emsp;{{item.no}}</span>
                         </div>
                         <div class="list_info">
-                            <span>图片来源：{{item.on}}</span>
+                            <span>图片来源：{{item.picFromName}}</span>
                         </div>
                         <div class="list_info">
                             <span>入库时间：{{item.createTime}}</span>
