@@ -384,11 +384,11 @@
             search(){
                 let params = {
                     ...this.formData,...this.page,
-                    faceGroupNames :this.formData.name/* ? this.formData.name.split(',') : ''*/,
-                    faceGroupIds:this.formData.id/* ? this.formData.id.split(','):''*/,
-                    faceGroupCreators:this.formData.createrName /*?this.formData.createName.split(","):''*/,
-                    creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
-                    creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
+                    faceGroupNames :this.formData.name,
+                    faceGroupIds:this.formData.id,
+                    faceGroupCreators:this.formData.createrName,
+                    createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getFaceList(params).then(({data})=>{
                     if(data.success){
