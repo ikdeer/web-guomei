@@ -55,6 +55,7 @@
                             class="application_list_form_time"
                             v-model="formData.dataTime"
                             type="daterange"
+                            :picker-options="pickerOptions"
                             range-separator="至"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             start-placeholder="开始日期"
@@ -168,11 +169,6 @@
                 </el-pagination>
             </div>
         </div>
-
-
-
-
-
         <!--table表格弹窗信息-->
         <el-dialog
             :title="applicationInfo.title"
@@ -202,13 +198,11 @@
                 <el-button v-if="applicationInfo.type" @click="applicationTableDialog = false">取 消</el-button>
             </span>
         </el-dialog>
-
-
     </div>
 </template>
 
 <script>
-    import {textLen} from "../../../lib/utils";
+    import {textLen,formatTimes} from "../../../lib/utils";
     import {getAppList,disableApplication,delApplication,auditApplication,getAapplicationState,getApplicationReviewState } from '@/HttpApi/application/application';
     export default {
         name: "applicationList",
@@ -221,7 +215,47 @@
                     state:'',
                     reviewState:'',
                     createName:'',
-                    dataTime:null
+                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59']
+                },
+                pickerOptions: {
+                    shortcuts: [
+                        {
+                            text: '今天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '昨天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 1);
+                                end = new Date(new Date(end).getTime() - 3600 * 1000 * 24 * 1);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '近7天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 7);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: '近30天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 30);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }
+                    ]
                 },
                 AapplicationState:[],//应用状态
                 ApplicationReviewState:[],//应用审核状态
@@ -230,7 +264,7 @@
                 page: {
                     page: 1,
                     pageSize: 10,
-                    total: 500
+                    total: 0
                 },
                 applicationTableDialog:false,
                 applicationInfo:{
@@ -269,7 +303,7 @@
                 getAppList(params).then(({data})=>{
                     if(data.success){
                         this.tableData = data.data?data.data.list:[];
-                        this.page.total = data.pagerManager.totalResults;
+                        this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
                         this.tableData = [];
                         this.$message.warning(data.errorInfo)

@@ -27,6 +27,7 @@
                         <el-date-picker
                             class="user_list_form_time"
                             v-model="formData.dataTime"
+                            :picker-options="pickerOptions"
                             type="daterange"
                             range-separator="至"
                             value-format="yyyy-MM-dd HH:mm:ss"
@@ -194,7 +195,7 @@
 </template>
 
 <script>
-    import {textLen} from '@/lib/utils'
+    import {textLen,formatTimes} from '@/lib/utils'
     import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace } from '@/HttpApi/face/face'
     export default {
         name: "userList",
@@ -249,7 +250,47 @@
                     name:'',
                     id:'',
                     createrName:'',
-                    dataTime:null
+                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],
+                },
+                pickerOptions: {
+                    shortcuts: [
+                        {
+                            text: '今天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '昨天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 1);
+                                end = new Date(new Date(end).getTime() - 3600 * 1000 * 24 * 1);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '近7天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 7);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: '近30天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 30);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }
+                    ]
                 },
                 tableData:[],
                 page:{
@@ -345,7 +386,7 @@
                     ...this.formData,...this.page,
                     faceGroupNames :this.formData.name/* ? this.formData.name.split(',') : ''*/,
                     faceGroupIds:this.formData.id/* ? this.formData.id.split(','):''*/,
-                    faceGroupCreators:this.formData.createName /*?this.formData.createName.split(","):''*/,
+                    faceGroupCreators:this.formData.createrName /*?this.formData.createName.split(","):''*/,
                     creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
                     creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
