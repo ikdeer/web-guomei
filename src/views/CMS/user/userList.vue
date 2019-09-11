@@ -43,7 +43,7 @@
                         <el-button type="primary" @click="adduser">创建用户</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -332,7 +332,7 @@
                 this.userListAddDialog = true;
                 this.$refs['dataDialogForm'].resetFields();
             },
-            search(){
+            search(page){
                 let phoneArr = this.formData.phoneNums.replace('，',',').split(',');
                 let emailArr = this.formData.mails.replace('，',',').split(',');
                 if(!phoneArr[0]==''){
@@ -357,6 +357,13 @@
                     if(emailFlag){
                         this.$message.warning('邮箱不符合规则')
                         return;
+                    }
+                }
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
                     }
                 }
                 let params = {
@@ -384,7 +391,7 @@
                     disenable:'',
                     dataTime:null
                 };
-                this.search();
+                this.search(1);
             },
             see(row){
                 this.$router.push({ path: '/Index/userInfo', query: { id: row.id }})

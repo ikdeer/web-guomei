@@ -42,7 +42,7 @@
                         <el-button type="primary" @click="addGroup">创建分组</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -381,7 +381,14 @@
             addGroup(){
                 this.$router.push({path:'/Index/addgroupone',query:{type:'1'}})
             },
-            search(){
+            search(page){
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     faceGroupNames :this.formData.name,
@@ -392,9 +399,11 @@
                 };
                 getFaceList(params).then(({data})=>{
                     if(data.success){
-                        this.tableData = data.data.list;
-                        this.page.total = data.pagerManager.totalResults;
+                        this.tableData = data.data?data.data.list:[];
+                        this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
+                        this.tableData = [];
+                        this.page.total =0;
                         this.$message.warning(data.errorInfo)
                     }
                 })
@@ -409,7 +418,7 @@
                 if(this.userInfo.groupID==20){
                     this.formData.createName = this.userInfo.userName;
                 }
-                this.search();
+                this.search(1);
             },
             see(row){
                 this.$router.push({path:'/Index/addgroupone',query:{id:row.id,type:'2'}})
@@ -432,11 +441,11 @@
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
-                this.search()
+                this.search(2)
             },
             handleCurrentChange(val){
                 this.page.page = val;
-                this.search()
+                this.search(2)
             },
             handleAvatarSuccess(res, file) {
                 var that = this;

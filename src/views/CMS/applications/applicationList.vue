@@ -69,7 +69,7 @@
                         <el-button type="primary" :disabled="userInfo.groupID!=20" @click="addapplication">创建应用</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -293,8 +293,15 @@
             addapplication() {
                 this.$router.push({path: '/Index/addApplication', query: {type: 'add',NavType:'VIS-A-VIS'}})
             },
-            search() {
+            search(page) {
                 //查询应用列表
+                if(page==1){
+                    this.page = {
+                        page: 1,
+                        pageSize: 10,
+                        total: 0
+                    }
+                }
                 let params = {
                     ...this.page,...this.formData,
                     creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
@@ -321,7 +328,7 @@
                 if(this.userInfo.groupID==20){
                     this.formData.createName = this.userInfo.userName;
                 }
-                this.search();
+                this.search(1);
             },
             statement(row) {
                 //查看报表
