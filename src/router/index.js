@@ -5,6 +5,7 @@ import Cookie from 'js-cookie'
 import Company from '@/views/CompanyHome/coupany'
 import login from '@/views/CompanyHome/login/login'
 import userLogin from '@/views/CompanyHome/login/userLogin'
+import forgetPaw from '@/views/CompanyHome/login/forgetPaw'
 import CompanyHome from '@/views/CompanyHome/home/home'
 import product from '@/views/CompanyHome/product/product'
 import solution from '@/views/CompanyHome/product/solution'
@@ -66,6 +67,14 @@ const router = new Router({
           path: '/Company/userLogin',
           name: '注册',
           component: userLogin,
+          meta: {
+            title:'国美人脸认证开放平台',
+          },
+        },
+        {
+          path: '/Company/forgetPaw',
+          name: '忘记密码',
+          component: forgetPaw,
           meta: {
             title:'国美人脸认证开放平台',
           },

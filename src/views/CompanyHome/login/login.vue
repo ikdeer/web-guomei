@@ -31,7 +31,7 @@
             </div>
             <div class="login-itemText">
               <span></span>
-              <span>忘记密码</span>
+              <router-link tag="span" :to="{path:'/Company/forgetPaw'}">忘记密码</router-link>
             </div>
             <div class="login-button">
               <el-button @click="ClickUserLogin">登 录</el-button>
