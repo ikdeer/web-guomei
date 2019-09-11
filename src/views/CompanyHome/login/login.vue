@@ -52,11 +52,7 @@
           var password = (rule, value, callback) => {
             if (value === '') {
               callback(new Error('请输入密码'));
-            } else if(value.length < 8 || value.length > 16){
-              callback(new Error('8到16位字母和数字'));
-            }else if(/^[^\d]*$|^[^a-zA-Z]*$|[^\da-zA-Z]/.test(value)){
-              callback(new Error('密码不符合规则'));
-            }else{
+            } else {
               callback();
             }
           };

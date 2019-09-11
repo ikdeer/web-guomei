@@ -28,10 +28,19 @@
       </div>
     </div>
     <div class="header-navRight">
-      <div class="header-navName" v-if="token != null">
-        <img src="/static/images/sy_icon_me_64@2x.png" alt="">
-        <span>{{userInfo.userName}}</span>
-      </div>
+      <template v-if="token != null">
+        <el-dropdown @command="handleCommand" placement="top">
+          <div class="header-navName">
+            <img src="/static/images/sy_icon_me_64@2x.png" alt="">
+            <span>{{userInfo.userName}}</span>
+            <span class="el-icon-arrow-right gm-sbc"></span>
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-user">用户中心</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-switch-button" command="Quit">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </template>
       <template v-else>
         <router-link :to="{path:'/Company/userLogin'}">
           <el-button type="text" class="button-login">注册</el-button>
@@ -44,6 +53,7 @@
 </template>
 
 <script>
+  import {getUserLogout} from "@/HttpApi/login/loginApi";
   export default {
     name: "header",
     data(){
@@ -100,6 +110,35 @@
           this.$router.push({path: '/Company/login',query:{console:'overview'}});
         }
       },
+      handleCommand(command){
+        let _this = this;
+        if(command == 'Quit'){
+          this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            customClass:'gm-config',
+            type: 'warning'
+          }).then(() => {
+            getUserLogout().then(response => {
+              if(response.data.success){
+                _this.Cookies.remove('token');
+                _this.Cookies.remove('userInfo');
+                _this.$message({
+                  type: 'success',
+                  message: '退出登录成功!'
+                });
+                setTimeout(()=>{
+                  _this.$router.go(0);
+                },200)
+              }else{
+                _this.$message.error(response.data.data.msg);
+              }
+            })
+          }).catch(() => {});
+        }else{
+          this.$router.push({path:'/Index/userInfo',query:{id:this.userInfo.uid}});
+        }
+      },
       //跳转首页
       ClickURL(){
         let routeData = this.$router.resolve({
@@ -117,7 +156,7 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .header-nav{
     width: 100%;
     height: 0.8rem;
@@ -252,6 +291,10 @@
           color: #ffffff;
           margin-left: 0.13rem;
         }
+        .gm-sbc{
+          font-size: 0.2rem;
+          color: #dddddd;
+        }
       }
       .button-login{
         font-size: 0.16rem;
@@ -270,6 +313,19 @@
         color: #ffffff;
         background:#F20A59;
         border: none;
+      }
+    }
+  }
+  .gm-config{
+    .el-message-box__content{
+      padding: 0.3rem 0.3rem;
+      color: #333333;
+      font-weight: 600;
+      text-align: left;
+    }
+    .el-message-box__btns{
+      button{
+        padding: 0.09rem 0.25rem;
       }
     }
   }

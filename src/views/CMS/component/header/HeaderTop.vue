@@ -13,7 +13,7 @@
             <div class="header-name">
               <img src="/static/images/sy_icon_me_64@2x.png" alt="">
               <span>{{userInfo.userName}}</span>
-              <span class="el-icon-arrow-right gm-sbc" @click="userInfo.isUserShow =! userInfo.isUserShow"></span>
+              <span class="el-icon-arrow-right gm-sbc"></span>
             </div>
             <div class="gm-popUp">
               <el-dropdown-menu slot="dropdown">
