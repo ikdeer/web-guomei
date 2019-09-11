@@ -72,7 +72,7 @@
                         <span class="equipment_form_btn_span">离线：<span style="color: #E56565;">{{totalList.offLineCount}}</span></span>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -463,7 +463,7 @@
                 this.shopFour = [];//弹窗所属门店
                 this.faceChildOne = [];//人脸一级分组
                 this.faceChildTwo = [];//人脸二级分组
-                this.search();//查询应用信息
+                this.search(1);//查询应用信息
                 this.$refs['dialogOne'].clearValidate();
                 this.$refs['dialogTwo'].clearValidate();
             },
@@ -479,7 +479,14 @@
                 };
 
             },
-            search(){
+            search(page){
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     belongComID:this.formData.floor,
@@ -512,7 +519,7 @@
                     no:'',//设备编号
                     name:''//设备名称
                 };
-                this.search()
+                this.search(1)
             },
             see(row) {
                 //查看操作

@@ -31,7 +31,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -137,7 +137,14 @@
             }
         },
         methods:{
-            search(){
+            search(page){
+                if(page==1){
+                    this.page = {
+                        page: 1,
+                        pageSize: 10,
+                        total: 0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',

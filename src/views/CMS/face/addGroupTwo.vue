@@ -166,7 +166,7 @@
                         <el-button type="text" @click="">下载批量添加模板</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="dialogSearch">查询</el-button>
+                        <el-button type="primary" @click="dialogSearch(1)">查询</el-button>
                         <el-button @click="dialogReset">清空</el-button>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
                     <div class="list" v-for="item in faceList">
                         <div class="list_img">
                             <el-checkbox v-model="item.select" @change="ClickFaceImage(item)" class="checkbox"></el-checkbox>
-                            <img :src="item.img">
+                            <img :src="item.url">
                         </div>
                         <div class="list_info">
                             <span>姓名：{{item.name}}</span>
@@ -288,7 +288,7 @@
                 };
                 this.faceList = [];
                 this.faceListBirge = [];
-                this.dialogSearch();
+                this.dialogSearch(1);
                 this.addGroupFace = true;
             },
             handleSelectionChange(val){
@@ -345,8 +345,15 @@
                 //关闭所有
                 this.$router.push({path:'/Index/faceList'})
             },
-            dialogSearch(){
+            dialogSearch(page){
                 //弹窗查询
+                if(page==1){
+                    this.facePage = {
+                        page:1,
+                        pageCount:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.dataDialogForm,
                     ...this.facePage,
@@ -379,7 +386,7 @@
                     sex:'',
                     types:'',
                 };
-                this.dialogSearch();
+                this.dialogSearch(1);
             },
             addGroupFaceDialog(){
                 //确认添加人脸 发送添加关闭弹窗
@@ -402,6 +409,11 @@
                 });
             },
             getFaceGroupShowList(){
+                this.page = {
+                    page:1,
+                    pageCount:10,
+                    total:0
+                };
                 let params = {
                     ...this.page,
                     faceGroupID:this.groupid,
@@ -419,15 +431,19 @@
             },
             handleSizeChange(val){
                 this.page.pageCount = val;
+                this.getFaceGroupShowList();
             },
             handleCurrentChange(val){
                 this.page.page = val;
+                this.getFaceGroupShowList();
             },
             handleDialogSizeChange(val){
                 this.facePage.pageCount = val;
+                this.dialogSearch();
             },
             handleDialogCurrentChange(val){
                 this.facePage.page = val;
+                this.dialogSearch();
             },
             getGroupOneList(){
                 let params = {
@@ -444,7 +460,7 @@
                 //获取图片来源
                 getPicList().then(({data})=>{
                     if(data.success){
-                        this.dataDialogForm.picList = data.data?data.data.list:[];
+                        this.picList = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取图片来源列表失败')
                     }
@@ -452,7 +468,7 @@
                 //获取图片编号
                 getFaceNoType().then(({data})=>{
                     if(data.success){
-                        this.dataDialogForm.faceNoType = data.data?data.data.list:[];
+                        this.faceNoType = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取图片编号列表失败')
                     }
@@ -460,7 +476,7 @@
                 //获取类型
                 getFaceType().then(({data})=>{
                     if(data.success){
-                        this.dataDialogForm.faceType = data.data?data.data.list:[];
+                        this.faceType = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取类型列表失败')
                     }
