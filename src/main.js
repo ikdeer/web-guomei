@@ -17,7 +17,7 @@ import './style/common.css'
 import 'babel-polyfill'
 
 //头部组件
-import Header from '@/views/CMS/component/header/HeaderTop.vue'
+import Header from '@/views/CMS/component/header/header.vue'
 import layout from '@/views/CMS/component/layout/layout.vue'
 
 Vue.prototype.$md5 = md5;
