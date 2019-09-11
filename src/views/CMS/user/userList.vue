@@ -184,7 +184,7 @@
                         return callback(new Error('手机号不符合规则'));
                     }else{
                         phoneNumCheck({phoneNum:value}).then(({data})=>{
-                            if(data.success){
+                            if(data.errorCode ==200){
                                 return callback()
                             }else{
                                 return callback(new Error(data.errorInfo));
@@ -374,7 +374,7 @@
                 if(this.formData.disenable) params.enable = this.formData.disenable;
 
                 getUserList(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data ? data.data.list : [];
                         this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
@@ -442,7 +442,7 @@
                             password:this.dataDialogForm.passwordend
                         };
                         createUser(params).then(({data})=>{
-                            if(data.success){
+                            if(data.errorCode ==200){
                                 this.$message.success('添加成功');
                                 this.search();
                                 this.userListAddDialog = false;
@@ -471,7 +471,7 @@
                 }
                 if(this.userListTableInfo.status===3){
                     removeUser({id:this.userListTableInfo.id}).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.search();
                             this.$message.success('删除成功');
                             this.userListTableDialog = false;
@@ -481,7 +481,7 @@
                     })
                 }else{
                     enableUser(params).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.search();
                             this.$message.success(this.userListTableInfo.status===1?'停用成功':'启用成功');
                             this.userListTableDialog = false;
