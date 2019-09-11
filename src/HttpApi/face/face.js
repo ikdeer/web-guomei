@@ -1,5 +1,5 @@
 import AxIos from "../HttpApi";
-
+const HttpApi = 'http://139.196.161.174:8090/gm';
 //获取人脸分组列表
 export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }) => AxIos({
     url: '/faceGroup/show',
@@ -18,6 +18,14 @@ export const uploadFaceImage = ({ imageBase64 }) => AxIos({
     method: 'post',
     data: { imageBase64 }
 });
+
+//创建人脸
+export const createFace = ({ gmRelated,id,name,no,noType,picFromID,sex,type,url }) => AxIos({
+    url: '/face/delFaceData',
+    method: 'post',
+    data: { gmRelated,id,name,no,noType,picFromID,sex,type,url }
+});
+
 
 //获取人员编号类型
 export const getFaceNoType = () => AxIos({
@@ -151,3 +159,6 @@ export const getGroupChildremTwo = ({ id }) => AxIos({
     method: 'post',
     data:{id }
 });
+
+//文件上传
+export const uploadUrl = `${HttpApi}/upload`;

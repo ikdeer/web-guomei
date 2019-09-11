@@ -74,7 +74,11 @@ export const getApplicationTypesInterface = ({baseApiGroupID}) => AxIos({
     params:{baseApiGroupID}
 });
 
-
+//应用类型接口选择项
+export const getApplicationTypesInterfaceList = () => AxIos({
+    url: '/options/app/applicationTypesInterfaceList',
+    method: 'get',
+});
 
 
 //新增应用

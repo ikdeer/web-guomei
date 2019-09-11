@@ -4,7 +4,7 @@
         <nav class="nav-Type">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组列表</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组管理</el-breadcrumb-item>
                 <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>

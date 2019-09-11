@@ -209,7 +209,7 @@
             };
             let passwordstart = (rule, value, callback) => {
                 if(value){
-                    if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/.test(value)){
+                    if(!/[0-9A-Za-z]{8,16}$/.test(value)){
                         return callback(new Error('密码不符合规则'));
                     }else{
                         return callback()
