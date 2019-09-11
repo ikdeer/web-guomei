@@ -11,12 +11,12 @@
           <el-form :model="loginForm" :rules="rules2" ref="loginForm">
             <div class="login-form">
               <el-form-item prop="username">
-                <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" v-model="loginForm.username"></el-input>
+                <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" maxlength="20" v-model="loginForm.username"></el-input>
               </el-form-item>
             </div>
             <div class="login-form">
               <el-form-item prop="password">
-                <el-input placeholder="密码" show-password type="password" v-model="loginForm.password"></el-input>
+                <el-input placeholder="密码" show-password maxlength="16" type="password" v-model="loginForm.password"></el-input>
               </el-form-item>
             </div>
             <div class="login-form">
@@ -49,6 +49,17 @@
         name: "login",
         components:{Header_Nav},
         data(){
+          var password = (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请输入密码'));
+            } else if(value.length < 8 || value.length > 16){
+              callback(new Error('8到16位字母和数字'));
+            }else if(/^[^\d]*$|^[^a-zA-Z]*$|[^\da-zA-Z]/.test(value)){
+              callback(new Error('密码不符合规则'));
+            }else{
+              callback();
+            }
+          };
           return {
             loginForm:{
               username:'',//用户名
@@ -66,14 +77,10 @@
               username:[
                 { required: true, message: '用户名(6-20位字母数字)/手机号/邮箱', trigger: 'blur' },
                 { min: 1, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
-                { pattern: /^\S+$/, message: '用户名不允许有空格', trigger: 'blur' },
+                { pattern:/^[0-9a-zA-Z]*$/g, message: '请输入6-20位字母数字', trigger: 'blur' },
               ],
-              password:[
-                { required: true, message: '请输入密码', trigger: 'blur' },
-              ],
-              code:[
-                { required: true, message: '请输入验证码', trigger: 'blur' },
-              ]
+              password:[{ validator: password, trigger: 'blur' }],
+              code:[{required: true, message: '请输入验证码', trigger: 'blur' }]
             }
           }
         },
