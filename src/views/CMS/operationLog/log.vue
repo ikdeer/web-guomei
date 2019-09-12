@@ -42,18 +42,22 @@
                     tooltip-effect="dark">
                     <el-table-column
                         prop="name"
+                        align="center"
                         label="用户名">
                     </el-table-column>
                     <el-table-column
                         prop="createBy"
+                        align="center"
                         label="操作记录">
                     </el-table-column>
                     <el-table-column
                         prop="lastModifyTime"
+                        align="center"
                         label="操作时间">
                     </el-table-column>
                     <el-table-column
                         prop="id"
+                        align="center"
                         label="访问IP">
                     </el-table-column>
                 </el-table>

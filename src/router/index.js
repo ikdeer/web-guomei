@@ -36,6 +36,8 @@ import instructionsDetails from '@/views/CMS/instructions/instructionsDetails'
 import instructionsEdit from '@/views/CMS/instructions/instructionsEdit'
 import categories from '@/views/CMS/categories/categories'
 import SDKDownload from '@/views/CMS/SDKDownload/SDKDownload'
+import productlist from '@/views/CMS/productService/productlist'
+import productAdd from '@/views/CMS/productService/productAdd'
 
 //控制跳转同一个路由报错
 const originalPush = Router.prototype.push;
@@ -322,6 +324,24 @@ const router = new Router({
           meta: {
             title:'国美人脸认证管理后台',
             code:12
+          }
+        },
+        {
+          path: '/Index/productlist',
+          name: '产品服务列表',
+          component: productlist,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:11
+          }
+        },
+        {
+          path: '/Index/productAdd',
+          name: '产品服务新增',
+          component: productAdd,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:11
           }
         },
       ],

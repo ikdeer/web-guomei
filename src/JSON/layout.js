@@ -77,7 +77,7 @@ export default [
     iconText:'图文编辑',
     iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
     iconImgHide:'/static/images/tuwenbianji_icon@2x.png',
-    iconRouter:'',
+    iconRouter:'/Index/productlist',
     code:11,
   },
   {
