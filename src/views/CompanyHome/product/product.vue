@@ -11,7 +11,7 @@
               <el-button @click.stop="ClickApply">立即申请</el-button>
               <router-link tag="button" class="el-button el-button--default el-button--small" :to="{path:'/Company/APITCF'}">技术文档</router-link>
             </div>
-            <p class="header-leftItem">国美家服务信息技术中心提供技术支持</p>
+            <p class="header-leftItem">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
           </div>
           <div class="header-right">
             <img src="/static/images/product_banner_bg@2x.png" alt="">
@@ -98,6 +98,7 @@
         return {
           SolutionList:[],//数据展示
           SolutionText:[],//右侧内容数据
+          groupID:'',//登录人员身份
         }
       },
       methods:{
@@ -105,7 +106,11 @@
         ClickApply(){
           let _this = this;
           if(this.Cookies.get('token')){
-            _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+            if(this.groupID == '20'){
+              _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+            }else{
+              this.$message({message: '亲！你暂时没有权限哦~~~~', type: 'warning'});
+            }
           }else{
             _this.$message.error('此功能需要登录过后才能查看');
             setTimeout(()=>{
@@ -136,6 +141,8 @@
         }
       },
       mounted(){
+        let userInfo= this.Cookies.get('userInfo') || '';
+        this.groupID = JSON.parse(userInfo).groupID;
         this.getSolutionShow();
       }
     }

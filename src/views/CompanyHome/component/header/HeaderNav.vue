@@ -29,11 +29,11 @@
     </div>
     <div class="header-navRight">
       <template v-if="token != null">
-        <el-dropdown @command="handleCommand" placement="top">
+        <el-dropdown @command="handleCommand" @visible-change="visibleShow" placement="top">
           <div class="header-navName">
             <img src="/static/images/sy_icon_me_64@2x.png" alt="">
             <span>{{userInfo.userName}}</span>
-            <span class="el-icon-arrow-right gm-sbc"></span>
+            <span :class="isIconShow ? 'el-icon-arrow-down gm-sbc' : 'el-icon-arrow-right gm-sbc'"></span>
           </div>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item icon="el-icon-user">用户中心</el-dropdown-item>
@@ -85,6 +85,7 @@
         ],
         token:null,//登陆唯一标识token
         userInfo:null,//登陆用户信息
+        isIconShow:false,
       }
     },
     methods:{
@@ -138,6 +139,10 @@
         }else{
           this.$router.push({path:'/Index/userInfo',query:{id:this.userInfo.uid}});
         }
+      },
+      //角标icon显示隐藏
+      visibleShow(isIconShow){
+        this.isIconShow = isIconShow;
       },
       //跳转首页
       ClickURL(){

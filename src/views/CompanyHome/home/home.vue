@@ -12,7 +12,7 @@
               企业提供高性能的在线API服务，应用于人脸AR、人脸识别和认证、大规模人脸
               检索、照片管理等各种场景。</p>
             <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
-            <p class="IfoImg-TextSmall">国美家服务信息技术中心提供技术支持</p>
+            <p class="IfoImg-TextSmall">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
           </div>
           <div class="IfoImg-right">
             <img src="/static/images/banner_bg@2x.png" alt="">
@@ -33,7 +33,7 @@
                 <div class="ListUl-Pad">
                   <img class="ListUl-PadImg" src="/static/images/analysis_image@2x.png" alt="">
                   <h4 class="ListUl-PadTitle">人脸检测与属性分析</h4>
-                  <p class="ListUl-PadText">人脸检测与属性分析</p>
+                  <p class="ListUl-PadText">精准定位图中人脸，获得眼、口、鼻等关键点位置，分析性别、年龄、等多种人脸属性</p>
                   <el-button class="ListUl-PadButton">了解详情</el-button>
                 </div>
               </li>
@@ -217,7 +217,7 @@
       },
       data(){
         return {
-
+          groupID:'',//登录人员身份
         }
       },
       methods:{
@@ -225,7 +225,11 @@
         ClickApply(){
           let _this = this;
           if(this.Cookies.get('token')){
-            _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+            if(this.groupID == '20'){
+              _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+            }else{
+              this.$message({message: '亲！你暂时没有权限哦~~~~', type: 'warning'});
+            }
           }else{
             _this.$message.error('此功能需要登录过后才能查看');
             setTimeout(()=>{
@@ -233,6 +237,10 @@
             },300)
           }
         }
+      },
+      mounted(){
+        let userInfo= this.Cookies.get('userInfo') || '';
+        this.groupID = JSON.parse(userInfo).groupID;
       }
     }
 </script>

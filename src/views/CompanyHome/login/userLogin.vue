@@ -32,12 +32,12 @@
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="password">
+            <el-form-item prop="password" label="*">
               <el-input placeholder="密码" type="password"  maxlength="16" v-model="loginForm.password"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
-            <el-form-item prop="confirmPassword">
+            <el-form-item prop="confirmPassword" label="*">
               <el-input placeholder="确认登录密码" type="password" maxlength="16" v-model="loginForm.confirmPassword"></el-input>
             </el-form-item>
           </div>
@@ -100,7 +100,7 @@
           username:[
             { required: true, message: '用户名(6-20位字母数字)', trigger: 'blur' },
             { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
-            { pattern:/^[0-9a-zA-Z]*$/g, message: '请输入6-20位字母数字', trigger: 'blur' },
+            { pattern:/^[0-9a-zA-Z@.]*$/g, message: '请输入6-20位字母数字', trigger: 'blur' },
           ],
           phoneNum:[
             { required: true, message: '请输入手机号', trigger: 'blur' },
@@ -194,7 +194,7 @@
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
   .login{
     width: 100%;
     height: 100%;
@@ -246,6 +246,13 @@
                 height: 0.43rem !important;
                 font-size: 0.14rem !important;
               }
+            }
+            .el-form-item__label{
+              color:#F56C6C;
+            }
+            .el-input-group__append{
+              background:#ffffff;
+              color: #999999;
             }
           }
         }

@@ -61,7 +61,7 @@
               username:'',//用户名
               password:'',//密码
               code:'',//图片验证码
-              codeImg:'http://10.128.18.12:8091/gm/generating/code',
+              codeImg:'http://139.196.161.174:8090/gm/generating/code',
             },
             userInfo:{
               userName:'',//用户姓名
@@ -73,7 +73,7 @@
               username:[
                 { required: true, message: '用户名(6-20位字母数字)/手机号/邮箱', trigger: 'blur' },
                 { min: 1, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
-                { pattern:/^[0-9a-zA-Z]*$/g, message: '请输入6-20位字母数字', trigger: 'blur' },
+                { pattern:/^[0-9a-zA-Z@.]*$/g, message: '请输入6-20位字母数字', trigger: 'blur' },
               ],
               password:[{ validator: password, trigger: 'blur' }],
               code:[{required: true, message: '请输入验证码', trigger: 'blur' }]

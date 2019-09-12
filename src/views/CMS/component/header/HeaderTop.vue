@@ -9,11 +9,11 @@
         </div>
         <div class="header-right">
           <img class="header-issue" src="/static/images/Shape_btn@2x.png" alt="">
-          <el-dropdown @command="handleCommand" placement="top">
+          <el-dropdown @command="handleCommand" @visible-change="visibleShow" placement="top">
             <div class="header-name">
               <img src="/static/images/sy_icon_me_64@2x.png" alt="">
               <span>{{userInfo.userName}}</span>
-              <span class="el-icon-arrow-right gm-sbc"></span>
+              <span :class="isIconShow ? 'el-icon-arrow-down gm-sbc' : 'el-icon-arrow-right gm-sbc'"></span>
             </div>
             <div class="gm-popUp">
               <el-dropdown-menu slot="dropdown">
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import {getUserLogout} from "../../../../HttpApi/login/loginApi";
+  import {getUserLogout} from "@/HttpApi/login/loginApi";
   export default {
     name: "header",
     data(){
@@ -36,7 +36,8 @@
           userName:'',//用户姓名
           userImg:'',//用户头像
           uid:'',//用户ID
-        }
+        },
+        isIconShow:false,
       }
     },
     methods:{
@@ -68,6 +69,10 @@
         }else{
           this.$router.push({path:'/Index/userInfo',query:{id:this.userInfo.uid}});
         }
+      },
+      //角标icon显示隐藏
+      visibleShow(isIconShow){
+        this.isIconShow = isIconShow;
       },
       //跳转首页
       ClickURL(){

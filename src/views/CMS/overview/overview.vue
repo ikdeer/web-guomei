@@ -527,6 +527,7 @@ export default {
           }
           .el-icon-arrow-right{
             font-size:0.18rem;
+            margin-top: 0.02rem;
           }
         }
       }
@@ -568,6 +569,7 @@ export default {
               font-size:0.14rem;
               color:#666666;
               margin: 0;
+              height: 0.45rem;
               text-align: center;
             }
             .scene-Text_span{
