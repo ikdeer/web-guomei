@@ -260,7 +260,7 @@
                 AapplicationState:[],//应用状态
                 ApplicationReviewState:[],//应用审核状态
 
-                tableData: [{}],
+                tableData: [],
                 page: {
                     page: 1,
                     pageSize: 10,
