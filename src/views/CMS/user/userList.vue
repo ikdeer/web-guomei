@@ -169,7 +169,7 @@
         data() {
             let username = (rule, value, callback) => {
                 if(value){
-                    if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value)){
+                    if(!/[0-9A-Za-z]{6,20}$/.test(value)){
                         return callback(new Error('请输入6-20位字母数字'));
                     }else{
                         return callback()

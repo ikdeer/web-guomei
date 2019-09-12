@@ -183,6 +183,10 @@
                 this.info.phoneStatus = false;
             },
             submitPhone(){
+                if(this.info.phone==''){
+                    this.$message.warning('请输入手机号！');
+                    return;
+                }
                 if(/^1[3456789]\d{9}$/.test(this.info.phone)){
                     //修改手机号
                     editUserInfo({
@@ -206,6 +210,10 @@
                 this.info.emailStatus = false;
             },
             submitEmail(){
+                if(this.info.email==''){
+                    this.$message.warning('请输入邮箱！');
+                    return;
+                }
                 if(/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(this.info.email)){
                     //修改邮箱
                     editUserInfo({

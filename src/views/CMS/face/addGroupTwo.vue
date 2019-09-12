@@ -5,10 +5,10 @@
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组管理</el-breadcrumb-item>
-                <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>
-        <h3>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</h3>
+        <h3>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
                 <div @click="lastStep"><span>1</span>第一步 设置分组</div>
@@ -204,7 +204,7 @@
                         @current-change="handleDialogCurrentChange"
                         :current-page="facePage.page"
                         :page-sizes="[10, 20, 30, 50, 100]"
-                        :page-size="facePage.pageCount"
+                        :page-size="facePage.pageSize"
                         background
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="facePage.total">
@@ -255,7 +255,7 @@
                 faceListBirge:[],//选中集合
                 facePage:{
                     page:1,
-                    pageCount:10,
+                    pageSize:10,
                     total:0
                 },
                 picList:[],//图片来源
@@ -351,7 +351,7 @@
                 if(page==1){
                     this.facePage = {
                         page:1,
-                        pageCount:10,
+                        pageSize:10,
                         total:0
                     }
                 }
@@ -370,6 +370,7 @@
 
                         }else{
                             this.faceList = [];
+                            this.facePage.total = 0;
                         }
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -439,7 +440,7 @@
                 this.getFaceGroupShowList();
             },
             handleDialogSizeChange(val){
-                this.facePage.pageCount = val;
+                this.facePage.pageSize = val;
                 this.dialogSearch();
             },
             handleDialogCurrentChange(val){

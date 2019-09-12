@@ -98,7 +98,6 @@
                 },
                 groupOneList:[],
                 groupTwoList:[],
-
             }
         },
         computed:{
@@ -174,7 +173,8 @@
                                 id2:'',
                                 name1:'',
                                 name2:''
-                            }
+                            };
+                            this.groupTwoList = [];
                         }else{
                             this.$message.warning(data.errorInfo)
                         }
@@ -273,6 +273,7 @@
                                 name1:'',
                                 name2:''
                             };
+                            this.groupTwoList = [];
                         }else{
                             this.$message.warning(data.errorInfo)
                         }
