@@ -33,7 +33,7 @@
                     <div class="child_top">
                         <h3>设置子分组 <span>请注意一级子分组不可添加图片</span></h3>
                         <div>
-                            <el-button type="primary" size="mini" :disabled="groupData.id=='' || isSee" @click="goChildren">查看子分组列表</el-button>
+                            <el-button type="primary" size="mini" :disabled="groupData.id=='' || isSee" @click="goChildren">查看子分组</el-button>
                         </div>
                     </div>
                     <div class="set_group_childinp">

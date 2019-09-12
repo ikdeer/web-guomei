@@ -343,7 +343,7 @@
                 if(val==1){
                     return '使用中'
                 }
-                if(val==2){
+                if(val==0){
                     return '已停用'
                 }
                 return ''
