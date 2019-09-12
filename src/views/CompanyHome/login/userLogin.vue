@@ -11,7 +11,7 @@
         <el-form :model="loginForm" :rules="rules2" ref="loginForm" label-width="20px">
           <div class="loginUser-input">
             <el-form-item prop="username" label=" ">
-              <el-input placeholder="用户名(6-20位字母数字)" v-model="loginForm.username"></el-input>
+              <el-input placeholder="用户名(6-20位字母数字)" maxlength="20" v-model="loginForm.username"></el-input>
             </el-form-item>
           </div>
           <div class="loginUser-input">
@@ -64,6 +64,8 @@
           callback(new Error('请输入密码'));
         } else if(value.length < 8 || value.length > 16){
           callback(new Error('8到16位字母和数字'));
+        }else if(/^[^\d]*$|^[^a-zA-Z]*$|[^\da-zA-Z]/.test(value)){
+          callback(new Error('密码不符合规则'));
         }else{
           if (this.loginForm.confirmPassword !== '') {
             this.$refs.loginForm.validateField('confirmPassword');
@@ -98,7 +100,7 @@
           username:[
             { required: true, message: '用户名(6-20位字母数字)', trigger: 'blur' },
             { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
-            { pattern: /^\S+$/, message: '用户名不允许有空格', trigger: 'blur' },
+            { pattern:/^[0-9a-zA-Z]*$/g, message: '请输入6-20位字母数字', trigger: 'blur' },
           ],
           phoneNum:[
             { required: true, message: '请输入手机号', trigger: 'blur' },

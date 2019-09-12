@@ -21,7 +21,7 @@
                      class="demo-dynamic">
               <el-form-item label="标题" prop="Title">
                 <div class="api-OneLevel">
-                  <el-input v-model="catalogText.Title" placeholder="请输入标题名称"></el-input>
+                  <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
                 </div>
               </el-form-item>
               <el-form-item label="一级目录" prop="OneLevel">

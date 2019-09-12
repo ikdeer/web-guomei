@@ -3,7 +3,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="类目名称" prop="Title">
           <div class="Module-fromPad">
-            <el-input v-model="form.Title" placeholder="请输入类目名称"></el-input>
+            <el-input v-model="form.Title" maxlength="20" placeholder="请输入类目名称"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="类目层级" prop="categoryLevel">

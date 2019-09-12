@@ -114,7 +114,7 @@
             title="添加人像"
             class="add_group_face_dialog"
             :visible.sync="addGroupFace"
-            width="15rem">
+            width="1000px">
             <div>
                 <div class="from">
                     <el-form :inline="true" ref="dataDialogForm" label-width="80px">
@@ -634,7 +634,7 @@
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
                 border-radius: 4px;
-                padding: .2rem;
+                padding: 10px;
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
@@ -650,7 +650,8 @@
                 }
                 .list_img{
                     position: relative;
-                    width: 100%;
+                    width: 160px;
+                    height: 160px;
                     .checkbox{
                         position: absolute;
                         /*width: 0.2rem;*/
