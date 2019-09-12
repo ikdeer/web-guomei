@@ -54,12 +54,12 @@
                             label="姓名">
                         </el-table-column>
                         <el-table-column
-                            prop="sex"
+                            prop="sexName"
                             label="性别">
                         </el-table-column>
                         <el-table-column
-                            prop="id"
-                            label="PersonID">
+                            prop="personID"
+                            label="personID">
                         </el-table-column>
                         <el-table-column
                             prop="typeName"
