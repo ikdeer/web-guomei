@@ -5,10 +5,10 @@
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{path:'/Index/faceList'}">人脸分组管理</el-breadcrumb-item>
-                <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</el-breadcrumb-item>
             </el-breadcrumb>
         </nav>
-        <h3>{{isSee?'查看分组':isEdit?'编辑分组':'创建分组'}}</h3>
+        <h3>{{isSee?'查看分组':isEdit?'修改分组':'创建分组'}}</h3>
         <div class="add_group_content">
             <div class="addgroup_top">
                 <div @click="lastStep"><span>1</span>第一步 设置分组</div>
