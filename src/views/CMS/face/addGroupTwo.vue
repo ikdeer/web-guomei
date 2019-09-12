@@ -174,7 +174,7 @@
                 <div class="content">
                     <div class="list" v-for="item in faceList">
                         <div class="list_img">
-                            <el-checkbox v-model="item.select" @change="ClickFaceImage(item)" class="checkbox"></el-checkbox>
+                            <el-checkbox v-model="item.select" :disabled="item.isCurrentSubGroup2" @change="ClickFaceImage(item)" class="checkbox"></el-checkbox>
                             <img :src="item.url">
                         </div>
                         <div class="list_info">
@@ -357,6 +357,7 @@
                 }
                 let params = {
                     ...this.dataDialogForm,
+                    sub2:this.stepTwoForm.two,
                     ...this.facePage,
                 };
                 getFaceShow(params).then(({data})=>{
