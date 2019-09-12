@@ -48,7 +48,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="创建人">
-                        <el-input :maxlength="400" :disabled="userInfo.groupID==20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="400" :disabled="userInfo.groupID==20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="创建时间">
                         <el-date-picker
@@ -214,7 +214,7 @@
                     id:'',
                     state:'',
                     reviewState:'',
-                    createName:'',
+                    createrName:'',
                     dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59']
                 },
                 pickerOptions: {
@@ -326,7 +326,7 @@
                     dataTime:null
                 };
                 if(this.userInfo.groupID==20){
-                    this.formData.createName = this.userInfo.userName;
+                    this.formData.createrName = this.userInfo.userName;
                 }
                 this.search(1);
             },
@@ -527,7 +527,7 @@
         mounted() {
             this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             if(this.userInfo.groupID==20){
-                this.formData.createName = this.userInfo.userName;
+                this.formData.createrName = this.userInfo.userName;
             }
             this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
             this.search();

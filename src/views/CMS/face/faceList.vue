@@ -420,7 +420,7 @@
                     dataTime:null
                 };
                 if(this.userInfo.groupID==20){
-                    this.formData.createName = this.userInfo.userName;
+                    this.formData.createrName = this.userInfo.userName;
                 }
                 this.search(1);
             },
@@ -524,7 +524,7 @@
         mounted(){
             this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             if(this.userInfo.groupID==20){
-                this.formData.createName = this.userInfo.userName;
+                this.formData.createrName = this.userInfo.userName;
             }
             this.search();
         }
