@@ -204,7 +204,7 @@
                         @current-change="handleDialogCurrentChange"
                         :current-page="facePage.page"
                         :page-sizes="[10, 20, 30, 50, 100]"
-                        :page-size="facePage.pageCount"
+                        :page-size="facePage.pageSize"
                         background
                         layout="total, sizes, prev, pager, next, jumper"
                         :total="facePage.total">
@@ -255,7 +255,7 @@
                 faceListBirge:[],//选中集合
                 facePage:{
                     page:1,
-                    pageCount:10,
+                    pageSize:10,
                     total:0
                 },
                 picList:[],//图片来源
@@ -351,7 +351,7 @@
                 if(page==1){
                     this.facePage = {
                         page:1,
-                        pageCount:10,
+                        pageSize:10,
                         total:0
                     }
                 }
@@ -440,7 +440,7 @@
                 this.getFaceGroupShowList();
             },
             handleDialogSizeChange(val){
-                this.facePage.pageCount = val;
+                this.facePage.pageSize = val;
                 this.dialogSearch();
             },
             handleDialogCurrentChange(val){
