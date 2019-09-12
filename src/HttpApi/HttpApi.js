@@ -4,7 +4,7 @@ import router from '@/router'
 import Cookie from 'js-cookie'
 
 //全局接口
-const HttpApi = 'http://139.196.161.174:8090/gm';
+const HttpApi = 'http://127.0.0.1:8090/gm';
 
 //创建axios实例
 const AxIos = axios.create({

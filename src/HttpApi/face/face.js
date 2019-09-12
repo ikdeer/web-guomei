@@ -1,5 +1,5 @@
 import AxIos from "../HttpApi";
-const HttpApi = 'http://139.196.161.174:8090/gm';
+const HttpApi = 'http://127.0.0.1:8090/gm';
 //获取人脸分组列表
 export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }) => AxIos({
     url: '/faceGroup/show',

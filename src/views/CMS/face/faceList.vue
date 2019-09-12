@@ -356,7 +356,7 @@
                 this.dataDialogForm.uploadFaceDialog = true;
                 //获取图片来源
                 getPicList().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.picList = data.data?data.data.list:[];
                     }else{
                         this.picList = [];
@@ -365,7 +365,7 @@
                 });
                 //获取图片编号
                 getFaceNoType().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.faceNoType = data.data?data.data.list:[];
                     }else{
                         this.faceNoType = [];
@@ -374,7 +374,7 @@
                 });
                 //获取类型
                 getFaceType().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.faceType = data.data?data.data.list:[];
                     }else{
                         this.faceType = [];
@@ -402,7 +402,7 @@
                     createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getFaceList(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data?data.data.list:[];
                         this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
@@ -432,7 +432,7 @@
             },
             addFace(row){
                 getGroupChildremTwo({id:row.id}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         if(data.data.count > 0){
                             this.$router.push({path:'/Index/addgrouptwo',query:{id:row.id,type:'3'}})
                         }else{
@@ -460,7 +460,7 @@
                     this.result; // base64编码
                     imgurl = this.result;
                     uploadFaceImage({imageBase64:this.result}).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             that.faceImgUrl = data.data.url;
                             that.imageUrl = imgurl;
                         }else{
@@ -495,7 +495,7 @@
                             url:this.faceImgUrl
                         };
                         createFace(params).then(({data})=>{
-                            if(data.success){
+                            if(data.errorCode ==200){
                                 this.$message.success('上传成功');
                                 this.dataDialogForm.uploadFaceDialog = false
                             }else{

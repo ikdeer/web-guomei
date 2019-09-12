@@ -265,7 +265,7 @@
                     top:10
                 };
                 getStatement(params).then(({data}) => {
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.callData = data.data.data.callData?data.data.data.callData:[];
                         this.tableData = data.data.data.appStatisApiList?data.data.data.appStatisApiList:[];
                         this.page.total = data.data.data.pagerManager? data.data.data.pagerManager.totalResults:0;
@@ -349,7 +349,7 @@
             getStateList(){
                 //获取应用下拉
                 getAppList().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.formData.appList = data.data?data.data.list:[];
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -360,7 +360,7 @@
                 getApiList({
                     appID:this.formData.appIds
                 }).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.formData.apiList = data.data?data.data.data.apisList:[];
                     }else{
                         this.$message.warning(data.errorInfo)

@@ -308,7 +308,7 @@
                     creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getAppList(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data?data.data.list:[];
                         this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
@@ -376,7 +376,7 @@
                     appID:row.id,
                     enable:1
                 }).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.applicationInfo={
                             title:'启用应用',
                             info:'APPID为'+row.id+'的应用接口已启用',
@@ -432,7 +432,7 @@
                         appID:this.applicationInfo.id,
                         enable:0
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('禁用成功');
                             this.search();
                             this.applicationTableDialog = false;
@@ -447,7 +447,7 @@
                     delApplication({
                         appID:this.applicationInfo.id
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('删除成功');
                             this.search();
                             this.applicationTableDialog = false;
@@ -470,7 +470,7 @@
                         params.rejectReason = this.auditInfo.info;
                     }
                     auditApplication(params).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('审核完成');
                             this.search();
                             this.applicationTableDialog = false;
@@ -485,7 +485,7 @@
                         appID:this.applicationInfo.id,
                         reviewState:10
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('提交成功');
                             this.search();
                             this.applicationTableDialog = false;

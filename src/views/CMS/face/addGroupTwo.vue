@@ -182,7 +182,7 @@
                             <span>{{item.sexName}}</span>
                         </div>
                         <div class="list_info">
-                            <span>PersonID：{{item.PersonID}}</span>
+                            <span>PersonID：{{item.personID}}</span>
                         </div>
                         <div class="list_info">
                             <span>类型：{{item.typeName}}</span>
@@ -302,7 +302,7 @@
                     ids:[row.id]
                 };
                 deleteFaceGroup(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.$message.warning('删除成功')
                         this.getFaceGroupShowList();
                     }else{
@@ -323,7 +323,7 @@
                     ids:arr
                 };
                 deleteFaceGroup(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.$message.warning('删除成功');
                         this.getFaceGroupShowList();
                     }else{
@@ -360,7 +360,7 @@
                     ...this.facePage,
                 };
                 getFaceShow(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         if(data.data){
                             data.data.list.forEach((item)=>{
                                 item.select = false;
@@ -399,7 +399,7 @@
                     sub2:this.stepTwoForm.two
                 };
                 addFace(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.$message.success('添加成功');
                         this.faceListBirge = [];
                         this.getFaceGroupShowList();
@@ -422,7 +422,7 @@
                     sub2:this.stepTwoForm.two
                 };
                 getFaceGroupShow(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data?data.data.list:[];
                     }else{
                         this.tableData = [];
@@ -451,7 +451,7 @@
                     faceGroupID:this.groupid
                 };
                 getGroupOne(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.groupOneList = data.data ? data.data.list:[];
                     }else{
                         this.groupOneList = []
@@ -460,7 +460,7 @@
 
                 //获取图片来源
                 getPicList().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.picList = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取图片来源列表失败')
@@ -468,7 +468,7 @@
                 });
                 //获取图片编号
                 getFaceNoType().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.faceNoType = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取图片编号列表失败')
@@ -476,7 +476,7 @@
                 });
                 //获取类型
                 getFaceType().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.faceType = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取类型列表失败')
@@ -489,7 +489,7 @@
                     sub1:this.stepTwoForm.one
                 };
                 getGroupTwo(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.groupTwoList = data.data ? data.data.list:[];
                     }else{
                         this.groupTwoList = []

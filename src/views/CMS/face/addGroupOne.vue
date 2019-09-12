@@ -122,7 +122,7 @@
                         name:this.groupData.name,
                         id:this.groupData.id
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('修改成功');
                         }else{
                             this.$message.warning(data.errorInfo)
@@ -133,7 +133,7 @@
                     createFaceGroup({
                         name:this.groupData.name
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('创建成功');
                             this.groupData.id = data.data.id;
                             this.$router.push({path:'/Index/addgroupone',query:{id:this.groupData.id,type:this.type}})
@@ -166,7 +166,7 @@
                         name:this.groupChildData.name1,
                         id:this.groupChildData.id1
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('修改成功');
                             this.getGroupOneList();
                             this.groupChildData = {
@@ -184,7 +184,7 @@
                         faceGroupID:this.groupData.id,
                         name:this.groupChildData.name1
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('创建成功');
                             this.getGroupOneList();
                             this.groupChildData = {
@@ -223,7 +223,7 @@
                         sub1:this.groupChildData.id1,
                         id:this.groupChildData.id2
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('修改成功');
                             this.getGroupTwoList();
                             this.groupChildData.id2 = '';
@@ -240,7 +240,7 @@
                         name:this.groupChildData.name2,
                         sub1:this.groupChildData.id1
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('创建成功');
                             this.getGroupTwoList();
                             this.groupChildData.id2 = '';
@@ -264,7 +264,7 @@
                     deleteGroupOne({
                         id:this.groupChildData.id1,
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('删除成功');
                             this.getGroupOneList();
                             this.groupChildData = {
@@ -292,7 +292,7 @@
                     deleteGroupTwo({
                         id:this.groupChildData.id2
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('删除成功');
                             this.getGroupTwoList();
                             this.groupChildData.id2 = '';
@@ -323,7 +323,7 @@
                     faceGroupID:this.groupData.id
                 };
                 getGroupOne(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.groupOneList = data.data ? data.data.list:[];
                     }else{
                         this.groupOneList = []
@@ -337,7 +337,7 @@
                     sub1:this.groupChildData.id1
                 };
                 getGroupTwo(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.groupTwoList = data.data ? data.data.list:[];
                     }else{
                         this.groupTwoList = []
@@ -351,7 +351,7 @@
                     return false;
                 }
                 getGroupChildremTwo({id:this.groupData.id}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         if(data.data.count > 0){
                             this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id,type:this.type}})
                         }else{
@@ -373,7 +373,7 @@
                     faceGroupID:this.$route.query.id
                 };
                 getFacedetails(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.groupData.id = data.data.data.id;
                         this.groupData.name = data.data.data.name;
                         this.getGroupOneList();

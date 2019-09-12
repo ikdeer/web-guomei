@@ -151,7 +151,7 @@
                     createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                 };
                 getLogList(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data.list;
                         this.page.total = data.pagerManager.totalResults;
                     }else{

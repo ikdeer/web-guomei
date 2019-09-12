@@ -94,7 +94,7 @@
                     ...this.page
                 };
                 geteGrouplist(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data;
                     }else{
                         this.$message.warning(data.errorInfo);
