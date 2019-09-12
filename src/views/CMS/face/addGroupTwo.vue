@@ -370,6 +370,7 @@
 
                         }else{
                             this.faceList = [];
+                            this.facePage.total = 0;
                         }
                     }else{
                         this.$message.warning(data.errorInfo)

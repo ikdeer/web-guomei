@@ -493,10 +493,11 @@
                 };
                 getEquipmentList(params).then(({data})=>{
                     if(data.errorCode ==200){
-                        this.tableData = data.data.list || [];
-                        this.page.total = data.pagerManager.totalResults || 0;
+                        this.tableData = data.data?data.data.list:[];
+                        this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
                         this.tableData = [];
+                        this.page.total = 0;
                         // this.$message.warning(data.errorInfo)
                     }
                 });
