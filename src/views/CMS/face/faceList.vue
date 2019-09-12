@@ -27,6 +27,7 @@
                         <el-date-picker
                             class="user_list_form_time"
                             v-model="formData.dataTime"
+                            :picker-options="pickerOptions"
                             type="daterange"
                             range-separator="至"
                             value-format="yyyy-MM-dd HH:mm:ss"
@@ -41,7 +42,7 @@
                         <el-button type="primary" @click="addGroup">创建分组</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -110,7 +111,7 @@
             <el-form :inline="true" :model="dataDialogForm" :rules="DialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="图片来源" prop="picFromID" required>
                     <el-select v-model="dataDialogForm.picFromID" placeholder="请选择图片来源">
-                        <el-option v-for="item in dataDialogForm.picList"
+                        <el-option v-for="item in picList"
                                    :label="item.name"
                                    :value="item.id"
                                    :key="item.id">
@@ -119,7 +120,7 @@
                 </el-form-item>
                 <el-form-item label="编号" prop="noType" required>
                     <el-select v-model="dataDialogForm.noType" placeholder="请选择编号系统">
-                        <el-option v-for="item in dataDialogForm.faceNoType"
+                        <el-option v-for="item in faceNoType"
                                    :label="item.name"
                                    :value="item.id"
                                    :key="item.id">
@@ -129,7 +130,7 @@
                 </el-form-item>
                 <el-form-item label="类型" prop="type" required>
                     <el-select v-model="dataDialogForm.type" placeholder="请选择类型">
-                        <el-option v-for="item in dataDialogForm.faceType"
+                        <el-option v-for="item in faceType"
                                    :label="item.name"
                                    :value="item.id"
                                    :key="item.id">
@@ -141,8 +142,8 @@
                 </el-form-item>
                 <el-form-item label="性别" prop="sex" required>
                     <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
-                        <el-option label="男" value="男"></el-option>
-                        <el-option label="女" value="女"></el-option>
+                        <el-option label="男" value="1"></el-option>
+                        <el-option label="女" value="2"></el-option>
                     </el-select>
                 </el-form-item>
             </el-form>
@@ -194,7 +195,7 @@
 </template>
 
 <script>
-    import {textLen} from '@/lib/utils'
+    import {textLen,formatTimes} from '@/lib/utils'
     import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace } from '@/HttpApi/face/face'
     export default {
         name: "userList",
@@ -249,7 +250,47 @@
                     name:'',
                     id:'',
                     createrName:'',
-                    dataTime:null
+                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],
+                },
+                pickerOptions: {
+                    shortcuts: [
+                        {
+                            text: '今天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '昨天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 1);
+                                end = new Date(new Date(end).getTime() - 3600 * 1000 * 24 * 1);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '近7天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 7);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: '近30天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 30);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }
+                    ]
                 },
                 tableData:[],
                 page:{
@@ -265,10 +306,10 @@
                     name:'',
                     sex:'',
                     uploadFaceDialog:false,
-                    picList:[],
-                    faceType:[],
-                    faceNoType:[],
                 },
+                picList:[],
+                faceType:[],
+                faceNoType:[],
                 imageUrl: '',//base64图片url
                 faceImgUrl:'',//发送后端url
                 DialogRules:{
@@ -306,33 +347,37 @@
                         name:'',
                         sex:'',
                         uploadFaceDialog:false,
-                        faceType:[],
-                        faceNoType:[],
                 };
+                this.picList=[];
+                this.faceType=[];
+                this.faceNoType=[];
                 this.imageUrl = '';
                 this.faceImgUrl = '';
                 this.dataDialogForm.uploadFaceDialog = true;
                 //获取图片来源
                 getPicList().then(({data})=>{
-                    if(data.success){
-                        this.dataDialogForm.picList = data.data?data.data.list:[];
+                    if(data.errorCode ==200){
+                        this.picList = data.data?data.data.list:[];
                     }else{
+                        this.picList = [];
                         this.$message.warning('获取图片来源列表失败')
                     }
                 });
                 //获取图片编号
                 getFaceNoType().then(({data})=>{
-                    if(data.success){
-                        this.dataDialogForm.faceNoType = data.data?data.data.list:[];
+                    if(data.errorCode ==200){
+                        this.faceNoType = data.data?data.data.list:[];
                     }else{
+                        this.faceNoType = [];
                         this.$message.warning('获取图片编号列表失败')
                     }
                 });
                 //获取类型
                 getFaceType().then(({data})=>{
-                    if(data.success){
-                        this.dataDialogForm.faceType = data.data?data.data.list:[];
+                    if(data.errorCode ==200){
+                        this.faceType = data.data?data.data.list:[];
                     }else{
+                        this.faceType = [];
                         this.$message.warning('获取类型列表失败')
                     }
                 })
@@ -340,20 +385,29 @@
             addGroup(){
                 this.$router.push({path:'/Index/addgroupone',query:{type:'1'}})
             },
-            search(){
+            search(page){
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
-                    faceGroupNames :this.formData.name/* ? this.formData.name.split(',') : ''*/,
-                    faceGroupIds:this.formData.id/* ? this.formData.id.split(','):''*/,
-                    faceGroupCreators:this.formData.createName /*?this.formData.createName.split(","):''*/,
-                    creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
-                    creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
+                    faceGroupNames :this.formData.name,
+                    faceGroupIds:this.formData.id,
+                    faceGroupCreators:this.formData.createrName,
+                    createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getFaceList(params).then(({data})=>{
-                    if(data.success){
-                        this.tableData = data.data.list;
-                        this.page.total = data.pagerManager.totalResults;
+                    if(data.errorCode ==200){
+                        this.tableData = data.data?data.data.list:[];
+                        this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
+                        this.tableData = [];
+                        this.page.total =0;
                         this.$message.warning(data.errorInfo)
                     }
                 })
@@ -366,9 +420,9 @@
                     dataTime:null
                 };
                 if(this.userInfo.groupID==20){
-                    this.formData.createName = this.userInfo.userName;
+                    this.formData.createrName = this.userInfo.userName;
                 }
-                this.search();
+                this.search(1);
             },
             see(row){
                 this.$router.push({path:'/Index/addgroupone',query:{id:row.id,type:'2'}})
@@ -378,7 +432,7 @@
             },
             addFace(row){
                 getGroupChildremTwo({id:row.id}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         if(data.data.count > 0){
                             this.$router.push({path:'/Index/addgrouptwo',query:{id:row.id,type:'3'}})
                         }else{
@@ -391,11 +445,11 @@
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
-                this.search()
+                this.search(2)
             },
             handleCurrentChange(val){
                 this.page.page = val;
-                this.search()
+                this.search(2)
             },
             handleAvatarSuccess(res, file) {
                 var that = this;
@@ -406,7 +460,7 @@
                     this.result; // base64编码
                     imgurl = this.result;
                     uploadFaceImage({imageBase64:this.result}).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             that.faceImgUrl = data.data.url;
                             that.imageUrl = imgurl;
                         }else{
@@ -429,6 +483,7 @@
                 return isJPG && isLt2M;
             },
             commitFaceImage(){
+                console.log(this.dataDialogForm.picList);
                 this.$refs['dataDialogForm'].validate((valid) => {
                     if (valid) {
                         if(this.imageUrl == ''){
@@ -440,7 +495,7 @@
                             url:this.faceImgUrl
                         };
                         createFace(params).then(({data})=>{
-                            if(data.success){
+                            if(data.errorCode ==200){
                                 this.$message.success('上传成功');
                                 this.dataDialogForm.uploadFaceDialog = false
                             }else{
@@ -469,7 +524,7 @@
         mounted(){
             this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             if(this.userInfo.groupID==20){
-                this.formData.createName = this.userInfo.userName;
+                this.formData.createrName = this.userInfo.userName;
             }
             this.search();
         }

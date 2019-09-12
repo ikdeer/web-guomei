@@ -127,7 +127,7 @@
         methods:{
             search(){
                 getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.InfoOne[0].content = data.data.data.name || '————';
                         this.InfoOne[1].content = data.data.data.appTypeName || '————';
                         this.InfoOne[2].content = data.data.data.id || '————';
@@ -160,7 +160,7 @@
                     params.enable = 1
                 }
                 enableApplicationApi(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.search();
                         this.$message.success(row.enable===1 ? '停用成功':'启用成功')
                     }else{

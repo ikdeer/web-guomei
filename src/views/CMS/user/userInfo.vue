@@ -189,7 +189,7 @@
                         id:this.id,
                         phoneNum:this.info.phone
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.getUserDetail();
                             this.$message.success('修改成功');
                             this.info.phoneStatus = true;
@@ -212,7 +212,7 @@
                         id:this.id,
                         mail:this.info.email
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.getUserDetail();
                             this.$message.success('修改成功');
                             this.info.emailStatus = true;
@@ -226,11 +226,11 @@
             },
             closeDialog(){
                 this.dataDialogForm = {
-                    name: row.name,
-                    phone: row.phoneNum,
-                    email: row.mail,
-                    id: row.id,
-                    isEdit: true,
+                    name: '',
+                    phone: '',
+                    email: '',
+                    id: '',
+                    isEdit: false,
                 };
                 this.$refs['dataDialogForm'].clearValidate();
             },
@@ -250,7 +250,7 @@
                     cancelButtonText: '取消',
                 }).then(() => {
                     delContactInfo({id:row.id}).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('删除成功');
                             this.getContactList()
                         }else{
@@ -275,7 +275,7 @@
                         if(this.dataDialogForm.isEdit){
                             //编辑联系人
                             editUserContact(params).then(({data})=>{
-                                if(data.success){
+                                if(data.errorCode ==200){
                                     this.$message.success('编辑成功');
                                     this.getContactList();
                                     this.userInfoAddDialog = false;
@@ -286,7 +286,7 @@
                         }else{
                             //新增联系人
                             addUserContact(params).then(({data})=>{
-                                if(data.success){
+                                if(data.errorCode ==200){
                                     this.$message.success('添加成功');
                                     this.getContactList();
                                     this.userInfoAddDialog = false;
@@ -302,7 +302,7 @@
             },
             getUserDetail(){//获取用户详情
                 userDetail({id:this.id}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.info.name = data.data.name;
                         this.info.mail = data.data.mail;
                         this.info.phoneNum = data.data.phoneNum;
@@ -315,7 +315,7 @@
             },
             getContactList(){//获取联系人列表
                 userContactList({userID:this.id,page:1,pageSize:200}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data?data.data.list:[];
                     }else{
                         this.$message.warning(data.errorInfo)

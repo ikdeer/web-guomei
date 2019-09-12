@@ -176,7 +176,7 @@
                             //编辑
                             params.id = this.$route.query.id;
                             editApplication(params).then(({data})=>{
-                                if(data.success){
+                                if(data.errorCode ==200){
                                     this.$message.success('编辑成功');
                                     this.onback()
                                 }else{
@@ -185,7 +185,7 @@
                             })
                         }else{
                             createApplication(params).then(({data})=>{
-                                if(data.success){
+                                if(data.errorCode ==200){
                                     this.$message.success('创建成功');
                                     this.onback()
                                 }else{
@@ -213,7 +213,7 @@
             },
             getDetail(){
                 getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.dataForm.name = data.data.data.name;
                         this.dataForm.introduction = data.data.data.introduction;
                         this.dataForm.typeID = String(data.data.data.typeID);

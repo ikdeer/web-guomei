@@ -164,51 +164,57 @@
 </template>
 
 <script>
+import { formatTimes } from '@/lib/utils'
 import {getAppAudit,getApisConSumpTion} from "../../../HttpApi/overview/overview";
 export default {
     name: "overview",
     data(){
       return {
+        formatTimes:formatTimes,
         newAppsCount:0,//应用总数
         toBeAuditedAppsCount:0,//待审核应用
-        pickerOptions: {
-          shortcuts: [{
-            text: '今天',
-            onClick(picker) {
-              let end = new Date();
-              let start = new Date();
-              start.setTime(start.getTime() - 24 * 60 * 60 * 1000);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '昨天',
-            onClick(picker) {
-              let end = new Date();
-              let start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 2);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近7天',
-            onClick(picker) {
-              let end = new Date();
-              let start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
+          pickerOptions: {
+              shortcuts: [
+                  {
+                      text: '今天',
+                      onClick(picker) {
+                          let start = formatTimes(new Date(), true) + ' 00:00:00';
+                          let end = formatTimes(new Date(), true) + ' 23:59:59';
+                          picker.$emit('pick', [start, end]);
+                      }
+                  }, {
+                      text: '昨天',
+                      onClick(picker) {
+                          let start = formatTimes(new Date(), true) + ' 00:00:00';
+                          let end = formatTimes(new Date(), true) + ' 23:59:59';
+                          start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 1);
+                          end = new Date(new Date(end).getTime() - 3600 * 1000 * 24 * 1);
+                          picker.$emit('pick', [start, end]);
+                      }
+                  }, {
+                      text: '近7天',
+                      onClick(picker) {
+                          let start = formatTimes(new Date(), true) + ' 00:00:00';
+                          let end = formatTimes(new Date(), true) + ' 23:59:59';
+                          start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 7);
+                          end = new Date(new Date(end));
+                          picker.$emit('pick', [start, end]);
+                      }
+                  },
+                  {
+                      text: '近30天',
+                      onClick(picker) {
+                          let start = formatTimes(new Date(), true) + ' 00:00:00';
+                          let end = formatTimes(new Date(), true) + ' 23:59:59';
+                          start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 30);
+                          end = new Date(new Date(end));
+                          picker.$emit('pick', [start, end]);
+                      }
+                  }
+              ]
           },
-            {
-              text: '本月',
-              onClick(picker) {
-                let end = new Date();
-                let start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                picker.$emit('pick', [start, end]);
-              }
-            }]
-        },
         TimeData:{
-          TimeDate:[new Date(),new Date()],//时间获取
+          TimeDate:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],//时间获取
           timeStart:'',//创建开始时间
           timeEnd:'',//创建结束时间
           top:5,//用量数量条数
@@ -231,7 +237,8 @@ export default {
       },
       //选择时间
       TimeBluer(){
-        getApisConSumpTion({
+          console.log(this.TimeData.TimeDate);
+          getApisConSumpTion({
           'timeStart':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[0]) : '',//开始时间
           'timeEnd':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[1]) : '',//结束时间
           'top':this.TimeData.top,
@@ -279,6 +286,7 @@ export default {
     },
     mounted(){
       this.groupID = JSON.parse(this.Cookies.get('userInfo')).groupID;
+      this.TimeBluer();
       this.getAppAudit();
       this.getApisConSumpTion();
     }

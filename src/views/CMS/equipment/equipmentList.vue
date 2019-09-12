@@ -72,7 +72,7 @@
                         <span class="equipment_form_btn_span">离线：<span style="color: #E56565;">{{totalList.offLineCount}}</span></span>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -463,7 +463,7 @@
                 this.shopFour = [];//弹窗所属门店
                 this.faceChildOne = [];//人脸一级分组
                 this.faceChildTwo = [];//人脸二级分组
-                this.search();//查询应用信息
+                this.search(1);//查询应用信息
                 this.$refs['dialogOne'].clearValidate();
                 this.$refs['dialogTwo'].clearValidate();
             },
@@ -479,13 +479,20 @@
                 };
 
             },
-            search(){
+            search(page){
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     belongComID:this.formData.floor,
                 };
                 getEquipmentList(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data.list || [];
                         this.page.total = data.pagerManager.totalResults || 0;
                     }else{
@@ -494,7 +501,7 @@
                     }
                 });
                 getLineTotal().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.totalList.offLineCount = data.data.data.offLineCount;
                         this.totalList.onLineCount = data.data.data.onLineCount
                     }else{
@@ -512,7 +519,7 @@
                     no:'',//设备编号
                     name:''//设备名称
                 };
-                this.search()
+                this.search(1)
             },
             see(row) {
                 //查看操作
@@ -550,7 +557,7 @@
                         deviceID:row.id,
                         onOffLine:1
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('上线成功');
                             this.search()
                         }else{
@@ -569,7 +576,7 @@
                         deviceID:row.id,
                         onOffLine:0
                     }).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.$message.success('下线成功');
                             this.search()
                         }else{
@@ -601,7 +608,7 @@
             },
             getDetail(id){
                 getEquipmentDetail({id:id}).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.dialogInfo = {
                             no:data.data.device.no,//设备编号
                             name:data.data.device.name,//设备名称
@@ -617,7 +624,7 @@
                         //处理分组反显
                         if(data.data.device.faceGroupID){
                             getFaceGroupOne({faceGroupID:data.data.device.faceGroupID}).then(({data})=>{
-                                if(data.success){
+                                if(data.errorCode ==200){
                                     this.faceChildOne = data.data.list;
                                 }else{
                                     this.$message.warning(data.errorInfo)
@@ -627,7 +634,7 @@
                                 faceGroupID:data.data.device.faceGroupID,
                                 sub1:data.data.device.sub1
                             }).then(({data})=>{
-                                if(data.success){
+                                if(data.errorCode ==200){
                                     this.faceChildTwo = data.data.list;
                                 }else{
                                     this.$message.warning(data.errorInfo)
@@ -747,7 +754,7 @@
                     positionType:1
                 };
                 addEquipment(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         /*第一步新增完成改变为编辑类型，为什么变，后端太TM懒*/
                         this.equipmentDialogInfo.id = data.data.id;
                         this.equipmentDialogInfo.isEdit = true;
@@ -769,7 +776,7 @@
                     positionType:1
                 };
                 editEquipment(pams).then(({data}) => {
-                    if(data.success){
+                    if(data.errorCode ==200){
                         if(this.equipmentDialogInfo.type === 1){//第一步调用编辑
                             this.equipmentDialogInfo.btnInfo ='保存';
                             this.equipmentDialogInfo.type=2;

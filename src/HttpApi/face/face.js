@@ -1,10 +1,10 @@
 import AxIos from "../HttpApi";
-const HttpApi = 'http://139.196.161.174:8090/gm';
+const HttpApi = 'http://127.0.0.1:8090/gm';
 //获取人脸分组列表
-export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }) => AxIos({
+export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,createTimeStart,createTimeEnd }) => AxIos({
     url: '/faceGroup/show',
     method: 'get',
-    params: { page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,creatTimeStart,creatTimeEnd }
+    params: { page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,createTimeStart,createTimeEnd }
 });
 //人脸分组详情
 export const getFacedetails = ({ faceGroupID }) => AxIos({
@@ -140,10 +140,10 @@ export const addFace = ({ faceGroupID,ids,id,sub1,sub2 }) => AxIos({
 });
 
 //获取当前分组绑定人脸列表
-export const getFaceGroupShow = ({ page,pageSize,faceGroupID,id,sub1,sub2 }) => AxIos({
+export const getFaceGroupShow = ({ page,pageCount,faceGroupID,id,sub1,sub2 }) => AxIos({
     url: '/face2Group/show',
     method: 'get',
-    params: { page,pageSize,faceGroupID,id,sub1,sub2 }
+    params: { page,pageCount,faceGroupID,id,sub1,sub2 }
 });
 
 //删除人脸绑定数据

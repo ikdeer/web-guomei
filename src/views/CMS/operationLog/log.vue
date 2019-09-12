@@ -21,6 +21,7 @@
                         <el-date-picker
                             class="user_list_form_time"
                             v-model="formData.dataTime"
+                            :picker-options="pickerOptions"
                             type="daterange"
                             range-separator="至"
                             value-format="yyyy-MM-dd HH:mm:ss"
@@ -30,7 +31,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -80,6 +81,7 @@
 </template>
 
 <script>
+    import {formatTimes} from '@/lib/utils'
     import { getLogList } from '@/HttpApi/log/log'
     export default {
         name: "log",
@@ -88,7 +90,47 @@
                 formData:{
                     user:'',
                     ip:'',
-                    dataTime:'',
+                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],
+                },
+                pickerOptions: {
+                    shortcuts: [
+                        {
+                            text: '今天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '昨天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 1);
+                                end = new Date(new Date(end).getTime() - 3600 * 1000 * 24 * 1);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '近7天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 7);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: '近30天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 30);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }
+                    ]
                 },
                 tableData:[],
                 page:{
@@ -99,14 +141,21 @@
             }
         },
         methods:{
-            search(){
+            search(page){
+                if(page==1){
+                    this.page = {
+                        page: 1,
+                        pageSize: 10,
+                        total: 0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
                     createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                 };
                 getLogList(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data.list;
                         this.page.total = data.pagerManager.totalResults;
                     }else{

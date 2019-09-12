@@ -54,12 +54,12 @@
                             label="姓名">
                         </el-table-column>
                         <el-table-column
-                            prop="sex"
+                            prop="sexName"
                             label="性别">
                         </el-table-column>
                         <el-table-column
-                            prop="id"
-                            label="PersonID">
+                            prop="personID"
+                            label="personID">
                         </el-table-column>
                         <el-table-column
                             prop="typeName"
@@ -114,7 +114,7 @@
             title="添加人像"
             class="add_group_face_dialog"
             :visible.sync="addGroupFace"
-            width="15rem">
+            width="1000px">
             <div>
                 <div class="from">
                     <el-form :inline="true" ref="dataDialogForm" label-width="80px">
@@ -151,8 +151,9 @@
                         </el-form-item>
                         <el-form-item label="性别">
                             <el-select v-model="dataDialogForm.sex" placeholder="请选择性别">
-                                <el-option label="男" value="男"></el-option>
-                                <el-option label="女" value="女"></el-option>
+                                <el-option label="男" value="1"></el-option>
+                                <el-option label="女" value="2"></el-option>
+                                <el-option label="未知" value="0"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="PersonID">
@@ -166,7 +167,7 @@
                         <el-button type="text" @click="">下载批量添加模板</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="dialogSearch">查询</el-button>
+                        <el-button type="primary" @click="dialogSearch(1)">查询</el-button>
                         <el-button @click="dialogReset">清空</el-button>
                     </div>
                 </div>
@@ -174,14 +175,14 @@
                     <div class="list" v-for="item in faceList">
                         <div class="list_img">
                             <el-checkbox v-model="item.select" @change="ClickFaceImage(item)" class="checkbox"></el-checkbox>
-                            <img :src="item.img">
+                            <img :src="item.url">
                         </div>
                         <div class="list_info">
                             <span>姓名：{{item.name}}</span>
-                            <span>{{item.sex}}</span>
+                            <span>{{item.sexName}}</span>
                         </div>
                         <div class="list_info">
-                            <span>PersonID：{{item.id}}</span>
+                            <span>PersonID：{{item.personID}}</span>
                         </div>
                         <div class="list_info">
                             <span>类型：{{item.typeName}}</span>
@@ -190,7 +191,7 @@
                             <span>编号：{{item.number}}&emsp;{{item.no}}</span>
                         </div>
                         <div class="list_info">
-                            <span>图片来源：{{item.on}}</span>
+                            <span>图片来源：{{item.picFromName}}</span>
                         </div>
                         <div class="list_info">
                             <span>入库时间：{{item.createTime}}</span>
@@ -288,7 +289,7 @@
                 };
                 this.faceList = [];
                 this.faceListBirge = [];
-                this.dialogSearch();
+                this.dialogSearch(1);
                 this.addGroupFace = true;
             },
             handleSelectionChange(val){
@@ -301,7 +302,7 @@
                     ids:[row.id]
                 };
                 deleteFaceGroup(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.$message.warning('删除成功')
                         this.getFaceGroupShowList();
                     }else{
@@ -322,7 +323,7 @@
                     ids:arr
                 };
                 deleteFaceGroup(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.$message.warning('删除成功');
                         this.getFaceGroupShowList();
                     }else{
@@ -345,14 +346,21 @@
                 //关闭所有
                 this.$router.push({path:'/Index/faceList'})
             },
-            dialogSearch(){
+            dialogSearch(page){
                 //弹窗查询
+                if(page==1){
+                    this.facePage = {
+                        page:1,
+                        pageCount:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.dataDialogForm,
                     ...this.facePage,
                 };
                 getFaceShow(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         if(data.data){
                             data.data.list.forEach((item)=>{
                                 item.select = false;
@@ -379,7 +387,7 @@
                     sex:'',
                     types:'',
                 };
-                this.dialogSearch();
+                this.dialogSearch(1);
             },
             addGroupFaceDialog(){
                 //确认添加人脸 发送添加关闭弹窗
@@ -391,7 +399,7 @@
                     sub2:this.stepTwoForm.two
                 };
                 addFace(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.$message.success('添加成功');
                         this.faceListBirge = [];
                         this.getFaceGroupShowList();
@@ -402,6 +410,11 @@
                 });
             },
             getFaceGroupShowList(){
+                this.page = {
+                    page:1,
+                    pageCount:10,
+                    total:0
+                };
                 let params = {
                     ...this.page,
                     faceGroupID:this.groupid,
@@ -409,7 +422,7 @@
                     sub2:this.stepTwoForm.two
                 };
                 getFaceGroupShow(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data?data.data.list:[];
                     }else{
                         this.tableData = [];
@@ -419,22 +432,26 @@
             },
             handleSizeChange(val){
                 this.page.pageCount = val;
+                this.getFaceGroupShowList();
             },
             handleCurrentChange(val){
                 this.page.page = val;
+                this.getFaceGroupShowList();
             },
             handleDialogSizeChange(val){
                 this.facePage.pageCount = val;
+                this.dialogSearch();
             },
             handleDialogCurrentChange(val){
                 this.facePage.page = val;
+                this.dialogSearch();
             },
             getGroupOneList(){
                 let params = {
                     faceGroupID:this.groupid
                 };
                 getGroupOne(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.groupOneList = data.data ? data.data.list:[];
                     }else{
                         this.groupOneList = []
@@ -443,24 +460,24 @@
 
                 //获取图片来源
                 getPicList().then(({data})=>{
-                    if(data.success){
-                        this.dataDialogForm.picList = data.data?data.data.list:[];
+                    if(data.errorCode ==200){
+                        this.picList = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取图片来源列表失败')
                     }
                 });
                 //获取图片编号
                 getFaceNoType().then(({data})=>{
-                    if(data.success){
-                        this.dataDialogForm.faceNoType = data.data?data.data.list:[];
+                    if(data.errorCode ==200){
+                        this.faceNoType = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取图片编号列表失败')
                     }
                 });
                 //获取类型
                 getFaceType().then(({data})=>{
-                    if(data.success){
-                        this.dataDialogForm.faceType = data.data?data.data.list:[];
+                    if(data.errorCode ==200){
+                        this.faceType = data.data?data.data.list:[];
                     }else{
                         this.$message.warning('获取类型列表失败')
                     }
@@ -472,7 +489,7 @@
                     sub1:this.stepTwoForm.one
                 };
                 getGroupTwo(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.groupTwoList = data.data ? data.data.list:[];
                     }else{
                         this.groupTwoList = []
@@ -617,7 +634,7 @@
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
                 border-radius: 4px;
-                padding: .2rem;
+                padding: 10px;
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
@@ -633,7 +650,8 @@
                 }
                 .list_img{
                     position: relative;
-                    width: 100%;
+                    width: 160px;
+                    height: 160px;
                     .checkbox{
                         position: absolute;
                         /*width: 0.2rem;*/

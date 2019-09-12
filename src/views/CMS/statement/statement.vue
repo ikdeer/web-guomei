@@ -34,7 +34,7 @@
             <div class="statement_form">
                 <el-form label-width="80px">
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="选择应用">
                         <el-select v-model="formData.appIds" @change="getApiSelectList" placeholder="请选择">
@@ -72,6 +72,7 @@
                         <el-date-picker
                             class="user_list_form_time"
                             v-model="formData.dataTime"
+                            :picker-options="pickerOptions"
                             type="daterange"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             start-placeholder="开始日期"
@@ -80,7 +81,7 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -166,7 +167,7 @@
 </template>
 
 <script>
-    import {textLen} from '@/lib/utils'
+    import {textLen,formatTimes} from '@/lib/utils'
     import { getStatement,getAppList,getApiList } from '@/HttpApi/statement/statement'
     export default {
         name: "statement",
@@ -174,14 +175,54 @@
             return{
                 textLen:textLen,
                 formData:{
-                    createName:'',//创建人名称
+                    createrName:'',//创建人名称
                     apiIds:'',//api ID
                     appIds:'',//app ID
                     statisItems:'',//统计项 1-调用量 2-qps
                     monitor:['1'],//监控项
-                    dataTime:null,
+                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],
                     appList:[],
                     apiList:[]
+                },
+                pickerOptions: {
+                    shortcuts: [
+                        {
+                            text: '今天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '昨天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 1);
+                                end = new Date(new Date(end).getTime() - 3600 * 1000 * 24 * 1);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '近7天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 7);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: '近30天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 30);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }
+                    ]
                 },
                 tableData:[],
                 radio:'1',
@@ -207,7 +248,14 @@
             }
         },
         methods:{
-            search(){
+            search(page){
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     timeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
@@ -217,7 +265,7 @@
                     top:10
                 };
                 getStatement(params).then(({data}) => {
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.callData = data.data.data.callData?data.data.data.callData:[];
                         this.tableData = data.data.data.appStatisApiList?data.data.data.appStatisApiList:[];
                         this.page.total = data.data.data.pagerManager? data.data.data.pagerManager.totalResults:0;
@@ -285,7 +333,7 @@
                 })
             },
             ClickRadio(){
-                this.search()
+                this.search(1)
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
@@ -301,7 +349,7 @@
             getStateList(){
                 //获取应用下拉
                 getAppList().then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.formData.appList = data.data?data.data.list:[];
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -312,7 +360,7 @@
                 getApiList({
                     appID:this.formData.appIds
                 }).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.formData.apiList = data.data?data.data.data.apisList:[];
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -331,7 +379,7 @@
             this.formData.appIds = this.$route.query.id ? this.$route.query.id : '';
             this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             if(this.userInfo.groupID==20){
-                this.formData.createName = this.userInfo.userName;
+                this.formData.createrName = this.userInfo.userName;
             }
             this.$nextTick(() => {
                 this.lineCharts = this.$echarts.init(document.getElementById('MyEcharts'))

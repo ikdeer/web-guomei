@@ -29,6 +29,7 @@
                             class="user_list_form_time"
                             v-model="formData.dataTime"
                             type="daterange"
+                            :picker-options="pickerOptions"
                             range-separator="至"
                             value-format="yyyy-MM-dd HH:mm:ss"
                             start-placeholder="开始日期"
@@ -42,7 +43,7 @@
                         <el-button type="primary" @click="adduser">创建用户</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search">查询</el-button>
+                        <el-button type="primary" @click="search(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -183,7 +184,7 @@
                         return callback(new Error('手机号不符合规则'));
                     }else{
                         phoneNumCheck({phoneNum:value}).then(({data})=>{
-                            if(data.success){
+                            if(data.errorCode ==200){
                                 return callback()
                             }else{
                                 return callback(new Error(data.errorInfo));
@@ -237,7 +238,47 @@
                     phoneNums:'',
                     mails:'',
                     disenable:'',
-                    dataTime:null
+                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59']
+                },
+                pickerOptions: {
+                    shortcuts: [
+                        {
+                            text: '今天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '昨天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 1);
+                                end = new Date(new Date(end).getTime() - 3600 * 1000 * 24 * 1);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }, {
+                            text: '近7天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 7);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: '近30天',
+                            onClick(picker) {
+                                let start = formatTimes(new Date(), true) + ' 00:00:00';
+                                let end = formatTimes(new Date(), true) + ' 23:59:59';
+                                start = new Date(new Date(start).getTime() - 3600 * 1000 * 24 * 30);
+                                end = new Date(new Date(end));
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }
+                    ]
                 },
                 tableData:[],//用户列表
                 page:{
@@ -291,7 +332,7 @@
                 this.userListAddDialog = true;
                 this.$refs['dataDialogForm'].resetFields();
             },
-            search(){
+            search(page){
                 let phoneArr = this.formData.phoneNums.replace('，',',').split(',');
                 let emailArr = this.formData.mails.replace('，',',').split(',');
                 if(!phoneArr[0]==''){
@@ -318,6 +359,13 @@
                         return;
                     }
                 }
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
+                    }
+                }
                 let params = {
                     ...this.formData,...this.page,
                     createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
@@ -326,7 +374,7 @@
                 if(this.formData.disenable) params.enable = this.formData.disenable;
 
                 getUserList(params).then(({data})=>{
-                    if(data.success){
+                    if(data.errorCode ==200){
                         this.tableData = data.data ? data.data.list : [];
                         this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
@@ -343,7 +391,7 @@
                     disenable:'',
                     dataTime:null
                 };
-                this.search();
+                this.search(1);
             },
             see(row){
                 this.$router.push({ path: '/Index/userInfo', query: { id: row.id }})
@@ -394,7 +442,7 @@
                             password:this.dataDialogForm.passwordend
                         };
                         createUser(params).then(({data})=>{
-                            if(data.success){
+                            if(data.errorCode ==200){
                                 this.$message.success('添加成功');
                                 this.search();
                                 this.userListAddDialog = false;
@@ -423,7 +471,7 @@
                 }
                 if(this.userListTableInfo.status===3){
                     removeUser({id:this.userListTableInfo.id}).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.search();
                             this.$message.success('删除成功');
                             this.userListTableDialog = false;
@@ -433,7 +481,7 @@
                     })
                 }else{
                     enableUser(params).then(({data})=>{
-                        if(data.success){
+                        if(data.errorCode ==200){
                             this.search();
                             this.$message.success(this.userListTableInfo.status===1?'停用成功':'启用成功');
                             this.userListTableDialog = false;
