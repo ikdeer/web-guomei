@@ -103,9 +103,10 @@
         </div>
 
         <el-dialog
-            title="提示"
+            title="上传人脸图片"
             class="face__upload_dialog"
             :visible.sync="dataDialogForm.uploadFaceDialog"
+            @close="closeDialog"
             width="890px">
             <h3>填写人员信息</h3>
             <el-form :inline="true" :model="dataDialogForm" :rules="DialogRules" ref="dataDialogForm" label-width="80px">
@@ -520,6 +521,18 @@
             },
             uploadFillError(a,b,c,d){
 
+            },
+            closeDialog(){
+                this.dataDialogForm = {
+                    picFromID:'',
+                    noType:'',
+                    no:'',
+                    type:'',
+                    name:'',
+                    sex:'',
+                    uploadFaceDialog:false,
+                };
+                this.$refs['dataDialogForm'].clearValidate();
             }
         },
         mounted(){
