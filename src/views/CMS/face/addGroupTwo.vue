@@ -163,7 +163,15 @@
                 </div>
                 <div class="btn">
                     <div>
-                        <el-button type="primary" @click="">批量添加</el-button>
+                        <el-upload
+                            class="upload_footer"
+                            :action="uploadUrl"
+                            :show-file-list="false"
+                            :on-success="uploadFillSuccess"
+                            :on-error="uploadFillError"
+                            :on-change="allhandleChange">
+                            <el-button type="primary">批量添加</el-button>
+                        </el-upload>
                         <el-button type="text" @click="">下载批量添加模板</el-button>
                     </div>
                     <div>
@@ -221,7 +229,7 @@
 </template>
 
 <script>
-    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType } from '@/HttpApi/face/face'
+    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl } from '@/HttpApi/face/face'
     export default {
         name: "addGroupTwo",
         data(){
@@ -261,6 +269,7 @@
                 picList:[],//图片来源
                 faceType:[],//人脸类型
                 faceNoType:[],//编号系统
+                uploadUrl:uploadUrl
             }
         },
         computed:{
@@ -498,6 +507,20 @@
                     }
                 })
             },
+            allhandleChange(a,b,c,d){
+                // console.log('change',a,b,c,d)
+            },
+            uploadFillSuccess(res,file,fileList){
+                if(res.success){
+                    this.$message.warning('上传成功');
+                    this.dialogSearch(1);
+                }else{
+                    this.$message.success(res.errorInfo)
+                }
+            },
+            uploadFillError(a,b,c,d){
+
+            }
         },
         mounted(){
             this.groupid = this.$route.query.id;
@@ -622,6 +645,10 @@
             display: -webkit-flex;
             justify-content: space-between;
             border-top: 1px solid #EEEEEE;
+            .upload_footer{
+                display: inline-block;
+                width: 90px;
+            }
         }
 
         .content{

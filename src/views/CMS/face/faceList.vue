@@ -513,7 +513,7 @@
             },
             uploadFillSuccess(res,file,fileList){
                if(res.success){
-
+                   this.$message.success('上传成功')
                }else{
                    this.$message.warning(res.errorInfo)
                }
