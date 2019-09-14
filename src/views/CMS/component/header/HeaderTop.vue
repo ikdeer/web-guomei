@@ -29,7 +29,7 @@
 <script>
   import {getUserLogout} from "@/HttpApi/login/loginApi";
   export default {
-    name: "header",
+    name: "HeaderTop",
     data(){
       return {
         userInfo:{

@@ -11,7 +11,7 @@
         <h3>用户基本信息</h3>
         <div class="info">
             <div class="info_title">
-                <img src="/static/images/touxiang.jpeg" alt="">
+                <img src="/static/images/sy_icon_me_64@2x.png" alt="">
                 <div>你好<br/>欢迎使用国美人脸认证开放平台</div>
             </div>
             <div class="info_list">&emsp;用户名：{{info.name}}</div>

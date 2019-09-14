@@ -10,20 +10,20 @@
       </div>
       <div class="header-navCenter">
         <div class="navCenter-div">
-          <router-link  tag="div"
+          <!--<router-link  tag="div"
                         class="One-Level"
                         v-for="(item,index) in stairList"
                         :to="{path:item.stairRouter}">
             <span class="One-LevelText">{{item.stairText}}</span>
-            <!--<div class="navCenter-divMenu" v-if="item.secondList.length != '0'">
+            &lt;!&ndash;<div class="navCenter-divMenu" v-if="item.secondList.length != '0'">
               <router-link  tag="div"
                             class="second-level"
                             v-for="(items,indexS) in item.secondList"
                             :to="{path:''}">
                 <span class="second-levelText">{{items.secondText}}</span>
               </router-link>
-            </div>-->
-          </router-link>
+            </div>&ndash;&gt;
+          </router-link>-->
         </div>
       </div>
     </div>
@@ -202,7 +202,7 @@
             margin:0 0.2rem;
           }
           >p{
-            font-size: 0.18rem;
+            font-size: 0.2rem;
             color: #ffffff;
             font-weight: 600;
           }
