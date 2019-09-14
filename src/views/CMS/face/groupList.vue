@@ -19,29 +19,29 @@
                 <el-table-column
                     label="一级分组名称">
                     <template slot-scope="scope">
-                        {{textLen(scope.row.name,16)}}
+                        {{textLen(scope.row.name1,16)}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="phoneNum"
+                    prop="sub1"
                     label="一级分组ID">
                 </el-table-column>
                 <el-table-column
                     label="二级分组名称">
                     <template slot-scope="scope">
-                        {{textLen(scope.row.name,16)}}
+                        {{textLen(scope.row.name2,16)}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="mail"
+                    prop="sub2"
                     label="二级分组ID">
                 </el-table-column>
                 <el-table-column
-                    prop="mail"
+                    prop="count"
                     label="人脸数量">
                 </el-table-column>
                 <el-table-column
-                    prop="mail"
+                    prop="lastModifyTime"
                     label="修改时间">
                 </el-table-column>
                 <el-table-column
