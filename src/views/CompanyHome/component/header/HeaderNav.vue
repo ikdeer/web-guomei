@@ -108,7 +108,7 @@
             message: '你还没有登录,请先登录~~~',
             type: 'warning'
           });
-          this.$router.push({path: '/Company/login',query:{console:'overview'}});
+          this.$router.push({path: '/Company/login',query:{redirect:'overview'}});
         }
       },
       handleCommand(command){

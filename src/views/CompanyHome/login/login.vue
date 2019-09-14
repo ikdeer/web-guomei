@@ -107,8 +107,10 @@
                       this.Cookies.set('userInfo',JSON.stringify(this.userInfo));
                       this.$message({message: '登录成功', type: 'success'});
                       setTimeout(()=>{
-                        if(_this.$route.query.console == 'overview'){
+                        if(_this.$route.query.redirect == 'overview'){
                           _this.$router.push({path: '/Index/overview'});
+                        }else if(_this.$route.query.redirect){
+                          _this.$router.push({path:_this.$route.query.redirect});
                         }else{
                           _this.$router.push({path: '/Company/CompanyHome'});
                         }
