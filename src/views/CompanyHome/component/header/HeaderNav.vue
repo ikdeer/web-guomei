@@ -2,11 +2,7 @@
   <nav class="header-nav">
     <div class="header-nav_Left">
       <div class="header-navLeft">
-        <img class="navLeft-Img" src="/static/images/logo_image@2x.png" @click.stop="ClickURL">
-        <div class="navLeft-Text">
-          <span></span>
-          <p>人脸认证开放平台</p>
-        </div>
+        <img class="navLeft-Img" src="/static/images/logo_imgae@2x.png" @click.stop="ClickURL">
       </div>
       <div class="header-navCenter">
         <div class="navCenter-div">
@@ -184,28 +180,11 @@
         display: -webkit-flex;
         align-items: center;
         .navLeft-Img{
-          width: 1.38rem;
+          width: 3.88rem;
           height: 0.46rem;
           display: block;
           margin-left: 0.4rem;
           cursor: pointer;
-        }
-        .navLeft-Text{
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          >span{
-            width: 0.02rem;
-            height: 0.3rem;
-            display: block;
-            background: #ffffff;
-            margin:0 0.2rem;
-          }
-          >p{
-            font-size: 0.2rem;
-            color: #ffffff;
-            font-weight: 600;
-          }
         }
       }
       .header-navCenter{
