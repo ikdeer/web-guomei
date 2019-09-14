@@ -50,7 +50,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="user_list_footer">
+        <div class="SDK_footer">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -122,6 +122,10 @@
     .SDK-table{
       width: 100%;
       background: #ffffff;
+    }
+    .SDK_footer{
+      margin-top: 10px;
+      text-align: right;
     }
   }
 }
