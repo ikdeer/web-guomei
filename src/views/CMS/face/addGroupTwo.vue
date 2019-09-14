@@ -433,7 +433,8 @@
                     sub2:this.stepTwoForm.two
                 };
                 getFaceGroupShow(params).then(({data})=>{
-                    if(data.errorCode ==200){
+                    if(data.errorCode == 200){
+                        console.log(data.data);
                         this.tableData = data.data?data.data.list:[];
                     }else{
                         this.tableData = [];
