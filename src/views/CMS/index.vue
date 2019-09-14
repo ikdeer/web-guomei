@@ -52,7 +52,7 @@
     .content-right{
       width: auto;
       box-sizing: border-box;
-      margin-left: 2.6rem;
+      margin-left: 250px;
       padding-left: 0.25rem;
       padding-right: 0.25rem;
       padding-bottom: 0.25rem;
