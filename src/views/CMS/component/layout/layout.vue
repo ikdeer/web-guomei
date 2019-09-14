@@ -51,7 +51,7 @@
 
 <style lang="scss">
 .sider{
-  width: 2.6rem;
+  width: 250px;
   height: calc(100% - 0.6rem);
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
   z-index: 10;
@@ -61,24 +61,24 @@
   .sider-ul{
     width: 100%;
     margin: 0;
-    padding: 0.2rem 0 0 0 ;
+    padding: 20px 0 0 0 ;
     li{
       cursor: pointer;
-      height: 0.6rem;
+      height: 60px;
       list-style-type:none;
       display: flex;
       display: -webkit-flex;
       align-items: center;
       justify-content: center;
       img{
-        width: 0.2rem;
-        height: 0.2rem;
+        width: 20px;
+        height: 20px;
         display: block;
-        margin-right: 0.2rem;
+        margin-right: 20px;
       }
       span{
-        width: 1.2rem;
-        font-size:0.16rem;
+        width: 120px;
+        font-size:16px;
         color:#666666;
         display: block;
         text-align: left;

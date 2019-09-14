@@ -20,10 +20,10 @@ export const uploadFaceImage = ({ imageBase64 }) => AxIos({
 });
 
 //创建人脸
-export const createFace = ({ gmRelated,id,name,no,noType,picFromID,sex,type,url }) => AxIos({
-    url: '/face/delFaceData',
+export const createFace = ({ gmRelated,id,name,no,noType,picFromID,sex,type,url,imageBase64 }) => AxIos({
+    url: '/face/createFaceData',
     method: 'post',
-    data: { gmRelated,id,name,no,noType,picFromID,sex,type,url }
+    data: { gmRelated,id,name,no,noType,picFromID,sex,type,url,imageBase64 }
 });
 
 

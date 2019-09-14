@@ -307,7 +307,7 @@
                         width: 100%;
                         .left{
                             cursor: pointer;
-                            width: 90px;
+                            width: 100px;
                             color: #666666;
                             float: left;
                             .left_icon{
@@ -324,10 +324,9 @@
                         }
                         .right{
                             float: left;
-                            width: calc(100% - 120px);
-                            margin-left: 20px;
+                            width: calc(100% - 100px);
                             .el-checkbox{
-                                width: 90px;
+                                width: 160px;
                             }
                         }
                     }

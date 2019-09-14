@@ -461,9 +461,10 @@
                     imgurl = this.result;
                     uploadFaceImage({imageBase64:this.result}).then(({data})=>{
                         if(data.errorCode ==200){
-                            that.faceImgUrl = data.data.url;
+                            // that.faceImgUrl = data.data.url;
                             that.imageUrl = imgurl;
                         }else{
+                            that.imageUrl = '';
                             that.$message.warning(data.errorInfo)
                         }
                     })
@@ -483,7 +484,6 @@
                 return isJPG && isLt2M;
             },
             commitFaceImage(){
-                console.log(this.dataDialogForm.picList);
                 this.$refs['dataDialogForm'].validate((valid) => {
                     if (valid) {
                         if(this.imageUrl == ''){
@@ -492,7 +492,8 @@
                         }
                         let params = {
                             ...this.dataDialogForm,
-                            url:this.faceImgUrl
+                            // url:this.faceImgUrl,
+                            imageBase64:this.imageUrl
                         };
                         createFace(params).then(({data})=>{
                             if(data.errorCode ==200){
