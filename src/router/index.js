@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Cookie from 'js-cookie'
+import Cookies from 'js-cookie'
 //CompanyHome
 import Company from '@/views/CompanyHome/coupany'
 import login from '@/views/CompanyHome/login/login'
@@ -53,9 +53,14 @@ const router = new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: [
     {
+      path: '*',
+      redirect: '/Company/CompanyHome'
+    },
+    {
       path: '/Company',
       name: '首页容器',
       component: Company,
+      meta:{requireAuth:true},
       children:[
         {
           path: '/Company/login',
@@ -63,6 +68,7 @@ const router = new Router({
           component: login,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
         {
@@ -71,6 +77,7 @@ const router = new Router({
           component: userLogin,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
         {
@@ -79,6 +86,7 @@ const router = new Router({
           component: forgetPaw,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
         {
@@ -87,6 +95,7 @@ const router = new Router({
           component: CompanyHome,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
         {
@@ -95,6 +104,7 @@ const router = new Router({
           component: product,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
         {
@@ -103,6 +113,7 @@ const router = new Router({
           component: solution,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
         {
@@ -111,6 +122,7 @@ const router = new Router({
           component: APITCF,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
         {
@@ -119,6 +131,7 @@ const router = new Router({
           component: AccessToInformation,
           meta: {
             title:'国美人脸认证开放平台',
+            requireAuth:true
           },
         },
       ]
@@ -127,6 +140,9 @@ const router = new Router({
       path: '/Index',
       name: '首页',
       component: Index,
+      meta:{
+        requireAuth:true
+      },
       children:[
         {
           path: '/Index/overview',
@@ -134,7 +150,7 @@ const router = new Router({
           component: overview,
           meta: {
             title:'国美人脸认证管理后台',
-            code:1
+            code:1,
           },
         },
         {
@@ -143,7 +159,8 @@ const router = new Router({
           component: userList,
           meta: {
             title:'国美人脸认证管理后台',
-            code:2
+            code:2,
+            requireAuth:true
           },
         },
         {
@@ -152,7 +169,8 @@ const router = new Router({
           component:userInfo ,
           meta: {
             title:'国美人脸认证管理后台',
-            code:2
+            code:2,
+            requireAuth:true
           },
         },{
           path: '/Index/applicationList',
@@ -160,7 +178,8 @@ const router = new Router({
           component:applicationList ,
           meta: {
             title:'国美人脸认证管理后台',
-            code:3
+            code:3,
+            requireAuth:true
           },
         },{
           path: '/Index/addApplication',
@@ -168,7 +187,8 @@ const router = new Router({
           component:addApplication ,
           meta: {
             title:'国美人脸认证管理后台',
-            code:3
+            code:3,
+            requireAuth:true
           },
         },{
           path: '/Index/applicationDetail',
@@ -176,7 +196,8 @@ const router = new Router({
           component:applicationDetail ,
           meta: {
               title:'国美人脸认证管理后台',
-              code:3
+              code:3,
+              requireAuth:true
           },
       },{
         path: '/Index/faceList',
@@ -184,7 +205,8 @@ const router = new Router({
         component: faceList,
         meta: {
             title:'国美人脸认证管理后台',
-            code:4
+            code:4,
+            requireAuth:true
           }
       },{
         path: '/Index/addgroupone',
@@ -192,7 +214,8 @@ const router = new Router({
         component: addGroupOne,
         meta: {
           title:'国美人脸认证管理后台',
-          code:4
+          code:4,
+          requireAuth:true
         }
       },{
          path: '/Index/addGroupTwo',
@@ -200,7 +223,8 @@ const router = new Router({
          component: addGroupTwo,
          meta: {
            title:'国美人脸认证管理后台',
-           code:4
+           code:4,
+           requireAuth:true
          }
       },{
         path: '/Index/groupList',
@@ -208,7 +232,8 @@ const router = new Router({
         component: groupList,
         meta: {
           title:'国美人脸认证管理后台',
-          code:4
+          code:4,
+          requireAuth:true
         }
       },{
         path: '/Index/equipmentList',
@@ -216,7 +241,8 @@ const router = new Router({
         component: equipmentList,
         meta: {
             title:'国美人脸认证管理后台',
-            code:5
+            code:5,
+            requireAuth:true
         }
       },{
         path: '/Index/statement',
@@ -224,7 +250,8 @@ const router = new Router({
         component: statement,
         meta: {
           title:'国美人脸认证管理后台',
-          code:6
+          code:6,
+          requireAuth:true
         }
       },
         {
@@ -233,7 +260,8 @@ const router = new Router({
           component: TCFApiList,
           meta: {
             title:'国美人脸认证管理后台',
-            code:7
+            code:7,
+            requireAuth:true
           }
         },
         {
@@ -242,7 +270,8 @@ const router = new Router({
           component: TCFApiAdd,
           meta: {
             title:'国美人脸认证管理后台',
-            code:7
+            code:7,
+            requireAuth:true
           }
         },
         {
@@ -251,7 +280,8 @@ const router = new Router({
           component:TCFApiEdit,
           meta: {
             title:'国美人脸认证管理后台',
-            code:7
+            code:7,
+            requireAuth:true
           }
         },
         {
@@ -260,7 +290,8 @@ const router = new Router({
           component: TCFApiDetails,
           meta: {
             title:'国美人脸认证管理后台',
-            code:7
+            code:7,
+            requireAuth:true
           }
         },
         {
@@ -269,7 +300,8 @@ const router = new Router({
           component: instructionsList,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:8,
+            requireAuth:true
           }
         },
         {
@@ -278,7 +310,8 @@ const router = new Router({
           component: instructionsAdd,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:8,
+            requireAuth:true
           }
         },
         {
@@ -287,7 +320,8 @@ const router = new Router({
           component: instructionsEdit,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:8,
+            requireAuth:true
           }
         },
         {
@@ -296,7 +330,8 @@ const router = new Router({
           component: instructionsDetails,
           meta: {
             title:'国美人脸认证管理后台',
-            code:8
+            code:8,
+            requireAuth:true
           }
         },
         {
@@ -305,7 +340,8 @@ const router = new Router({
         component: log,
         meta: {
           title:'国美人脸认证管理后台',
-          code:9
+          code:9,
+          requireAuth:true
         }
       },
         {
@@ -314,7 +350,8 @@ const router = new Router({
           component: categories,
           meta: {
             title:'国美人脸认证管理后台',
-            code:10
+            code:10,
+            requireAuth:true
           }
         },
         {
@@ -323,7 +360,8 @@ const router = new Router({
           component: SDKDownload,
           meta: {
             title:'国美人脸认证管理后台',
-            code:12
+            code:12,
+            requireAuth:true
           }
         },
         {
@@ -332,7 +370,8 @@ const router = new Router({
           component: productlist,
           meta: {
             title:'国美人脸认证管理后台',
-            code:11
+            code:11,
+            requireAuth:true
           }
         },
         {
@@ -341,21 +380,36 @@ const router = new Router({
           component: productAdd,
           meta: {
             title:'国美人脸认证管理后台',
-            code:11
+            code:11,
+            requireAuth:true
           }
         },
       ],
-    },
-    {
-      path: '*',
-      redirect: '/Company/CompanyHome'
     }
   ]
 })
 
-//路由处理函数
-router.beforeEach((to, from, next)=>{
+// 免登录白名单
+const whiteList = ['/Company/CompanyHome', '/Company/product'];
+router.beforeEach((to,from,next)=>{
+  if(Cookies.get('token')){
+    if(to.fullPath === "/Company/login"){
+      next({
+        path:from.fullPath
+      });
+    }else{
+      next();
+    }
+  }else{
+    if(whiteList.indexOf(to.path) !== -1){
+      next();
+    }else{
+      // 否则全部重定向到登录页
+      //next({path: '/', query: { redirect: to.fullPath }});
+      next();
+    }
+  }
   document.title = to.meta.title || '国美人脸认证开放平台';
-  next();
 });
+
 export default router;
