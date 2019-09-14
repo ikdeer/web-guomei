@@ -6,7 +6,7 @@
         <Header_Nav></Header_Nav>
         <div class="header-IfoImg">
           <div class="IfoImg-left">
-            <h4 class="IfoImg-Title">人脸对比</h4>
+            <p class="IfoImg-Title">人脸对比</p>
             <p class="IfoImg-Text">人脸识别（Face Recognition）基于图像或视频中的人脸检测、分析和比对技术，
               提供人脸检测定位、人脸属性识别和人脸比对等独立服务模块。可以为开发者和
               企业提供高性能的在线API服务，应用于人脸AR、人脸识别和认证、大规模人脸
@@ -265,7 +265,7 @@
         .IfoImg-Title{
           font-size: 0.68rem;
           color: #ffffff;
-          font-weight: 600;
+          font-weight: 700;
         }
         .IfoImg-Text{
           width: 7.95rem;
@@ -273,21 +273,21 @@
           color: #ffffff;
           font-weight: 400;
           padding:0.3rem 0;
+          line-height: 0.37rem;
         }
         .IfoImg-button{
           background: #ffffff;
           color: #F20A59;
           font-size: 0.2rem;
           border-radius: 0.29rem;
-          padding: 0.12rem 0.5rem;
+          padding: 0.16rem 0.5rem;
           border: none;
           display: block;
         }
         .IfoImg-TextSmall{
           padding-top: 0.38rem;
           font-size: 0.18rem;
-          color: #333333;
-          font-weight: 400;
+          color: #999999;
         }
       }
       .IfoImg-right{

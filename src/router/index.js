@@ -195,7 +195,7 @@ const router = new Router({
           code:4
         }
       },{
-         path: '/Index/addgrouptwo',
+         path: '/Index/addGroupTwo',
          name: '人脸创建分组',
          component: addGroupTwo,
          meta: {

@@ -22,7 +22,7 @@
             <div class="login-form">
               <el-form-item prop="code">
                 <div class="login-code">
-                  <el-input placeholder="验证码" v-model="loginForm.code"></el-input>
+                  <el-input placeholder="验证码" maxlength="4" v-model="loginForm.code"></el-input>
                   <a href="javascript:;" @click="changeCodeImg()">
                     <img :src="loginForm.codeImg" alt="图片加载失败">
                   </a>
@@ -114,6 +114,7 @@
                         }
                       },500)
                     }else{
+                      this.changeCodeImg();
                       _this.$message.error(response.data.errorInfo);
                     }
                   })

@@ -59,6 +59,11 @@
               </div>
               <div class="overIew-right_pad">
                 <el-table :data="tableData" header-row-class-name="tableHead" style="width: 100%">
+                  <!-- //暂无数据提示 -->
+                  <template slot="empty">
+                    <span>您还没有可用的API，请先创建应用</span>
+                  </template>
+
                   <el-table-column label="API"  align="center">
                     <template slot-scope="scope">
                       <span>{{scope.row.name}}</span>
@@ -521,6 +526,7 @@ export default {
           align-items: center;
           justify-content: center;
           margin-right:0.1rem;
+          cursor: pointer;
           span{
             font-size:0.16rem;
             font-weight: 500;
