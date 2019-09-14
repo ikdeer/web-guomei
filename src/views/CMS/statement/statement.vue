@@ -387,6 +387,7 @@
                 window.addEventListener('resize', this.handleResize)
             });
             this.getStateList();
+            this.getApiSelectList();
             this.search();
         },
         beforeDestroy() {
