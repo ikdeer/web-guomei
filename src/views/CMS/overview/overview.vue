@@ -58,7 +58,7 @@
                 </div>
               </div>
               <div class="overIew-right_pad">
-                <el-table :data="tableData" header-row-class-name="tableHead" style="width: 100%">
+                <el-table :data="tableData" class="tableHead" style="width: 100%">
                   <!-- //暂无数据提示 -->
                   <template slot="empty">
                     <span>您还没有可用的API，请先创建应用</span>
@@ -298,7 +298,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .overIew{
   width: 100%;
   padding-bottom: 0.3rem;
@@ -332,7 +332,7 @@ export default {
         padding-right: 0.25rem;
         padding-top: 0.2rem;
         .overIew-use_left{
-          width:7.14rem;
+          width:7rem;
           position: relative;
           .overIew-use_text{
             font-size: 0.16rem;
@@ -441,13 +441,17 @@ export default {
             }
           }
           .overIew-right_pad{
-            width: 9rem;
+            width: 100%;
             height: 3.35rem;
             .tableHead{
-              color: #333333;
-              font-weight: 600;
+              font-weight: 700;
+              color: #666666;
               th{
                 background: #F1F1F1;
+              }
+              td{
+                font-weight: 500 !important;
+                padding: 4px 0 !important;
               }
             }
           }

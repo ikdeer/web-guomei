@@ -45,6 +45,10 @@
                         tooltip-effect="dark"
                         style="width: 100%"
                         @selection-change="handleSelectionChange">
+                        <!-- //暂无数据提示 -->
+                        <template slot="empty">
+                          <span>暂无人脸图片</span>
+                        </template>
                         <el-table-column
                             type="selection"
                             width="55">
@@ -331,14 +335,18 @@
                     sub2:this.stepTwoForm.two,
                     ids:arr
                 };
-                deleteFaceGroup(params).then(({data})=>{
+                if(arr.length != 0){
+                  deleteFaceGroup(params).then(({data})=>{
                     if(data.errorCode ==200){
-                        this.$message.warning('删除成功');
-                        this.getFaceGroupShowList();
+                      this.$message.warning('删除成功');
+                      this.getFaceGroupShowList();
                     }else{
-                        this.$message.warning(data.errorInfo)
+                      this.$message.warning(data.errorInfo)
                     }
-                })
+                  })
+                }else{
+                  this.$message.warning('请选中要删除的人像');
+                }
             },
             ClickFaceImage(item){
                 //点击图片

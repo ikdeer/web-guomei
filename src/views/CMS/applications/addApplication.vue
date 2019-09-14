@@ -84,7 +84,11 @@
             };
             let introduction = (rule, value, callback) => {
                 if(value){
-                    return callback()
+                  if(/^[\s]*$/.test(value)){
+                    return callback(new Error('请填写应用描述'))
+                  }else{
+                    return callback();
+                  }
                 }else{
                     return callback(new Error('请填写应用描述'))
                 }
@@ -112,11 +116,7 @@
                 }else{
                     return callback()
                 }
-            };
-
-
-
-
+            }
             return {
                 dataForm: {
                     //amountLimit:'',//调用量 , 用量限制

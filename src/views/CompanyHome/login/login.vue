@@ -101,7 +101,6 @@
                     if(response.data.errorCode == 200){
                       this.Cookies.set('token',response.data.data.token);
                       this.userInfo.userName = response.data.data.username;
-                      this.userInfo.userImg = response.data.data.username ? response.data.data.username.substring(0,1) : '';
                       this.userInfo.uid = response.data.data.uid;
                       this.userInfo.groupID = response.data.data.groupID;
                       this.Cookies.set('userInfo',JSON.stringify(this.userInfo));

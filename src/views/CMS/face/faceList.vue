@@ -51,6 +51,10 @@
                 <el-table
                     :data="tableData"
                     style="width: 100%">
+                    <!-- //暂无数据提示 -->
+                    <template slot="empty">
+                      <span>你还未创建分组</span>
+                    </template>
                     <el-table-column
                         align="center"
                         label="人脸分组名称">

@@ -29,52 +29,12 @@
           </div>
           <div class="product-List">
             <ul class="product-ListUl">
-              <li>
+              <li v-for="(item,index) in productList">
                 <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/analysis_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">人脸检测与属性分析</h4>
-                  <p class="ListUl-PadText">精准定位图中人脸，获得眼、口、鼻等关键点位置，分析性别、年龄、等多种人脸属性</p>
-                  <el-button class="ListUl-PadButton">了解详情</el-button>
-                </div>
-              </li>
-              <li>
-                <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/identify_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">人脸对比</h4>
-                  <p class="ListUl-PadText">对比两张人脸的相似度，并给出相似度评分，从而判断是否同一人</p>
-                  <el-button class="ListUl-PadButton">了解详情</el-button>
-                </div>
-              </li>
-              <li>
-                <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/explore_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">人脸搜索</h4>
-                  <p class="ListUl-PadText">针对一张人脸照片，在指定人脸集合中搜索，找出最相似的一张脸或多张人脸，并给出相似度分值</p>
-                  <el-button class="ListUl-PadButton">了解详情</el-button>
-                </div>
-              </li>
-              <li>
-                <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/detection_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">活体检测</h4>
-                  <p class="ListUl-PadText">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
-                  <el-button class="ListUl-PadButton">了解详情</el-button>
-                </div>
-              </li>
-              <li>
-                <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/collect_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">视频流人脸采集</h4>
-                  <p class="ListUl-PadText">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
-                  <el-button class="ListUl-PadButton">了解详情</el-button>
-                </div>
-              </li>
-              <li>
-                <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" src="/static/images/contrast_image@2x.png" alt="">
-                  <h4 class="ListUl-PadTitle">离线识别SDK</h4>
-                  <p class="ListUl-PadText">提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用</p>
-                  <el-button class="ListUl-PadButton">了解详情</el-button>
+                  <img class="ListUl-PadImg" :src="item.productImg" alt="">
+                  <h4 class="ListUl-PadTitle">{{item.productTitle}}</h4>
+                  <p class="ListUl-PadText">{{item.productText}}</p>
+                  <el-button class="ListUl-PadButton" @click="ClickProduct(item)">了解详情</el-button>
                 </div>
               </li>
             </ul>
@@ -218,6 +178,44 @@
       data(){
         return {
           groupID:'',//登录人员身份
+          productList:[
+            {
+              productImg:'/static/images/analysis_image@2x.png',
+              productTitle:'人脸检测与属性分析',
+              productText:'精准定位图中人脸，获得眼、口、鼻等关键点位置，分析性别、年龄、等多种人脸属性',
+              productId:1,
+            },
+            {
+              productImg:'/static/images/identify_image@2x.png',
+              productTitle:'人脸对比',
+              productText:'对比两张人脸的相似度，并给出相似度评分，从而判断是否同一人',
+              productId:2,
+            },
+            {
+              productImg:'/static/images/explore_image@2x.png',
+              productTitle:'人脸搜索',
+              productText:'针对一张人脸照片，在指定人脸集合中搜索，找出最相似的一张脸或多张人脸，并给出相似度分值',
+              productId:3,
+            },
+            {
+              productImg:'/static/images/detection_image@2x.png',
+              productTitle:'活体检测',
+              productText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
+              productId:4,
+            },
+            {
+              productImg:'/static/images/collect_image@2x.png',
+              productTitle:'视频流人脸采集',
+              productText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
+              productId:5,
+            },
+            {
+              productImg:'/static/images/contrast_image@2x.png',
+              productTitle:'离线识别SDK',
+              productText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
+              productId:6,
+            },
+          ],
         }
       },
       methods:{
@@ -236,11 +234,15 @@
               _this.$router.push({path:'/Company/login'});
             },300)
           }
+        },
+        //产品功能区域跳转
+        ClickProduct(item){
+          this.$router.push({path:'/Company/product',query:{productId:item.productId}});
         }
       },
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
-        this.groupID = JSON.parse(userInfo).groupID;
+        this.groupID =userInfo ? JSON.parse(userInfo).groupID : '';
       }
     }
 </script>
@@ -355,24 +357,27 @@
                 display: block;
               }
               .ListUl-PadTitle{
-                font-size:0.26rem;
+                font-size:0.22rem;
                 color: #252525;
-                font-weight: 600;
-                padding-top: 0.05rem;
+                font-weight: 700;
                 text-align: center;
               }
               .ListUl-PadText{
                 font-size: 0.18rem;
                 color: #666666;
-                padding-top: 0.23rem;
-                padding-bottom: 0.6rem;
+                padding-top: 0.19rem;
+                padding-bottom: 0.3rem;
                 text-align: center;
+                height: 0.9rem;
+                line-height: 0.3rem;
               }
               .ListUl-PadButton{
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
-                padding: 0.1rem 0.35rem;
+                line-height: 0.54rem;
+                padding: 0;
+                width: 2.04rem;
                 border-radius: 0.27rem;
                 background: #ffffff;
                 font-size: 0.18rem;
@@ -389,7 +394,6 @@
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
-                padding: 0.1rem 0.35rem;
                 border-radius: 0.27rem;
                 font-size: 0.18rem;
                 border-color: #F20A59;
@@ -421,7 +425,7 @@
           background: #036FE2;
           display: block;
           position: absolute;
-          top: 70%;
+          top: 75%;
           left: 50%;
           -webkit-transform: translate(-50%,-70%);
           -ms-transform: translate(-50%,-70%);
@@ -469,13 +473,16 @@
               .listUl-Text{
                 font-size: 0.18rem;
                 color: #666666;
-                padding-top: 0.25rem;
-                padding-bottom: 0.52rem;
+                padding-top: 0.24rem;
+                padding-bottom: 0.41rem;
+                line-height: 0.3rem;
+                height: 0.9rem;
               }
               .listUl-title{
                 display: flex;
                 display: -webkit-flex;
                 align-items: center;
+                font-weight: 700;
                 span:first-child{
                   font-size: 0.2rem;
                   color: #252525;
@@ -483,6 +490,7 @@
                 span:last-child{
                   font-size: 0.2rem;
                   color: #036FE2;
+                  margin-left:0.22rem;
                 }
               }
             }
@@ -508,6 +516,7 @@
         padding-top: 0.8rem;
         padding-bottom: 0.55rem;
         position: relative;
+        line-height: 0.25rem;
         .service-TextH2{
           font-size: 0.48rem;
           color:#252525;
@@ -541,13 +550,13 @@
             height: 2.5rem;
             display: flex;
             display: -webkit-flex;
-            align-items: center;
             justify-content: center;
             box-shadow:0 0.01rem 0.1rem 0.01rem rgba(0,0,0,0.11);
             border-radius:0.3rem;
             border:0.01rem solid rgba(253,253,253,1);
             .service-pad{
               width: 3.42rem;
+              margin-top: 0.23rem;
               .service-Title{
                 font-size: 0.24rem;
                 font-weight: 600;

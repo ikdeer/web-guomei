@@ -360,7 +360,7 @@
                   .listDiv-padH4{
                     font-size: 0.24rem;
                     color: #333333;
-                    padding-top: 0.5rem;
+                    padding-top: 0.4rem;
                     padding-bottom: 0.2rem;
                     border-bottom: 1px solid #D8D8D8;
                   }
@@ -369,13 +369,14 @@
                     .listDiv-padButton{
                       margin-bottom: 0.2rem;
                       .listDiv-padDiv_h5{
-                        font-size:0.16rem;
+                        font-size:0.2rem;
                         font-weight: 400;
                         padding-bottom: 0.1rem;
                       }
                       .listDiv-padDiv_p{
                         font-size: 0.14rem;
                         color: #666666;
+                        line-height: 0.23rem;
                       }
                     }
                   }
@@ -468,14 +469,14 @@
                   .listBottom-divPad{
                     width: 85%;
                     .listBottom-H5{
-                      font-size: 0.16rem;
+                      font-size: 0.22rem;
                       color: #333333;
                       text-align: center;
                       font-weight: 400;
                       padding-top: 0.44rem;
                     }
                     .listBottom-p{
-                      font-size: 0.14rem;
+                      font-size: 0.18rem;
                       color: #666666;
                       padding-top: 0.25rem;
                     }

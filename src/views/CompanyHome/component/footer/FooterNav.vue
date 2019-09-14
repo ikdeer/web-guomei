@@ -55,19 +55,19 @@
         span{
           font-size: 0.22rem;
           color: #ffffff;
-          font-weight: 600;
+          font-weight: 700;
           margin-right: 0.76rem;
         }
       }
       .footer-leftCenter{
         font-size: 0.18rem;
-        color: #ffffff;
+        color: #cccccc;
         margin-top: 0.37rem;
         margin-bottom: 0.58rem;
       }
       .footer-leftBotton{
         font-size: 0.18rem;
-        color: #ffffff;
+        color: #cccccc;
       }
     }
     .footer-right{
