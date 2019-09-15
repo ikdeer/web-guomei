@@ -48,81 +48,16 @@
           </div>
           <div class="solution-List">
             <ul class="solution-ListUl">
-              <li class="ListUl-li">
+              <li class="ListUl-li" v-for="(item,index) in schemeList" :key="item.schemeId" @click="ClickSchemeURL(item,index)">
                 <div class="ListUl-pad">
                   <div class="listUl-header">
-                    <img src="/static/images/attendance_icon@ss2x.png" alt="">
-                    <span>人脸考勤</span>
+                    <img :src="item.schemeImg" alt="">
+                    <span>{{item.schemeTitle}}</span>
                   </div>
-                  <p class="listUl-Text">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
+                  <p class="listUl-Text">{{item.schemeText}}</p>
                   <div class="listUl-title">
                     <span>主要服务：</span>
-                    <span>人脸检测</span>
-                  </div>
-                </div>
-              </li>
-              <li class="ListUl-li">
-                <div class="ListUl-pad">
-                  <div class="listUl-header">
-                    <img src="/static/images/abckdkd.png" alt="">
-                    <span>刷脸门禁考勤</span>
-                  </div>
-                  <p class="listUl-Text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
-                  <div class="listUl-title">
-                    <span>主要服务：</span>
-                    <span>人脸搜索</span>
-                  </div>
-                </div>
-              </li>
-              <li class="ListUl-li">
-                <div class="ListUl-pad">
-                  <div class="listUl-header">
-                    <img src="/static/images/Group@2x.png" alt="">
-                    <span>安防监控</span>
-                  </div>
-                  <p class="listUl-Text">提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用</p>
-                  <div class="listUl-title">
-                    <span>主要服务：</span>
-                    <span>人脸搜索</span>
-                  </div>
-                </div>
-              </li>
-              <li class="ListUl-li">
-                <div class="ListUl-pad">
-                  <div class="listUl-header">
-                    <img src="/static/images/login_icon@2x.png" alt="">
-                    <span>人脸登录</span>
-                  </div>
-                  <p class="listUl-Text">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
-                  <div class="listUl-title">
-                    <span>主要服务：</span>
-                    <span>人脸检测</span>
-                  </div>
-                </div>
-              </li>
-              <li class="ListUl-li">
-                <div class="ListUl-pad">
-                  <div class="listUl-header">
-                    <img src="/static/images/pay_icon@2x.png" alt="">
-                    <span>人脸支付</span>
-                  </div>
-                  <p class="listUl-Text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
-                  <div class="listUl-title">
-                    <span>主要服务：</span>
-                    <span>人脸搜索</span>
-                  </div>
-                </div>
-              </li>
-              <li class="ListUl-li">
-                <div class="ListUl-pad">
-                  <div class="listUl-header">
-                    <img src="/static/images/member_icon@2x.png" alt="">
-                    <span>会员识别</span>
-                  </div>
-                  <p class="listUl-Text">提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用</p>
-                  <div class="listUl-title">
-                    <span>主要服务：</span>
-                    <span>人脸搜索</span>
+                    <span>{{item.schemeType}}</span>
                   </div>
                 </div>
               </li>
@@ -171,10 +106,7 @@
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
     export default {
       name: "home",
-      components:{
-        Header_Nav,
-        Footer_Nav
-      },
+      components:{Header_Nav, Footer_Nav},
       data(){
         return {
           groupID:'',//登录人员身份
@@ -216,6 +148,50 @@
               productId:6,
             },
           ],
+          schemeList:[
+            {
+              schemeImg:'/static/images/attendance_icon@ss2x.png',
+              schemeTitle:'人脸考勤',
+              schemeText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
+              schemeType:'人脸检测',
+              schemeId:1
+            },
+            {
+              schemeImg:'/static/images/abckdkd.png',
+              schemeTitle:'刷脸门禁考勤',
+              schemeText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
+              schemeType:'人脸搜索',
+              schemeId:2
+            },
+            {
+              schemeImg:'/static/images/Group@2x.png',
+              schemeTitle:'安防监控',
+              schemeText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
+              schemeType:'人脸搜索',
+              schemeId:3
+            },
+            {
+              schemeImg:'/static/images/login_icon@2x.png',
+              schemeTitle:'人脸登录',
+              schemeText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
+              schemeType:'人脸检测',
+              schemeId:4
+            },
+            {
+              schemeImg:'/static/images/pay_icon@2x.png',
+              schemeTitle:'人脸支付',
+              schemeText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
+              schemeType:'人脸搜索',
+              schemeId:5
+            },
+            {
+              schemeImg:'/static/images/member_icon@2x.png',
+              schemeTitle:'会员识别',
+              schemeText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
+              schemeType:'人脸搜索',
+              schemeId:6
+            },
+          ],
         }
       },
       methods:{
@@ -238,10 +214,14 @@
         //产品功能区域跳转
         ClickProduct(item){
           this.$router.push({path:'/Company/product',query:{productId:item.productId}});
+        },
+        //解决方案区域跳转
+        ClickSchemeURL(item){
+          this.$router.push({path:'/Company/solution',query:{schemeId:item.schemeId}});
         }
       },
       mounted(){
-        let userInfo= this.Cookies.get('userInfo') || '';
+        let userInfo = this.Cookies.get('userInfo') || '';
         this.groupID =userInfo ? JSON.parse(userInfo).groupID : '';
       }
     }
@@ -451,6 +431,7 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 0.9rem;
+            cursor: pointer;
             .ListUl-pad{
               width: 4rem;
               .listUl-header{

@@ -21,7 +21,7 @@
           <div class="solution-left">
             <ul class="solution-ul">
               <li v-for="(item,index) in schemeList"
-                  :class="{'solution-liBg':item.flag}"
+                  :class="{'solution-liBg':item.id == schemeId}"
                   :key="item.id"
                   @click.stop="ClickScheme(item)">
                 <span>{{item.name}}</span>
@@ -144,9 +144,17 @@
       components:{Header_Nav,Footer_Nav},
       data(){
         return {
-          schemeList:[],//数据展示
+          schemeList:[
+            {id:1,flag:false,name:'人脸考勤'},
+            {id:2,flag:false,name:'刷脸门禁考勤'},
+            {id:3,flag:false,name:'安防监控'},
+            {id:4,flag:false,name:'人脸登陆'},
+            {id:5,flag:false,name:'人脸支付'},
+            {id:6,flag:false,name:'会员识别'},
+          ],//数据展示
           schemeText:[],//右侧内容数据
           groupID:'',//登录人员身份
+          schemeId:0,//标识ID
         }
       },
       methods:{
@@ -185,13 +193,13 @@
           for(let i =0; i < this.schemeList.length; i++){
             this.schemeList[i].flag = false;
           }
-          item.flag = true;
+          this.schemeId = item.id;
         }
       },
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
-        this.groupID = JSON.parse(userInfo).groupID;
-        this.getProductServiceShow();
+        this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
+        this.schemeId = this.$route.query.schemeId || 1;
       }
     }
 </script>
