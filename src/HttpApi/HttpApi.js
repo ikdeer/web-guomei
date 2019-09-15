@@ -28,7 +28,7 @@ AxIos.interceptors.request.use(
 
 AxIos.interceptors.response.use(response => {
     if (response.data && response.data.code === 401) {
-      Vue.Cookies.delete('token');
+      Cookie.delete('token');
       router.push({name: 'login'});
     }
     return response;

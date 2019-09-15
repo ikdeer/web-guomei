@@ -354,7 +354,7 @@ const router = new Router({
 })
 
 // 免登录白名单
-const whiteList = ['/Company/CompanyHome', '/Company/product','/Company/solution','/Company/APITCF','/Company/AccessToInformation'];
+const whiteList = ['/Company/forgetPaw','/Company/userLogin','/Company/CompanyHome', '/Company/product','/Company/solution','/Company/APITCF','/Company/AccessToInformation'];
 router.beforeEach((to,from,next)=>{
   document.title = to.meta.title || '国美人脸认证开放平台';
   if(Cookies.get('token')){

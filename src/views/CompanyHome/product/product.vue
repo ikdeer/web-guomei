@@ -22,7 +22,7 @@
             <ul class="action-ul">
               <li v-for="(item,index) in SolutionList"
                   :key="item.id"
-                  :class="{'action-liBg':item.id  == ProductId || $route.query.productId == item.id}"
+                  :class="{'action-liBg':item.id  == productId}"
                   @click.stop="ClickSolution(item)">
                 <span>{{item.name}}</span>
               </li>
@@ -30,7 +30,7 @@
           </div>
           <div class="action-right"
                v-for="(item,index) in SolutionText"
-               v-if="$route.query.productId == item.ProductId || item.ProductId == ProductId">
+               v-if="item.ProductId == productId">
             <div class="action-introduce">
               <div class="introduce-Text">
                 <h2 class="introduce-TextH2">{{item.FunctionTitle}}</h2>
@@ -176,7 +176,7 @@
               ]
             },
           ],
-          ProductId:0,
+          productId:0,
           groupID:'',//登录人员身份
         }
       },
@@ -221,15 +221,13 @@
             this.SolutionList[i].flag = false;
           }
           item.flag = true;
-          this.ProductId = item.id;
+          this.productId = item.id;
         }
       },
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
         this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
-        if(!this.$route.query.productId){
-          this.ProductId = 1;
-        }
+        this.productId = this.$route.query.productId;
       }
     }
 </script>

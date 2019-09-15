@@ -99,11 +99,13 @@
                 })
                   .then(response => {
                     if(response.data.errorCode == 200){
-                      this.Cookies.set('token',response.data.data.token);
                       this.userInfo.userName = response.data.data.username;
                       this.userInfo.uid = response.data.data.uid;
                       this.userInfo.groupID = response.data.data.groupID;
-                      this.Cookies.set('userInfo',JSON.stringify(this.userInfo));
+                      let  exp = new Date();
+                      exp.setTime(exp.getTime() + (2 * 60 *60 * 1000));//过期时间2小时
+                      this.Cookies.set('token',response.data.data.token,{ expires:exp});
+                      this.Cookies.set('userInfo',JSON.stringify(this.userInfo),{expires:exp});
                       this.$message({message: '登录成功', type: 'success'});
                       setTimeout(()=>{
                         if(_this.$route.query.redirect == 'overview'){
