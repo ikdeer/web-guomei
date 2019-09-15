@@ -162,3 +162,6 @@ export const getGroupChildremTwo = ({ id }) => AxIos({
 
 //文件上传
 export const uploadUrl = `${HttpApi}/upload`;
+
+//文件下载
+export const downloadUrl = `${HttpApi}/uploadPicture/face.xls`;

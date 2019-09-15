@@ -105,10 +105,10 @@
                 })
             },
             addChildGroup(){
-                this.$router.push({path:'/Index/addgroupone',query:{id:this.groupid.id,type:this.type}})
+                this.$router.push({path:'/Index/addgroupone',query:{id:this.groupid,type:this.type}})
             },
             edit(){
-                this.$router.push({path:'/Index/addgroupone',query:{id:this.groupid.id,type:this.type}})
+                this.$router.push({path:'/Index/addgroupone',query:{id:this.groupid,type:this.type}})
             },
             handleSizeChange(val){
                 this.page.pageSize = val;

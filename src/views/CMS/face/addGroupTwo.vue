@@ -176,7 +176,9 @@
                             :on-change="allhandleChange">
                             <el-button type="primary">批量添加</el-button>
                         </el-upload>
-                        <el-button type="text" @click="">下载批量添加模板</el-button>
+                        <a :href="downloadUrl" download="" title="下载">
+                            <el-button type="text">下载批量添加模板</el-button>
+                        </a>
                     </div>
                     <div>
                         <el-button type="primary" @click="dialogSearch(1)">查询</el-button>
@@ -233,7 +235,7 @@
 </template>
 
 <script>
-    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl } from '@/HttpApi/face/face'
+    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl,downloadUrl } from '@/HttpApi/face/face'
     export default {
         name: "addGroupTwo",
         data(){
@@ -273,7 +275,8 @@
                 picList:[],//图片来源
                 faceType:[],//人脸类型
                 faceNoType:[],//编号系统
-                uploadUrl:uploadUrl
+                uploadUrl:uploadUrl,
+                downloadUrl:downloadUrl
             }
         },
         computed:{

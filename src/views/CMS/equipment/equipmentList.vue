@@ -31,6 +31,7 @@
                             </el-option>
                         </el-select>
                         <el-select v-model="formData.floor"
+                                   @change="choosedCompany(3)"
                                     placeholder="请选择所属楼层">
                             <el-option v-for="item in floorList"
                                        :label="item.name"
@@ -199,7 +200,7 @@
                     </el-form-item>
 
                     <!--设备位置如果是 国美电器展示门店-->
-                    <el-form-item label="选择门店" v-if="dialogInfo.siteTwo=='国美电器'" required>
+                    <el-form-item label="选择门店" v-if="isGmdq" required>
                         <el-select v-model="dialogInfo.shopOne" @change="ClickShop(1)" placeholder="请选择所属大区">
                             <el-option v-for="item in shopOne"
                                        :label="item.name"
@@ -208,7 +209,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item v-if="dialogInfo.siteTwo=='国美电器'" required>
+                    <el-form-item v-if="isGmdq" required>
                         <el-select v-model="dialogInfo.shopTwo" @change="ClickShop(2)" placeholder="请选择所属分部">
                             <el-option v-for="item in shopTwo"
                                        :label="item.name"
@@ -217,7 +218,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item v-if="dialogInfo.siteTwo=='国美电器'" required>
+                    <el-form-item v-if="isGmdq" required>
                         <el-select v-model="dialogInfo.shopThree" @change="ClickShop(3)" placeholder="请选择所属二级分部">
                             <el-option v-for="item in shopThree"
                                        :label="item.name"
@@ -226,7 +227,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item v-if="dialogInfo.siteTwo=='国美电器'" prop="shopFour" required>
+                    <el-form-item v-if="isGmdq" prop="shopFour" required>
                         <el-select v-model="dialogInfo.shopFour" placeholder="请选择所属门店">
                             <el-option v-for="item in shopFour"
                                        :label="item.storeName"
@@ -338,6 +339,7 @@
                     no:'',//设备编号
                     name:''//设备名称
                 },
+                locateNames:'',//拼接公司字符
                 companyList:[],//公司列表
                 departmentList:[],//部门列表
                 floorList:[],//楼层列表
@@ -379,6 +381,7 @@
                     faceChildOne:'',
                     faceChildTwo:''
                 },
+                isGmdq:false,
                 dialogFace:{
                     faceGroup:'',//人脸分组123
                     faceChildOne:'',
@@ -451,6 +454,7 @@
                     shopThree:'',
                     shopFour:'',
                 };
+                this.isGmdq = false;
                 this.dialogFace = {
                     faceGroup:'',//人脸分组123
                     faceChildOne:'',
@@ -490,6 +494,7 @@
                 let params = {
                     ...this.formData,...this.page,
                     belongComID:this.formData.floor,
+                    locateNames:this.locateNames
                 };
                 getEquipmentList(params).then(({data})=>{
                     if(data.errorCode ==200){
@@ -821,7 +826,7 @@
             },
             goGroup(){
                 let routeData = this.$router.resolve({
-                    path: '/Index/faceList',
+                    path: '/Index/addgroupone',
                 });
                 window.open(routeData.href, '_blank');
                 // this.$router.push({path: '/Index/faceList'})
@@ -835,6 +840,11 @@
                     this.siteThree = [];
                 }
                 if(index == 2){
+                    if(this.siteTwo[this.dialogInfo.siteTwo].name == '国美电器'){
+                        this.isGmdq = true;
+                    }else{
+                        this.isGmdq = false;
+                    }
                     this.dialogInfo.siteThree = '';
                     this.siteThree = this.siteTwo[this.dialogInfo.siteTwo].list;
                 }

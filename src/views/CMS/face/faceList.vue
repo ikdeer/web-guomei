@@ -185,7 +185,9 @@
                         :on-change="allhandleChange">
                         <el-button type="primary" @click="">批量添加</el-button>
                     </el-upload>
-                    <el-button type="text" @click="">下载批量添加模板</el-button>
+                    <a :href="downloadUrl" download="" title="下载">
+                        <el-button type="text">下载批量添加模板</el-button>
+                    </a>
                 </div>
                 <div>
                     <el-button type="primary" @click="commitFaceImage">确 定</el-button>
@@ -201,7 +203,7 @@
 
 <script>
     import {textLen,formatTimes} from '@/lib/utils'
-    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace } from '@/HttpApi/face/face'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace,downloadUrl } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -251,6 +253,7 @@
             return {
                 textLen:textLen,
                 uploadUrl:uploadUrl,
+                downloadUrl:downloadUrl,
                 formData:{
                     name:'',
                     id:'',

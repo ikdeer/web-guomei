@@ -1,10 +1,10 @@
 import AxIos from "../HttpApi";
 
 //获取设备列表
-export const getEquipmentList = ({ page,pageSize,belongComID,gmAreaID,name,no,online,positionType,type,creatTimeStart,creatTimeEnd }) => AxIos({
+export const getEquipmentList = ({ page,pageSize,belongComID,gmAreaID,name,no,online,positionType,type,creatTimeStart,creatTimeEnd,locateNames }) => AxIos({
     url: '/device/show',
     method: 'get',
-    params: { page,pageSize,belongComID,gmAreaID,name,no,online,positionType,type,creatTimeStart,creatTimeEnd }
+    params: { page,pageSize,belongComID,gmAreaID,name,no,online,positionType,type,creatTimeStart,creatTimeEnd,locateNames }
 });
 
 //设备离线总量
