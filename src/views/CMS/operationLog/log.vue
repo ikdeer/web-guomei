@@ -36,30 +36,26 @@
                 </el-form>
             </div>
             <div class="log_table">
-                <el-table
-                    ref="multipleTable"
-                    :data="tableData"
-                    border
-                    tooltip-effect="dark">
-                    <el-table-column
-                        prop="name"
-                        align="center"
-                        label="用户名">
+                <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
+                    <el-table-column align="center" label="用户名">
+                      <template slot-scope="scope">
+                          <span>{{scope.row.username}}</span>
+                      </template>
                     </el-table-column>
-                    <el-table-column
-                        prop="createBy"
-                        align="center"
-                        label="操作记录">
+                    <el-table-column  align="center" label="操作记录">
+                      <template slot-scope="scope">
+                        <span>{{scope.row.txt}}</span>
+                      </template>
                     </el-table-column>
-                    <el-table-column
-                        prop="lastModifyTime"
-                        align="center"
-                        label="操作时间">
+                    <el-table-column align="center" label="操作时间">
+                      <template slot-scope="scope">
+                        <span>{{scope.row.createTime}}</span>
+                      </template>
                     </el-table-column>
-                    <el-table-column
-                        prop="id"
-                        align="center"
-                        label="访问IP">
+                    <el-table-column align="center" label="访问IP">
+                      <template slot-scope="scope">
+                        <span>{{scope.row.ip}}</span>
+                      </template>
                     </el-table-column>
                 </el-table>
             </div>
@@ -76,7 +72,6 @@
                 </el-pagination>
             </div>
         </div>
-
     </div>
 </template>
 

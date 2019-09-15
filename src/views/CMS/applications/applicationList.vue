@@ -241,12 +241,13 @@
                     radio:0,
                     info:''
                 },
+                //用户登录信息
                 userInfo:{
                     userName:'',//用户姓名
                     userImg:'',//用户头头像
                     uid:'',//用户ID
                     groupID:'',//用户身份
-                },//用户登录信息
+                },
                 Breadcrumb:null,//面包屑导航栏
             }
         },
@@ -264,9 +265,10 @@
                     }
                 }
                 let params = {
-                    ...this.page,...this.formData,
-                    creatTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
-                    creatTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
+                    ...this.page,
+                    ...this.formData,
+                    createTimeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
+                    createTimeEnd:this.formData.dataTime?this.formData.dataTime[1]:''
                 };
                 getAppList(params).then(({data})=>{
                     if(data.errorCode ==200){
@@ -385,10 +387,8 @@
             submitTableDialog(){ //提交弹窗信息
                 //启用直接过
                 if(this.applicationInfo.status === 1){
-                    // this.search();
                     this.applicationTableDialog = false;
                 }
-
                 //禁用接口调用
                 if(this.applicationInfo.status === 2){
                     disableApplication({
@@ -488,8 +488,8 @@
             }
         },
         mounted() {
-            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
-            if(this.userInfo.groupID==20){
+            this.userInfo = this.Cookies.get('userInfo') ? JSON.parse(this.Cookies.get('userInfo')) : '';
+            if(this.userInfo.groupID == 20){
                 this.formData.createrName = this.userInfo.userName;
             }
             this.Breadcrumb = this.$route.query.NavType;//面包屑导航栏
