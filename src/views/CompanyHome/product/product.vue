@@ -174,7 +174,7 @@
                 {PrimaryTitle:'离线识别SDK',PrimaryText:'离线调用人脸检测、人脸追踪、人脸采集等能力，快速获取人脸图片'},
                 {PrimaryTitle:'离线识别SDK',PrimaryText:'离线调用人脸检测、人脸追踪、人脸采集等能力，快速获取人脸图片'}
               ]
-            },
+            }
           ],
           productId:0,
           groupID:'',//登录人员身份
@@ -220,14 +220,13 @@
           for(let i =0; i < this.SolutionList.length; i++){
             this.SolutionList[i].flag = false;
           }
-          item.flag = true;
           this.productId = item.id;
         }
       },
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
         this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
-        this.productId = this.$route.query.productId;
+        this.productId = this.$route.query.productId || 1;
       }
     }
 </script>
