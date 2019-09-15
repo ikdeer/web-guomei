@@ -226,11 +226,10 @@
       },
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
-        this.groupID = JSON.parse(userInfo).groupID;
+        this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
         if(!this.$route.query.productId){
           this.ProductId = 1;
         }
-        //this.getSolutionShow();
       }
     }
 </script>

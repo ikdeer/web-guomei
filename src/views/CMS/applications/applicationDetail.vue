@@ -53,7 +53,9 @@
                     <el-table-column
                         label="操作" align="center">
                         <template slot-scope="scope">
-                            <el-button type="text" @click="down(scope.row)">{{scope.row.enable===1 ? '停用':'启用'}}</el-button>
+                            <el-button type="text"
+                                       :disabled="groupID == '20' ? true : false"
+                                       @click="down(scope.row)">{{scope.row.enable===1 ? '停用':'启用'}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -117,6 +119,7 @@
                 }],
                 tableData:[],
                 introduction:'',
+                groupID:'',//登录人员身份
                 page:{
                     currentPage:1,
                     pageSize:10,
@@ -178,7 +181,9 @@
             },
         },
         mounted(){
-            this.search()
+            let userInfo= this.Cookies.get('userInfo') || '';
+            this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
+            this.search();
         }
     }
 </script>

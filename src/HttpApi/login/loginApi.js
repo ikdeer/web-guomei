@@ -66,7 +66,7 @@ export const geUserResetPassWord = (params) => {
  **/
 export const geUserResetPasswordPhoneMsg = (params) => {
   return new Promise(resolve => {
-    AxIos.post('/user/resetPassword', params).then(response => {
+    AxIos.post('/user/resetPasswordPhoneMsg', params).then(response => {
       resolve(response)
     })
   })
