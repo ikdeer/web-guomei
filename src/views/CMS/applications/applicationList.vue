@@ -321,9 +321,10 @@
             reset() {
                 this.formData= {
                     name:'',
-                    appID:'',
-                    appState:'',
+                    id:'',
+                    state:'',
                     reviewState:'',
+                    createrName:'',
                     dataTime:null
                 };
                 if(this.userInfo.groupID==20){

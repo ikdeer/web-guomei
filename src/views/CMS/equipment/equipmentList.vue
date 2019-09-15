@@ -337,7 +337,9 @@
                     no:'',//设备编号
                     name:''//设备名称
                 },
-                locateNames:'',//拼接公司字符
+                locateNames1:'',//拼接公司字符
+                locateNames2:'',//拼接公司字符
+                locateNames3:'',//拼接公司字符
                 companyList:[],//公司列表
                 departmentList:[],//部门列表
                 floorList:[],//楼层列表
@@ -433,10 +435,18 @@
                     this.formData.floor = '';
                     this.formData.department = '';
                     this.floorList = [];
+                    this.locateNames1 = this.companyList[this.formData.company].name;
+                    this.locateNames2 = '';
+                    this.locateNames3 = '';
                 }
                 if(index == 2){
                     this.formData.floor = '';
                     this.floorList = this.departmentList[this.formData.department].list;
+                    this.locateNames2 = this.departmentList[this.formData.department].name;
+                    this.locateNames3 = '';
+                }
+                if(index == 3){
+                    this.locateNames3 = this.floorList[this.formData.floor].name;
                 }
             },
             closeDialog(){
@@ -489,10 +499,20 @@
                         total:0
                     }
                 }
+                let locateNames = [];
+                if(this.locateNames1 != ''){
+                    locateNames.push(this.locateNames1)
+                }
+                if(this.locateNames2 != ''){
+                    locateNames.push(this.locateNames2)
+                }
+                if(this.locateNames3 != ''){
+                    locateNames.push(this.locateNames3)
+                }
                 let params = {
                     ...this.formData,...this.page,
                     belongComID:this.formData.floor,
-                    locateNames:this.locateNames
+                    locateNames:locateNames.length?locateNames.join():''
                 };
                 getEquipmentList(params).then(({data})=>{
                     if(data.errorCode ==200){
