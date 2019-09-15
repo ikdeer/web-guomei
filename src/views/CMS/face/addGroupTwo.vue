@@ -85,7 +85,6 @@
             </div>
         </div>
 
-
         <el-dialog
             title="添加人像"
             class="add_group_face_dialog"
@@ -261,7 +260,8 @@
         },
         methods:{
             ChangeTwoFormOne(){
-                //选择一级分组
+                this.stepTwoForm.two = '';
+                //选择获取二级级分组
                 this.getGroupTwoList();
             },
             getFaceShowList(){
@@ -339,6 +339,8 @@
                 this.$router.push({path:'/Index/faceList'})
             },
             dialogSearch(page){
+              //faceListBirge数组里面未置空存在上次勾选的数据
+              this.faceListBirge = [];
                 //弹窗查询
                 if(page==1){
                     this.facePage = {
@@ -364,7 +366,6 @@
                             this.faceList = [];
                             this.facePage.total = 0;
                         }
-                        console.log(data);
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -385,7 +386,6 @@
             },
             addGroupFaceDialog(){
                 //确认添加人脸 发送添加关闭弹窗
-                console.log(this.faceListBirge);
                 if(this.faceListBirge.length < 1){
                     this.$message.warning('请选择人像');
                     return ;
@@ -444,18 +444,15 @@
                 this.facePage.page = val;
                 this.dialogSearch();
             },
+            //获取一级分组
             getGroupOneList(){
-                let params = {
-                    faceGroupID:this.groupid
-                };
-                getGroupOne(params).then(({data})=>{
+                getGroupOne({faceGroupID:this.groupid}).then(({data})=>{
                     if(data.errorCode ==200){
                         this.groupOneList = data.data ? data.data.list:[];
                     }else{
                         this.groupOneList = []
                     }
                 });
-
                 //获取图片来源
                 getPicList().then(({data})=>{
                     if(data.errorCode ==200){
@@ -481,6 +478,7 @@
                     }
                 })
             },
+            //获取二级分组
             getGroupTwoList(){
                 let params = {
                     faceGroupID:this.groupid,
@@ -494,9 +492,7 @@
                     }
                 })
             },
-            allhandleChange(a,b,c,d){
-                // console.log('change',a,b,c,d)
-            },
+            allhandleChange(a,b,c,d){},
             uploadFillSuccess(res,file,fileList){
                 if(res.success){
                     this.$message.warning('上传成功');

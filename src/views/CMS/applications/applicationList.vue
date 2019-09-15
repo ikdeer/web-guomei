@@ -75,12 +75,8 @@
                 </div>
             </div>
             <div class="application_list_table">
-                <el-table
-                    :data="tableData"
-                    style="width: 100%">
-                    <el-table-column
-                        align="center"
-                        label="应用名称">
+                <el-table :data="tableData" style="width: 100%">
+                    <el-table-column align="center" label="应用名称">
                         <template slot-scope="scope">
                             <el-tooltip placement="top">
                                 <div slot="content">{{scope.row.name}}</div>
@@ -88,65 +84,30 @@
                             </el-tooltip>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="appTypeName"
-                        width="80"
-                        label="应用类型">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="id"
-                        label="appID">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="createTime"
-                        width="140"
-                        label="创建时间">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="lastModifyTime"
-                        width="140"
-                        label="最后修改时间">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="createrName"
-                        width="80"
-                        label="创建人">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="showState"
-                        width="80"
-                        label="应用状态">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        width="80"
-                        label="审核状态">
+                    <el-table-column align="center" prop="appTypeName" width="80" label="应用类型"></el-table-column>
+                    <el-table-column align="center" prop="id" label="appID"></el-table-column>
+                    <el-table-column align="center" prop="createTime" width="140" label="创建时间"></el-table-column>
+                    <el-table-column align="center" prop="lastModifyTime" width="140" label="最后修改时间"></el-table-column>
+                    <el-table-column align="center" prop="createrName" width="80" label="创建人"></el-table-column>
+                    <el-table-column align="center" prop="showState" width="80" label="应用状态"></el-table-column>
+                    <el-table-column align="center" width="80" label="审核状态">
                         <template slot-scope="scope">
-                            <div v-if="scope.row.reviewState==20">
+                            <!--div v-if="scope.row.reviewState==20">
                                 <el-tooltip placement="top">
                                     <div slot="content">{{scope.row.rejectReason}}</div>
                                     <span>{{scope.row.showReviewState}}</span>
                                 </el-tooltip>
                             </div>
-                            <div v-else>{{scope.row.showReviewState}}</div>
+                            <div v-else>{{scope.row.showReviewState}}</div>-->
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        label="操作" align="center">
+                    <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
                             <el-button type="text" @click="statement(scope.row)">报表</el-button>
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
-
                             <!--用户可操作-->
                             <el-button type="text" v-if="scope.row.reviewState == 1 && userInfo.groupID==20" @click="commitAudit(scope.row)">提交审核</el-button>
                             <el-button type="text" v-if="userInfo.groupID==20" @click="edit(scope.row)">修改</el-button>
-
                             <!--超管可操作-->
                             <el-button type="text" v-if="scope.row.reviewState ==10 && userInfo.groupID ==1" @click="audit(scope.row)">审核</el-button>
                             <el-button type="text" v-if="scope.row.enable == 0 && userInfo.groupID ==1" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>

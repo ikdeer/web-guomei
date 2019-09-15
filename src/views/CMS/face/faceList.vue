@@ -55,35 +55,16 @@
                     <template slot="empty">
                       <span>你还未创建分组</span>
                     </template>
-                    <el-table-column
-                        align="center"
-                        label="人脸分组名称">
+                    <el-table-column align="center" label="人脸分组名称">
                         <template slot-scope="scope">
                             {{textLen(scope.row.name,16)}}
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="id"
-                        label="人脸分组ID">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="createTime"
-                        label=" 创建时间">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="lastModifyTime"
-                        label="修改时间">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="creatorName"
-                        label="创建人">
-                    </el-table-column>
-                    <el-table-column
-                        label="操作" align="center">
+                    <el-table-column align="center" prop="id" label="人脸分组ID"></el-table-column>
+                    <el-table-column align="center" prop="createTime" label=" 创建时间"></el-table-column>
+                    <el-table-column align="center" prop="lastModifyTime" label="修改时间"></el-table-column>
+                    <el-table-column align="center" prop="creatorName" label="创建人"></el-table-column>
+                    <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
                             <el-button type="text" @click="see(scope.row)">查看</el-button>
                             <el-button type="text" @click="editGroup(scope.row)">修改分组</el-button>
@@ -195,9 +176,6 @@
                 </div>
             </div>
         </el-dialog>
-
-
-
     </div>
 </template>
 
@@ -209,11 +187,7 @@
         data() {
             let name = (rule, value, callback) => {
                 if(value){
-                    /*if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value)){
-                        return callback(new Error('请输入6-20位字母数字'));
-                    }else{*/
-                        return callback()
-                    // }
+                  return callback()
                 }else{
                     return callback(new Error('请输入姓名'))
                 }
@@ -469,7 +443,6 @@
                     imgurl = this.result;
                     uploadFaceImage({imageBase64:this.result}).then(({data})=>{
                         if(data.errorCode ==200){
-                            // that.faceImgUrl = data.data.url;
                             that.imageUrl = imgurl;
                         }else{
                             that.imageUrl = '';
@@ -500,7 +473,6 @@
                         }
                         let params = {
                             ...this.dataDialogForm,
-                            // url:this.faceImgUrl,
                             imageBase64:this.imageUrl
                         };
                         createFace(params).then(({data})=>{
@@ -516,9 +488,7 @@
                     }
                 });
             },
-            allhandleChange(a,b,c,d){
-                // console.log('change',a,b,c,d)
-            },
+            allhandleChange(a,b,c,d){},
             uploadFillSuccess(res,file,fileList){
                if(res.success){
                    this.$message.success('上传成功')
