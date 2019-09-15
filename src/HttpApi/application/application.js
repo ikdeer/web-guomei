@@ -33,10 +33,10 @@ export const auditApplication = ({ appID,reviewState,rejectReason }) => AxIos({
 
 
 //应用详情
-export const getApplicationDetail = ({ appID }) => AxIos({
+export const getApplicationDetail = ({ appID,page,pageSize}) => AxIos({
     url: '/app/details',
     method: 'get',
-    params: { appID }
+    params: { appID,page,pageSize}
 });
 
 //启用禁用api

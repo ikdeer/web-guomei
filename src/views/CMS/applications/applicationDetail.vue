@@ -107,8 +107,11 @@
         },
         methods:{
             search(){
-                getApplicationDetail({appID:this.$route.query.id,page:this.page.currentPage,pageSize:this.page.pageSize})
-                  .then(({data})=>{
+                getApplicationDetail({
+                  appID:this.$route.query.id,
+                  page:this.page.currentPage,
+                  pageSize:this.page.pageSize
+                }).then(({data})=>{
                     if(data.errorCode ==200){
                         this.InfoOne[0].content = data.data.data.name || '————';
                         this.InfoOne[1].content = data.data.data.appTypeName || '————';

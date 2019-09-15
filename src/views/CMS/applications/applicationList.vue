@@ -92,27 +92,71 @@
                     <el-table-column align="center" prop="showState" width="80" label="应用状态"></el-table-column>
                     <el-table-column align="center" width="80" label="审核状态">
                         <template slot-scope="scope">
-                            <!--div v-if="scope.row.reviewState==20">
-                                <el-tooltip placement="top">
-                                    <div slot="content">{{scope.row.rejectReason}}</div>
-                                    <span>{{scope.row.showReviewState}}</span>
-                                </el-tooltip>
-                            </div>
-                            <div v-else>{{scope.row.showReviewState}}</div>-->
+                          <span v-if="scope.row.reviewState == 1">待提交审核</span>
+                          <span v-if="scope.row.reviewState == 2">修改待提交审核</span>
+                          <span v-if="scope.row.reviewState == 10">待审核</span>
+                          <span v-if="scope.row.reviewState == 11">修改待审核</span>
+                          <span v-if="scope.row.reviewState == 20">审核不通过</span>
+                          <span v-if="scope.row.reviewState == 21">审核通过</span>
+                          <span v-if="scope.row.reviewState == 22">修改审核不通过</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
-                            <el-button type="text" @click="statement(scope.row)">报表</el-button>
-                            <el-button type="text" @click="see(scope.row)">查看</el-button>
-                            <!--用户可操作-->
-                            <el-button type="text" v-if="scope.row.reviewState == 1 && userInfo.groupID==20" @click="commitAudit(scope.row)">提交审核</el-button>
-                            <el-button type="text" v-if="userInfo.groupID==20" @click="edit(scope.row)">修改</el-button>
-                            <!--超管可操作-->
-                            <el-button type="text" v-if="scope.row.reviewState ==10 && userInfo.groupID ==1" @click="audit(scope.row)">审核</el-button>
-                            <el-button type="text" v-if="scope.row.enable == 0 && userInfo.groupID ==1" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                            <el-button type="text" v-if="scope.row.enable === 1&& userInfo.groupID ==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
-                            <el-button type="text" v-if="userInfo.groupID ==1" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                            <!-- 超级管理员 -->
+                            <template v-if="userInfo.groupID == 0">
+                              <el-button type="text" @click="statement(scope.row)">报表</el-button>
+                              <el-button type="text" @click="see(scope.row)">查看</el-button>
+                              <!-- 待提交审核状态 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 1" @click="edit(scope.row)">修改</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 1" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                              <!-- 待审核状态 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 10" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 10" @click="audit(scope.row)">审核</el-button>
+                              <!-- 审核不通过 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 20" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                              <!-- 审核通过 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 21" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 21" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 21" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <!-- 修改待提交审核 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 2" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 2" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 2" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <!-- 修改待审核 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 11" @click="audit(scope.row)">审核</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 11" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 11" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 11" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                              <!-- 修改审核不通过 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 22" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 22" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 22" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                            </template>
+                            <!-- 平台管理员 -->
+                            <template v-if="userInfo.groupID == 1">
+                              <el-button type="text" @click="statement(scope.row)">报表</el-button>
+                              <el-button type="text" @click="see(scope.row)">查看</el-button>
+                            </template>
+                            <!-- 普通用户 -->
+                            <template v-if="userInfo.groupID == 20">
+                              <el-button type="text" @click="statement(scope.row)">报表</el-button>
+                              <el-button type="text" @click="see(scope.row)">查看</el-button>
+                              <!-- 待提交审核 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 1" @click="commitAudit(scope.row)">提交审核</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 1" @click="edit(scope.row)">修改</el-button>
+                              <!-- 待审核只有报表和查看 -->
+                              <!-- 审核不通过 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 20" @click="edit(scope.row)">修改</el-button>
+                              <!-- 审核通过 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 21" @click="edit(scope.row)">修改</el-button>
+                              <!-- 修改待提交审核 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 2" @click="commitAudit(scope.row)">提交审核</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 2" @click="edit(scope.row)">修改</el-button>
+                              <!-- 修改待审核只有报表和查看 -->
+                              <!-- 修改审核不通过 -->
+                              <el-button type="text" v-if="scope.row.reviewState == 22" @click="edit(scope.row)">修改</el-button>
+                            </template>
                         </template>
                     </el-table-column>
                 </el-table>
