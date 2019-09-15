@@ -49,47 +49,19 @@
                         <template slot="empty">
                           <span>暂无人脸图片</span>
                         </template>
-                        <el-table-column
-                            type="selection"
-                            width="55">
-                        </el-table-column>
-                        <el-table-column
-                            prop="name"
-                            label="姓名">
-                        </el-table-column>
-                        <el-table-column
-                            prop="sexName"
-                            label="性别">
-                        </el-table-column>
-                        <el-table-column
-                            prop="personID"
-                            label="personID">
-                        </el-table-column>
-                        <el-table-column
-                            prop="typeName"
-                            label="人员类型">
-                        </el-table-column>
-                        <el-table-column
-                            prop="noTypeName"
-                            label="编号系统">
-                        </el-table-column>
-                        <el-table-column
-                            prop="no"
-                            label="编号">
-                        </el-table-column>
-                        <el-table-column
-                            prop="picFromName"
-                            label="图片来源">
-                        </el-table-column>
-                        <el-table-column
-                            prop="createTime"
-                            label="添加时间">
-                        </el-table-column>
-                        <el-table-column
-                            label="操作">
-                            <temalate slot-scope="scope">
+                        <el-table-column type="selection" width="50" align="center"></el-table-column>
+                        <el-table-column prop="name" label="姓名" align="center"></el-table-column>
+                        <el-table-column prop="sexName" label="性别" width="55" align="center"></el-table-column>
+                        <el-table-column prop="personID" label="personID" align="center"></el-table-column>
+                        <el-table-column prop="typeName" label="人员类型" align="center"></el-table-column>
+                        <el-table-column prop="noTypeName" label="编号系统" align="center"></el-table-column>
+                        <el-table-column prop="no" label="编号" align="center"></el-table-column>
+                        <el-table-column prop="picFromName" label="图片来源" align="center"></el-table-column>
+                        <el-table-column prop="createTime" label="添加时间" align="center"></el-table-column>
+                        <el-table-column label="操作" align="center">
+                            <template slot-scope="scope">
                                 <el-button type="text" :disabled="isSee" @click="removeFaceImg(scope.row)">删除</el-button>
-                            </temalate>
+                            </template>
                         </el-table-column>
                     </el-table>
                     <div class="steptwo_table_footer">
@@ -384,12 +356,12 @@
                                 item.select = false;
                             });
                             this.faceList = data.data.list;
-                            this.facePage.total = data.pagerManager.totalResults
-
+                            this.facePage.total = data.pagerManager.totalResults;
                         }else{
                             this.faceList = [];
                             this.facePage.total = 0;
                         }
+                        console.log(data);
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -442,11 +414,10 @@
                 };
                 getFaceGroupShow(params).then(({data})=>{
                     if(data.errorCode == 200){
-                        console.log(data.data);
-                        this.tableData = data.data?data.data.list:[];
+                      this.tableData = data.data?data.data.list:[];
+                      this.page.total = data.pagerManager.totalResults;
                     }else{
                         this.tableData = [];
-                        // this.$message.warning(data.errorInfo)
                     }
                 })
             },
