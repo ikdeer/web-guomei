@@ -21,41 +21,19 @@
         <h3>API列表</h3>
         <div class="application_detail_content">
             <div class="application_list_table">
-                <el-table
-                    :data="tableData"
-                    style="width: 100%">
-                    <el-table-column
-                        align="center"
-                        prop="name"
-                        label="API">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="showEnable"
-                        label="状态">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        width="380"
-                        prop="transferAddr"
-                        label="请求地址">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="amountLimit"
-                        label="调用量限制">
-                    </el-table-column>
-                    <el-table-column
-                        align="center"
-                        prop="qpsLimit"
-                        label="QPS限制">
-                    </el-table-column>
-                    <el-table-column
-                        label="操作" align="center">
+                <el-table :data="tableData" style="width: 100%">
+                    <el-table-column align="center" prop="name" label="API"></el-table-column>
+                    <el-table-column align="center" prop="showEnable" label="状态" width="100"></el-table-column>
+                    <el-table-column align="center" width="380" prop="transferAddr" label="请求地址"></el-table-column>
+                    <el-table-column align="center" prop="amountLimit" width="100" label="调用量限制"></el-table-column>
+                    <el-table-column align="center" prop="qpsLimit" width="100" label="QPS限制"></el-table-column>
+                    <el-table-column label="操作" align="center" width="150">
                         <template slot-scope="scope">
                             <el-button type="text"
                                        :disabled="groupID == '20' ? true : false"
-                                       @click="down(scope.row)">{{scope.row.enable===1 ? '停用':'启用'}}</el-button>
+                                       @click="down(scope.row)">
+                              {{scope.row.enable===1 ? '停用':'启用'}}
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -129,7 +107,8 @@
         },
         methods:{
             search(){
-                getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
+                getApplicationDetail({appID:this.$route.query.id,page:this.page.currentPage,pageSize:this.page.pageSize})
+                  .then(({data})=>{
                     if(data.errorCode ==200){
                         this.InfoOne[0].content = data.data.data.name || '————';
                         this.InfoOne[1].content = data.data.data.appTypeName || '————';
