@@ -160,9 +160,8 @@
                         action=""
                         accept="image/jpg,image/jpeg,image/png,image/x-ms-bmp"
                         :show-file-list="false"
-                        :auto-upload="false"
-                        :on-change="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
+                        :before-upload="beforeAvatarUpload"
+                        :on-change="handleAvatarSuccess">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <div v-else class="upload_info" >
                             <i class="el-icon-picture-outline"></i>
@@ -480,6 +479,7 @@
 
             },
             beforeAvatarUpload(file) {
+                debugger
                 const isJPG = file.type === 'image/jpg' || file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/x-ms-bmp";
                 const isLt2M = file.size / 1024 / 1024 < 5;
 
