@@ -454,6 +454,12 @@
                 }
                 &:last-child{
                     margin-left: 18px;
+                    &:after{
+                        display: none;
+                    }
+                }
+                &:first-child:before{
+                    display: none;
                 }
             }
             .active{

@@ -84,10 +84,8 @@
                     style="width: 100%">
                     <el-table-column
                         align="center"
+                        prop="name"
                         label="设备名称">
-                        <template slot-scope="scope">
-                            {{textLen(scope.row.name,10)}}
-                        </template>
                     </el-table-column>
                     <el-table-column
                         align="center"

@@ -12,29 +12,29 @@
         <div class="info">
             <div class="info_title">
                 <img src="/static/images/sy_icon_me_64@2x.png" alt="">
-                <div>你好<br/>欢迎使用国美人脸认证开放平台</div>
+                <div>您好<br/>欢迎使用国美人脸认证开放平台</div>
             </div>
             <div class="info_list">&emsp;用户名：{{info.name}}</div>
             <div class="info_list">手机绑定：
                 <div class="info_list_inp">
                     <span v-if="info.phoneStatus">{{info.phoneNum}}</span>
-                    <el-button v-if="info.phoneStatus" type="text" @click="editPhone" style="margin-left: 15px">编辑</el-button>
                     <el-input v-if="!info.phoneStatus" v-model.number="info.phone" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
-                <div class="info_list_btn" v-if="!info.phoneStatus">
-                    <el-button type="primary" @click="submitPhone">确定</el-button>
-                    <el-button @click="info.phoneStatus = true">取消</el-button>
+                <div class="info_list_btn">
+                    <el-button v-if="info.phoneStatus" type="primary" @click="editPhone">编辑</el-button>
+                    <el-button v-if="!info.phoneStatus" type="primary" @click="submitPhone">确定</el-button>
+                    <el-button v-if="!info.phoneStatus" @click="info.phoneStatus = true">取消</el-button>
                 </div>
             </div>
             <div class="info_list">邮箱绑定：
                 <div class="info_list_inp">
                     <span v-if="info.emailStatus">{{info.mail}}</span>
-                    <el-button v-if="info.emailStatus" type="text" @click="editEmail" style="margin-left: 15px">编辑</el-button>
                     <el-input v-if="!info.emailStatus" v-model="info.email" :maxlength="30" placeholder="请输入内容"></el-input>
                 </div>
-                <div class="info_list_btn" v-if="!info.emailStatus">
-                    <el-button type="primary" @click="submitEmail">确定</el-button>
-                    <el-button @click="info.emailStatus = true">取消</el-button>
+                <div class="info_list_btn">
+                    <el-button v-if="info.emailStatus" type="primary" @click="editEmail">编辑</el-button>
+                    <el-button v-if="!info.emailStatus" type="primary" @click="submitEmail">确定</el-button>
+                    <el-button v-if="!info.emailStatus" @click="info.emailStatus = true">取消</el-button>
                 </div>
             </div>
             <div class="info_list">账号状态：{{info.status | status }}</div>
@@ -361,7 +361,7 @@
             border-radius:10px;
             padding: 30px;
             box-sizing: border-box;
-            font-size: 12px;
+            font-size: 13px;
             .info_title{
                 display: flex;
                 display: -webkit-flex;
@@ -386,6 +386,7 @@
                     display: inline-block;
                 }
                 .info_list_btn{
+                    float: right;
                     margin-left: 15px;
                     display: inline-block;
                 }

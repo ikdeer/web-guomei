@@ -386,6 +386,10 @@
             addGroupFaceDialog(){
                 //确认添加人脸 发送添加关闭弹窗
                 console.log(this.faceListBirge);
+                if(this.faceListBirge.length < 1){
+                    this.$message.warning('请选择人像');
+                    return ;
+                }
                 let params = {
                     faceGroupID:this.groupid,
                     ids:this.faceListBirge,
@@ -572,6 +576,12 @@
                 }
                 &:last-child{
                     margin-left: 18px;
+                    &:after{
+                        display: none;
+                    }
+                }
+                &:first-child:before{
+                    display: none;
                 }
             }
             .active{
