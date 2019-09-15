@@ -387,7 +387,9 @@
                 window.addEventListener('resize', this.handleResize)
             });
             this.getStateList();
-            this.getApiSelectList();
+            if(this.formData.appIds !=''){
+                this.getApiSelectList();
+            }
             this.search();
         },
         beforeDestroy() {
