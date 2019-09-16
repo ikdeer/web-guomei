@@ -104,7 +104,7 @@
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
                             <!-- 超级管理员 -->
-                            <template v-if="userInfo.groupID == 0">
+                            <template v-if="userInfo.groupID == 1">
                               <el-button type="text" @click="statement(scope.row)">报表</el-button>
                               <el-button type="text" @click="see(scope.row)">查看</el-button>
                               <!-- 待提交审核状态 -->
@@ -134,7 +134,7 @@
                               <el-button type="text" v-if="scope.row.reviewState == 22" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                             </template>
                             <!-- 平台管理员 -->
-                            <template v-if="userInfo.groupID == 1">
+                            <template v-if="userInfo.groupID == 10">
                               <el-button type="text" @click="statement(scope.row)">报表</el-button>
                               <el-button type="text" @click="see(scope.row)">查看</el-button>
                             </template>
