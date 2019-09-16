@@ -1,10 +1,10 @@
 import AxIos from "../HttpApi";
 
 //获取应用列表接口 缺少审核状态
-export const getAppList = ({ page,pageSize,name,id,state,reviewState,createrName,creatTimeStart,creatTimeEnd }) => AxIos({
+export const getAppList = ({ page,pageSize,name,id,state,reviewState,createrName,createTimeStart,createTimeEnd }) => AxIos({
     url: '/app/show',
     method: 'get',
-    params: { page,pageSize,name,id,state,createrName,reviewState,creatTimeStart,creatTimeEnd }
+    params: { page,pageSize,name,id,state,createrName,reviewState,createTimeStart,createTimeEnd }
 });
 
 //启用/禁用应用 enable 0-禁用 1-启用
