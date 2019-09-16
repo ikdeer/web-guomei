@@ -52,10 +52,10 @@ export const createFaceGroup = ({ name }) => AxIos({
     data: { name }
 });
 //修改人脸分组
-export const editFaceGroup = ({ name }) => AxIos({
+export const editFaceGroup = ({ name,id }) => AxIos({
     url: '/faceGroup/modify',
     method: 'post',
-    data: { name }
+    data: { name,id }
 });
 
 //创建第一子分组
