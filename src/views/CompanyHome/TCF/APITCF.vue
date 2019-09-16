@@ -66,14 +66,9 @@
         }
       },
       created(){
-        this.getHeight();
         this.getTechDocConTentShow();
-        window.addEventListener('resize', this.getHeight);
       },
       methods:{
-        getHeight(){
-          //this.contentStyleObj.height = window.innerHeight - 120+'px';
-        },
         //技术文档列表
         getTechDocConTentShow(){
           getTechDocConTentShow().then(response => {
@@ -168,14 +163,11 @@
           itemSS.isText = true;
           this.getTechDocDetails(itemSS.id);
         },
-      },
-      destroyed() {
-        window.removeEventListener('resize', this.getHeight)
       }
     }
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
 .gm-api{
   width: 100%;
   .header-nav{
@@ -322,10 +314,6 @@
         align-items: center;
         border-bottom: 1px dashed #979797;
         margin-left: 0.32rem;
-        .el-breadcrumb{
-          font-size:0.16rem;
-          color:#999999;
-        }
       }
       .gm-contentPad{
         width: auto;

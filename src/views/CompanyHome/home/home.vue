@@ -497,7 +497,6 @@
         padding-top: 0.8rem;
         padding-bottom: 0.55rem;
         position: relative;
-        line-height: 0.25rem;
         .service-TextH2{
           font-size: 0.48rem;
           color:#252525;
@@ -511,8 +510,8 @@
           background: #036FE2;
           display: block;
           position: absolute;
-          top: 80%;
           left: 50%;
+          margin-top: 1.3%;
           -webkit-transform: translate(-50%,-80%);
           -ms-transform: translate(-50%,-80%);
           transform: translate(-50%,-80%);
@@ -549,6 +548,7 @@
                 color: #666666;
                 margin-top: 0.22rem;
                 margin-bottom: 0.24rem;
+                line-height: 0.28rem;
               }
               .service-buttom{
                 display: flex;

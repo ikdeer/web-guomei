@@ -228,12 +228,12 @@
           letter-spacing: 2px;
         }
         .header-leftText{
-          font-size: 0.18rem;
+          font-size: 0.22rem;
           color: #ffffff;
-          padding-top:0.22rem;
-          padding-bottom: 0.5rem;
+          padding-top:0.3rem;
+          padding-bottom: 0.84rem;
           font-weight: 400;
-          line-height: 0.3rem;
+          line-height: 0.37rem;
         }
         .header-leftButton{
           display: flex;
@@ -241,10 +241,13 @@
           align-items: center;
           padding-bottom: 0.38rem;
           button{
-            padding: 0.12rem 0.5rem;
-            border-radius: 0.29rem;
+            background: #ffffff;
             color: #F20A59;
-            font-size: 0.18rem;
+            font-size: 0.2rem;
+            border-radius: 0.29rem;
+            padding: 0.16rem 0.5rem;
+            border: none;
+            display: block;
             margin-right: 0.1rem;
           }
         }
@@ -342,7 +345,7 @@
             .GodaddyDeluxe-centerText{
               font-size: 0.18rem;
               color: #666666;
-              line-height: 0.3rem;
+              line-height: 0.35rem;
               text-align: center;
             }
             .GodaddyDeluxe-list{
@@ -424,7 +427,7 @@
             .productComposition-centerText{
               font-size: 0.18rem;
               color: #666666;
-              line-height: 0.3rem;
+              line-height: 0.35rem;
               text-align: center;
             }
             .productComposition-list{
@@ -487,11 +490,12 @@
                       font-size: 0.18rem;
                       color: #666666;
                       padding-top: 0.25rem;
+                      line-height: 0.3rem;
                     }
                   }
                 }
                 .listBottom-border{
-                  width: 0.01rem;
+                  width: 1px;
                   height: 1.41rem;
                   background:#D8D8D8;
                 }

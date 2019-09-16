@@ -38,6 +38,16 @@ ol,li,ul,dl,dt,dd{
   color:#999999 !important;
   font-weight: 400 !important;
 }
+.gm-nav .el-breadcrumb__inner{
+  font-size: 0.16rem !important;
+  font-weight: 600!important;
+  color: #036FE2 !important;
+  cursor: pointer;
+}
+.gm-nav .is-link{
+  color:#999999 !important;
+  font-weight: 400 !important;
+}
 /*富文本编辑框高度*/
 .ql-editor{
   height:4.5rem;

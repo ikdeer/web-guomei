@@ -30,12 +30,6 @@
             </div>
           </el-form-item>
         </template>
-        <el-form-item label="是否启用" prop="isEnable">
-          <el-radio-group v-model="form.isEnable">
-            <el-radio label="1">是</el-radio>
-            <el-radio label="0">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitCategoryEditForm">提交</el-button>
           <el-button @click="cancel">取消</el-button>
@@ -49,6 +43,17 @@
   export default {
     name: "categoriesModule",
     data(){
+      let Title = (rule, value, callback) => {
+        if(value){
+          if(/^[\s]*$/.test(value)){
+            return callback(new Error('请输入类目名称'))
+          }else{
+            return callback();
+          }
+        }else{
+          return callback(new Error('请输入类目名称'))
+        }
+      };
       return {
         form:{
           Title:'',
@@ -59,10 +64,9 @@
           isEnable:'',
         },
         rules:{
-          Title:[{ required: true, message: '请输入类目名称', trigger: 'blur' }],
+          Title:[{validator:Title,trigger:['blur','change']}],
           categoryLevel:[{ required: true, message: '请选择类目层级', trigger: 'blur,change' }],
           superior:[{ required: true, message: '请选择上级类目', trigger: 'blur,change' }],
-          isEnable:[{ required: true, message: '请选择状态', trigger: 'blur,change' }]
         }
       }
     },

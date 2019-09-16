@@ -19,21 +19,14 @@
                    ref="catalogText"
                    label-width="130px"
                    class="demo-dynamic">
-            <el-form-item label="标题" prop="Title">
+            <el-form-item label="标题" required prop="Title">
               <div class="api-OneLevel">
                 <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="目录" prop="OneLevel">
+            <el-form-item label="目录" required prop="OneLevel">
               <div class="api-OneLevel">
-                <el-select v-model="catalogText.OneLevel" placeholder="请选择目录">
-                  <el-option
-                    v-for="item in catalogText.OneLevelData"
-                    :key="item.name"
-                    :label="item.name"
-                    :value="item.name">
-                  </el-option>
-                </el-select>
+                <el-input v-model="catalogText.OneLevel" maxlength="20" placeholder="请输入目录"></el-input>
               </div>
             </el-form-item>
             <el-form-item  label="API内容" prop="bbsContent">
@@ -95,11 +88,32 @@
   export default {
     name: "instructionsAdd",
     data(){
+      let Title = (rule, value, callback) => {
+        if(value){
+          if(/^[\s]*$/.test(value)){
+            return callback(new Error('请输入标题名称'));
+          }else{
+            return callback();
+          }
+        }else{
+          return callback(new Error('请输入标题名称'));
+        }
+      };
+      let OneLevel = (rule, value, callback) => {
+        if(value){
+          if(/^[\s]*$/.test(value)){
+            return callback(new Error('请输入类目名称'));
+          }else{
+            return callback();
+          }
+        }else{
+          return callback(new Error('请输入类目名称'));
+        }
+      };
       return {
         catalogText:{
           Title:'',//标题
           OneLevel:'',//目录
-          OneLevelData:[],
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
@@ -141,23 +155,13 @@
           },
         },
         rules:{
-          Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-          OneLevel:[{ required: true, message: '请选择类目', trigger: 'blur' }],
+          Title:[{validator:Title,trigger:['blur','change']}],
+          OneLevel:[{validator:OneLevel,trigger:['blur','change']}],
           bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
         }
       }
     },
     methods:{
-      //一级目录
-      getAccessNoteTitleShow(){
-        getAccessNoteTitleShow().then(response => {
-          if(response.data.errorCode == 200){
-            this.catalogText.OneLevelData = response.data.data.list;
-          }else{
-            this.$message.error(response.data.errorInfo);
-          }
-        })
-      },
       // 上传图片前
       beforeUpload(res,file) {
         //显示loading动画
@@ -226,7 +230,7 @@
       },
     },
     mounted(){
-      this.getAccessNoteTitleShow();
+
     }
   }
 </script>

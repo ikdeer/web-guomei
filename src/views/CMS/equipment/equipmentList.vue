@@ -163,7 +163,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    </el-form-item>
                     <el-form-item label="设备名称" prop="name" required>
                         <el-tooltip effect="dark" content="建议名称中带有填写具体位置便于查看" hide-after="2000" placement="top">
                             <el-input :maxlength="50" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>

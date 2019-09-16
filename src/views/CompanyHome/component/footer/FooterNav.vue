@@ -3,15 +3,17 @@
   <footer class="home-footer">
     <div class="footer-left">
       <div class="footer-leftTop">
-        <span>技术文档</span>
-        <span>接入须知</span>
-        <span>常见问题</span>
+        <h4>技术文档</h4>
+        <router-link tag="span" :to="{path:'/Company/APITCF'}">技术文档1</router-link>
+        <router-link tag="span" :to="{path:'/Company/APITCF'}">SDK下载</router-link>
       </div>
-      <div class="footer-leftCenter">
-        <span>技术文档</span>
+      <div class="footer-leftTop">
+        <h4>接入须知</h4>
+        <router-link tag="span" :to="{path:'/Company/AccessToInformation'}">接入须知1</router-link>
       </div>
-      <div class="footer-leftBotton">
-        <span>SDK下载</span>
+      <div class="footer-leftTop">
+        <h4>常见问题</h4>
+        <router-link tag="span" :to="{path:'/Company/AccessToInformation'}">常见问题1</router-link>
       </div>
     </div>
     <div class="footer-right">
@@ -46,17 +48,23 @@
     display: -webkit-flex;
     justify-content: space-between;
     .footer-left{
+      display: flex;
+      display: -webkit-flex;
       .footer-leftTop{
-        display: flex;
-        display: -webkit-flex;
-        align-items: center;
-        justify-content: space-between;
         margin-top: 0.5rem;
-        span{
+        margin-right: 0.76rem;
+        h4{
           font-size: 0.22rem;
           color: #ffffff;
           font-weight: 700;
-          margin-right: 0.76rem;
+          margin-bottom: 0.16rem;
+        }
+        span{
+          font-size: 0.18rem;
+          color: #CCCCCC;
+          display: block;
+          margin-bottom: 0.4rem;
+          cursor: pointer;
         }
       }
       .footer-leftCenter{

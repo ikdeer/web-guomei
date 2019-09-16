@@ -255,12 +255,11 @@
           letter-spacing: 2px;
         }
         .header-leftText{
-          font-size: 0.18rem;
           color: #ffffff;
-          padding-top:0.22rem;
+          padding-top:0.3rem;
           padding-bottom: 0.5rem;
-          font-weight: 400;
-          line-height: 0.3rem;
+          font-size: 0.22rem;
+          line-height: 0.37rem;
         }
         .header-leftButton{
           display: flex;
@@ -268,10 +267,13 @@
           align-items: center;
           padding-bottom: 0.38rem;
           button{
-            padding: 0.12rem 0.5rem;
-            border-radius: 0.29rem;
+            background: #ffffff;
             color: #F20A59;
-            font-size: 0.18rem;
+            font-size: 0.2rem;
+            border-radius: 0.29rem;
+            padding: 0.16rem 0.5rem;
+            border: none;
+            display: block;
             margin-right: 0.1rem;
           }
         }

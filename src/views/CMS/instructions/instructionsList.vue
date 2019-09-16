@@ -9,19 +9,6 @@
     </nav>
     <h3>接入须知</h3>
     <div class="api-content">
-      <div class="api-form">
-        <el-form :inline="true">
-          <el-form-item label="ID">
-            <el-input :maxlength="20" v-model="formData.user" placeholder="请输入查找ID"></el-input>
-          </el-form-item>
-          <el-form-item label="标题">
-            <el-input :maxlength="20" v-model="formData.ip" placeholder="请输入查找标题"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
       <div class="api-table">
         <div class="api-addButton">
           <router-link :to="{path:'/Index/instructionsAdd'}">
@@ -157,10 +144,6 @@
       border-radius:10px;
       padding: 30px;
       box-sizing: border-box;
-      .api-form{
-        border-bottom: 1px solid #cccccc;
-        margin-bottom: 0.1rem;
-      }
       .api-table{
         width: 100%;
         .api-addButton{
