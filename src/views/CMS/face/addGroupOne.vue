@@ -508,12 +508,12 @@
                     }
                 }
                 .el-form{
-                    padding:0.1rem .3rem;
+                    padding:10px;
                     .el-form-item{
                         width: 48%;
                     }
                     .el-input{
-                        width: 280px;
+                        width: 230px;
                     }
                 }
                 .group_list{
@@ -526,12 +526,11 @@
                         box-sizing: border-box;
                         width: 50%;
                         &:first-child{
-                            margin-left: 130px;
+                            margin-left: 120px;
                         }
                         &:last-child{
                             margin-left: 80px;
                         }
-                        margin-left: 100px;
                         .item{
                             width: 4rem;
                             height: 2rem;
