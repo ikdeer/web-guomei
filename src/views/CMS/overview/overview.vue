@@ -21,7 +21,7 @@
                       <span>{{newAppsCount}}</span>
                       个
                     </p>
-                    <p class="user-contentNum">
+                    <p class="user-contentNum" v-if="groupID != 20">
                       待审核应用：
                       <span>{{toBeAuditedAppsCount}}</span>
                       个
@@ -31,7 +31,7 @@
                     <router-link :to="{path:'/Index/applicationList',query:{NavType:'overview'}}">
                       <el-button class="button-bluer" type="primary">管理应用</el-button>
                     </router-link>
-                    <router-link v-if="groupID == '20'" :to="{path:'/Index/addApplication',query:{type:'add',NavType:'overview'}}">
+                    <router-link v-if="groupID == 20" :to="{path:'/Index/addApplication',query:{type:'add',NavType:'overview'}}">
                       <el-button class="button-red">创建应用</el-button>
                     </router-link>
                   </div>
