@@ -7,9 +7,7 @@
         <layout-Sider></layout-Sider>
         <!-- 主体内容区域 -->
         <div class="content-right" :style="contentStyleObj">
-          <transition name="slide-fade">
-            <router-view class="view"></router-view>
-          </transition>
+          <router-view class="view"></router-view>
         </div>
       </div>
     </div>

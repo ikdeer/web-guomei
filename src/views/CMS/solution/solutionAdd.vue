@@ -1,15 +1,15 @@
 <template>
-  <div class="productAdd">
+  <div class="solutionAdd">
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{path:'/Index/productlist'}">产品服务</el-breadcrumb-item>
-        <el-breadcrumb-item>新增产品服务</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
+        <el-breadcrumb-item>新增解决方案</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <div class="productAdd-content">
-      <h4 class="api-TextH4">新增产品服务</h4>
+    <div class="solutionAdd-content">
+      <h4 class="api-TextH4">新增解决方案</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
@@ -24,7 +24,7 @@
                 <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="首页封面：" prop="coverImg">
+            <el-form-item label="图标：" prop="coverImg">
               <div class="api-OneLevel">
                 <el-upload
                   class="avatar-uploader"
@@ -35,6 +35,11 @@
                 </el-upload>
               </div>
             </el-form-item>
+            <el-form-item label="主要服务：" prop="serviceText">
+              <div class="api-OneLevel">
+                <el-input v-model="catalogText.serviceText" placeholder="请输入标题名称"></el-input>
+              </div>
+            </el-form-item>
             <el-form-item label="简介：" prop="introduceText">
               <div class="api-OneLevel">
                 <el-input
@@ -43,8 +48,7 @@
                   v-model="catalogText.introduceText"
                   maxlength="100"
                   rows="5"
-                  show-word-limit
-                ></el-input>
+                  show-word-limit></el-input>
               </div>
             </el-form-item>
             <el-form-item label="URL地址：" prop="URL">
@@ -110,12 +114,13 @@
   Quill.register('modules/imageDrop', ImageDrop);
   Quill.register('modules/imageResize', ImageResize);
   export default {
-    name: "productAdd",
+    name: "solutionAdd",
     data(){
       return {
         catalogText:{
           Title:'',//标题
-          coverImg:'',//首页封面
+          coverImg:'',//图标
+          serviceText:'',//主要服务
           introduceText:'',//介绍
           URL:'',//跳转地址
           sortNum:'',//排序
@@ -162,6 +167,7 @@
         rules:{
           Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
           coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
+          serviceText:[{ required: true, message: '请输入服务名称', trigger: 'blur' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
           URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
@@ -219,7 +225,6 @@
       },
       //保存并发布
       addDomain(){
-        let _this = this;
         this.$refs.catalogText.validate((valid) => {
           if(valid){
 
@@ -234,9 +239,9 @@
 </script>
 
 <style lang="scss">
-  .productAdd{
+  .solutionAdd{
     width: 100%;
-    .productAdd-content{
+    .solutionAdd-content{
       width: 100%;
       .api-TextH4{
         font-size: 0.18rem;

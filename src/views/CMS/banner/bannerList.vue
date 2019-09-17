@@ -1,30 +1,25 @@
 <template>
-  <div class="productList-list">
+  <div class="bannerList">
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item>产品服务</el-breadcrumb-item>
+        <el-breadcrumb-item>banner</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <h3>产品服务</h3>
-    <div class="productList-content">
-      <div class="productList-table">
-        <div class="productList-addButton">
-          <router-link :to="{path:'/Index/productAdd'}">
+    <h3>banner</h3>
+    <div class="bannerList-content">
+      <div class="bannerList-table">
+        <div class="bannerList-addButton">
+          <router-link :to="{path:'/Index/bannerAdd'}">
             <el-button type="primary">新增</el-button>
           </router-link>
           <el-button type="danger" class="gm-delete">删除</el-button>
         </div>
-        <div class="productList-tableColumn">
+        <div class="bannerList-tableColumn">
           <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
-            <el-table-column align="center" width="55" type="selection"></el-table-column>
-            <el-table-column align="center" label="服务名称">
-              <template slot-scope="scope">
-                <span></span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="排序">
+            <el-table-column align="center"  width="55" type="selection"></el-table-column>
+            <el-table-column align="center" label="名称">
               <template slot-scope="scope">
                 <span></span>
               </template>
@@ -34,7 +29,12 @@
                 <span></span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="URL">
+            <el-table-column align="center" label="排序">
+              <template slot-scope="scope">
+                <span></span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="创建时间">
               <template slot-scope="scope">
                 <span></span>
               </template>
@@ -48,18 +48,18 @@
             </el-table-column>
           </el-table>
         </div>
-      </div>
-      <div class="productList-footer">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="page.currentPage"
-          :page-sizes="[10, 20, 30, 50, 100]"
-          :page-size="page.pageSize"
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="page.total">
-        </el-pagination>
+        <div class="bannerList-footer">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page.pageNum"
+            :page-sizes="[10, 20, 30, 50, 100]"
+            :page-size="page.pageSize"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="page.total">
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -67,59 +67,41 @@
 
 <script>
   export default {
-    name: "productList",
+    name: "bannerList",
     data(){
       return {
-        formData:{
-          user:'',
-          ip:'',
-          dataTime:'',
-        },
         tableData:[],
         page:{
-          currentPage:1,
           pageSize:10,
+          pageNum:1,
           total:0
         }
       }
     },
     methods:{
-      //删除
-      ClickDelete(typeId){
-        this.$confirm('此操作将永久删除这条数据, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          customClass:'gm-configItem',
-          type: 'warning'
-        }).then(() => {
-
-        }).catch(() => {});
-      },
+      //分页
       handleSizeChange(val){
         this.page.pageSize = val;
       },
       handleCurrentChange(val){
-        this.page.currentPage = val;
-      },
-    },
-    mounted(){
-
+        this.page.pageNum = val;
+      }
     }
   }
 </script>
 
-<style lang="scss">
-  .productList-list{
-    font-size: 0.16rem;
-    .productList-content{
+<style scoped lang="scss">
+  .bannerList{
+    width: 100%;
+    .bannerList-content{
       background:rgba(255,255,255,1);
       box-shadow:0px 2px 4px 1px rgba(0,0,0,0.1);
       border-radius:10px;
       padding: 30px;
       box-sizing: border-box;
-      .productList-table{
+      .bannerList-table{
         width: 100%;
-        .productList-addButton{
+        .bannerList-addButton{
           button{
             padding: 0.08rem 0.25rem;
           }
@@ -127,27 +109,13 @@
             margin-left: 10px;
           }
         }
-        .productList-tableColumn{
+        .bannerList-tableColumn{
           padding-top: 0.2rem;
         }
-      }
-      .productList-footer{
-        margin-top: 10px;
-        text-align: right;
-      }
-
-    }
-  }
-  .gm-configItem{
-    .el-message-box__content{
-      padding: 0.3rem 0.3rem;
-      color: #333333;
-      font-weight: 600;
-      text-align: left;
-    }
-    .el-message-box__btns{
-      button{
-        padding: 0.09rem 0.25rem;
+        .bannerList-footer{
+          margin-top: 10px;
+          text-align: right;
+        }
       }
     }
   }
