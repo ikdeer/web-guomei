@@ -164,7 +164,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="设备名称" prop="name" required>
-                        <el-tooltip effect="dark" content="建议名称中带有填写具体位置便于查看" hide-after="2000" placement="top">
+                        <el-tooltip effect="dark" content="建议名称中带有填写具体位置便于查看" :hide-after="2000" placement="top">
                             <el-input :maxlength="50" v-model="dialogInfo.name" placeholder="请输入设备名称"></el-input>
                         </el-tooltip>
                     </el-form-item>
@@ -542,6 +542,9 @@
                     no:'',//设备编号
                     name:''//设备名称
                 };
+                this.locateNames1 = '';
+                this.locateNames2 = '';
+                this.locateNames3 = '';
                 this.search(1)
             },
             see(row) {
@@ -685,6 +688,10 @@
                                         this.siteTwo = item.list;
 
                                         this.dialogInfo.siteTwo = ins.index;
+
+                                        if(ins.name == '国美电器'){
+                                            this.isGmdq = true;
+                                        }
                                         this.siteThree = ins.list;
                                     }
                                 })
@@ -761,7 +768,7 @@
                             showCancelButton:false
                         }).then(() => {
                         }).catch(() => {});
-                    }else{
+                    } else {
                         this.editEquipmentDialog();
                     }
                 }
