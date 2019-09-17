@@ -47,7 +47,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="选择API">
-                        <el-select v-model="formData.apiIds"  class="user_list_form_status" placeholder="请选择状态">
+                        <el-select v-model="formData.apiIds" @change="apiChange" class="user_list_form_status" placeholder="请选择状态">
                             <el-option
                                 v-for="item in formData.apiList"
                                 :key="item.id"
@@ -177,6 +177,7 @@
                 formData:{
                     createrName:'',//创建人名称
                     apiIds:'',//api ID
+                    interfaceName:'',//api名字
                     appIds:'',//app ID
                     statisItems:'',//统计项 1-调用量 2-qps
                     monitor:['1'],//监控项
@@ -362,10 +363,19 @@
                 }).then(({data})=>{
                     if(data.errorCode ==200){
                         this.formData.apiList = data.data?data.data.data.apisList:[];
+                        this.formData.apiIds = '';
+                        this.formData.interfaceName = '';
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
 
+                })
+            },
+            apiChange(row){
+                this.formData.apiList.forEach((item)=>{
+                    if(row == item.id){
+                        this.formData.interfaceName = item.name;
+                    }
                 })
             }
         },
