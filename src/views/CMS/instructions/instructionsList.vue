@@ -105,7 +105,7 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           customClass:'gm-configItem',
-          type: 'warning'
+          // type: 'warning'
         }).then(() => {
           getAccessNoteDel({id:typeId}).then(response => {
             if(response.data.errorCode == 200){
@@ -167,7 +167,7 @@
       padding: 0.3rem 0.3rem;
       color: #333333;
       font-weight: 600;
-      text-align: left;
+      /*text-align: left;*/
     }
     .el-message-box__btns{
       button{

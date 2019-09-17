@@ -42,7 +42,7 @@
         <h3>联系人</h3>
         <div class="user_table">
             <div class="user_table_btn">
-                <el-button type="primary" v-if="userInfo.groupID==1" size="small" @click="adduser"> 新增 </el-button>
+                <el-button type="primary" v-if="userInfo.groupID==1 || isActiveUser" size="small" @click="adduser"> 新增 </el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -175,6 +175,11 @@
                     uid:'',//用户ID
                     groupID:'',//用户身份
                 }
+            }
+        },
+        computed:{
+            isActiveUser(){
+                return this.info.name == this.userInfo.userName ? true : false;
             }
         },
         methods:{

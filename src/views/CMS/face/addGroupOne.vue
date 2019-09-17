@@ -21,7 +21,7 @@
                         <el-form :inline="true" :disabled="isSee" label-width="100px">
                             <el-form-item label="分组名称" required>
                                 <el-input :maxlength="20" v-model="groupData.name" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" :disabled="groupData.name==''" @click="createGroup">保存</el-button>
+                                <el-button type="primary" :disabled="groupData.name==''" v-if="!isSee" @click="createGroup">保存</el-button>
                             </el-form-item>
                             <el-form-item label="分组ID" required>
                                 <el-input v-model="groupData.id" :disabled="true"></el-input>
@@ -33,20 +33,20 @@
                     <div class="child_top">
                         <h3>设置子分组 <span>请注意一级子分组不可添加图片</span></h3>
                         <div>
-                            <el-button type="primary" size="mini" :disabled="groupData.id=='' || isSee" @click="goChildren">查看子分组</el-button>
+                            <el-button type="primary" size="mini" :disabled="groupData.id==''" @click="goChildren">查看子分组</el-button>
                         </div>
                     </div>
                     <div class="set_group_childinp">
                         <el-form :inline="true" :disabled="isSee" label-width="110px">
                             <el-form-item label="一级分组名称" required>
                                 <el-input :maxlength="20" v-model="groupChildData.name1" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" :disabled="groupData.name1==''" @click="addGroupOne">保存</el-button>
-                                <el-button type="primary" :disabled="groupChildData.id1==''||groupChildData.name1==''" @click="deleteGroupOne">删除</el-button>
+                                <el-button type="primary" :disabled="groupData.name1==''" v-if="!isSee" @click="addGroupOne">保存</el-button>
+                                <el-button type="primary" :disabled="groupChildData.id1==''||groupChildData.name1==''" v-if="!isSee" @click="deleteGroupOne">删除</el-button>
                             </el-form-item>
                             <el-form-item label="二级分组名称" required>
                                 <el-input :maxlength="20" v-model="groupChildData.name2" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" :disabled="groupChildData.name2==''" @click="addGroupTwo">保存</el-button>
-                                <el-button type="primary" :disabled="groupChildData.id2==''||groupChildData.name2==''" @click="deleteGroupTwo">删除</el-button>
+                                <el-button type="primary" :disabled="groupChildData.name2==''" v-if="!isSee" @click="addGroupTwo">保存</el-button>
+                                <el-button type="primary" :disabled="groupChildData.id2==''||groupChildData.name2==''" v-if="!isSee" @click="deleteGroupTwo">删除</el-button>
                             </el-form-item>
                         </el-form>
                         <div class="group_list">

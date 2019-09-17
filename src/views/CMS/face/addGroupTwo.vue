@@ -34,7 +34,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" :disabled="isSee || stepTwoForm.two == ''" @click="getFaceShowList">添加人像</el-button>
+                            <el-button type="primary" :disabled="stepTwoForm.two == ''" v-if="!isSee" @click="getFaceShowList">添加人像</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -141,6 +141,7 @@
                         <el-upload
                             class="upload_footer"
                             :action="uploadUrl"
+                            :headers="headers"
                             :show-file-list="false"
                             :on-success="uploadFillSuccess"
                             :on-error="uploadFillError"
@@ -256,6 +257,11 @@
             },
             isEdit(){
                 return this.$route.query.type == '3' ? true : false;
+            },
+            headers(){
+                return {
+                    'token':this.Cookies.get('token')
+                };
             }
         },
         methods:{
