@@ -64,8 +64,6 @@ export default [
     iconRouter:'/Index/log',
     code:9,
   },
-
-
   {
     iconText:'栏目管理',
     iconImgShow:'/static/images/lanmuguanli_selected_icon@2x.png',
@@ -74,10 +72,10 @@ export default [
     code:10,
   },
   {
-    iconText:'图文编辑',
-    iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
-    iconImgHide:'/static/images/tuwenbianji_icon@2x.png',
-    iconRouter:'/Index/productlist',
+    iconText:'解决方案',
+    iconImgShow:'/static/images/jiejuefanganx_selected_icon@2x.png',
+    iconImgHide:'/static/images/jiejuefanganx_unselected_icon@2x.png',
+    iconRouter:'/Index/solutionList',
     code:11,
   },
   {
@@ -87,4 +85,18 @@ export default [
     iconRouter:'/Index/SDKDownload',
     code:12,
   },
+  {
+    iconText:'产品服务',
+    iconImgShow:'/static/images/chanpinfuwu_selected_icon@2x.png',
+    iconImgHide:'/static/images/chanpinfuwu_unselected_icon@2x.png',
+    iconRouter:'/Index/productlist',
+    code:13,
+  },
+  {
+    iconText:'banner位管理',
+    iconImgShow:'/static/images/tuwenbianji_selected_icon@2x.png',
+    iconImgHide:'/static/images/tuwenbianji_icon@2x.png',
+    iconRouter:'/Index/bannerList',
+    code:14,
+  }
 ]

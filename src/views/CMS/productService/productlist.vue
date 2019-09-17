@@ -4,10 +4,10 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item>图文编辑</el-breadcrumb-item>
+        <el-breadcrumb-item>产品服务</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <h3>图文编辑</h3>
+    <h3>产品服务</h3>
     <div class="api-content">
       <div class="api-form">
         <el-form :inline="true">

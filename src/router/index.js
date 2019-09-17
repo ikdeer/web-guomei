@@ -38,6 +38,10 @@ import categories from '@/views/CMS/categories/categories'
 import SDKDownload from '@/views/CMS/SDKDownload/SDKDownload'
 import productlist from '@/views/CMS/productService/productlist'
 import productAdd from '@/views/CMS/productService/productAdd'
+import solutionList from '@/views/CMS/solution/solutionList'
+import solutionAdd from '@/views/CMS/solution/solutionAdd'
+import bannerList from '@/views/CMS/banner/bannerList'
+import bannerAdd from '@/views/CMS/banner/bannerAdd'
 
 //控制跳转同一个路由报错
 const originalPush = Router.prototype.push;
@@ -322,6 +326,24 @@ const router = new Router({
           }
         },
         {
+          path: '/Index/solutionList',
+          name: '解决方案列表',
+          component: solutionList,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:11,
+          }
+        },
+        {
+          path: '/Index/solutionAdd',
+          name: '解决方案新增',
+          component: solutionAdd,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:11,
+          }
+        },
+        {
           path: '/Index/SDKDownload',
           name: 'SDK下载',
           component: SDKDownload,
@@ -336,7 +358,7 @@ const router = new Router({
           component: productlist,
           meta: {
             title:'国美人脸认证管理后台',
-            code:11,
+            code:13,
           }
         },
         {
@@ -345,7 +367,25 @@ const router = new Router({
           component: productAdd,
           meta: {
             title:'国美人脸认证管理后台',
-            code:11,
+            code:13,
+          }
+        },
+        {
+          path: '/Index/bannerList',
+          name: 'banner位置',
+          component: bannerList,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:14,
+          }
+        },
+        {
+          path: '/Index/bannerAdd',
+          name: 'banner位置新增',
+          component: bannerAdd,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:14,
           }
         },
       ],
