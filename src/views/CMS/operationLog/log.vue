@@ -12,7 +12,7 @@
             <div class="log_form">
                 <el-form :inline="true">
                     <el-form-item label="操作人">
-                        <el-input :maxlength="20" v-model="formData.user" placeholder="请输入操作人"></el-input>
+                        <el-input :maxlength="20" v-model="formData.username" placeholder="请输入操作人"></el-input>
                     </el-form-item>
                     <el-form-item label="IP">
                         <el-input :maxlength="20" v-model="formData.ip" placeholder="请输入IP"></el-input>
@@ -83,7 +83,7 @@
         data(){
             return {
                 formData:{
-                    user:'',
+                    username:'',
                     ip:'',
                     dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],
                 },
