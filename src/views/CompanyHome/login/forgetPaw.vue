@@ -82,12 +82,12 @@
           disabled:false,
           outTime: 60,//验证码时间
           time:'',//时间
-          phoneReg:/^1[3|4|5|7|8][0-9]{9}$/,//手机正则
+          phoneReg:/^1[3|4|5|6|7|8|9][0-9]{9}$/,//手机正则
         },
         rules2:{
           phoneNum:[
             { required: true, message: '请输入手机号', trigger: 'blur' },
-            { pattern: /^1[3|4|5|7|8][0-9]{9}$/, message: '请输入正确的11位手机号码', trigger: 'blur' },
+            { pattern: /^1[3|4|5|6|7|8|9][0-9]{9}$/, message: '请输入正确的11位手机号码', trigger: 'blur' },
           ],
           password:[
             { validator: password, trigger: 'blur' },

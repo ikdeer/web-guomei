@@ -11,7 +11,7 @@
         <h3>子分组列表</h3>
         <div class="group_list_table">
             <div class="group_list_table_btn">
-                <el-button type="primary" size="small" @click="addChildGroup"> 新增子分组 </el-button>
+                <el-button type="primary" size="small" @click="addChildGroup">{{isSee?' 返 回 ':'新增子分组'}}</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -48,7 +48,7 @@
                     align="center"
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button type="text" @click="edit(scope.row)">编辑</el-button>
+                        <el-button type="text" :disabled="isSee" @click="edit(scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -85,6 +85,11 @@
                 groupOneList:[],
                 groupid:'',
                 type:'1'
+            }
+        },
+        computed:{
+            isSee(){
+                return this.$route.query.type == '2' ? true : false;
             }
         },
         methods:{

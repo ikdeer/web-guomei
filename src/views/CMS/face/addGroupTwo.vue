@@ -34,7 +34,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" :disabled="isSee || stepTwoForm.two == ''" @click="getFaceShowList">添加人像</el-button>
+                            <el-button type="primary" :disabled="stepTwoForm.two == ''" v-if="!isSee" @click="getFaceShowList">添加人像</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
