@@ -140,7 +140,7 @@ h3{
     font-size: 13px;
 }
 .el-tooltip__popper{
-    width: 200px;
+    max-width: 200px;
 }
 /*禁止textarea拖动*/
 .el-textarea .el-textarea__inner{

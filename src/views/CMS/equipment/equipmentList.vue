@@ -1035,6 +1035,12 @@
                 }
                 &:last-child{
                     margin-left: 8px;
+                    &:after{
+                        display: none;
+                    }
+                }
+                &:first-child:before{
+                    display: none;
                 }
             }
             .active{
