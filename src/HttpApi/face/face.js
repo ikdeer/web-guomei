@@ -164,4 +164,4 @@ export const getGroupChildremTwo = ({ id }) => AxIos({
 export const uploadUrl = `${HttpApi}/image/uploadImageFaces2`;
 
 //文件下载
-export const downloadUrl = `${HttpApi}/uploadPicture/face.xls`;
+export const downloadUrl = `http://10.128.18.12:8090/uploadPicture/face.xls`;

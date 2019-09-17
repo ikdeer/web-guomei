@@ -141,6 +141,7 @@
                         <el-upload
                             class="upload_footer"
                             :action="uploadUrl"
+                            :headers="headers"
                             :show-file-list="false"
                             :on-success="uploadFillSuccess"
                             :on-error="uploadFillError"
@@ -256,6 +257,11 @@
             },
             isEdit(){
                 return this.$route.query.type == '3' ? true : false;
+            },
+            headers(){
+                return {
+                    'token':this.Cookies.get('token')
+                };
             }
         },
         methods:{

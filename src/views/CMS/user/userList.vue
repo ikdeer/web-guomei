@@ -408,7 +408,7 @@
             },
             on(row){
                 this.userListTableInfo = {
-                    title:'将在启用XXX分后该账户下所有应用API接口恢复调用!',
+                    title:'将在启用24小时后该账户下所有应用API接口恢复调用!',
                     btnInfo:'知道了',
                     type:false,
                     status:2,

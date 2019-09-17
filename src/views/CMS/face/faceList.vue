@@ -53,7 +53,7 @@
                     style="width: 100%">
                     <!-- //暂无数据提示 -->
                     <template slot="empty">
-                      <span>你还未创建分组</span>
+                        <span>你还未创建分组</span>
                     </template>
                     <el-table-column align="center" label="人脸分组名称">
                         <template slot-scope="scope">
@@ -158,6 +158,7 @@
                 <div>
                     <el-upload
                         class="upload_footer"
+                        :headers="headers"
                         :action="uploadUrl"
                         :show-file-list="false"
                         :on-success="uploadFillSuccess"
@@ -186,7 +187,7 @@
         data() {
             let name = (rule, value, callback) => {
                 if(value){
-                  return callback()
+                    return callback()
                 }else{
                     return callback(new Error('请输入姓名'))
                 }
@@ -322,12 +323,12 @@
             updateFace(){
                 this.dataDialogForm= {
                     picFromID:'',
-                        noType:'',
-                        no:'',
-                        type:'',
-                        name:'',
-                        sex:'',
-                        uploadFaceDialog:false,
+                    noType:'',
+                    no:'',
+                    type:'',
+                    name:'',
+                    sex:'',
+                    uploadFaceDialog:false,
                 };
                 this.picList=[];
                 this.faceType=[];
@@ -490,11 +491,11 @@
             },
             allhandleChange(a,b,c,d){},
             uploadFillSuccess(res,file,fileList){
-               if(res.success){
-                   this.$message.success('上传成功')
-               }else{
-                   this.$message.warning(res.errorInfo)
-               }
+                if(res.success){
+                    this.$message.success('上传成功')
+                }else{
+                    this.$message.warning(res.errorInfo)
+                }
             },
             uploadFillError(a,b,c,d){
 
@@ -518,6 +519,13 @@
                 this.formData.createrName = this.userInfo.userName;
             }
             this.search();
+        },
+        computed: {
+            headers(){
+                return {
+                    'token':this.Cookies.get('token')
+                };
+            }
         }
     }
 </script>
