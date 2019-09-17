@@ -97,11 +97,14 @@
                             <span v-if="scope.row.reviewState == 10">待审核</span>
                             <span v-if="scope.row.reviewState == 11">修改待审核</span>
                             <el-tooltip placement="top" v-if="scope.row.reviewState == 20">
-                                <div slot="content">{{scope.row.introduction}}</div>
+                                <div slot="content">{{scope.row.rejectReason}}</div>
                                 <span>审核不通过</span>
                             </el-tooltip>
                             <span v-if="scope.row.reviewState == 21">审核通过</span>
-                            <span v-if="scope.row.reviewState == 22">修改审核不通过</span>
+                            <el-tooltip placement="top" v-if="scope.row.reviewState == 22">
+                                <div slot="content">{{scope.row.rejectReason}}</div>
+                                <span>修改审核不通过</span>
+                            </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" align="center">
