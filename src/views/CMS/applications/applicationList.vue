@@ -92,13 +92,16 @@
                     <el-table-column align="center" prop="showState" width="80" label="应用状态"></el-table-column>
                     <el-table-column align="center" width="80" label="审核状态">
                         <template slot-scope="scope">
-                          <span v-if="scope.row.reviewState == 1">待提交审核</span>
-                          <span v-if="scope.row.reviewState == 2">修改待提交审核</span>
-                          <span v-if="scope.row.reviewState == 10">待审核</span>
-                          <span v-if="scope.row.reviewState == 11">修改待审核</span>
-                          <span v-if="scope.row.reviewState == 20">审核不通过</span>
-                          <span v-if="scope.row.reviewState == 21">审核通过</span>
-                          <span v-if="scope.row.reviewState == 22">修改审核不通过</span>
+                            <span v-if="scope.row.reviewState == 1">待提交审核</span>
+                            <span v-if="scope.row.reviewState == 2">修改待提交审核</span>
+                            <span v-if="scope.row.reviewState == 10">待审核</span>
+                            <span v-if="scope.row.reviewState == 11">修改待审核</span>
+                            <el-tooltip placement="top" v-if="scope.row.reviewState == 20">
+                                <div slot="content">{{scope.row.introduction}}</div>
+                                <span>审核不通过</span>
+                            </el-tooltip>
+                            <span v-if="scope.row.reviewState == 21">审核通过</span>
+                            <span v-if="scope.row.reviewState == 22">修改审核不通过</span>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" align="center">
