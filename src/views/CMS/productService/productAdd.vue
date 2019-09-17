@@ -28,7 +28,7 @@
               <div class="api-OneLevel">
                 <el-upload
                   class="avatar-uploader"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  action=""
                   :show-file-list="false">
                   <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -92,11 +92,6 @@
   </div>
 </template>
 <script>
-  import {
-    getAccessNoteCreate,
-    getAccessNoteTitleShow,
-    getImageUploadNormalImage
-  } from "../../../HttpApi/instructions/instructionsListAPi";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -175,16 +170,6 @@
       }
     },
     methods:{
-      //一级目录
-      getAccessNoteTitleShow(){
-        getAccessNoteTitleShow().then(response => {
-          if(response.data.errorCode == 200){
-            this.catalogText.OneLevelData = response.data.data.list;
-          }else{
-            this.$message.error(response.data.errorInfo);
-          }
-        })
-      },
       // 上传图片前
       beforeUpload(res,file) {
         //显示loading动画
@@ -237,23 +222,13 @@
         let _this = this;
         this.$refs.catalogText.validate((valid) => {
           if(valid){
-            getAccessNoteCreate({name:this.catalogText.Title,sort:0,title1:this.catalogText.OneLevel,txt:this.catalogText.bbsContent})
-              .then(response => {
-                if(response.data.success){
-                  this.$message({message: '创建成功~~~',type: 'success'});
-                  setTimeout(()=>{
-                    _this.$router.push({path:'/Index/instructionsList'})
-                  },300)
-                }else{
-                  this.$message.error(response.data.errorInfo);
-                }
-              })
+
           }
         })
       },
     },
     mounted(){
-      this.getAccessNoteTitleShow();
+
     }
   }
 </script>

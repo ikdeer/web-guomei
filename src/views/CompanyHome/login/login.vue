@@ -11,7 +11,7 @@
           <el-form :model="loginForm" :rules="rules2" ref="loginForm">
             <div class="login-form">
               <el-form-item prop="username">
-                <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" maxlength="20" v-model="loginForm.username"></el-input>
+                <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" v-model="loginForm.username"></el-input>
               </el-form-item>
             </div>
             <div class="login-form">
@@ -72,7 +72,7 @@
             rules2:{
               username:[
                 { required: true, message: '用户名(6-20位字母数字)/手机号/邮箱', trigger: 'blur' },
-                { min: 1, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
+                { min: 6, max: 100, message: '长度在 6 到 20 个字符', trigger: 'blur' },
                 { pattern:/^[0-9a-zA-Z@.]*$/g, message: '请输入6-20位字母数字', trigger: 'blur' },
               ],
               password:[{ validator: password, trigger: 'blur' }],

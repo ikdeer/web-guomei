@@ -8,7 +8,7 @@
           <p>人脸认证开放平台</p>
         </div>
         <div class="header-right">
-          <img class="header-issue" src="/static/images/Shape_btn@2x.png" alt="">
+          <img class="header-issue" @click="ClickIcon" src="/static/images/Shape_btn@2x.png" alt="">
           <el-dropdown @command="handleCommand" @visible-change="visibleShow" placement="top">
             <div class="header-name">
               <img src="/static/images/sy_icon_me_64@2x.png" alt="">
@@ -78,6 +78,13 @@
       ClickURL(){
         let routeData = this.$router.resolve({
           path: '/Company/CompanyHome',
+        });
+        window.open(routeData.href, '_blank');
+      },
+      //跳转到接入须知
+      ClickIcon(){
+        let routeData = this.$router.resolve({
+          path: '/Company/AccessToInformation',
         });
         window.open(routeData.href, '_blank');
       }
@@ -151,11 +158,12 @@
       justify-content: center;
       margin-left: 0.2rem;
       margin-right: 0.1rem;
-      >img{
+      img{
         width: 0.3rem;
         height: 0.3rem;
         border-radius: 50%;
         overflow: hidden;
+        display: block;
       }
       >span{
         font-size: 0.16rem;
