@@ -34,7 +34,7 @@
             <div class="statement_form">
                 <el-form label-width="80px">
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="选择应用">
                         <el-select v-model="formData.appIds" @change="getApiSelectList" placeholder="请选择">
@@ -175,7 +175,7 @@
             return{
                 textLen:textLen,
                 formData:{
-                    createrName:'',//创建人名称
+                    createName:'',//创建人名称
                     apiIds:'',//api ID
                     interfaceName:'',//api名字
                     appIds:'',//app ID
@@ -407,7 +407,7 @@
             this.formData.appIds = this.$route.query.id ? this.$route.query.id : '';
             this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             if(this.userInfo.groupID==20){
-                this.formData.createrName = this.userInfo.userName;
+                this.formData.createName = this.userInfo.userName;
             }
             this.$nextTick(() => {
                 this.lineCharts = this.$echarts.init(document.getElementById('MyEcharts'))
