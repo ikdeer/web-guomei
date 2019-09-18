@@ -158,13 +158,14 @@
                 <div>
                     <el-upload
                         class="upload_footer"
+                        :disabled="uploadLoading"
                         :headers="headers"
                         :action="uploadUrl"
                         :show-file-list="false"
                         :on-success="uploadFillSuccess"
                         :on-error="uploadFillError"
-                        :on-change="allhandleChange">
-                        <el-button type="primary" @click="">批量添加</el-button>
+                        :before-upload="allhandleChange">
+                        <el-button type="primary" :loading="uploadLoading">批量添加</el-button>
                     </el-upload>
                     <a :href="downloadUrl" download="" title="下载">
                         <el-button type="text">下载批量添加模板</el-button>
@@ -316,7 +317,8 @@
                     userImg:'',//用户头头像
                     uid:'',//用户ID
                     groupID:'',//用户身份
-                }
+                },
+                uploadLoading:false,
             }
         },
         methods: {
@@ -489,16 +491,20 @@
                     }
                 });
             },
-            allhandleChange(a,b,c,d){},
+            allhandleChange(){
+                this.uploadLoading = true;
+            },
             uploadFillSuccess(res,file,fileList){
+                this.uploadLoading = false;
                 if(res.success){
                     this.$message.success('上传成功')
                 }else{
+                    console.log(this.uploadLoading);
                     this.$message.warning(res.errorInfo)
                 }
             },
-            uploadFillError(a,b,c,d){
-
+            uploadFillError(){
+                this.uploadLoading = false;
             },
             closeDialog(){
                 this.dataDialogForm = {

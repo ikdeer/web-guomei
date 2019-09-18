@@ -34,7 +34,7 @@
                                    @change="choosedCompany(3)"
                                     placeholder="请选择所属楼层">
                             <el-option v-for="item in floorList"
-                                       :label="item.name"
+                                       :label="item.floorName"
                                        :value="item.id"
                                        :key="item.id">
                             </el-option>
@@ -430,6 +430,7 @@
             choosedCompany(index){
                 // 选中公司 部门
                 if(index == 1){
+                    console.log(this.companyList);
                     this.departmentList = this.companyList[this.formData.company].list;
                     this.formData.floor = '';
                     this.formData.department = '';
@@ -441,11 +442,12 @@
                 if(index == 2){
                     this.formData.floor = '';
                     this.floorList = this.departmentList[this.formData.department].list;
+                    console.log(this.floorList);
                     this.locateNames2 = this.departmentList[this.formData.department].name;
                     this.locateNames3 = '';
                 }
                 if(index == 3){
-                    this.locateNames3 = this.floorList[this.formData.floor].name;
+                    this.locateNames3 = this.floorList[this.formData.floor].floorName;
                 }
             },
             closeDialog(){
@@ -1035,6 +1037,12 @@
                 }
                 &:last-child{
                     margin-left: 8px;
+                    &:after{
+                        display: none;
+                    }
+                }
+                &:first-child:before{
+                    display: none;
                 }
             }
             .active{
