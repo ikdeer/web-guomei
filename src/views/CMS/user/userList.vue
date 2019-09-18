@@ -43,7 +43,7 @@
                         <el-button type="primary" @click="adduser">创建用户</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search(1)">查询</el-button>
+                        <el-button type="primary" @click="searchList">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -332,6 +332,13 @@
                 this.userListAddDialog = true;
                 this.$refs['dataDialogForm'].resetFields();
             },
+            searchList(){
+                if(this.formData.phoneNums=='' && this.formData.mails=='' && this.formData.disenable=='' && this.formData.dataTime == null){
+                    this.$message.warning('请输入查询条件');
+                    return;
+                }
+                this.search(1)
+            },
             search(page){
                 let phoneArr = this.formData.phoneNums.replace('，',',').split(',');
                 let emailArr = this.formData.mails.replace('，',',').split(',');
@@ -408,7 +415,7 @@
             },
             on(row){
                 this.userListTableInfo = {
-                    title:'将在启用24小时后该账户下所有应用API接口恢复调用!',
+                    title:'将在启用后恢复该账户下所有应用API接口的调用!',
                     btnInfo:'知道了',
                     type:false,
                     status:2,
