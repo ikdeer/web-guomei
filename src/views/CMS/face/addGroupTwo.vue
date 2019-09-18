@@ -506,10 +506,10 @@
             uploadFillSuccess(res,file,fileList){
                 this.uploadLoading = false;
                 if(res.success){
-                    this.$message.warning('上传成功');
+                    this.$message.success('上传成功');
                     this.dialogSearch(1);
                 }else{
-                    this.$message.success(res.errorInfo)
+                    this.$message.warning(res.errorInfo)
                 }
             },
             uploadFillError(){
