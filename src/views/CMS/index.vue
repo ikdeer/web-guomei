@@ -24,9 +24,6 @@
             },
           }
         },
-        watch:{
-
-        },
         created(){
           this.getHeight();
           window.addEventListener('resize', this.getHeight);
