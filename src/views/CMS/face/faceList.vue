@@ -42,7 +42,7 @@
                         <el-button type="primary" @click="addGroup">创建分组</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search(1)">查询</el-button>
+                        <el-button type="primary" @click="searchList">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -368,6 +368,13 @@
             },
             addGroup(){
                 this.$router.push({path:'/Index/addgroupone',query:{type:'1'}})
+            },
+            searchList(){
+                if (this.formData.name == '' && this.formData.id == '' && this.formData.createrName == '' && this.formData.dataTime == null){
+                    this.$message.warning('请输入查询条件');
+                    return;
+                }
+                this.search(1)
             },
             search(page){
                 if(page==1){
