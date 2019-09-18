@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="application_list_table">
-                <el-table :data="tableData" empty-text="您还未创建应用" style="width: 100%">
+                <el-table :data="tableData" style="width: 100%">
                     <el-table-column align="center" label="应用名称">
                         <template slot-scope="scope">
                             <el-tooltip placement="top">

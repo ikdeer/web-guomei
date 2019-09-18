@@ -354,6 +354,10 @@
                         return;
                     }
                 }
+                if(phoneArr.length > 10 ){
+                    this.$message.warning('手机号查询最多支持十条');
+                    return;
+                }
                 if(!emailArr[0]==''){
                     let emailFlag = false;
                     emailArr.forEach((item)=>{
@@ -365,6 +369,9 @@
                         this.$message.warning('邮箱不符合规则')
                         return;
                     }
+                }
+                if(emailArr.length > 10 ){
+                    this.$message.warning('邮箱查询最多支持十条')
                 }
                 if(page==1){
                     this.page = {

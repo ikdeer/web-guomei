@@ -269,7 +269,7 @@
                     if(data.errorCode ==200){
                         this.callData = data.data.data.callData?data.data.data.callData:[];
                         this.tableData = data.data.data.appStatisApiList?data.data.data.appStatisApiList:[];
-                        this.page.total = data.data.data.pagerManager? data.data.data.pagerManager.totalResults:0;
+                        this.page.total = data.pagerManager? data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
                         this.tableData.forEach((item,index)=>{
                             days.push(item.days);
@@ -351,18 +351,36 @@
                 //获取应用下拉
                 getAppList().then(({data})=>{
                     if(data.errorCode ==200){
-                        this.formData.appList = data.data?data.data.list:[];
+                        if(data.data){
+                            data.data.list.unshift({
+                                id: '',
+                                name: "全部"
+                            });
+                            this.formData.appList = data.data.list;
+                        }else{
+                            this.formData.appList = [];
+                        }
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
                 });
             },
             getApiSelectList(){
+                if(this.formData.appIds == ''){
+                    this.formData.apiList = [];
+                    return;
+                }
                 getApiList({
                     appID:this.formData.appIds
                 }).then(({data})=>{
                     if(data.errorCode ==200){
-                        this.formData.apiList = data.data?data.data.data.apisList:[];
+                        if(data.data){
+                            data.data.data.apisList.unshift({
+                                id: '',
+                                name: "全部"
+                            });
+                            this.formData.apiList = data.data.data.apisList;
+                        }
                         this.formData.apiIds = '';
                         this.formData.interfaceName = '';
                     }else{

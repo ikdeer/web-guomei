@@ -11,7 +11,7 @@
           </nav>
         </template>
         <!-- 本级过来 -->
-        <template v-if="Breadcrumb == 'VIS-A-VIS'">
+        <template v-else>
           <nav class="nav-Type">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
@@ -24,7 +24,7 @@
         <div class="add_application_content">
             <el-form :model="dataForm" ref="dataForm" :rules="dataFormRules" label-width="80px">
                 <el-form-item label="应用名称" prop="name" required >
-                    <el-input type="text" v-model="dataForm.name" :maxlength="20" placeholder="请输入应用名(20汉字以内)"
+                    <el-input type="text" v-model="dataForm.name" :maxlength="40" placeholder="请输入应用名(20汉字以内)"
                               :disabled="type"   autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="应用类型" prop="typeID" required>
@@ -67,16 +67,21 @@
 </template>
 
 <script>
+    import {strlength} from "../../../lib/utils";
     import { getApplicationDetail,getApplicationTypes,getApplicationTypesInterface,createApplication,editApplication,getApplicationTypesInterfaceList } from '@/HttpApi/application/application';
     export default {
         name: "addApplication",
         data() {
             let name = (rule, value, callback) => {
                 if(value){
-                    if(/[^\u4e00-\u9fa5]/.test(value)){
+                    if(/[^\u4e00-\u9fa5a-zA-Z0-9]/.test(value)){
                         return callback(new Error('请填写20位以内的汉字'));
                     }else{
-                        return callback()
+                        if(this.strlength(value) > 40){
+                            return callback(new Error('请填写20位以内的汉字'));
+                        }else{
+                            return callback()
+                        }
                     }
                 }else{
                     return callback(new Error('请填写应用名称'))
@@ -118,6 +123,7 @@
                 }
             }
             return {
+                strlength:strlength,
                 dataForm: {
                     //amountLimit:'',//调用量 , 用量限制
                     introduction:'',//应用描述
