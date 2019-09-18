@@ -72,7 +72,7 @@
 
 
         <el-dialog
-            :title="dataDialogForm.isEdit?'编辑联系人':'新增联系人'"
+            :title="dataDialogForm.isEdit?'修改联系人':'新增联系人'"
             class="user_info_add_dialog"
             :visible.sync="userInfoAddDialog"
             @close="closeDialog"
