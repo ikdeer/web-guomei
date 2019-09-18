@@ -221,7 +221,9 @@
                         let apiArray = [];
                         if(data.data.data.apisList.length){
                             data.data.data.apisList.forEach((item)=>{
-                                apiArray.push(item.id)
+                                if(item.review == 1 || item.review == 0){
+                                    apiArray.push(item.id)
+                                }
                             })
                         }
                         this.getInterface(data.data.data.typeID,apiArray)

@@ -149,7 +149,7 @@
                             :before-upload="allhandleChange">
                             <el-button type="primary" :loading="uploadLoading">批量添加</el-button>
                         </el-upload>
-                        <a :href="downloadUrl" download="" title="下载">
+                        <a href="/static/fill/face.zip" download="" title="下载">
                             <el-button type="text">下载批量添加模板</el-button>
                         </a>
                     </div>
@@ -208,7 +208,7 @@
 </template>
 
 <script>
-    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl,downloadUrl } from '@/HttpApi/face/face'
+    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl } from '@/HttpApi/face/face'
     export default {
         name: "addGroupTwo",
         data(){
@@ -249,7 +249,6 @@
                 faceType:[],//人脸类型
                 faceNoType:[],//编号系统
                 uploadUrl:uploadUrl,
-                downloadUrl:downloadUrl,
                 uploadLoading:false,
             }
         },

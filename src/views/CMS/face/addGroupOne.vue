@@ -20,7 +20,7 @@
                     <div class="set_group_inp">
                         <el-form :inline="true" :disabled="isSee" label-width="100px">
                             <el-form-item label="分组名称" required>
-                                <el-input :maxlength="20" v-model="groupData.name" placeholder="20汉字以内"></el-input>
+                                <el-input :maxlength="40" v-model="groupData.name" placeholder="20汉字以内"></el-input>
                                 <el-button type="primary" :disabled="groupData.name==''" v-if="!isSee" @click="createGroup">保存</el-button>
                             </el-form-item>
                             <el-form-item label="分组ID" required>
@@ -39,12 +39,12 @@
                     <div class="set_group_childinp">
                         <el-form :inline="true" :disabled="isSee" label-width="110px">
                             <el-form-item label="一级分组名称" required>
-                                <el-input :maxlength="20" v-model="groupChildData.name1" placeholder="20汉字以内"></el-input>
-                                <el-button type="primary" :disabled="groupData.name1==''" v-if="!isSee" @click="addGroupOne">保存</el-button>
+                                <el-input :maxlength="40" v-model="groupChildData.name1" placeholder="20汉字以内"></el-input>
+                                <el-button type="primary" :disabled="groupChildData.name1==''" v-if="!isSee" @click="addGroupOne">保存</el-button>
                                 <el-button type="primary" :disabled="groupChildData.id1==''||groupChildData.name1==''" v-if="!isSee" @click="deleteGroupOne">删除</el-button>
                             </el-form-item>
                             <el-form-item label="二级分组名称" required>
-                                <el-input :maxlength="20" v-model="groupChildData.name2" placeholder="20汉字以内"></el-input>
+                                <el-input :maxlength="40" v-model="groupChildData.name2" placeholder="20汉字以内"></el-input>
                                 <el-button type="primary" :disabled="groupChildData.name2==''" v-if="!isSee" @click="addGroupTwo">保存</el-button>
                                 <el-button type="primary" :disabled="groupChildData.id2==''||groupChildData.name2==''" v-if="!isSee" @click="deleteGroupTwo">删除</el-button>
                             </el-form-item>
@@ -80,11 +80,13 @@
 </template>
 
 <script>
+    import {strlength} from "../../../lib/utils";
     import { createFaceGroup,editFaceGroup,createGroupOne,createGroupTwo,deleteGroupOne,deleteGroupTwo,getGroupOne,getGroupTwo,getFacedetails,editeGroupOne,editeGroupTwo,getGroupChildremTwo } from '@/HttpApi/face/face'
     export default {
         name: "addGroupOne",
         data(){
             return{
+                strlength:strlength,
                 type:'1',
                 groupData:{
                     name:'',
@@ -111,10 +113,15 @@
         methods:{
             createGroup(){
                 //保存分组
-                if(/[^\u4e00-\u9fa5]/.test(this.groupData.name)){
+                if(/[^\u4e00-\u9fa5a-zA-Z0-9]/.test(this.groupData.name)){
                     this.$message.warning('请填写20位以内的汉字');
                     return false;
                 }
+                if(this.strlength(this.groupData.name)  > 40){
+                    this.$message.warning('请填写20位以内的汉字');
+                    return false;
+                }
+
                 if(this.groupData.id != ''){
                     //修改人脸分组
                     editFaceGroup({
@@ -153,7 +160,12 @@
                     this.$message.warning('请输入分组名称')
                     return;
                 }
-                if(/[^\u4e00-\u9fa5]/.test(this.groupChildData.name1)){
+
+                if(/[^\u4e00-\u9fa5a-zA-Z0-9]/.test(this.groupChildData.name1)){
+                    this.$message.warning('请填写20位以内的汉字');
+                    return false;
+                }
+                if(this.strlength(this.groupChildData.name1)  > 40){
                     this.$message.warning('请填写20位以内的汉字');
                     return false;
                 }
@@ -202,17 +214,22 @@
             },
             addGroupTwo(){
                 //保存二级子分组
+                if(this.groupChildData.id1 == ''){
+                    this.$message.warning('请选择要关联的一级子分组名称');
+                    return;
+                }
+
                 if(this.groupChildData.name2==''){
                     this.$message.warning('请输入分组名称');
                     return;
                 }
-                if(/[^\u4e00-\u9fa5]/.test(this.groupChildData.name2)){
+                if(/[^\u4e00-\u9fa5a-zA-Z0-9]/.test(this.groupChildData.name2)){
                     this.$message.warning('请填写20位以内的汉字');
                     return false;
                 }
-                if(this.groupChildData.id1 == ''){
-                    this.$message.warning('请选择要关联的一级子分组名称');
-                    return;
+                if(this.strlength(this.groupChildData.name2) > 40){
+                    this.$message.warning('请填写20位以内的汉字');
+                    return false;
                 }
 
                 if(this.groupChildData.id2 != ''){

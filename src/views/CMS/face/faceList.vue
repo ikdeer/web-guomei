@@ -167,7 +167,7 @@
                         :before-upload="allhandleChange">
                         <el-button type="primary" :loading="uploadLoading">批量添加</el-button>
                     </el-upload>
-                    <a :href="downloadUrl" download="" title="下载">
+                    <a href="/static/fill/face.zip" download="" title="下载">
                         <el-button type="text">下载批量添加模板</el-button>
                     </a>
                 </div>
@@ -182,7 +182,7 @@
 
 <script>
     import {textLen,formatTimes} from '@/lib/utils'
-    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace,downloadUrl } from '@/HttpApi/face/face'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -228,7 +228,6 @@
             return {
                 textLen:textLen,
                 uploadUrl:uploadUrl,
-                downloadUrl:downloadUrl,
                 formData:{
                     name:'',
                     id:'',
