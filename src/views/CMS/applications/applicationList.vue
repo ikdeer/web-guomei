@@ -127,8 +127,8 @@
                               <el-button type="text" v-if="scope.row.reviewState == 21 && scope.row.state==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                               <!-- 修改待提交审核 -->
                               <el-button type="text" v-if="scope.row.reviewState == 2" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==10" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==11" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                               <!-- 修改待审核 -->
                               <el-button type="text" v-if="scope.row.reviewState == 11" @click="audit(scope.row)">审核</el-button>
                               <el-button type="text" v-if="scope.row.reviewState == 11 && scope.row.state==0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
