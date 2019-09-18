@@ -262,7 +262,7 @@
                     timeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
                     timeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                     timeType:this.radio,
-                    monitorItems:this.formData.monitor.join(),
+                    monitorItems:(this.formData.monitor.length==0||this.formData.monitor.length==2) ? 0 : this.formData.monitor.join(),
                     top:10
                 };
                 getStatement(params).then(({data}) => {
