@@ -21,7 +21,7 @@
                     <el-input v-if="!info.phoneStatus" v-model.number="info.phone" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
                 <div class="info_list_btn">
-                    <el-button v-if="info.phoneStatus" type="primary" @click="editPhone">编辑</el-button>
+                    <el-button v-if="info.phoneStatus" type="primary" @click="editPhone">修改</el-button>
                     <el-button v-if="!info.phoneStatus" type="primary" @click="submitPhone">确定</el-button>
                     <el-button v-if="!info.phoneStatus" @click="info.phoneStatus = true">取消</el-button>
                 </div>
@@ -32,7 +32,7 @@
                     <el-input v-if="!info.emailStatus" v-model="info.email" :maxlength="30" placeholder="请输入内容"></el-input>
                 </div>
                 <div class="info_list_btn">
-                    <el-button v-if="info.emailStatus" type="primary" @click="editEmail">编辑</el-button>
+                    <el-button v-if="info.emailStatus" type="primary" @click="editEmail">修改</el-button>
                     <el-button v-if="!info.emailStatus" type="primary" @click="submitEmail">确定</el-button>
                     <el-button v-if="!info.emailStatus" @click="info.emailStatus = true">取消</el-button>
                 </div>
