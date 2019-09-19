@@ -1,15 +1,15 @@
 <template>
-  <div class="bannerAdd">
+  <div class="bannerDetails">
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
-        <el-breadcrumb-item>新增Banner</el-breadcrumb-item>
+        <el-breadcrumb-item>查看Banner</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <div class="bannerAdd-content">
-      <h4 class="api-TextH4">新增Banner</h4>
+    <div class="bannerDetails-content">
+      <h4 class="api-TextH4">查看Banner</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="form"
@@ -21,7 +21,7 @@
                    class="demo-dynamic">
             <el-form-item label="图片名称：" prop="Title">
               <div class="api-OneLevel">
-                <el-input v-model="form.TitleImg" maxlength="20" placeholder="请输入图片名称"></el-input>
+                <el-input v-model="form.TitleImg" disabled maxlength="20" placeholder="请输入图片名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="上传图片：" prop="coverImg">
@@ -29,6 +29,7 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  disabled
                   :show-file-list="false">
                   <img v-if="form.coverImg" :src="form.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -37,27 +38,21 @@
             </el-form-item>
             <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL1">
+                <el-input placeholder="请输入URL" disabled v-model="form.URL1">
                   <template slot="prepend">Http://</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="按钮2跳转地址：" prop="URL2">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL2">
+                <el-input placeholder="请输入URL" disabled v-model="form.URL2">
                   <template slot="prepend">Http://</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="form.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
-              </div>
-            </el-form-item>
-            <el-form-item>
-              <div class="api-editor">
-                <el-button type="primary" @click.stop="addDomain">保存</el-button>
-                <el-button @click.stop="cancel">重置</el-button>
+                <el-input v-model="form.sortNum" disabled maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
           </el-form>
@@ -68,7 +63,7 @@
 </template>
 <script>
   export default {
-    name: "bannerAdd",
+    name: "bannerDetails",
     data(){
       return {
         form:{
@@ -90,61 +85,7 @@
       }
     },
     methods:{
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
-      //图片上传
-      getFile(file,fileList){
-        let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
-          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
-              // 获取光标所在位置
-              let length = quill.getSelection().index;
-              // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
-              // 调整光标到最后
-              quill.setSelection(length + 1);
-              // loading动画消失
-              this.catalogText.quillUpdateImg = false;
-            }else{
-              this.$message.error(response.data.errorInfo);
-            }
-          })
-        })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
-      },
-      //重置
-      cancel(){
-        this.$refs.form.resetFields();
-      },
-      //保存并发布
-      addDomain(){
-        this.$refs.form.validate((valid) => {
-          if(valid){
 
-          }
-        })
-      },
     },
     mounted(){
 
@@ -153,9 +94,9 @@
 </script>
 
 <style lang="scss">
-  .bannerAdd{
+  .bannerDetails{
     width: 100%;
-    .bannerAdd-content{
+    .bannerDetails-content{
       width: 100%;
       .api-TextH4{
         font-size: 0.18rem;

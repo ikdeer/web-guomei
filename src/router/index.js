@@ -36,12 +36,18 @@ import instructionsDetails from '@/views/CMS/instructions/instructionsDetails'
 import instructionsEdit from '@/views/CMS/instructions/instructionsEdit'
 import categories from '@/views/CMS/categories/categories'
 import SDKDownload from '@/views/CMS/SDKDownload/SDKDownload'
-import productlist from '@/views/CMS/productService/productlist'
+import productList from '@/views/CMS/productService/productList'
 import productAdd from '@/views/CMS/productService/productAdd'
+import productDetails from '@/views/CMS/productService/productDetails'
+import productEdit from '@/views/CMS/productService/productEdit'
 import solutionList from '@/views/CMS/solution/solutionList'
 import solutionAdd from '@/views/CMS/solution/solutionAdd'
+import solutionDetails from '@/views/CMS/solution/solutionDetails'
+import solutionEdit from '@/views/CMS/solution/solutionEdit'
 import bannerList from '@/views/CMS/banner/bannerList'
 import bannerAdd from '@/views/CMS/banner/bannerAdd'
+import bannerDetails from '@/views/CMS/banner/bannerDetails'
+import bannerEdit from '@/views/CMS/banner/bannerEdit'
 
 //控制跳转同一个路由报错
 const originalPush = Router.prototype.push;
@@ -183,58 +189,58 @@ const router = new Router({
           name: '应用详情',
           component:applicationDetail ,
           meta: {
-              title:'国美人脸认证管理后台',
-              code:3,
+            title:'国美人脸认证管理后台',
+            code:3,
           },
-      },{
-        path: '/Index/faceList',
-        name: '人脸分组列表',
-        component: faceList,
-        meta: {
+        },{
+          path: '/Index/faceList',
+          name: '人脸分组列表',
+          component: faceList,
+          meta: {
             title:'国美人脸认证管理后台',
             code:4,
           }
-      },{
-        path: '/Index/addgroupone',
-        name: '人脸创建分组',
-        component: addGroupOne,
-        meta: {
-          title:'国美人脸认证管理后台',
-          code:4,
-        }
-      },{
-         path: '/Index/addGroupTwo',
-         name: '人脸创建分组',
-         component: addGroupTwo,
-         meta: {
-           title:'国美人脸认证管理后台',
-           code:4,
-         }
-      },{
-        path: '/Index/groupList',
-        name: 'groupList',
-        component: groupList,
-        meta: {
-          title:'国美人脸认证管理后台',
-          code:4,
-        }
-      },{
-        path: '/Index/equipmentList',
-        name: '设备管理',
-        component: equipmentList,
-        meta: {
+        },{
+          path: '/Index/addgroupone',
+          name: '人脸创建分组',
+          component: addGroupOne,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:4,
+          }
+        },{
+          path: '/Index/addGroupTwo',
+          name: '人脸创建分组',
+          component: addGroupTwo,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:4,
+          }
+        },{
+          path: '/Index/groupList',
+          name: 'groupList',
+          component: groupList,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:4,
+          }
+        },{
+          path: '/Index/equipmentList',
+          name: '设备管理',
+          component: equipmentList,
+          meta: {
             title:'国美人脸认证管理后台',
             code:5,
-        }
-      },{
-        path: '/Index/statement',
-        name: '监控报表',
-        component: statement,
-        meta: {
-          title:'国美人脸认证管理后台',
-          code:6,
-        }
-      },
+          }
+        },{
+          path: '/Index/statement',
+          name: '监控报表',
+          component: statement,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:6,
+          }
+        },
         {
           path: '/Index/TCFApiList',
           name: '技术文档列表',
@@ -308,14 +314,14 @@ const router = new Router({
           }
         },
         {
-        path: '/Index/log',
-        name: '操作日志',
-        component: log,
-        meta: {
-          title:'国美人脸认证管理后台',
-          code:9,
-        }
-      },
+          path: '/Index/log',
+          name: '操作日志',
+          component: log,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:9,
+          }
+        },
         {
           path: '/Index/categories',
           name: '栏目管理',
@@ -344,6 +350,24 @@ const router = new Router({
           }
         },
         {
+          path: '/Index/solutionDetails',
+          name: '解决方案查看',
+          component: solutionDetails,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:11,
+          }
+        },
+        {
+          path: '/Index/solutionEdit',
+          name: '解决方案编辑',
+          component: solutionEdit,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:11,
+          }
+        },
+        {
           path: '/Index/SDKDownload',
           name: 'SDK下载',
           component: SDKDownload,
@@ -353,9 +377,9 @@ const router = new Router({
           }
         },
         {
-          path: '/Index/productlist',
+          path: '/Index/productList',
           name: '产品服务列表',
-          component: productlist,
+          component: productList,
           meta: {
             title:'国美人脸认证管理后台',
             code:13,
@@ -365,6 +389,24 @@ const router = new Router({
           path: '/Index/productAdd',
           name: '产品服务新增',
           component: productAdd,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:13,
+          }
+        },
+        {
+          path: '/Index/productDetails',
+          name: '产品服务查看',
+          component: productDetails,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:13,
+          }
+        },
+        {
+          path: '/Index/productEdit',
+          name: '产品服务编辑',
+          component: productEdit,
           meta: {
             title:'国美人脸认证管理后台',
             code:13,
@@ -383,6 +425,24 @@ const router = new Router({
           path: '/Index/bannerAdd',
           name: 'banner位置新增',
           component: bannerAdd,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:14,
+          }
+        },
+        {
+          path: '/Index/bannerDetails',
+          name: 'banner位置查看',
+          component: bannerDetails,
+          meta: {
+            title:'国美人脸认证管理后台',
+            code:14,
+          }
+        },
+        {
+          path: '/Index/bannerEdit',
+          name: 'banner位置编辑',
+          component: bannerEdit,
           meta: {
             title:'国美人脸认证管理后台',
             code:14,

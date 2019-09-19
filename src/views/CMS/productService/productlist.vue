@@ -41,8 +41,12 @@
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
-                <el-button type="text" style="color:#409eff;">查看</el-button>
-                <el-button type="text" style="color:#67c23a;">编辑</el-button>
+                <router-link :to="{path:'/Index/productDetails',query:{Id:''}}">
+                  <el-button type="text" style="color:#409eff;">查看</el-button>
+                </router-link>
+                <router-link :to="{path:'/Index/productEdit',query:{Id:''}}">
+                  <el-button type="text" style="color:#67c23a;">编辑</el-button>
+                </router-link>
                 <el-button type="text" style="color:#f56c6c;">删除</el-button>
               </template>
             </el-table-column>

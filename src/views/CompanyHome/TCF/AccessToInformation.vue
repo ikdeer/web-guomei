@@ -32,7 +32,7 @@
         <div class="gm-contentPad">
           <h4 class="gm-contentPadText">{{bbsTopTitle}}</h4>
           <div class="gm-contentArea">
-            <div class="contentArea-left" v-html="bbsContent"></div>
+            <div class="ql-editor contentArea-left" v-html="bbsContent"></div>
           </div>
         </div>
       </div>

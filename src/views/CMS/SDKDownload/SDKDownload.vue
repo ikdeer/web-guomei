@@ -84,8 +84,8 @@
         getDownloadList({page:this.page.pageNum,pageSize:this.page.pageSize})
           .then(response => {
             if(response.data.errorCode == 200){
-              this.tableData = response.data.data.list;
-              this.page.total = response.data.pagerManager.totalResults;
+              this.tableData = response.data.data ? response.data.data.list : [];
+              this.page.total = response.data.pagerManager ? response.data.pagerManager.totalResults : 0;
             }else{
               this.$message.warning(response.data.errorInfo);
             }

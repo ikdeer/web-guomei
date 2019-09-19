@@ -1,15 +1,15 @@
 <template>
-  <div class="bannerAdd">
+  <div class="bannerEdit">
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
-        <el-breadcrumb-item>新增Banner</el-breadcrumb-item>
+        <el-breadcrumb-item>编辑Banner</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <div class="bannerAdd-content">
-      <h4 class="api-TextH4">新增Banner</h4>
+    <div class="bannerEdit-content">
+      <h4 class="api-TextH4">编辑Banner</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="form"
@@ -57,7 +57,10 @@
             <el-form-item>
               <div class="api-editor">
                 <el-button type="primary" @click.stop="addDomain">保存</el-button>
-                <el-button @click.stop="cancel">重置</el-button>
+                <router-link
+                  tag="button"
+                  class="el-button el-button--default el-button--small"
+                  :to="{path:'/Index/solutionList'}">取消</router-link>
               </div>
             </el-form-item>
           </el-form>
@@ -68,7 +71,7 @@
 </template>
 <script>
   export default {
-    name: "bannerAdd",
+    name: "bannerEdit",
     data(){
       return {
         form:{
@@ -133,10 +136,6 @@
           };
         });
       },
-      //重置
-      cancel(){
-        this.$refs.form.resetFields();
-      },
       //保存并发布
       addDomain(){
         this.$refs.form.validate((valid) => {
@@ -153,9 +152,9 @@
 </script>
 
 <style lang="scss">
-  .bannerAdd{
+  .bannerEdit{
     width: 100%;
-    .bannerAdd-content{
+    .bannerEdit-content{
       width: 100%;
       .api-TextH4{
         font-size: 0.18rem;

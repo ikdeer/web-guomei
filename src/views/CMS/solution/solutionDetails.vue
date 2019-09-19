@@ -1,15 +1,15 @@
 <template>
-  <div class="solutionAdd">
+  <div class="solutionDetails">
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
-        <el-breadcrumb-item>新增解决方案</el-breadcrumb-item>
+        <el-breadcrumb-item>编辑解决方案</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <div class="solutionAdd-content">
-      <h4 class="api-TextH4">新增解决方案</h4>
+    <div class="solutionDetails-content">
+      <h4 class="api-TextH4">编辑解决方案</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
@@ -83,12 +83,6 @@
                 </el-col>
               </el-row>
             </el-form-item>
-            <el-form-item>
-              <div class="api-editor">
-                <el-button type="primary" @click.stop="addDomain">保存</el-button>
-                <el-button @click.stop="cancel">重置</el-button>
-              </div>
-            </el-form-item>
           </el-form>
         </div>
       </div>
@@ -114,7 +108,7 @@
   Quill.register('modules/imageDrop', ImageDrop);
   Quill.register('modules/imageResize', ImageResize);
   export default {
-    name: "solutionAdd",
+    name: "solutionDetails",
     data(){
       return {
         catalogText:{
@@ -176,61 +170,7 @@
       }
     },
     methods:{
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
-      //图片上传
-      getFile(file,fileList){
-        let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
-          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
-              // 获取光标所在位置
-              let length = quill.getSelection().index;
-              // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
-              // 调整光标到最后
-              quill.setSelection(length + 1);
-              // loading动画消失
-              this.catalogText.quillUpdateImg = false;
-            }else{
-              this.$message.error(response.data.errorInfo);
-            }
-          })
-        })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
-      },
-      //重置
-      cancel(){
-        this.$refs.catalogText.resetFields();
-      },
-      //保存并发布
-      addDomain(){
-        this.$refs.catalogText.validate((valid) => {
-          if(valid){
 
-          }
-        })
-      },
     },
     mounted(){
 
@@ -239,9 +179,9 @@
 </script>
 
 <style lang="scss">
-  .solutionAdd{
+  .solutionDetails{
     width: 100%;
-    .solutionAdd-content{
+    .solutionDetails-content{
       width: 100%;
       .api-TextH4{
         font-size: 0.18rem;
