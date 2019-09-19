@@ -52,7 +52,7 @@ Router.prototype.push = function push(location) {
 Vue.use(Router);
 
 const router = new Router({
-  mode:'history',
+  mode:'hash',
   //路由跳转后页面回到顶部
   scrollBehavior: () => ({ y: 0 }),
   routes: [
