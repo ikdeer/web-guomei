@@ -61,7 +61,7 @@
               username:'',//用户名
               password:'',//密码
               code:'',//图片验证码
-              codeImg:'http://10.128.18.12:8091/gm/generating/code',
+              codeImg:'/gm/generating/code',
             },
             userInfo:{
               userName:'',//用户姓名
