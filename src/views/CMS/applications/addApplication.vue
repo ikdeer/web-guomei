@@ -46,7 +46,7 @@
                             {{item.name}}
                         </div>
                         <div class="right" v-show="item.isShow">
-                            <el-checkbox v-for="api in item.apisList" v-model="api.checkd" :disabled="api.disabled" @change="innerCheck(api)" :label="api.name" :key="api.id"></el-checkbox>
+                            <el-checkbox v-for="api in item.apisList" v-model="api.checkd" :disabled="api.disabled" :label="api.name" :key="api.id"></el-checkbox>
                         </div>
                     </div>
                 </el-form-item>
@@ -136,7 +136,7 @@
                 applicationTypes:[],//应用类型
                 InterfaceApi:[],//接口选择
                 info:{},//登录用户信息
-
+                birgeObject:{},//
                 dataFormRules:{
                     name:[
                         {validator:name,trigger:['blur','change']}
@@ -180,6 +180,31 @@
                         };
                         if(this.type){
                             //编辑
+                            let flag = false;
+                            if(params.name != this.birgeObject.name){
+                                flag = true;
+                            }
+                            if(params.introduction != this.birgeObject.introduction){
+                                flag = true;
+                            }
+                            if(params.typeID != this.birgeObject.typeID){
+                                flag = true;
+                            }else{
+                                if(ids.length != this.birgeObject.apiIds.length){
+                                    flag = true;
+                                }else{
+                                    this.birgeObject.apiIds.forEach((item) => {
+                                        if (ids.indexOf(item) < 0 ) {
+                                            flag = true;
+                                        }
+                                    })
+                                }
+                            }
+                            if(!flag){
+                                this.$message.warning('无修改，请勿重复提交');
+                                return;
+                            }
+                            console.log(params,this.birgeObject)
                             params.id = this.$route.query.id;
                             editApplication(params).then(({data})=>{
                                 if(data.errorCode ==200){
@@ -214,9 +239,6 @@
                     item.isShow = true;
                 }
             },
-            innerCheck(ins){
-                console.log(this.InterfaceApi[ins.index].apisList)
-            },
             getDetail(){
                 getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
                     if(data.errorCode ==200){
@@ -232,6 +254,13 @@
                                 }
                             })
                         }
+                        //查看详情保存数据，用到用户无修改提示
+                        this.birgeObject = {
+                            name:data.data.data.name,
+                            introduction:data.data.data.introduction,
+                            typeID:data.data.data.typeID,
+                            apiIds:apiArray
+                        };
                         this.getInterface(data.data.data.typeID,apiArray)
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -245,13 +274,12 @@
                 })
             },
             getInterface(id,ArrayId){
-                getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
-                    console.log(data);
-                });
-
+                /*getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
+                    console.log(data);  又改令人头大
+                });*/
                 getApplicationTypesInterfaceList().then(({data})=>{
                     if(data.data){
-                        /*给外层一个默认值 内层一个外层index备用*/
+                        /*给外层一个默认值 内层一个外层index备用，为什么这么搞，后面我自己也看不懂了*/
                         data.data.list.forEach((item,index)=>{
                             item.isShow = true;
                             item.index = index;
