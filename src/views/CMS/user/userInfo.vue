@@ -4,7 +4,7 @@
       <nav class="nav-Type">
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{path:'/Index/userList'}">用户管理</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="userInfo.groupID!=20" :to="{path:'/Index/userList'}">用户管理</el-breadcrumb-item>
           <el-breadcrumb-item>用户基本信息</el-breadcrumb-item>
         </el-breadcrumb>
       </nav>
