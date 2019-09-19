@@ -314,6 +314,21 @@
             },
             search(page) {
                 //查询应用列表
+                let nameArr = this.formData.name.replace('，',',').split(',');
+                let idArr = this.formData.id.split(',');
+                let createrNameArr = this.formData.createrName.replace('，',',').split(',');
+                if(nameArr.length > 10 ){
+                    this.$message.warning('应用名称查询最多支持十条');
+                    return;
+                }
+                if(idArr.length > 10 ){
+                    this.$message.warning('APPID查询最多支持十条');
+                    return;
+                }
+                if(createrNameArr.length > 10 ){
+                    this.$message.warning('创建人查询最多支持十条');
+                    return;
+                }
                 if(page==1){
                     this.page = {
                         page: 1,

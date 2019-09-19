@@ -154,7 +154,7 @@
                         </a>
                     </div>
                     <div>
-                        <el-button type="primary" @click="dialogSearch(1)">查询</el-button>
+                        <el-button type="primary" @click="dialogSearchList">查询</el-button>
                         <el-button @click="dialogReset">清空</el-button>
                     </div>
                 </div>
@@ -344,6 +344,13 @@
             ok(){
                 //关闭所有
                 this.$router.push({path:'/Index/faceList'})
+            },
+            dialogSearchList(){
+                if(this.dataDialogForm.names == '' && this.dataDialogForm.ids == '' && this.dataDialogForm.nos == '' && this.dataDialogForm.noType == '' && this.dataDialogForm.picFromIDs == '' && this.dataDialogForm.sex == '' && this.dataDialogForm.types == ''){
+                    this.$message.warning('请输入查询条件');
+                    return;
+                }
+                this.dialogSearch(1);
             },
             dialogSearch(page){
               //faceListBirge数组里面未置空存在上次勾选的数据
