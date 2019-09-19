@@ -372,6 +372,7 @@
                 }
                 if(emailArr.length > 10 ){
                     this.$message.warning('邮箱查询最多支持十条')
+                    return;
                 }
                 if(page==1){
                     this.page = {

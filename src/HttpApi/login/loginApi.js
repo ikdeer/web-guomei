@@ -1,5 +1,5 @@
 import AxIos from "../HttpApi";
-
+const HttpApi = process.env.BASE_URL;
 /**
 * 用户登录接口
 * @username 用户名
@@ -72,3 +72,4 @@ export const geUserResetPasswordPhoneMsg = (params) => {
   })
 }
 
+export const codeImgUrl = `${HttpApi}/generating/code`;

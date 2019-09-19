@@ -44,7 +44,7 @@
 
 <script>
   import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
-  import {getUserLogin,getGeneraTingCode} from '@/HttpApi/login/loginApi'
+  import {getUserLogin,getGeneraTingCode,codeImgUrl} from '@/HttpApi/login/loginApi'
     export default {
         name: "login",
         components:{Header_Nav},
@@ -61,7 +61,7 @@
               username:'',//用户名
               password:'',//密码
               code:'',//图片验证码
-              codeImg:'http://10.128.18.12:8091/gm/generating/code',
+              codeImg:codeImgUrl,
             },
             userInfo:{
               userName:'',//用户姓名
