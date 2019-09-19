@@ -42,7 +42,7 @@
                         <el-button type="primary" @click="addGroup">创建分组</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search(1)">查询</el-button>
+                        <el-button type="primary" @click="searchList">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                         accept="image/jpg,image/jpeg,image/png,image/x-ms-bmp"
                         :show-file-list="false"
                         :before-upload="beforeAvatarUpload"
-                        :on-change="handleAvatarSuccess">
+                        :on-progress="handleAvatarSuccess">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <div v-else class="upload_info" >
                             <i class="el-icon-picture-outline"></i>
@@ -167,7 +167,7 @@
                         :before-upload="allhandleChange">
                         <el-button type="primary" :loading="uploadLoading">批量添加</el-button>
                     </el-upload>
-                    <a :href="downloadUrl" download="" title="下载">
+                    <a href="/static/fill/face.zip" download="" title="下载">
                         <el-button type="text">下载批量添加模板</el-button>
                     </a>
                 </div>
@@ -182,7 +182,7 @@
 
 <script>
     import {textLen,formatTimes} from '@/lib/utils'
-    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace,downloadUrl } from '@/HttpApi/face/face'
+    import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace } from '@/HttpApi/face/face'
     export default {
         name: "userList",
         data() {
@@ -228,7 +228,6 @@
             return {
                 textLen:textLen,
                 uploadUrl:uploadUrl,
-                downloadUrl:downloadUrl,
                 formData:{
                     name:'',
                     id:'',
@@ -369,7 +368,29 @@
             addGroup(){
                 this.$router.push({path:'/Index/addgroupone',query:{type:'1'}})
             },
+            searchList(){
+                if (this.formData.name == '' && this.formData.id == '' && this.formData.createrName == '' && this.formData.dataTime == null){
+                    this.$message.warning('请输入查询条件');
+                    return;
+                }
+                this.search(1)
+            },
             search(page){
+                let nameArr = this.formData.name.replace('，',',').split(',');
+                let idArr = this.formData.id.replace('，',',').split(',');
+                let createrNameArr = this.formData.createrName.replace('，',',').split(',');
+                if(nameArr.length > 10 ){
+                    this.$message.warning('分组名称查询最多支持十条');
+                    return;
+                }
+                if(idArr.length > 10 ){
+                    this.$message.warning('分组ID查询最多支持十条');
+                    return;
+                }
+                if(createrNameArr.length > 10 ){
+                    this.$message.warning('创建人查询最多支持十条');
+                    return;
+                }
                 if(page==1){
                     this.page = {
                         page:1,
@@ -435,11 +456,11 @@
                 this.page.page = val;
                 this.search(2)
             },
-            handleAvatarSuccess(res, file) {
+            handleAvatarSuccess(event, file, fileList) {
                 var that = this;
                 var imgurl = '';
                 var reader = new FileReader();
-                reader.readAsDataURL(res.raw);
+                reader.readAsDataURL(file.raw);
                 reader.onload = function(e){
                     this.result; // base64编码
                     imgurl = this.result;
@@ -452,10 +473,8 @@
                         }
                     })
                 };
-
             },
             beforeAvatarUpload(file) {
-                debugger
                 const isJPG = file.type === 'image/jpg' || file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/x-ms-bmp";
                 const isLt2M = file.size / 1024 / 1024 < 5;
 
@@ -497,7 +516,9 @@
             uploadFillSuccess(res,file,fileList){
                 this.uploadLoading = false;
                 if(res.success){
-                    this.$message.success('上传成功')
+                    this.$message.success('上传成功');
+                    this.dataDialogForm.uploadFaceDialog = false;
+                    this.search(1);
                 }else{
                     console.log(this.uploadLoading);
                     this.$message.warning(res.errorInfo)

@@ -260,7 +260,7 @@ export default {
         })
       },
       //应用App用量列表
-      getApisConSumpTion(){
+      /*getApisConSumpTion(){
         getApisConSumpTion(this.TimeData).then(response => {
           if(response.data.errorCode == 200){
             if(response.data.data){
@@ -272,7 +272,7 @@ export default {
             this.$message.warning(response.data.errorInfo);
           }
         })
-      },
+      },*/
       //跳转监控报表
       clickStatement(scope){
         this.$router.push({path:'/Index/statement',query:{id:scope.row.id,NavType:'overview'}});
@@ -293,7 +293,7 @@ export default {
       this.groupID = JSON.parse(this.Cookies.get('userInfo')).groupID;
       this.TimeBluer();
       this.getAppAudit();
-      this.getApisConSumpTion();
+      // this.getApisConSumpTion();
     }
 }
 </script>

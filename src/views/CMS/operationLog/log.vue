@@ -12,7 +12,7 @@
             <div class="log_form">
                 <el-form :inline="true">
                     <el-form-item label="操作人">
-                        <el-input :maxlength="20" v-model="formData.username" placeholder="请输入操作人"></el-input>
+                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.username" placeholder="请输入操作人"></el-input>
                     </el-form-item>
                     <el-form-item label="IP">
                         <el-input :maxlength="20" v-model="formData.ip" placeholder="请输入IP"></el-input>
@@ -132,7 +132,13 @@
                     page:1,
                     pageSize:10,
                     total:0
-                }
+                },
+                userInfo:{
+                    userName:'',//用户姓名
+                    userImg:'',//用户头头像
+                    uid:'',//用户ID
+                    groupID:'',//用户身份
+                },
             }
         },
         methods:{
@@ -170,6 +176,10 @@
             },
         },
         mounted(){
+            this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
+            if(this.userInfo.groupID==20){
+                this.formData.username = this.userInfo.userName;
+            }
             this.search()
         }
     }

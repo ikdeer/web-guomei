@@ -4,7 +4,7 @@
       <nav class="nav-Type">
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{path:'/Index/userList'}">用户管理</el-breadcrumb-item>
+          <el-breadcrumb-item v-if="userInfo.groupID!=20" :to="{path:'/Index/userList'}">用户管理</el-breadcrumb-item>
           <el-breadcrumb-item>用户基本信息</el-breadcrumb-item>
         </el-breadcrumb>
       </nav>
@@ -21,7 +21,7 @@
                     <el-input v-if="!info.phoneStatus" v-model.number="info.phone" :maxlength="11" placeholder="请输入内容"></el-input>
                 </div>
                 <div class="info_list_btn">
-                    <el-button v-if="info.phoneStatus" type="primary" @click="editPhone">编辑</el-button>
+                    <el-button v-if="info.phoneStatus" type="primary" @click="editPhone">修改</el-button>
                     <el-button v-if="!info.phoneStatus" type="primary" @click="submitPhone">确定</el-button>
                     <el-button v-if="!info.phoneStatus" @click="info.phoneStatus = true">取消</el-button>
                 </div>
@@ -32,7 +32,7 @@
                     <el-input v-if="!info.emailStatus" v-model="info.email" :maxlength="30" placeholder="请输入内容"></el-input>
                 </div>
                 <div class="info_list_btn">
-                    <el-button v-if="info.emailStatus" type="primary" @click="editEmail">编辑</el-button>
+                    <el-button v-if="info.emailStatus" type="primary" @click="editEmail">修改</el-button>
                     <el-button v-if="!info.emailStatus" type="primary" @click="submitEmail">确定</el-button>
                     <el-button v-if="!info.emailStatus" @click="info.emailStatus = true">取消</el-button>
                 </div>
@@ -72,14 +72,14 @@
 
 
         <el-dialog
-            :title="dataDialogForm.isEdit?'编辑联系人':'新增联系人'"
+            :title="dataDialogForm.isEdit?'修改联系人':'新增联系人'"
             class="user_info_add_dialog"
             :visible.sync="userInfoAddDialog"
             @close="closeDialog"
             width="30%">
             <el-form :model="dataDialogForm" :rules="adduserDialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="姓名" prop="name" required>
-                    <el-input type="text" v-model="dataDialogForm.name" placeholder="请输入姓名" autocomplete="off"></el-input>
+                    <el-input type="text" :maxlength="20" v-model="dataDialogForm.name" placeholder="请输入姓名" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item
                     label="手机号" prop="phone" required>

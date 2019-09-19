@@ -34,7 +34,7 @@
             <div class="statement_form">
                 <el-form label-width="80px">
                     <el-form-item label="创建人">
-                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.createrName" placeholder="请输入创建人"></el-input>
+                        <el-input :maxlength="20" :disabled="userInfo.groupID==20" v-model="formData.createName" placeholder="请输入创建人"></el-input>
                     </el-form-item>
                     <el-form-item label="选择应用">
                         <el-select v-model="formData.appIds" @change="getApiSelectList" placeholder="请选择">
@@ -175,7 +175,7 @@
             return{
                 textLen:textLen,
                 formData:{
-                    createrName:'',//创建人名称
+                    createName:'',//创建人名称
                     apiIds:'',//api ID
                     interfaceName:'',//api名字
                     appIds:'',//app ID
@@ -262,17 +262,17 @@
                     timeStart:this.formData.dataTime?this.formData.dataTime[0]:'',
                     timeEnd:this.formData.dataTime?this.formData.dataTime[1]:'',
                     timeType:this.radio,
-                    monitorItems:this.formData.monitor.join(),
+                    monitorItems:(this.formData.monitor.length==0||this.formData.monitor.length==2) ? 0 : this.formData.monitor.join(),
                     top:10
                 };
                 getStatement(params).then(({data}) => {
                     if(data.errorCode ==200){
                         this.callData = data.data.data.callData?data.data.data.callData:[];
                         this.tableData = data.data.data.appStatisApiList?data.data.data.appStatisApiList:[];
-                        this.page.total = data.data.data.pagerManager? data.data.data.pagerManager.totalResults:0;
+                        this.page.total = data.pagerManager? data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
                         this.tableData.forEach((item,index)=>{
-                            days.push(item.days);
+                            days.push(item.lastCallTime);
                             callSucessCount.push(item.callSucessCount);
                             callFailCount.push(item.callFailCount);
                         });
@@ -351,18 +351,36 @@
                 //获取应用下拉
                 getAppList().then(({data})=>{
                     if(data.errorCode ==200){
-                        this.formData.appList = data.data?data.data.list:[];
+                        if(data.data){
+                            data.data.list.unshift({
+                                id: '',
+                                name: "全部"
+                            });
+                            this.formData.appList = data.data.list;
+                        }else{
+                            this.formData.appList = [];
+                        }
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
                 });
             },
             getApiSelectList(){
+                if(this.formData.appIds == ''){
+                    this.formData.apiList = [];
+                    return;
+                }
                 getApiList({
                     appID:this.formData.appIds
                 }).then(({data})=>{
                     if(data.errorCode ==200){
-                        this.formData.apiList = data.data?data.data.data.apisList:[];
+                        if(data.data){
+                            data.data.data.apisList.unshift({
+                                id: '',
+                                name: "全部"
+                            });
+                            this.formData.apiList = data.data.data.apisList;
+                        }
                         this.formData.apiIds = '';
                         this.formData.interfaceName = '';
                     }else{
@@ -389,7 +407,7 @@
             this.formData.appIds = this.$route.query.id ? this.$route.query.id : '';
             this.userInfo = JSON.parse(this.Cookies.get('userInfo'));
             if(this.userInfo.groupID==20){
-                this.formData.createrName = this.userInfo.userName;
+                this.formData.createName = this.userInfo.userName;
             }
             this.$nextTick(() => {
                 this.lineCharts = this.$echarts.init(document.getElementById('MyEcharts'))

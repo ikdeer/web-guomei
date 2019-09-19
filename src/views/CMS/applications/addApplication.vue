@@ -11,7 +11,7 @@
           </nav>
         </template>
         <!-- 本级过来 -->
-        <template v-if="Breadcrumb == 'VIS-A-VIS'">
+        <template v-else>
           <nav class="nav-Type">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
@@ -24,7 +24,7 @@
         <div class="add_application_content">
             <el-form :model="dataForm" ref="dataForm" :rules="dataFormRules" label-width="80px">
                 <el-form-item label="应用名称" prop="name" required >
-                    <el-input type="text" v-model="dataForm.name" :maxlength="20" placeholder="请输入应用名(20汉字以内)"
+                    <el-input type="text" v-model="dataForm.name" :maxlength="40" placeholder="请输入应用名(20汉字以内)"
                               :disabled="type"   autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="应用类型" prop="typeID" required>
@@ -46,7 +46,7 @@
                             {{item.name}}
                         </div>
                         <div class="right" v-show="item.isShow">
-                            <el-checkbox v-for="api in item.apisList" v-model="api.checkd" :disabled="api.disabled" @change="innerCheck(api)" :label="api.name" :key="api.id"></el-checkbox>
+                            <el-checkbox v-for="api in item.apisList" v-model="api.checkd" :disabled="api.disabled" :label="api.name" :key="api.id"></el-checkbox>
                         </div>
                     </div>
                 </el-form-item>
@@ -67,16 +67,21 @@
 </template>
 
 <script>
+    import {strlength} from "../../../lib/utils";
     import { getApplicationDetail,getApplicationTypes,getApplicationTypesInterface,createApplication,editApplication,getApplicationTypesInterfaceList } from '@/HttpApi/application/application';
     export default {
         name: "addApplication",
         data() {
             let name = (rule, value, callback) => {
                 if(value){
-                    if(/[^\u4e00-\u9fa5]/.test(value)){
+                    if(/[^\u4e00-\u9fa5a-zA-Z0-9]/.test(value)){
                         return callback(new Error('请填写20位以内的汉字'));
                     }else{
-                        return callback()
+                        if(this.strlength(value) > 40){
+                            return callback(new Error('请填写20位以内的汉字'));
+                        }else{
+                            return callback()
+                        }
                     }
                 }else{
                     return callback(new Error('请填写应用名称'))
@@ -118,6 +123,7 @@
                 }
             }
             return {
+                strlength:strlength,
                 dataForm: {
                     //amountLimit:'',//调用量 , 用量限制
                     introduction:'',//应用描述
@@ -130,7 +136,7 @@
                 applicationTypes:[],//应用类型
                 InterfaceApi:[],//接口选择
                 info:{},//登录用户信息
-
+                birgeObject:{},//
                 dataFormRules:{
                     name:[
                         {validator:name,trigger:['blur','change']}
@@ -174,6 +180,31 @@
                         };
                         if(this.type){
                             //编辑
+                            let flag = false;
+                            if(params.name != this.birgeObject.name){
+                                flag = true;
+                            }
+                            if(params.introduction != this.birgeObject.introduction){
+                                flag = true;
+                            }
+                            if(params.typeID != this.birgeObject.typeID){
+                                flag = true;
+                            }else{
+                                if(ids.length != this.birgeObject.apiIds.length){
+                                    flag = true;
+                                }else{
+                                    this.birgeObject.apiIds.forEach((item) => {
+                                        if (ids.indexOf(item) < 0 ) {
+                                            flag = true;
+                                        }
+                                    })
+                                }
+                            }
+                            if(!flag){
+                                this.$message.warning('无修改，请勿重复提交');
+                                return;
+                            }
+                            console.log(params,this.birgeObject)
                             params.id = this.$route.query.id;
                             editApplication(params).then(({data})=>{
                                 if(data.errorCode ==200){
@@ -208,9 +239,6 @@
                     item.isShow = true;
                 }
             },
-            innerCheck(ins){
-                console.log(this.InterfaceApi[ins.index].apisList)
-            },
             getDetail(){
                 getApplicationDetail({appID:this.$route.query.id}).then(({data})=>{
                     if(data.errorCode ==200){
@@ -221,9 +249,18 @@
                         let apiArray = [];
                         if(data.data.data.apisList.length){
                             data.data.data.apisList.forEach((item)=>{
-                                apiArray.push(item.id)
+                                if(item.review == 1 || item.review == 0){
+                                    apiArray.push(item.id)
+                                }
                             })
                         }
+                        //查看详情保存数据，用到用户无修改提示
+                        this.birgeObject = {
+                            name:data.data.data.name,
+                            introduction:data.data.data.introduction,
+                            typeID:data.data.data.typeID,
+                            apiIds:apiArray
+                        };
                         this.getInterface(data.data.data.typeID,apiArray)
                     }else{
                         this.$message.warning(data.errorInfo)
@@ -237,13 +274,12 @@
                 })
             },
             getInterface(id,ArrayId){
-                getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
-                    console.log(data);
-                });
-
+                /*getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
+                    console.log(data);  又改令人头大
+                });*/
                 getApplicationTypesInterfaceList().then(({data})=>{
                     if(data.data){
-                        /*给外层一个默认值 内层一个外层index备用*/
+                        /*给外层一个默认值 内层一个外层index备用，为什么这么搞，后面我自己也看不懂了*/
                         data.data.list.forEach((item,index)=>{
                             item.isShow = true;
                             item.index = index;

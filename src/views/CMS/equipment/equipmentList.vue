@@ -59,11 +59,11 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="设备编号">
-                        <el-input :maxlength="200" v-model="formData.no" placeholder="请输入设备编号"></el-input>
+                        <el-input :maxlength="400" v-model="formData.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
                     </el-form-item>
                     <el-form-item label="设备名称">
-                        <el-input :maxlength="200" v-model="formData.name" placeholder="请输入设备名称"></el-input>
+                        <el-input :maxlength="400" v-model="formData.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
                 </el-form>
                 <div class="equipment_form_btn">
@@ -73,7 +73,7 @@
                         <span class="equipment_form_btn_span">离线：<span style="color: #E56565;">{{totalList.offLineCount}}</span></span>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search(1)">查询</el-button>
+                        <el-button type="primary" @click="searchList(1)">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
@@ -281,7 +281,7 @@
 </template>
 
 <script>
-    import { textLen } from '@/lib/utils'
+    import { textLen,strlength } from '@/lib/utils'
     import { getEquipmentList,getLineTotal,getEquipmentLocation,getEquipmentType,getEquipmentState,lineEquipment,getEquipmentArea,getEquipmentDetail,getFaceGroupOne,getFaceGroupTwo,getFaceList,addEquipment,editEquipment } from '@/HttpApi/equipment/equipment'
     export default {
         name: "equipmentList",
@@ -299,7 +299,11 @@
             };
             let name = (rule, value, callback) => {
                 if(value){
-                    return callback()
+                    if(this.strlength(value) > 50){
+                        return callback(new Error('设备名称限制50英文字符以内'))
+                    }else{
+                        return callback()
+                    }
                 }else{
                     return callback(new Error('请输入设备名称'))
                 }
@@ -327,6 +331,7 @@
             };
             return{
                 textLen:textLen,
+                strlength:strlength,
                 formData:{
                     company:'',//公司
                     department:'',//部门
@@ -492,7 +497,24 @@
                 };
 
             },
+            searchList(){
+                if(this.formData.company == '' && this.formData.department == '' && this.formData.floor == '' && this.formData.type == '' && this.formData.online == '' && this.formData.no == '' && this.formData.name == ''){
+                    this.$message.warning('请输入查询条件');
+                    return;
+                }
+                this.search(1)
+            },
             search(page){
+                let nameArr = this.formData.name.replace('，',',').split(',');
+                let noArr = this.formData.no.replace('，',',').split(',');
+                if(nameArr.length > 10 ){
+                    this.$message.warning('设备名称查询最多支持十条');
+                    return;
+                }
+                if(noArr.length > 10 ){
+                    this.$message.warning('设备编号查询最多支持十条');
+                    return;
+                }
                 if(page==1){
                     this.page = {
                         page:1,

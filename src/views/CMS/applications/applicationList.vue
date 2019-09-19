@@ -69,13 +69,13 @@
                         <el-button type="primary" :disabled="userInfo.groupID!=20" @click="addapplication">创建应用</el-button>
                     </div>
                     <div>
-                        <el-button type="primary" @click="search(1)">查询</el-button>
+                        <el-button type="primary" @click="searchList">查询</el-button>
                         <el-button @click="reset">清空</el-button>
                     </div>
                 </div>
             </div>
             <div class="application_list_table">
-                <el-table :data="tableData" empty-text="您还未创建应用" style="width: 100%">
+                <el-table :data="tableData" style="width: 100%">
                     <el-table-column align="center" label="应用名称">
                         <template slot-scope="scope">
                             <el-tooltip placement="top">
@@ -123,21 +123,21 @@
                               <el-button type="text" v-if="scope.row.reviewState == 20" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                               <!-- 审核通过 -->
                               <el-button type="text" v-if="scope.row.reviewState == 21" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 21 && scope.row.state==10" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 21 && scope.row.state==11" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 21 && scope.row.state==0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 21 && scope.row.state==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                               <!-- 修改待提交审核 -->
                               <el-button type="text" v-if="scope.row.reviewState == 2" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==10" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==11" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 2 && scope.row.state==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                               <!-- 修改待审核 -->
                               <el-button type="text" v-if="scope.row.reviewState == 11" @click="audit(scope.row)">审核</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 11 && scope.row.state==10" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 11 && scope.row.state==11" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 11 && scope.row.state==0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 11 && scope.row.state==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                               <el-button type="text" v-if="scope.row.reviewState == 11" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
                               <!-- 修改审核不通过 -->
                               <el-button type="text" v-if="scope.row.reviewState == 22" style="color: #E56565;" @click="remove(scope.row)">删除</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 22 && scope.row.state==10" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
-                              <el-button type="text" v-if="scope.row.reviewState == 22 && scope.row.state==11" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 22 && scope.row.state==0" style="color: #67C23A;" @click="on(scope.row)">启用</el-button>
+                              <el-button type="text" v-if="scope.row.reviewState == 22 && scope.row.state==1" style="color: #E56565;" @click="off(scope.row)">禁用</el-button>
                             </template>
                             <!-- 平台管理员 -->
                             <template v-if="userInfo.groupID == 10">
@@ -305,8 +305,30 @@
             addapplication() {
                 this.$router.push({path: '/Index/addApplication', query: {type: 'add',NavType:'VIS-A-VIS'}})
             },
+            searchList(){
+                if (this.formData.name == '' && this.formData.id == '' && this.formData.reviewState == '' && this.formData.state == '' && this.formData.createrName == '' && this.formData.dataTime == null){
+                    this.$message.warning('请输入查询条件');
+                    return;
+                }
+                this.search(1)
+            },
             search(page) {
                 //查询应用列表
+                let nameArr = this.formData.name.replace('，',',').split(',');
+                let idArr = this.formData.id.split(',');
+                let createrNameArr = this.formData.createrName.replace('，',',').split(',');
+                if(nameArr.length > 10 ){
+                    this.$message.warning('应用名称查询最多支持十条');
+                    return;
+                }
+                if(idArr.length > 10 ){
+                    this.$message.warning('APPID查询最多支持十条');
+                    return;
+                }
+                if(createrNameArr.length > 10 ){
+                    this.$message.warning('创建人查询最多支持十条');
+                    return;
+                }
                 if(page==1){
                     this.page = {
                         page: 1,

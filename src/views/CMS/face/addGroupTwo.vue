@@ -149,12 +149,12 @@
                             :before-upload="allhandleChange">
                             <el-button type="primary" :loading="uploadLoading">批量添加</el-button>
                         </el-upload>
-                        <a :href="downloadUrl" download="" title="下载">
+                        <a href="/static/fill/face.zip" download="" title="下载">
                             <el-button type="text">下载批量添加模板</el-button>
                         </a>
                     </div>
                     <div>
-                        <el-button type="primary" @click="dialogSearch(1)">查询</el-button>
+                        <el-button type="primary" @click="dialogSearchList">查询</el-button>
                         <el-button @click="dialogReset">清空</el-button>
                     </div>
                 </div>
@@ -208,7 +208,7 @@
 </template>
 
 <script>
-    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl,downloadUrl } from '@/HttpApi/face/face'
+    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl } from '@/HttpApi/face/face'
     export default {
         name: "addGroupTwo",
         data(){
@@ -249,7 +249,6 @@
                 faceType:[],//人脸类型
                 faceNoType:[],//编号系统
                 uploadUrl:uploadUrl,
-                downloadUrl:downloadUrl,
                 uploadLoading:false,
             }
         },
@@ -345,6 +344,13 @@
             ok(){
                 //关闭所有
                 this.$router.push({path:'/Index/faceList'})
+            },
+            dialogSearchList(){
+                if(this.dataDialogForm.names == '' && this.dataDialogForm.ids == '' && this.dataDialogForm.nos == '' && this.dataDialogForm.noType == '' && this.dataDialogForm.picFromIDs == '' && this.dataDialogForm.sex == '' && this.dataDialogForm.types == ''){
+                    this.$message.warning('请输入查询条件');
+                    return;
+                }
+                this.dialogSearch(1);
             },
             dialogSearch(page){
               //faceListBirge数组里面未置空存在上次勾选的数据
