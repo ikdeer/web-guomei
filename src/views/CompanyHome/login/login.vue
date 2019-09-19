@@ -61,7 +61,7 @@
               username:'',//用户名
               password:'',//密码
               code:'',//图片验证码
-              codeImg:'/gm/generating/code',
+              codeImg:'./generating/code',
             },
             userInfo:{
               userName:'',//用户姓名
