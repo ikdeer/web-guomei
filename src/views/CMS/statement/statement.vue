@@ -272,7 +272,7 @@
                         this.page.total = data.pagerManager? data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
                         this.tableData.forEach((item,index)=>{
-                            days.push(item.days);
+                            days.push(item.lastCallTime);
                             callSucessCount.push(item.callSucessCount);
                             callFailCount.push(item.callFailCount);
                         });
