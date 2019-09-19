@@ -1,5 +1,5 @@
 import AxIos from "../HttpApi";
-const HttpApi = '.';
+const HttpApi = process.env.BASE_URL;
 //获取人脸分组列表
 export const getFaceList = ({ page,pageSize,faceGroupCreators,faceGroupIds,faceGroupNames,createTimeStart,createTimeEnd }) => AxIos({
     url: '/faceGroup/show',

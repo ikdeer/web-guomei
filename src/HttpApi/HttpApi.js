@@ -3,8 +3,9 @@ import axios from 'axios'
 import router from '@/router'
 import Cookie from 'js-cookie'
 
-//全局接口http://10.128.18.12:8091
-const HttpApi = '.';
+
+//全局接口http://10.128.18.12:8091  process.env.BASE_URL;
+const HttpApi = process.env.BASE_URL;
 
 //创建axios实例
 const AxIos = axios.create({
