@@ -291,6 +291,7 @@
                                 containLabel: true
                             },
                             toolbox: {
+                                x:'96%',
                                 feature: {
                                     saveAsImage: {
                                         show: true
@@ -367,6 +368,7 @@
             },
             getApiSelectList(){
                 if(this.formData.appIds == ''){
+                    this.formData.apiIds = '';
                     this.formData.apiList = [];
                     return;
                 }
@@ -386,7 +388,6 @@
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
-
                 })
             },
             apiChange(row){

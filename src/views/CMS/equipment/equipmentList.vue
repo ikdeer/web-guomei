@@ -186,7 +186,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item prop="siteThree" required>
+                    <el-form-item prop="siteThree" required v-if="!isGmdq">
                         <el-select v-model="dialogInfo.siteThree" placeholder="请选择所属楼层">
                             <el-option v-for="item in siteThree"
                                        :label="item.floorName"
