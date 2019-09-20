@@ -147,10 +147,10 @@ export const getFaceGroupShow = ({ page,pageCount,faceGroupID,id,sub1,sub2 }) =>
 });
 
 //删除人脸绑定数据
-export const deleteFaceGroup = ({ ids }) => AxIos({
+export const deleteFaceGroup = ({ ids,sub1,sub2,faceGroupID }) => AxIos({
     url: '/face2Group/del',
     method: 'post',
-    data:{ids }
+    data:{ ids,sub1,sub2,faceGroupID }
 });
 
 //获取第二子分组数量

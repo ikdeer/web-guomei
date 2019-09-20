@@ -890,11 +890,19 @@
                 if(index == 2){
                     if(this.siteTwo[this.dialogInfo.siteTwo].name == '国美电器'){
                         this.isGmdq = true;
+                        this.dialogInfo.siteThree = this.siteTwo[this.dialogInfo.siteTwo].list[0].id
                     }else{
+                        this.dialogInfo.siteThree = '';
                         this.isGmdq = false;
                     }
-                    this.dialogInfo.siteThree = '';
                     this.siteThree = this.siteTwo[this.dialogInfo.siteTwo].list;
+                    this.dialogInfo.shopOne = '';
+                    this.dialogInfo.shopTwo = '';
+                    this.dialogInfo.shopThree = '';
+                    this.dialogInfo.shopFour = '';
+                    this.shopTwo = [];
+                    this.shopThree = [];
+                    this.shopFour = [];
                 }
             },
             ClickShop(index){
@@ -973,7 +981,11 @@
                 });
                 //获取人脸分组下拉框
                 getFaceList({page:1, pageSize:100}).then(({data})=>{
-                    this.faceGroup = data.data.list;
+                    if(data.data){
+                        this.faceGroup = data.data.list;
+                    }else{
+                        this.faceGroup =[]
+                    }
                 })
             },
         },
