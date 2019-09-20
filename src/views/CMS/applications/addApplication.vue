@@ -208,7 +208,7 @@
                             params.id = this.$route.query.id;
                             editApplication(params).then(({data})=>{
                                 if(data.errorCode ==200){
-                                    this.$message.success('编辑成功');
+                                    this.$message.success('修改成功');
                                     this.onback()
                                 }else{
                                     this.$message.warning(data.errorInfo)

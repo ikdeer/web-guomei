@@ -291,7 +291,7 @@
                                 containLabel: true
                             },
                             toolbox: {
-                                x:'96%',
+                                x:'94%',
                                 feature: {
                                     saveAsImage: {
                                         show: true
