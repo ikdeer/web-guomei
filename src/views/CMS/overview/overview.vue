@@ -97,25 +97,14 @@
         <div class="overIew-basics">
           <p class="basics-topText">基础应用</p>
           <div class="basics-ListPad">
-            <div class="basics-ListPad_face">
-              <img src="/static/images/face_icon@2x.png" alt="">
+            <div class="basics-ListPad_face"
+                 v-for="(item,index) in BasicUseList"
+                 @click="ClickBasicsURL(item)"
+                 :key="item.BasicUseId">
+              <img :src="item.BasicUseImg" alt="">
               <div class="face-Text">
-                <h4>人脸识别</h4>
-                <p>包括人脸检测、人脸比对、人脸属性分析、1：n人脸 检索、1：1人脸检索及人脸库管理</p>
-              </div>
-            </div>
-            <div class="basics-ListPad_face">
-              <img src="/static/images/head_icon@2x.png" alt="">
-              <div class="face-Text">
-                <h4>活体检测</h4>
-                <p>支持应用终端、服务端的人脸动作活体检测</p>
-              </div>
-            </div>
-            <div class="basics-ListPad_face">
-              <img src="/static/images/certificate_icon@2x.png" alt="">
-              <div class="face-Text">
-                <h4>文字识别</h4>
-                <p>支持身份证、银行卡文字 识别</p>
+                <h4>{{item.BasicUseTitle}}</h4>
+                <p>{{item.BasicUseText}}</p>
               </div>
             </div>
           </div>
@@ -123,42 +112,31 @@
         <div class="overIew-scene">
           <div class="scene-top">
             <p class="scene-topText">常用应用场景</p>
-            <router-link class="overIew-fixed" tag="div" :to="{path:'/Company/solution'}">
+            <div class="overIew-fixed" @click="ClickBasicsURL">
               <span>更多</span>
               <i class="el-icon-arrow-right"></i>
-            </router-link>
+            </div>
           </div>
           <div class="scene-ListPad">
-            <div class="ListPad-scene">
+            <div class="ListPad-scene"
+                 v-for="(item,index) in CommonUseList"
+                 @click="ClickBasicsURL(item)"
+                 :class="{
+                 'ListPad-bgBlue':item.CommonUseId == 1,
+                 'ListPad-RKE':item.CommonUseId == 2,
+                 'ListPad-bgRed':item.CommonUseId == 3
+                 }">
               <div class="ListPad-scene_center">
-                <img src="/static/images/attendance_icon@2x.png" alt="">
-                <p class="scene-Title">刷脸考勤</p>
-                <p class="scene-Text">包括人脸检测、人脸比对、人脸属性分析、1：n人脸检索、1：1人脸检索及人脸库管理</p>
+                <img :src="item.CommonUseImg" alt="">
+                <p class="scene-Title">{{item.CommonUseTitle}}</p>
+                <p class="scene-Text">{{item.CommonUseText}}</p>
                 <div class="scene-Text_span">
                   <span>主要服务：</span>
-                  <span>人脸检测</span>
-                </div>
-              </div>
-            </div>
-            <div class="ListPad-scene ListPad-RKE">
-              <div class="ListPad-scene_center">
-                <img src="/static/images/guard_icon@2x.png" alt="">
-                <p class="scene-Title">刷脸门禁考勤</p>
-                <p class="scene-Text">支持应用终端、服务端的人脸动作活体检测</p>
-                <div class="scene-Text_span">
-                  <span>主要服务：</span>
-                  <span class="ListPad-Text_RKE">人脸检索</span>
-                </div>
-              </div>
-            </div>
-            <div class="ListPad-scene ListPad-bgRed">
-              <div class="ListPad-scene_center">
-                <img src="/static/images/security_icon@2x.png" alt="">
-                <p class="scene-Title">安防监控</p>
-                <p class="scene-Text">支持身份证、银行卡文字识别</p>
-                <div class="scene-Text_span">
-                  <span>主要服务：</span>
-                  <span class="ListPad-TextRed">人脸检索</span>
+                  <span :class="{
+                  'ListPad-Text_BLUER':item.CommonUseId == 1,
+                  'ListPad-Text_RKE':item.CommonUseId == 2,
+                  'ListPad-Text_RED':item.CommonUseId == 3
+                  }">{{item.CommonUseLabel}}</span>
                 </div>
               </div>
             </div>
@@ -226,6 +204,49 @@ export default {
         },
         tableData: [],//列表数据
         groupID:'',//登录人员身份
+        BasicUseList:[
+          {
+            BasicUseImg:'/static/images/face_icon@2x.png',
+            BasicUseTitle:'人脸识别',
+            BasicUseText:'包括人脸检测、人脸比对、人脸属性分析、1：n人脸 检索、1：1人脸检索及人脸库管理',
+            BasicUseId:1
+          },
+          {
+            BasicUseImg:'/static/images/head_icon@2x.png',
+            BasicUseTitle:'活体检测',
+            BasicUseText:'支持应用终端、服务端的人脸动作活体检测',
+            BasicUseId:2
+          },
+          {
+            BasicUseImg:'/static/images/certificate_icon@2x.png',
+            BasicUseTitle:'文字识别',
+            BasicUseText:'支持身份证、银行卡文字 识别',
+            BasicUseId:3
+          },
+        ],
+        CommonUseList:[
+          {
+            CommonUseImg:'/static/images/attendance_icon@2x.png',
+            CommonUseTitle:'刷脸考勤',
+            CommonUseText:'包括人脸检测、人脸比对、人脸属性分析、1：n人脸检索、1：1人脸检索及人脸库管理',
+            CommonUseLabel:'人脸检测',
+            CommonUseId:1,
+          },
+          {
+            CommonUseImg:'/static/images/guard_icon@2x.png',
+            CommonUseTitle:'刷脸门禁考勤',
+            CommonUseText:'支持应用终端、服务端的人脸动作活体检测',
+            CommonUseLabel:'人脸检索',
+            CommonUseId:2,
+          },
+          {
+            CommonUseImg:'/static/images/security_icon@2x.png',
+            CommonUseTitle:'安防监控',
+            CommonUseText:'支持身份证、银行卡文字识别',
+            CommonUseLabel:'人脸检索',
+            CommonUseId:3,
+          },
+        ]
       }
     },
     methods:{
@@ -242,7 +263,6 @@ export default {
       },
       //选择时间
       TimeBluer(){
-          console.log(this.TimeData.TimeDate);
           getApisConSumpTion({
           'timeStart':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[0]) : '',//开始时间
           'timeEnd':this.TimeData.TimeDate != null ? this.TimeCycle(this.TimeData.TimeDate[1]) : '',//结束时间
@@ -259,23 +279,16 @@ export default {
           }
         })
       },
-      //应用App用量列表
-      /*getApisConSumpTion(){
-        getApisConSumpTion(this.TimeData).then(response => {
-          if(response.data.errorCode == 200){
-            if(response.data.data){
-              this.tableData = response.data.data.list;
-            }else{
-              this.tableData = [];
-            }
-          }else{
-            this.$message.warning(response.data.errorInfo);
-          }
-        })
-      },*/
       //跳转监控报表
       clickStatement(scope){
         this.$router.push({path:'/Index/statement',query:{id:scope.row.id,NavType:'overview'}});
+      },
+      //跳转到前台产品服务页面
+      ClickBasicsURL(item){
+        let routeData = this.$router.resolve({
+          path: '/Company/product',
+        });
+        window.open(routeData.href, '_blank');
       },
       //时间转换格式2019-01-01 00:00:00
       TimeCycle(Time){
@@ -293,7 +306,6 @@ export default {
       this.groupID = JSON.parse(this.Cookies.get('userInfo')).groupID;
       this.TimeBluer();
       this.getAppAudit();
-      // this.getApisConSumpTion();
     }
 }
 </script>
@@ -485,6 +497,7 @@ export default {
           display: -webkit-flex;
           align-items: center;
           border: 1px solid #409EFF;
+          cursor: pointer;
           img{
             width: 1.5rem;
             height: 1.32rem;
@@ -552,12 +565,12 @@ export default {
         .ListPad-scene{
           width: 32%;
           height:2.86rem;
-          border: 1px solid #409EFF;
           background:rgba(241,249,255,1);
           display: flex;
           display: -webkit-flex;
           align-items: center;
           justify-content: center;
+          cursor: pointer;
           .ListPad-scene_center{
             width: 3.23rem;
             >img{
@@ -594,13 +607,16 @@ export default {
               }
               span:last-child{
                 font-size:0.16rem;
+
+              }
+              .ListPad-Text_BLUER{
                 color: #409EFF;
               }
               .ListPad-Text_RKE{
-                color:#F79648 !important;
+                color:#F79648;
               }
-              .ListPad-TextRed{
-                color:#ED6A65 !important;
+              .ListPad-Text_RED{
+                color:#ED6A65;
               }
             }
           }
@@ -612,6 +628,10 @@ export default {
         .ListPad-bgRed{
           border: 1px solid #ED6A65;
           background:rgba(255,235,234,1);
+        }
+        .ListPad-bgBlue{
+          border: 1px solid #409EFF;
+          background:rgba(241,249,255,1);
         }
       }
     }

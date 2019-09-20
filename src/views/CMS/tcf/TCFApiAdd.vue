@@ -110,6 +110,17 @@
 export default {
   name: "TCFApi",
   data(){
+    let Title = (rule, value, callback) => {
+      if(value){
+        if(/^[\s]*$/.test(value)){
+          return callback(new Error('请输入标题名称'));
+        }else{
+          return callback();
+        }
+      }else{
+        return callback(new Error('请输入标题名称'));
+      }
+    };
     return {
       catalogText:{
         Title:'',//标题
@@ -158,7 +169,7 @@ export default {
         },
       },
       rules:{
-        Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
+        Title:[{validator:Title,trigger:['blur','change']}],
         OneLevel:[{ required: true, message: '请选择一级类目', trigger: 'blur' }],
         bbsContent:[{ required: true, message: '请填写要发布的API公告版内容', trigger: 'blur,change' }]
       }
@@ -243,46 +254,21 @@ export default {
       let _this = this;
       this.$refs.catalogText.validate((valid) => {
         if(valid){
-          if(this.catalogText.secondLevelData != null && this.catalogText.secondLevel != ''){
-            getTechDocCreate({
-              name:this.catalogText.Title,
-              title1:this.catalogText.OneLevel,
-              title2:this.catalogText.secondLevel,
-              txt:this.catalogText.bbsContent,
-            }).then(response => {
-              if(response.data.success){
-                this.$message({message: '创建成功~~~',type: 'success'});
-                setTimeout(()=>{
-                  _this.$router.push({path:'/Index/TCFApiList'})
-                },300)
-              }else{
-                this.$message.error(response.data.errorInfo);
-              }
-            })
-          }else{
-            if(this.catalogText.secondLevelData == null){
-              getTechDocCreate({
-                name:this.catalogText.Title,
-                title1:this.catalogText.OneLevel,
-                title2:this.catalogText.secondLevel,
-                txt:this.catalogText.bbsContent,
-              }).then(response => {
-                if(response.data.success){
-                  this.$message({message: '创建成功~~~',type: 'success'});
-                  setTimeout(()=>{
-                    _this.$router.push({path:'/Index/TCFApiList'})
-                  },300)
-                }else{
-                  this.$message.error(response.data.errorInfo);
-                }
-              })
+          getTechDocCreate({
+            name:this.catalogText.Title,
+            title1:this.catalogText.OneLevel,
+            title2:this.catalogText.secondLevel,
+            txt:this.catalogText.bbsContent,
+          }).then(response => {
+            if(response.data.success){
+              this.$message({message: '创建成功~~~',type: 'success'});
+              setTimeout(()=>{
+                _this.$router.push({path:'/Index/TCFApiList'})
+              },300)
             }else{
-              this.$message({
-                message: '二级目录必选项！！！',
-                type: 'warning'
-              });
+              this.$message.error(response.data.errorInfo);
             }
-          }
+          })
         }
       })
     },
