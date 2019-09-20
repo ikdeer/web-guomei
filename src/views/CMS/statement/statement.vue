@@ -94,8 +94,8 @@
                     </div>
                     <div>
                         <el-radio-group @change="ClickRadio" v-model="radio">
-                            <el-radio label="1">按日</el-radio>
-                            <el-radio label="2">按时</el-radio>
+                            <el-radio label="0">按日</el-radio>
+                            <el-radio label="1">按时</el-radio>
                         </el-radio-group>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
                     ]
                 },
                 tableData:[],
-                radio:'1',
+                radio:'0',
                 callData:{
                     callDataCount: 0,
                     callFailCount: 0,
