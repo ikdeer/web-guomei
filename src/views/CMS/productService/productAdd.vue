@@ -29,10 +29,8 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
-                  :show-file-list="false">
-                  :action="url.uploadImg"
                   :on-success="handleAvatarSuccess"
-                  >
+                  :show-file-list="false">
                   <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -70,9 +68,9 @@
                 :show-file-list="false"
                 :auto-upload="false"
                 :on-change="getFile"
-                :before-upload="beforeUpload">
                 :action="url.uploadImg"
-                :on-success="handleAvatarSuccess2">
+                :on-success="handleAvatarSuccess2"
+                :before-upload="beforeUpload">
               </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
@@ -97,9 +95,7 @@
   </div>
 </template>
 <script>
-    import {
-        productServiceCreate
-    } from "@/HttpApi/product/productApi";
+    import {productServiceCreate} from "@/HttpApi/product/productApi";
     //引入编辑器
     import * as Quill from 'quill';
     import { ImageDrop } from 'quill-image-drop-module';
@@ -332,7 +328,7 @@
               .avatar-uploader-icon {
                 font-size: 28px;
                 color: #8c939d;
-                width: 160px;
+                width: 422px;
                 height: 160px;
                 line-height: 160px;
                 text-align: center;

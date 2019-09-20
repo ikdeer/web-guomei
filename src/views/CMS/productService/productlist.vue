@@ -66,9 +66,7 @@
 </template>
 
 <script>
-    import {
-        getProductServiceShow
-    } from "@/HttpApi/product/productApi";
+    import {getProductServiceShow} from "@/HttpApi/product/productApi";
     export default {
         name: "productList",
         data(){
@@ -80,7 +78,7 @@
                 },
                 tableData:[],
                 page:{
-                    page:1,
+                    pageNum:1,
                     pageSize:10,
                     total:0
                 }
@@ -103,26 +101,19 @@
                 this.loadData()
             },
             handleCurrentChange(val){
-                this.page.currentPage = val;
+                this.page.pageNum = val;
                 this.loadData()
             },
-            loadData(page) {
-                if(page==1){
-                    this.page = {
-                        page:1,
-                        pageSize:10,
-                        total:0
-                    }
-                }
+            loadData() {
                 let params = {
                     ...this.formData,
-                    page:this.page.currentPage,
+                    page:this.page.pageNum,
                     pageSize: this.page.pageSize
                 };
                 getProductServiceShow(params).then(response=>{
                     if(response.data.success){
-                        this.tableData = response.data.data.list;
-                        this.page.total = response.data.pagerManager.totalResults;//总条数
+                        this.tableData = response.data.data ? response.data.data.list : [];
+                        this.page.total = response.data.pagerManager ? response.data.pagerManager.totalResults : 0;//总条数
                     }
                 })
             }

@@ -1,13 +1,22 @@
 import AxIos from "../HttpApi";
 
 /**
- * 解决方案列表
+ * 产品服务列表
  **/
-export const getSolutionShow = (params) => {
+export const getProductServiceShow = (params) => AxIos({
+  url: '/productService/show',
+  method: 'get',
+  params: params,
+});
+
+/**
+ * 产品服务创建
+ **/
+export const productServiceCreate = (params) => {
   return new Promise(resolve => {
-    AxIos.get('/solution/show', params).then(response => {
+    AxIos.post('/productService/create', params).then(response => {
       resolve(response)
     })
   })
-}
+};
 
