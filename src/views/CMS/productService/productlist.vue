@@ -21,32 +21,28 @@
             <el-table-column align="center" width="55" type="selection"></el-table-column>
             <el-table-column align="center" label="服务名称">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.title}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="排序">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.sort}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="缩略图">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.imgUrl}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="URL">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.imgUrl}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
-                <router-link :to="{path:'/Index/productDetails',query:{Id:''}}">
-                  <el-button type="text" style="color:#409eff;">查看</el-button>
-                </router-link>
-                <router-link :to="{path:'/Index/productEdit',query:{Id:''}}">
-                  <el-button type="text" style="color:#67c23a;">编辑</el-button>
-                </router-link>
+                <el-button type="text" style="color:#409eff;">查看</el-button>
+                <el-button type="text" style="color:#67c23a;">编辑</el-button>
                 <el-button type="text" style="color:#f56c6c;">删除</el-button>
               </template>
             </el-table-column>
@@ -70,46 +66,71 @@
 </template>
 
 <script>
-  export default {
-    name: "productList",
-    data(){
-      return {
-        formData:{
-          user:'',
-          ip:'',
-          dataTime:'',
+    import {
+        getProductServiceShow
+    } from "@/HttpApi/product/productApi";
+    export default {
+        name: "productList",
+        data(){
+            return {
+                formData:{
+                    user:'',
+                    ip:'',
+                    dataTime:'',
+                },
+                tableData:[],
+                page:{
+                    page:1,
+                    pageSize:10,
+                    total:0
+                }
+            }
         },
-        tableData:[],
-        page:{
-          currentPage:1,
-          pageSize:10,
-          total:0
+        methods:{
+            //删除
+            ClickDelete(typeId){
+                this.$confirm('此操作将永久删除这条数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    customClass:'gm-configItem',
+                    type: 'warning'
+                }).then(() => {
+
+                }).catch(() => {});
+            },
+            handleSizeChange(val){
+                this.page.pageSize = val;
+                this.loadData()
+            },
+            handleCurrentChange(val){
+                this.page.currentPage = val;
+                this.loadData()
+            },
+            loadData(page) {
+                if(page==1){
+                    this.page = {
+                        page:1,
+                        pageSize:10,
+                        total:0
+                    }
+                }
+                let params = {
+                    ...this.formData,
+                    page:this.page.currentPage,
+                    pageSize: this.page.pageSize
+                };
+                getProductServiceShow(params).then(response=>{
+                    if(response.data.success){
+                        this.tableData = response.data.data.list;
+                        this.page.total = response.data.pagerManager.totalResults;//总条数
+                    }
+                })
+            }
+        },
+        mounted(){
+            this.loadData()
         }
-      }
-    },
-    methods:{
-      //删除
-      ClickDelete(typeId){
-        this.$confirm('此操作将永久删除这条数据, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          customClass:'gm-configItem',
-          type: 'warning'
-        }).then(() => {
-
-        }).catch(() => {});
-      },
-      handleSizeChange(val){
-        this.page.pageSize = val;
-      },
-      handleCurrentChange(val){
-        this.page.currentPage = val;
-      },
-    },
-    mounted(){
-
     }
-  }
 </script>
 
 <style lang="scss">

@@ -30,6 +30,9 @@
                   class="avatar-uploader"
                   action=""
                   :show-file-list="false">
+                  :action="url.uploadImg"
+                  :on-success="handleAvatarSuccess"
+                  >
                   <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
@@ -68,6 +71,8 @@
                 :auto-upload="false"
                 :on-change="getFile"
                 :before-upload="beforeUpload">
+                :action="url.uploadImg"
+                :on-success="handleAvatarSuccess2">
               </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
@@ -92,145 +97,195 @@
   </div>
 </template>
 <script>
-  //引入编辑器
-  import * as Quill from 'quill';
-  import { ImageDrop } from 'quill-image-drop-module';
-  //quill图片可拖拽改变大小
-  import ImageResize from 'quill-image-resize-module';
-  //quill编辑器的字体
-  var fonts = ['SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman','sans-serif'];
-  var fontSize = ['10px', '12px', '14px', '16px', '20px', '24px', '36px'];
-  var fontSizeStyle = Quill.import('attributors/style/size');
-  var Font = Quill.import('formats/font');
-  //将字体加入到白名单
-  Font.whitelist = fonts;
-  fontSizeStyle.whitelist = fontSize;
-  Quill.register(Font, true);
-  Quill.register(fontSizeStyle, true);
-  Quill.register('modules/imageDrop', ImageDrop);
-  Quill.register('modules/imageResize', ImageResize);
-  export default {
-    name: "productAdd",
-    data(){
-      return {
-        catalogText:{
-          Title:'',//标题
-          coverImg:'',//首页封面
-          introduceText:'',//介绍
-          URL:'',//跳转地址
-          sortNum:'',//排序
-          bbsContent:'',//文本内容
-          quillUpdateImg:'',//图片上传动画
-        },
-        labelPosition:'right',//form对其方式
-        editorOption: {
-          theme: 'snow',
-          placeholder: '请填写要发布的公告版内容...',
-          modules: {
-            toolbar: {
-              // 工具栏
-              container: [
-                ['bold', 'italic', 'underline', 'strike'],        //加粗，斜体，下划线，删除线
-                ['blockquote', 'code-block'],         //引用，代码块
-                [{ 'header': 1 }, { 'header': 2 }],               // 标题，键值对的形式；1、2表示字体大小
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],          //列表
-                [{ 'script': 'sub'}, { 'script': 'super' }],      // 上下标
-                [{ 'indent': '-1'}, { 'indent': '+1' }],          // 缩进
-                [{ 'direction': 'rtl' }],                         // 文本方向
-                [{ 'size': fontSize }],  // 字体大小
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],         //几级标题
-                [{ 'color': [] }, { 'background': [] }],          // 字体颜色，字体背景颜色
-                [{ 'font': fonts }],         //字体
-                [{ 'align': [] }],        //对齐方式
-                ['clean'],        //清除字体样式
-                ['image']        //上传图片、上传视频
-              ],
-              handlers:{
-                'image':function(value){
-                  if(value){
-                    // 触发input框选择图片文件
-                    document.querySelector('.avatar-uploaderImg input').click();
-                  }else{
-                    this.quill.format('image', false);
-                  }
+    import {
+        productServiceCreate
+    } from "@/HttpApi/product/productApi";
+    //引入编辑器
+    import * as Quill from 'quill';
+    import { ImageDrop } from 'quill-image-drop-module';
+    //quill图片可拖拽改变大小
+    import ImageResize from 'quill-image-resize-module';
+    //quill编辑器的字体
+    var fonts = ['SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman','sans-serif'];
+    var fontSize = ['10px', '12px', '14px', '16px', '20px', '24px', '36px'];
+    var fontSizeStyle = Quill.import('attributors/style/size');
+    var Font = Quill.import('formats/font');
+    //将字体加入到白名单
+    Font.whitelist = fonts;
+    fontSizeStyle.whitelist = fontSize;
+    Quill.register(Font, true);
+    Quill.register(fontSizeStyle, true);
+    Quill.register('modules/imageDrop', ImageDrop);
+    Quill.register('modules/imageResize', ImageResize);
+    export default {
+        name: "productAdd",
+        data(){
+            return {
+                catalogText:{
+                    Title:'',//标题
+                    coverImg:'',//首页封面
+                    introduceText:'',//介绍
+                    URL:'',//跳转地址
+                    sortNum:'',//排序
+                    bbsContent:'',//文本内容
+                    quillUpdateImg:'',//图片上传动画
+                },
+                labelPosition:'right',//form对其方式
+                editorOption: {
+                    theme: 'snow',
+                    placeholder: '请填写要发布的公告版内容...',
+                    modules: {
+                        toolbar: {
+                            // 工具栏
+                            container: [
+                                ['bold', 'italic', 'underline', 'strike'],        //加粗，斜体，下划线，删除线
+                                ['blockquote', 'code-block'],         //引用，代码块
+                                [{ 'header': 1 }, { 'header': 2 }],               // 标题，键值对的形式；1、2表示字体大小
+                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],          //列表
+                                [{ 'script': 'sub'}, { 'script': 'super' }],      // 上下标
+                                [{ 'indent': '-1'}, { 'indent': '+1' }],          // 缩进
+                                [{ 'direction': 'rtl' }],                         // 文本方向
+                                [{ 'size': fontSize }],  // 字体大小
+                                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],         //几级标题
+                                [{ 'color': [] }, { 'background': [] }],          // 字体颜色，字体背景颜色
+                                [{ 'font': fonts }],         //字体
+                                [{ 'align': [] }],        //对齐方式
+                                ['clean'],        //清除字体样式
+                                ['image']        //上传图片、上传视频
+                            ],
+                            handlers:{
+                                'image':function(value){
+                                    if(value){
+                                        // 触发input框选择图片文件
+                                        document.querySelector('.avatar-uploaderImg input').click();
+                                    }else{
+                                        this.quill.format('image', false);
+                                    }
+                                }
+                            }
+                        },
+                        imageResize: {}
+                    },
+                },
+                rules:{
+                    Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
+                    coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
+                    introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
+                    URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
+                    sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
+                    bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
+                },
+                url: {
+                    uploadImg: `${process.env.BASE_URL}/upload2`
                 }
-              }
-            },
-            imageResize: {}
-          },
-        },
-        rules:{
-          Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-          coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
-          introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
-          URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-          sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
-          bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
-        }
-      }
-    },
-    methods:{
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
-      //图片上传
-      getFile(file,fileList){
-        let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
-          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
-              // 获取光标所在位置
-              let length = quill.getSelection().index;
-              // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
-              // 调整光标到最后
-              quill.setSelection(length + 1);
-              // loading动画消失
-              this.catalogText.quillUpdateImg = false;
-            }else{
-              this.$message.error(response.data.errorInfo);
             }
-          })
-        })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
-      },
-      //重置
-      cancel(){
-        this.$refs.catalogText.resetFields();
-      },
-      //保存并发布
-      addDomain(){
-        let _this = this;
-        this.$refs.catalogText.validate((valid) => {
-          if(valid){
+        },
+        methods:{
+            // 图片上传成功回调
+            handleAvatarSuccess(res, file) {
+                console.log(`res: ${JSON.stringify(res)}`);
+                if (res.success) {
+                    let url = res.data.path
+                    url = `${process.env.BASE_URL}/image/view/${url}`;
+                    this.catalogText.coverImg = url;
+                }
+            },
+            // 图片上传成功回调
+            handleAvatarSuccess2(res, file) {
+                console.log(`res: ${JSON.stringify(res)}`);
+                if (res.success) {
+                    let url = res.data.path
+                    url = `${process.env.BASE_URL}/${url}`;
+                    let quill = this.$refs.myQuillEditor.quill;
+                    // 获取光标所在位置
+                    let length = quill.getSelection().index;
+                    // 插入图片  res.data为服务器返回的图片地址
+                    quill.insertEmbed(length, 'image', url);
+                    // 调整光标到最后
+                    quill.setSelection(length + 1);
+                    // loading动画消失
+                    this.catalogText.quillUpdateImg = false;
+                }else{
+                    this.$message.error(response.data.errorInfo);
+                }
+            },
+            // 上传图片前
+            beforeUpload(res,file) {
+                //显示loading动画
+                this.catalogText.quillUpdateImg = true;
+            },
+            //图片上传
+            getFile(file,fileList){
+                let _this = this;
+                _this.getBase64(file.raw).then(resBase64Img => {
+                    getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+                        if(response.data.success){
+                            let quill = this.$refs.myQuillEditor.quill;
+                            // 获取光标所在位置
+                            let length = quill.getSelection().index;
+                            // 插入图片  res.data为服务器返回的图片地址
+                            quill.insertEmbed(length, 'image', resBase64Img);
+                            // 调整光标到最后
+                            quill.setSelection(length + 1);
+                            // loading动画消失
+                            this.catalogText.quillUpdateImg = false;
+                        }else{
+                            this.$message.error(response.data.errorInfo);
+                        }
+                    })
+                })
+            },
+            //转换Base64
+            getBase64(file) {
+                return new Promise(function(resolve, reject) {
+                    let reader = new FileReader();
+                    let imgResult = "";
+                    reader.readAsDataURL(file);
+                    reader.onload = function() {
+                        imgResult = reader.result;
+                    };
+                    reader.onerror = function(error) {
+                        reject(error);
+                    };
+                    reader.onloadend = function() {
+                        resolve(imgResult);
+                    };
+                });
+            },
+            //重置
+            cancel(){
+                this.$refs.catalogText.resetFields();
+            },
+            //保存并发布
+            addDomain(){
+                let _this = this;
+                this.$refs.catalogText.validate((valid) => {
+                    if(valid){
+                        productServiceCreate({
+                            title: this.catalogText.Title,
+                            imgUrl: this.catalogText.coverImg,
+                            intro: this.catalogText.introduceText,
+                            urlAddress: this.catalogText.URL,
+                            sort: this.catalogText.sortNum,
+                            txt: this.catalogText.bbsContent
+                        }).then(response => {
+                            if(response.data.success){
+                                this.$message({message: '创建成功~~~',type: 'success'});
+                                setTimeout(()=>{
+                                    _this.$router.push({path:'/Index/productlist'})
+                                },300)
+                            }else{
+                                this.$message.error(response.data.errorInfo);
+                            }
+                        })
+                    }
+                })
+            },
+        },
+        mounted(){
 
-          }
-        })
-      },
-    },
-    mounted(){
-
+        }
     }
-  }
 </script>
 
 <style lang="scss">
@@ -247,6 +302,7 @@
       }
       .api-center{
         width: 100%;
+        min-height: 8rem;
         background: #ffffff;
         box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
         border-radius:0.1rem;
@@ -302,3 +358,4 @@
     }
   }
 </style>
+

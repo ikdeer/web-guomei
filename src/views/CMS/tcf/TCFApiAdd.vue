@@ -19,7 +19,7 @@
                      ref="catalogText"
                      label-width="130px"
                      class="demo-dynamic">
-              <el-form-item label="标题" prop="Title">
+              <el-form-item label="标题" required prop="Title">
                 <div class="api-OneLevel">
                   <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
                 </div>
@@ -31,7 +31,6 @@
                              placeholder="请选择一级目录">
                     <el-option
                       v-for="item in catalogText.OneLevelData"
-                      :key="item.name"
                       :label="item.name"
                       :value="item.name">
                     </el-option>
@@ -43,7 +42,6 @@
                   <el-select v-model="catalogText.secondLevel" placeholder="请选择二级目录">
                     <el-option
                       v-for="item in catalogText.secondLevelData"
-                      :key="item.name"
                       :label="item.name"
                       :value="item.name">
                     </el-option>
