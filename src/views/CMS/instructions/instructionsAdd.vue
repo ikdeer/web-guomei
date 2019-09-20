@@ -110,6 +110,17 @@
           return callback(new Error('请输入类目名称'));
         }
       };
+      let bbsContent = (rule, value, callback) => {
+        if(value){
+          if(value == ''){
+            return callback(new Error('请填写要发布的内容'));
+          }else{
+            return callback();
+          }
+        }else{
+          return callback(new Error('请填写要发布的内容'));
+        }
+      };
       return {
         catalogText:{
           Title:'',//标题
@@ -157,7 +168,7 @@
         rules:{
           Title:[{validator:Title,trigger:['blur','change']}],
           OneLevel:[{validator:OneLevel,trigger:['blur','change']}],
-          bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
+          bbsContent:[{validator:bbsContent,trigger:['blur','change']}],
         }
       }
     },

@@ -16,7 +16,7 @@
           </router-link>
         </div>
         <div class="api-tableColumn">
-          <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
+          <el-table ref="multipleTable" v-loading="loading" :data="tableData" border tooltip-effect="dark">
             <el-table-column align="center" label="ID">
               <template slot-scope="scope">
                 <span>{{ scope.row.id}}</span>
@@ -80,6 +80,7 @@
           dataTime:'',
         },
         tableData:[],
+        loading:false,
         page:{
           currentPage:1,
           pageSize:10,
@@ -90,7 +91,9 @@
     methods:{
       //接入须知列表
       getAccessNoteShow(){
+        this.loading = true;
         getAccessNoteShow({page:this.page.currentPage,pageSize:this.page.pageSize}).then(response => {
+          this.loading = false;
           if(response.data.errorCode == 200){
             this.tableData = response.data.data.list;
             this.page.total = response.data.pagerManager.totalResults;//总条数
@@ -105,7 +108,6 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           customClass:'gm-configItem',
-          // type: 'warning'
         }).then(() => {
           getAccessNoteDel({id:typeId}).then(response => {
             if(response.data.errorCode == 200){
@@ -113,6 +115,7 @@
                 type: 'success',
                 message: '删除成功!'
               });
+              this.page.currentPage = 1;
               this.getAccessNoteShow();
             }else{
               this.$message.warning(response.data.errorInfo);

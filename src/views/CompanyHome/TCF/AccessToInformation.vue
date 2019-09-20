@@ -26,13 +26,13 @@
         <nav class="gm-nav">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-            <el-breadcrumb-item>技术文档</el-breadcrumb-item>
+            <el-breadcrumb-item>接入须知</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
         <div class="gm-contentPad">
           <h4 class="gm-contentPadText">{{bbsTopTitle}}</h4>
           <div class="gm-contentArea">
-            <div class="contentArea-left" v-html="bbsContent"></div>
+            <div class="ql-editor contentArea-left" v-html="bbsContent"></div>
           </div>
         </div>
       </div>

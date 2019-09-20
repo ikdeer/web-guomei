@@ -1,15 +1,15 @@
 <template>
-  <div class="solutionAdd">
+  <div class="solutionEdit">
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
-        <el-breadcrumb-item>新增解决方案</el-breadcrumb-item>
+        <el-breadcrumb-item>编辑解决方案</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <div class="solutionAdd-content">
-      <h4 class="api-TextH4">新增解决方案</h4>
+    <div class="solutionEdit-content">
+      <h4 class="api-TextH4">编辑解决方案</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
@@ -86,7 +86,10 @@
             <el-form-item>
               <div class="api-editor">
                 <el-button type="primary" @click.stop="addDomain">保存</el-button>
-                <el-button @click.stop="cancel">重置</el-button>
+                <router-link
+                  tag="button"
+                  class="el-button el-button--default el-button--small"
+                  :to="{path:'/Index/solutionList'}">取消</router-link>
               </div>
             </el-form-item>
           </el-form>
@@ -114,7 +117,7 @@
   Quill.register('modules/imageDrop', ImageDrop);
   Quill.register('modules/imageResize', ImageResize);
   export default {
-    name: "solutionAdd",
+    name: "solutionEdit",
     data(){
       return {
         catalogText:{
@@ -239,9 +242,9 @@
 </script>
 
 <style lang="scss">
-  .solutionAdd{
+  .solutionEdit{
     width: 100%;
-    .solutionAdd-content{
+    .solutionEdit-content{
       width: 100%;
       .api-TextH4{
         font-size: 0.18rem;

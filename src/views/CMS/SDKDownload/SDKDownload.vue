@@ -11,7 +11,7 @@
       <div class="SDK-Content">
         <div class="SDK-table">
           <el-table :data="tableData" style="width: 100%" border size="small">
-            <el-table-column label="ID" align="center">
+            <el-table-column label="ID" width="55" align="center">
               <template slot-scope="scope">
                 <span>{{scope.row.id}}</span>
               </template>
@@ -21,7 +21,7 @@
                 <span>{{scope.row.name}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="创建时间" align="center">
+            <el-table-column label="创建时间" width="150" align="center">
               <template slot-scope="scope">
                 <span>{{scope.row.createTime}}</span>
               </template>
@@ -84,8 +84,8 @@
         getDownloadList({page:this.page.pageNum,pageSize:this.page.pageSize})
           .then(response => {
             if(response.data.errorCode == 200){
-              this.tableData = response.data.data.list;
-              this.page.total = response.data.pagerManager.totalResults;
+              this.tableData = response.data.data ? response.data.data.list : [];
+              this.page.total = response.data.pagerManager ? response.data.pagerManager.totalResults : 0;
             }else{
               this.$message.warning(response.data.errorInfo);
             }

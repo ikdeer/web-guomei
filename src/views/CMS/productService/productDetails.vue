@@ -1,15 +1,15 @@
 <template>
-  <div class="solutionAdd">
+  <div class="productDetails">
     <!-- 面包屑导航栏 -->
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
-        <el-breadcrumb-item>新增解决方案</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{path:'/Index/productList'}">产品服务</el-breadcrumb-item>
+        <el-breadcrumb-item>查看产品服务</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <div class="solutionAdd-content">
-      <h4 class="api-TextH4">新增解决方案</h4>
+    <div class="productDetails-content">
+      <h4 class="api-TextH4">查看产品服务</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
@@ -21,23 +21,19 @@
                    class="demo-dynamic">
             <el-form-item label="标题：" prop="Title">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
+                <el-input v-model="catalogText.Title" disabled maxlength="20" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="图标：" prop="coverImg">
+            <el-form-item label="首页封面：" prop="coverImg">
               <div class="api-OneLevel">
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  disabled
                   :show-file-list="false">
                   <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-              </div>
-            </el-form-item>
-            <el-form-item label="主要服务：" prop="serviceText">
-              <div class="api-OneLevel">
-                <el-input v-model="catalogText.serviceText" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="简介：" prop="introduceText">
@@ -45,22 +41,24 @@
                 <el-input
                   type="textarea"
                   placeholder="请输入内容"
+                  disabled
                   v-model="catalogText.introduceText"
                   maxlength="100"
                   rows="5"
-                  show-word-limit></el-input>
+                  show-word-limit
+                ></el-input>
               </div>
             </el-form-item>
             <el-form-item label="URL地址：" prop="URL">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="catalogText.URL">
+                <el-input placeholder="请输入URL" disabled v-model="catalogText.URL">
                   <template slot="prepend">Http://</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="catalogText.sortNum" disabled maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item  label="内容：" prop="bbsContent">
@@ -68,26 +66,20 @@
               <el-upload
                 class="avatar-uploaderImg"
                 action=""
+                disabled
                 :show-file-list="false"
-                :auto-upload="false"
-                :on-change="getFile"
-                :before-upload="beforeUpload">
+                :auto-upload="false">
               </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
                   <quill-editor
                     v-model="catalogText.bbsContent"
                     ref="myQuillEditor"
+                    disabled
                     :options="editorOption">
                   </quill-editor>
                 </el-col>
               </el-row>
-            </el-form-item>
-            <el-form-item>
-              <div class="api-editor">
-                <el-button type="primary" @click.stop="addDomain">保存</el-button>
-                <el-button @click.stop="cancel">重置</el-button>
-              </div>
             </el-form-item>
           </el-form>
         </div>
@@ -114,13 +106,12 @@
   Quill.register('modules/imageDrop', ImageDrop);
   Quill.register('modules/imageResize', ImageResize);
   export default {
-    name: "solutionAdd",
+    name: "productDetails",
     data(){
       return {
         catalogText:{
           Title:'',//标题
-          coverImg:'',//图标
-          serviceText:'',//主要服务
+          coverImg:'',//首页封面
           introduceText:'',//介绍
           URL:'',//跳转地址
           sortNum:'',//排序
@@ -167,7 +158,6 @@
         rules:{
           Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
           coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
-          serviceText:[{ required: true, message: '请输入服务名称', trigger: 'blur' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
           URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
@@ -176,61 +166,7 @@
       }
     },
     methods:{
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
-      //图片上传
-      getFile(file,fileList){
-        let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
-          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
-              // 获取光标所在位置
-              let length = quill.getSelection().index;
-              // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
-              // 调整光标到最后
-              quill.setSelection(length + 1);
-              // loading动画消失
-              this.catalogText.quillUpdateImg = false;
-            }else{
-              this.$message.error(response.data.errorInfo);
-            }
-          })
-        })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
-      },
-      //重置
-      cancel(){
-        this.$refs.catalogText.resetFields();
-      },
-      //保存并发布
-      addDomain(){
-        this.$refs.catalogText.validate((valid) => {
-          if(valid){
 
-          }
-        })
-      },
     },
     mounted(){
 
@@ -239,9 +175,9 @@
 </script>
 
 <style lang="scss">
-  .solutionAdd{
+  .productDetails{
     width: 100%;
-    .solutionAdd-content{
+    .productDetails-content{
       width: 100%;
       .api-TextH4{
         font-size: 0.18rem;

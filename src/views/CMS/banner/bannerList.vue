@@ -4,10 +4,10 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item>banner</el-breadcrumb-item>
+        <el-breadcrumb-item>Banner</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <h3>banner</h3>
+    <h3>Banner</h3>
     <div class="bannerList-content">
       <div class="bannerList-table">
         <div class="bannerList-addButton">
@@ -41,8 +41,12 @@
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
-                <el-button type="text" style="color:#409eff;">查看</el-button>
-                <el-button type="text" style="color:#67c23a;">编辑</el-button>
+                <router-link :to="{path:'/Index/bannerDetails',query:{Id:''}}">
+                  <el-button type="text" style="color:#409eff;">查看</el-button>
+                </router-link>
+                <router-link :to="{path:'/Index/bannerEdit',query:{Id:''}}">
+                  <el-button type="text" style="color:#67c23a;">编辑</el-button>
+                </router-link>
                 <el-button type="text" style="color:#f56c6c;">删除</el-button>
               </template>
             </el-table-column>

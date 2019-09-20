@@ -247,7 +247,6 @@
       }
       .api-center{
         width: 100%;
-        min-height: 8rem;
         background: #ffffff;
         box-shadow:0 0.02rem 0.04rem 0.01rem rgba(0,0,0,0.1);
         border-radius:0.1rem;

@@ -100,7 +100,6 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           customClass:'gm-configItem',
-          type: 'warning'
         }).then(() => {
           getTechDocDel({id:typeId}).then(response => {
             if(response.data.errorCode == 200){
@@ -108,6 +107,7 @@
                 type: 'success',
                 message: '删除成功!'
               });
+              this.page.currentPage = 1;
               this.getTechDoc();
             }else{
               this.$message.warning(response.data.errorInfo);
@@ -154,7 +154,6 @@
         margin-top: 10px;
         text-align: right;
       }
-
     }
   }
   .gm-configItem{
