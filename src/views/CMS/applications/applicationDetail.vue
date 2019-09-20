@@ -21,7 +21,7 @@
         <h3>API列表</h3>
         <div class="application_detail_content">
             <div class="application_list_table">
-                <el-table :data="tableData" style="width: 100%">
+                <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
                     <el-table-column align="center" prop="name" label="API"></el-table-column>
                     <el-table-column align="center" prop="showEnable" label="状态" width="100"></el-table-column>
                     <el-table-column align="center" width="380" prop="transferAddr" label="请求地址"></el-table-column>
@@ -106,6 +106,15 @@
             }
         },
         methods:{
+            tableRowClassName({row, rowIndex}) {
+                if (row.review == 1) {
+                    return 'warning_row';
+                }
+                if (row.review == -1) {
+                    return 'success_row';
+                }
+                return '';
+            },
             search(){
                 getApplicationDetail({
                   appID:this.$route.query.id,
@@ -124,8 +133,8 @@
                         this.InfoOne[8].content = data.data.data.lastModifyTime || '————';
                         this.InfoOne[9].content = data.data.data.createrName || '————';
                         this.introduction = data.data.data.introduction || '无';
-                        this.tableData = data.data.data.apisList || [];
-                        this.page.total = data.pagerManager.totalResults || 0;
+                        this.tableData = data.data.data.apisList?data.data.data.apisList:[];
+                        this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -170,7 +179,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .application_detail {
         font-size: 0.16rem;
         .application_detail_top {
@@ -212,6 +221,12 @@
             box-sizing: border-box;
             .application_list_table{
                 width: 100%;
+                .warning_row {
+                    background: oldlace!important;
+                }
+                .success_row {
+                    background: #f0f9eb!important;
+                }
             }
             .application_list_footer{
                 margin-top: 10px;
