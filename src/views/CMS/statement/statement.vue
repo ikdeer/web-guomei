@@ -267,15 +267,17 @@
                 };
                 getStatement(params).then(({data}) => {
                     if(data.errorCode ==200){
-                        this.callData = data.data.data.callData?data.data.data.callData:[];
+                        this.callData = data.data.data.callData?data.data.data.callData : { callDataCount: 0, callFailCount: 0, callSucessCount: 0};
                         this.tableData = data.data.data.appStatisApiList?data.data.data.appStatisApiList:[];
                         this.page.total = data.pagerManager? data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
-                        this.tableData.forEach((item,index)=>{
-                            days.push(item.lastCallTime);
-                            callSucessCount.push(item.callSucessCount);
-                            callFailCount.push(item.callFailCount);
-                        });
+                        if(data.data.data.charStaticApiList){
+                            data.data.data.charStaticApiList.forEach((item,index)=>{
+                                days.push(item.days);
+                                callSucessCount.push(item.callSucessCount);
+                                callFailCount.push(item.callFailCount);
+                            });
+                        }
                         let option = {
                             tooltip: {
                                 trigger: 'axis'
