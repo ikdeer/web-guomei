@@ -289,7 +289,7 @@
                             //编辑联系人
                             editUserContact(params).then(({data})=>{
                                 if(data.errorCode ==200){
-                                    this.$message.success('编辑成功');
+                                    this.$message.success('修改成功');
                                     this.getContactList();
                                     this.userInfoAddDialog = false;
                                 }else{
