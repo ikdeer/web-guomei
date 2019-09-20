@@ -161,7 +161,7 @@
                 <div class="content">
                     <div class="list" v-for="item in faceList">
                         <div class="list_img">
-                            <el-checkbox v-model="item.select" :disabled="item.isCurrentSubGroup2" @change="ClickFaceImage(item)" class="checkbox"></el-checkbox>
+                            <el-checkbox v-model="item.checked" :disabled="item.isCurrentSubGroup2" @change="ClickFaceImage(item)" class="checkbox"></el-checkbox>
                             <img :src="item.url">
                         </div>
                         <div class="list_info">
@@ -175,7 +175,7 @@
                             <span>类型：{{item.typeName}}</span>
                         </div>
                         <div class="list_info">
-                            <span>编号：{{item.number}}&emsp;{{item.no}}</span>
+                            <span>编号：{{item.noType}}&emsp;{{item.no}}</span>
                         </div>
                         <div class="list_info">
                             <span>图片来源：{{item.picFromName}}</span>
@@ -294,7 +294,10 @@
             removeFaceImg(row){
                 //删除
                 let params = {
-                    ids:[row.id]
+                    ids:[row.id],
+                    faceGroupID:this.groupid,
+                    sub1:this.stepTwoForm.one,
+                    sub2:this.stepTwoForm.two
                 };
                 deleteFaceGroup(params).then(({data})=>{
                     if(data.errorCode ==200){
@@ -332,7 +335,7 @@
             },
             ClickFaceImage(item){
                 //点击图片
-                if(item.select){
+                if(item.checked){
                     this.faceListBirge.push(item.id);
                 }else{
                     this.faceListBirge = this.faceListBirge.filter( ins => item.id != ins )
@@ -353,15 +356,14 @@
                 this.dialogSearch(1);
             },
             dialogSearch(page){
-              //faceListBirge数组里面未置空存在上次勾选的数据
-              this.faceListBirge = [];
                 //弹窗查询
                 if(page==1){
                     this.facePage = {
                         page:1,
                         pageSize:10,
                         total:0
-                    }
+                    };
+                    this.faceListBirge = [];
                 }
                 let params = {
                     ...this.dataDialogForm,
@@ -372,15 +374,24 @@
                     if(data.errorCode ==200){
                         if(data.data){
                             data.data.list.forEach((item)=>{
-                                item.select = false;
+                                if(item.checked){
+                                    if (this.faceListBirge.indexOf(item.id) < 0 ) {
+                                        this.faceListBirge.push(item.id);
+                                    }
+                                }else if (this.faceListBirge.indexOf(item.id) == 0 ) {
+                                    item.checked = true;
+                                }
                             });
                             this.faceList = data.data.list;
                             this.facePage.total = data.pagerManager.totalResults;
                         }else{
                             this.faceList = [];
+                            this.faceListBirge = [];
                             this.facePage.total = 0;
                         }
                     }else{
+                        this.faceList = [];
+                        this.faceListBirge = [];
                         this.$message.warning(data.errorInfo)
                     }
                 })
