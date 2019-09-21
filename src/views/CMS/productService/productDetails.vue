@@ -88,6 +88,7 @@
   </div>
 </template>
 <script>
+  import {getDetail} from "@/HttpApi/product/productApi";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -166,10 +167,24 @@
       }
     },
     methods:{
-
+      //产品服务详情
+      getDetail(){
+        getDetail({id:this.$route.query.Id}).then(response => {
+          if(response.data.errorCode == 200){
+            this.catalogText.Title = response.data.data.title;//标题
+            this.catalogText.coverImg = response.data.data.imgUrl;//图片
+            this.catalogText.introduceText = response.data.data.intro;//介绍
+            this.catalogText.URL = response.data.data.urlAddress;//跳转地址
+            this.catalogText.sortNum = response.data.data.sort;//排序
+            this.catalogText.bbsContent = response.data.data.txt;//富文本内容
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        })
+      }
     },
     mounted(){
-
+      this.getDetail();
     }
   }
 </script>

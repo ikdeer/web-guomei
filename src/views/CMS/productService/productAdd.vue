@@ -29,7 +29,8 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
-                  :on-success="handleAvatarSuccess"
+                  :auto-upload="false"
+                  :on-change="coverUpDataImg"
                   :show-file-list="false">
                   <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -68,7 +69,7 @@
                 :show-file-list="false"
                 :auto-upload="false"
                 :on-change="getFile"
-                :action="url.uploadImg"
+                action=""
                 :on-success="handleAvatarSuccess2"
                 :before-upload="beforeUpload">
               </el-upload>
@@ -95,7 +96,7 @@
   </div>
 </template>
 <script>
-    import {productServiceCreate} from "@/HttpApi/product/productApi";
+    import {productServiceCreate,getImageUploadNormalImage} from "@/HttpApi/product/productApi";
     //引入编辑器
     import * as Quill from 'quill';
     import { ImageDrop } from 'quill-image-drop-module';
@@ -171,39 +172,20 @@
                     sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
                     bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
                 },
-                url: {
-                    uploadImg: `${process.env.BASE_URL}/upload2`
-                }
             }
         },
         methods:{
-            // 图片上传成功回调
-            handleAvatarSuccess(res, file) {
-                console.log(`res: ${JSON.stringify(res)}`);
-                if (res.success) {
-                    let url = res.data.path
-                    url = `${process.env.BASE_URL}/image/view/${url}`;
-                    this.catalogText.coverImg = url;
-                }
-            },
-            // 图片上传成功回调
-            handleAvatarSuccess2(res, file) {
-                console.log(`res: ${JSON.stringify(res)}`);
-                if (res.success) {
-                    let url = res.data.path
-                    url = `${process.env.BASE_URL}/${url}`;
-                    let quill = this.$refs.myQuillEditor.quill;
-                    // 获取光标所在位置
-                    let length = quill.getSelection().index;
-                    // 插入图片  res.data为服务器返回的图片地址
-                    quill.insertEmbed(length, 'image', url);
-                    // 调整光标到最后
-                    quill.setSelection(length + 1);
-                    // loading动画消失
-                    this.catalogText.quillUpdateImg = false;
-                }else{
+            //封面上传
+            coverUpDataImg(file,fileList){
+              this.getBase64(file.raw).then(resBase64Img => {
+                getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+                  if(response.data.errorCode == 200){
+                      this.catalogText.coverImg = response.data.data.url;
+                  }else{
                     this.$message.error(response.data.errorInfo);
-                }
+                  }
+                })
+              })
             },
             // 上传图片前
             beforeUpload(res,file) {
@@ -230,6 +212,24 @@
                         }
                     })
                 })
+            },
+            // 图片上传成功回调
+            handleAvatarSuccess2(res, file) {
+              if (res.success) {
+                let url = res.data.path
+                url = `${process.env.BASE_URL}/${url}`;
+                let quill = this.$refs.myQuillEditor.quill;
+                // 获取光标所在位置
+                let length = quill.getSelection().index;
+                // 插入图片  res.data为服务器返回的图片地址
+                quill.insertEmbed(length, 'image', url);
+                // 调整光标到最后
+                quill.setSelection(length + 1);
+                // loading动画消失
+                this.catalogText.quillUpdateImg = false;
+              }else{
+                this.$message.error(response.data.errorInfo);
+              }
             },
             //转换Base64
             getBase64(file) {

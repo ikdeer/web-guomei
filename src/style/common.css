@@ -49,7 +49,7 @@ ol,li,ul,dl,dt,dd{
   font-weight: 400 !important;
 }
 /*富文本编辑框高度*/
-.ql-editor{
+.ql-container{
   height:4.5rem;
 }
 h3{

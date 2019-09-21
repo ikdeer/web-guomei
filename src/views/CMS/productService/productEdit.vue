@@ -29,6 +29,8 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  :auto-upload="false"
+                  :on-change="coverUpDataImg"
                   :show-file-list="false">
                   <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -95,6 +97,7 @@
   </div>
 </template>
 <script>
+  import {getDetail} from "@/HttpApi/product/productApi";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -173,6 +176,34 @@
       }
     },
     methods:{
+      //产品服务详情
+      getDetail(){
+        getDetail({id:this.$route.query.Id}).then(response => {
+          if(response.data.errorCode == 200){
+            this.catalogText.Title = response.data.data.title;//标题
+            this.catalogText.coverImg = response.data.data.imgUrl;//图片
+            this.catalogText.introduceText = response.data.data.intro;//介绍
+            this.catalogText.URL = response.data.data.urlAddress;//跳转地址
+            this.catalogText.sortNum = response.data.data.sort;//排序
+            this.catalogText.bbsContent = response.data.data.txt;//富文本内容
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        })
+      },
+      //封面上传
+      coverUpDataImg(file,fileList){
+        this.getBase64(file.raw).then(resBase64Img => {
+          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            if(response.data.errorCode == 200){
+              this.catalogText.coverImg = response.data.data.url;
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
+        })
+      },
+
       // 上传图片前
       beforeUpload(res,file) {
         //显示loading动画
@@ -226,7 +257,7 @@
       },
     },
     mounted(){
-
+      this.getDetail();
     }
   }
 </script>
