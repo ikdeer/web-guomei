@@ -4,24 +4,23 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
-        <el-breadcrumb-item>新增Banner</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{path:'/Index/bannerList'}">Banner位置管理</el-breadcrumb-item>
+        <el-breadcrumb-item>新增Banner位置管理</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
     <div class="bannerAdd-content">
-      <h4 class="api-TextH4">新增Banner</h4>
+      <h4 class="api-TextH4">新增Banner位置管理</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="form"
-                   :label-position="labelPosition"
                    :rules="rules"
                    size="small"
                    ref="form"
                    label-width="130px"
                    class="demo-dynamic">
-            <el-form-item label="图片名称：" prop="Title">
+            <el-form-item label="图片名称：" prop="TitleImg">
               <div class="api-OneLevel">
-                <el-input v-model="form.TitleImg" maxlength="20" placeholder="请输入图片名称"></el-input>
+                <el-input v-model="form.TitleImg" placeholder="请输入图片名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="上传图片：" prop="coverImg">
@@ -29,6 +28,8 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  :auto-upload="false"
+                  :on-change="BannerUpDataImg"
                   :show-file-list="false">
                   <img v-if="form.coverImg" :src="form.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -67,6 +68,7 @@
   </div>
 </template>
 <script>
+  import {getBannerCreate,getImageUploadNormalImage} from "@/HttpApi/banner/bannerApi";
   export default {
     name: "bannerAdd",
     data(){
@@ -77,11 +79,9 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          quillUpdateImg:'',//图片上传动画
         },
-        labelPosition:'right',//form对其方式
         rules:{
-          Title:[{ required: true, message: '请输入图片名称', trigger: 'blur' }],
+          TitleImg:[{ required: true, message: '请输入图片名称', trigger: 'blur'}],
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
           URL1:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
           URL2:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
@@ -90,26 +90,12 @@
       }
     },
     methods:{
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
       //图片上传
-      getFile(file,fileList){
-        let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
+      BannerUpDataImg(file,fileList){
+        this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
-              // 获取光标所在位置
-              let length = quill.getSelection().index;
-              // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
-              // 调整光标到最后
-              quill.setSelection(length + 1);
-              // loading动画消失
-              this.catalogText.quillUpdateImg = false;
+            if(response.data.errorCode == 200){
+              this.form.coverImg = response.data.data.url;
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -139,9 +125,25 @@
       },
       //保存并发布
       addDomain(){
+        let _this = this;
         this.$refs.form.validate((valid) => {
           if(valid){
-
+            getBannerCreate({
+              title:this.form.TitleImg,
+              imgUrl:this.form.coverImg,
+              url1:this.form.URL1,
+              url2:this.form.URL2,
+              sort:this.form.sortNum,
+            }).then(response => {
+              if(response.data.errorCode == 200){
+                this.$message({message: '创建成功',type: 'success'});
+                setTimeout(()=>{
+                  _this.$router.push({path:'/Index/bannerList'})
+                },300)
+              }else{
+                this.$message.error(response.data.errorInfo);
+              }
+            })
           }
         })
       },
@@ -195,7 +197,7 @@
               .avatar-uploader-icon {
                 font-size: 28px;
                 color: #8c939d;
-                width: 160px;
+                width: 422px;
                 height: 160px;
                 line-height: 160px;
                 text-align: center;

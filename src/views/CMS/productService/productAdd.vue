@@ -197,7 +197,7 @@
                 let _this = this;
                 _this.getBase64(file.raw).then(resBase64Img => {
                     getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-                        if(response.data.success){
+                        if(response.data.errorCode == 200){
                             let quill = this.$refs.myQuillEditor.quill;
                             // 获取光标所在位置
                             let length = quill.getSelection().index;
@@ -265,7 +265,7 @@
                             sort: this.catalogText.sortNum,
                             txt: this.catalogText.bbsContent
                         }).then(response => {
-                            if(response.data.success){
+                            if(response.data.errorCode == 200){
                                 this.$message({message: '创建成功',type: 'success'});
                                 setTimeout(()=>{
                                     _this.$router.push({path:'/Index/productList'})

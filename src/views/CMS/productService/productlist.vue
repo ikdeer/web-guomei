@@ -100,7 +100,6 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     customClass:'gm-configItem',
-                    type: 'warning'
                 }).then(() => {
                   getDelete({id:id}).then(response => {
                     if(response.data.errorCode == 200){
@@ -120,7 +119,6 @@
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
                   customClass:'gm-configItem',
-                  type: 'warning'
                 }).then(() => {
                   getDelBatch({ids:this.DeleteArr}).then(response => {
                     if(response.data.errorCode == 200){

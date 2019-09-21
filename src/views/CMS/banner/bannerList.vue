@@ -4,50 +4,54 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item>Banner</el-breadcrumb-item>
+        <el-breadcrumb-item>Banner位置管理</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <h3>Banner</h3>
+    <h3>Banner位置管理</h3>
     <div class="bannerList-content">
       <div class="bannerList-table">
         <div class="bannerList-addButton">
           <router-link :to="{path:'/Index/bannerAdd'}">
             <el-button type="primary">新增</el-button>
           </router-link>
-          <el-button type="danger" class="gm-delete">删除</el-button>
+          <el-button type="danger" class="gm-delete" @click="ClickBatchDeLeTe">删除</el-button>
         </div>
         <div class="bannerList-tableColumn">
-          <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
+          <el-table ref="multipleTable"
+                    :data="tableData"
+                    @selection-change="handleSelectionChange"
+                    border
+                    tooltip-effect="dark">
             <el-table-column align="center"  width="55" type="selection"></el-table-column>
             <el-table-column align="center" label="名称">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.title}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="缩略图">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.imgUrl}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="排序">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.sort}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="创建时间">
               <template slot-scope="scope">
-                <span></span>
+                <span>{{scope.row.createTime}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
-                <router-link :to="{path:'/Index/bannerDetails',query:{Id:''}}">
+                <router-link :to="{path:'/Index/bannerDetails',query:{Id:scope.row.id}}">
                   <el-button type="text" style="color:#409eff;">查看</el-button>
                 </router-link>
                 <router-link :to="{path:'/Index/bannerEdit',query:{Id:''}}">
                   <el-button type="text" style="color:#67c23a;">编辑</el-button>
                 </router-link>
-                <el-button type="text" style="color:#f56c6c;">删除</el-button>
+                <el-button type="text" style="color:#f56c6c;" @click="ClickDelete(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -70,11 +74,13 @@
 </template>
 
 <script>
+  import {getBannerShow,getBannerDelete,getBannerDelBatch} from "@/HttpApi/banner/bannerApi";
   export default {
     name: "bannerList",
     data(){
       return {
         tableData:[],
+        DeleteArr:[],//批量删除
         page:{
           pageSize:10,
           pageNum:1,
@@ -83,13 +89,77 @@
       }
     },
     methods:{
+      //banner列表页
+      getBannerShow(){
+        getBannerShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
+          if(response.data.errorCode == 200){
+            this.tableData = response.data.data ? response.data.data.list : [];
+            this.page.total = response.data.pagerManager ? response.data.pagerManager.totalResults : 0;//总条数
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        })
+      },
+      //删除
+      ClickDelete(id){
+        this.$confirm('此操作将永久删除这条数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          customClass:'gm-configItem',
+        }).then(() => {
+          getBannerDelete({id:id}).then(response => {
+            if(response.data.errorCode == 200){
+              this.$message({message: '删除成功',type: 'success'});
+              this.page.pageNum = 1;
+              this.getBannerShow();
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
+        }).catch(() => {});
+      },
+      //批量删除
+      ClickBatchDeLeTe(){
+        if(this.DeleteArr.length != 0){
+          this.$confirm('此操作将永久删除数据, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            customClass:'gm-configItem',
+          }).then(() => {
+            getBannerDelBatch({ids:this.DeleteArr}).then(response => {
+              if(response.data.errorCode == 200){
+                this.$message({message: '批量删除成功',type: 'success'});
+                this.page.pageNum = 1;
+                this.getBannerShow();
+              }else{
+                this.$message.error(response.data.errorInfo);
+              }
+            })
+          }).catch(() => {});
+        }else{
+          this.$message.error('请选择你要删除的数据');
+        }
+      },
+      //全部批量选中数组ID
+      handleSelectionChange(val){
+        let arr = [];
+        for(let i =0; i < val.length; i++){
+          arr.push(val[i].id);
+        }
+        this.DeleteArr = arr;
+      },
       //分页
       handleSizeChange(val){
         this.page.pageSize = val;
+        this.getBannerShow();
       },
       handleCurrentChange(val){
         this.page.pageNum = val;
+        this.getBannerShow();
       }
+    },
+    mounted(){
+      this.getBannerShow();
     }
   }
 </script>
