@@ -5,23 +5,17 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
         <el-breadcrumb-item :to="{path:'/Index/solutionList'}">解决方案</el-breadcrumb-item>
-        <el-breadcrumb-item>编辑解决方案</el-breadcrumb-item>
+        <el-breadcrumb-item>解决方案详情</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
     <div class="solutionDetails-content">
-      <h4 class="api-TextH4">编辑解决方案</h4>
+      <h4 class="api-TextH4">解决方案详情</h4>
       <div class="api-center">
         <div class="api-quill">
-          <el-form :model="catalogText"
-                   :label-position="labelPosition"
-                   :rules="rules"
-                   size="small"
-                   ref="catalogText"
-                   label-width="130px"
-                   class="demo-dynamic">
+          <el-form :model="form" :rules="rules" size="small" ref="formItem" label-width="130px" class="demo-dynamic">
             <el-form-item label="标题：" prop="Title">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
+                <el-input v-model="form.Title" disabled placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="图标：" prop="coverImg">
@@ -29,38 +23,40 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  disabled
                   :show-file-list="false">
-                  <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
+                  <img v-if="form.coverImg" :src="form.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
             </el-form-item>
             <el-form-item label="主要服务：" prop="serviceText">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.serviceText" placeholder="请输入标题名称"></el-input>
+                <el-input v-model="form.serviceText" disabled placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="简介：" prop="introduceText">
               <div class="api-OneLevel">
-                <el-input
-                  type="textarea"
-                  placeholder="请输入内容"
-                  v-model="catalogText.introduceText"
-                  maxlength="100"
-                  rows="5"
-                  show-word-limit></el-input>
+                <el-input type="textarea"
+                          placeholder="请输入内容"
+                          disabled
+                          v-model="form.introduceText"
+                          maxlength="100"
+                          rows="5"
+                          show-word-limit>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="URL地址：" prop="URL">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="catalogText.URL">
+                <el-input placeholder="请输入URL" disabled v-model="form.URL">
                   <template slot="prepend">Http://</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="form.sortNum" disabled maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item  label="内容：" prop="bbsContent">
@@ -69,15 +65,15 @@
                 class="avatar-uploaderImg"
                 action=""
                 :show-file-list="false"
-                :auto-upload="false"
-                :on-change="getFile"
-                :before-upload="beforeUpload">
+                disabled
+                :auto-upload="false">
               </el-upload>
-              <el-row v-loading="catalogText.quillUpdateImg">
+              <el-row v-loading="form.quillUpdateImg">
                 <el-col :span="24">
                   <quill-editor
-                    v-model="catalogText.bbsContent"
+                    v-model="form.bbsContent"
                     ref="myQuillEditor"
+                    disabled
                     :options="editorOption">
                   </quill-editor>
                 </el-col>
@@ -90,6 +86,7 @@
   </div>
 </template>
 <script>
+  import {getSolutionDetail} from "../../../HttpApi/solution/solutionApi";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -111,7 +108,7 @@
     name: "solutionDetails",
     data(){
       return {
-        catalogText:{
+        form:{
           Title:'',//标题
           coverImg:'',//图标
           serviceText:'',//主要服务
@@ -121,7 +118,6 @@
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
-        labelPosition:'right',//form对其方式
         editorOption: {
           theme: 'snow',
           placeholder: '请填写要发布的公告版内容...',
@@ -170,10 +166,25 @@
       }
     },
     methods:{
-
+      //解决方案详情
+      getSolutionDetail(){
+        getSolutionDetail({id:this.$route.query.Id}).then(response => {
+          if(response.data.errorCode == 200){
+            this.form.Title = response.data.data.title;
+            this.form.coverImg = response.data.data.imgUrl;
+            this.form.serviceText = response.data.data.primaryService;
+            this.form.introduceText = response.data.data.intro;
+            this.form.URL = response.data.data.urlAddress;
+            this.form.sortNum = response.data.data.sort;
+            this.form.bbsContent = response.data.data.txt;
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        })
+      }
     },
     mounted(){
-
+      this.getSolutionDetail();
     }
   }
 </script>
@@ -208,12 +219,19 @@
               display: block;
             }
             .avatar-uploader{
+              width: 100%;
+              height: 160px;
               .el-upload {
                 border: 1px dashed #d9d9d9;
                 border-radius: 6px;
                 cursor: pointer;
                 position: relative;
                 overflow: hidden;
+                .avatar {
+                  width: 100%;
+                  height: 100%;
+                  display: block;
+                }
               }
               .el-upload:hover {
                 border-color: #409EFF;
@@ -221,15 +239,10 @@
               .avatar-uploader-icon {
                 font-size: 28px;
                 color: #8c939d;
-                width: 160px;
+                width: 100%;
                 height: 160px;
                 line-height: 160px;
                 text-align: center;
-              }
-              .avatar {
-                width: 100px;
-                height: 100px;
-                display: block;
               }
             }
           }

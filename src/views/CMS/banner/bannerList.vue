@@ -33,6 +33,16 @@
                 <span>{{scope.row.imgUrl}}</span>
               </template>
             </el-table-column>
+            <el-table-column align="center" label="按钮1地址">
+              <template slot-scope="scope">
+                <span>{{scope.row.url1}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="按钮2地址">
+              <template slot-scope="scope">
+                <span>{{scope.row.url2}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" label="排序">
               <template slot-scope="scope">
                 <span>{{scope.row.sort}}</span>

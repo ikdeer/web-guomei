@@ -23,14 +23,9 @@
                     border
                     tooltip-effect="dark">
             <el-table-column align="center" width="55" type="selection"></el-table-column>
-            <el-table-column align="center" label="服务名称">
+            <el-table-column align="center" label="标题">
               <template slot-scope="scope">
                 <span>{{scope.row.title}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" label="排序">
-              <template slot-scope="scope">
-                <span>{{scope.row.sort}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="缩略图">
@@ -38,9 +33,19 @@
                 <span>{{scope.row.imgUrl}}</span>
               </template>
             </el-table-column>
+            <el-table-column align="center" label="简介">
+              <template slot-scope="scope">
+                <span>{{scope.row.intro}}</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" label="URL">
               <template slot-scope="scope">
                 <span>{{scope.row.urlAddress}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" label="排序">
+              <template slot-scope="scope">
+                <span>{{scope.row.sort}}</span>
               </template>
             </el-table-column>
             <el-table-column align="center" label="操作">

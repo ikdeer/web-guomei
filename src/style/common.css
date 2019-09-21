@@ -62,7 +62,10 @@ h3{
 .overflow {
   overflow:hidden;
 }
-
+/* 弹出框样式 */
+.gm-configItem .el-message-box__content{
+  padding: 30px 30px !important;
+}
 /*重置element样式*/
 .el-dialog .el-dialog__header {
     background: #409EFF;

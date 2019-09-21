@@ -12,16 +12,10 @@
       <h4 class="api-TextH4">编辑解决方案</h4>
       <div class="api-center">
         <div class="api-quill">
-          <el-form :model="catalogText"
-                   :label-position="labelPosition"
-                   :rules="rules"
-                   size="small"
-                   ref="catalogText"
-                   label-width="130px"
-                   class="demo-dynamic">
+          <el-form :model="form" :rules="rules" size="small" ref="formItem" label-width="130px" class="demo-dynamic">
             <el-form-item label="标题：" prop="Title">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
+                <el-input v-model="form.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="图标：" prop="coverImg">
@@ -29,15 +23,17 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
-                  :show-file-list="false">
-                  <img v-if="catalogText.coverImg" :src="catalogText.coverImg" class="avatar">
+                  :auto-upload="false"
+                  :show-file-list="false"
+                  :on-change="coverUpDataImg">
+                  <img v-if="form.coverImg" :src="form.coverImg" class="avatar">
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
             </el-form-item>
             <el-form-item label="主要服务：" prop="serviceText">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.serviceText" placeholder="请输入标题名称"></el-input>
+                <el-input v-model="form.serviceText" placeholder="请输入标题名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="简介：" prop="introduceText">
@@ -45,7 +41,7 @@
                 <el-input
                   type="textarea"
                   placeholder="请输入内容"
-                  v-model="catalogText.introduceText"
+                  v-model="form.introduceText"
                   maxlength="100"
                   rows="5"
                   show-word-limit></el-input>
@@ -53,14 +49,14 @@
             </el-form-item>
             <el-form-item label="URL地址：" prop="URL">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="catalogText.URL">
+                <el-input placeholder="请输入URL" v-model="form.URL">
                   <template slot="prepend">Http://</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="form.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item  label="内容：" prop="bbsContent">
@@ -73,10 +69,10 @@
                 :on-change="getFile"
                 :before-upload="beforeUpload">
               </el-upload>
-              <el-row v-loading="catalogText.quillUpdateImg">
+              <el-row v-loading="form.quillUpdateImg">
                 <el-col :span="24">
                   <quill-editor
-                    v-model="catalogText.bbsContent"
+                    v-model="form.bbsContent"
                     ref="myQuillEditor"
                     :options="editorOption">
                   </quill-editor>
@@ -99,6 +95,7 @@
   </div>
 </template>
 <script>
+  import {SolutionModify,getSolutionDetail} from "../../../HttpApi/solution/solutionApi";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -120,7 +117,7 @@
     name: "solutionEdit",
     data(){
       return {
-        catalogText:{
+        form:{
           Title:'',//标题
           coverImg:'',//图标
           serviceText:'',//主要服务
@@ -179,17 +176,45 @@
       }
     },
     methods:{
+      //解决方案详情
+      getSolutionDetail(){
+        getSolutionDetail({id:this.$route.query.Id}).then(response => {
+          if(response.data.errorCode == 200){
+            this.form.Title = response.data.data.title;
+            this.form.coverImg = response.data.data.imgUrl;
+            this.form.serviceText = response.data.data.primaryService;
+            this.form.introduceText = response.data.data.intro;
+            this.form.URL = response.data.data.urlAddress;
+            this.form.sortNum = response.data.data.sort;
+            this.form.bbsContent = response.data.data.txt;
+          }else{
+            this.$message.error(response.data.errorInfo);
+          }
+        })
+      },
+      //封面上传
+      coverUpDataImg(file,fileList){
+        this.getBase64(file.raw).then(resBase64Img => {
+          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            if(response.data.errorCode == 200){
+              this.form.coverImg = response.data.data.url;
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
+        })
+      },
       // 上传图片前
       beforeUpload(res,file) {
         //显示loading动画
-        this.catalogText.quillUpdateImg = true;
+        this.form.quillUpdateImg = true;
       },
       //图片上传
       getFile(file,fileList){
         let _this = this;
         _this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
+            if(response.data.errorCode == 200){
               let quill = this.$refs.myQuillEditor.quill;
               // 获取光标所在位置
               let length = quill.getSelection().index;
@@ -198,7 +223,7 @@
               // 调整光标到最后
               quill.setSelection(length + 1);
               // loading动画消失
-              this.catalogText.quillUpdateImg = false;
+              this.form.quillUpdateImg = false;
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -224,19 +249,38 @@
       },
       //重置
       cancel(){
-        this.$refs.catalogText.resetFields();
+        this.$refs.formItem.resetFields();
       },
       //保存并发布
       addDomain(){
-        this.$refs.catalogText.validate((valid) => {
+        let _this = this;
+        this.$refs.formItem.validate((valid) => {
           if(valid){
-
+            SolutionModify({
+              id:this.$route.query.Id,
+              title:this.form.Title,
+              imgUrl:this.form.coverImg,
+              primaryService:this.form.serviceText,
+              intro:this.form.introduceText,
+              urlAddress:this.form.URL,
+              sort:this.form.sortNum,
+              txt:this.form.bbsContent,
+            }).then(response => {
+              if(response.data.errorCode == 200){
+                this.$message({message: '编辑成功',type: 'success'});
+                setTimeout(()=>{
+                  _this.$router.push({path:'/Index/solutionList'})
+                },300)
+              }else{
+                this.$message.error(response.data.errorInfo);
+              }
+            })
           }
         })
       },
     },
     mounted(){
-
+      this.getSolutionDetail();
     }
   }
 </script>
@@ -271,12 +315,19 @@
               display: block;
             }
             .avatar-uploader{
+              width: 100%;
+              height: 160px;
               .el-upload {
                 border: 1px dashed #d9d9d9;
                 border-radius: 6px;
                 cursor: pointer;
                 position: relative;
                 overflow: hidden;
+                .avatar {
+                  width: 100%;
+                  height: 100%;
+                  display: block;
+                }
               }
               .el-upload:hover {
                 border-color: #409EFF;
@@ -284,15 +335,10 @@
               .avatar-uploader-icon {
                 font-size: 28px;
                 color: #8c939d;
-                width: 160px;
+                width: 100%;
                 height: 160px;
                 line-height: 160px;
                 text-align: center;
-              }
-              .avatar {
-                width: 100px;
-                height: 100px;
-                display: block;
               }
             }
           }
