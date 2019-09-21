@@ -66,3 +66,14 @@ export const getBannerDelBatch = (params) => {
     })
   })
 };
+
+/**
+* banner列表页修改
+**/
+export const getBannerModify = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/banner/modify', params).then(response => {
+      resolve(response)
+    })
+  })
+};
