@@ -546,21 +546,25 @@
                 getEquipmentList(params).then(({data})=>{
                     if(data.errorCode ==200){
                         this.tableData = data.data?data.data.list:[];
+                        this.totalList.offLineCount = data.data?data.data.offlineCnt:0;
+                        this.totalList.onLineCount = data.data?data.data.onlineCnt:0;
                         this.page.total = data.pagerManager?data.pagerManager.totalResults:0;
                     }else{
                         this.tableData = [];
                         this.page.total = 0;
+                        this.totalList.offLineCount = 0;
+                        this.totalList.onLineCount =0;
                         // this.$message.warning(data.errorInfo)
                     }
                 });
-                getLineTotal().then(({data})=>{
+                /*getLineTotal().then(({data})=>{
                     if(data.errorCode ==200){
                         this.totalList.offLineCount = data.data.data.offLineCount;
                         this.totalList.onLineCount = data.data.data.onLineCount
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
-                })
+                })*/
             },
             reset(){
                 this.formData={
