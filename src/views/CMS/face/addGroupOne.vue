@@ -373,7 +373,7 @@
                         if(data.data.count > 0){
                             this.$router.push({path:'/Index/addgrouptwo',query:{id:this.groupData.id,type:this.type}})
                         }else{
-                            this.$message.warning('请先创建二级子分组')
+                            this.$message.warning(data.errorInfo)
                         }
                     }else{
                         this.$message.warning(data.errorInfo)

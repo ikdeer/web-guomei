@@ -25,7 +25,7 @@
                                            :key="item.id">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="stepTwoForm.two" @change="getFaceGroupShowList" placeholder="请选择二级分组">
+                            <el-select v-model="stepTwoForm.two" @change="getFaceGroupShowList(1)" placeholder="请选择二级分组">
                                 <el-option v-for="item in groupTwoList"
                                            :label="item.name"
                                            :value="item.id"
@@ -302,7 +302,7 @@
                 deleteFaceGroup(params).then(({data})=>{
                     if(data.errorCode ==200){
                         this.$message.warning('删除成功')
-                        this.getFaceGroupShowList();
+                        this.getFaceGroupShowList(1);
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -324,7 +324,7 @@
                   deleteFaceGroup(params).then(({data})=>{
                     if(data.errorCode ==200){
                       this.$message.warning('删除成功');
-                      this.getFaceGroupShowList();
+                      this.getFaceGroupShowList(1);
                     }else{
                       this.$message.warning(data.errorInfo)
                     }
@@ -425,19 +425,21 @@
                     if(data.errorCode ==200){
                         this.$message.success('添加成功');
                         this.faceListBirge = [];
-                        this.getFaceGroupShowList();
+                        this.getFaceGroupShowList(1);
                         this.addGroupFace = false;
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
                 });
             },
-            getFaceGroupShowList(){
-                this.page = {
-                    page:1,
-                    pageCount:10,
-                    total:0
-                };
+            getFaceGroupShowList(page){
+                if(page == 1){
+                    this.page = {
+                        page:1,
+                        pageCount:10,
+                        total:0
+                    };
+                }
                 let params = {
                     ...this.page,
                     faceGroupID:this.groupid,

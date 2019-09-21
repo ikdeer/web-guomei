@@ -94,8 +94,8 @@
                     </div>
                     <div>
                         <el-radio-group @change="ClickRadio" v-model="radio">
-                            <el-radio label="1">按日</el-radio>
-                            <el-radio label="2">按时</el-radio>
+                            <el-radio label="0">按日</el-radio>
+                            <el-radio label="1">按时</el-radio>
                         </el-radio-group>
                     </div>
                 </div>
@@ -226,7 +226,7 @@
                     ]
                 },
                 tableData:[],
-                radio:'1',
+                radio:'0',
                 callData:{
                     callDataCount: 0,
                     callFailCount: 0,
@@ -267,22 +267,23 @@
                 };
                 getStatement(params).then(({data}) => {
                     if(data.errorCode ==200){
-                        this.callData = data.data.data.callData?data.data.data.callData:[];
+                        this.callData = data.data.data.callData?data.data.data.callData : { callDataCount: 0, callFailCount: 0, callSucessCount: 0};
                         this.tableData = data.data.data.appStatisApiList?data.data.data.appStatisApiList:[];
                         this.page.total = data.pagerManager? data.pagerManager.totalResults:0;
                         let days=[],callFailCount=[],callSucessCount=[];
-                        this.tableData.forEach((item,index)=>{
-                            days.push(item.lastCallTime);
-                            callSucessCount.push(item.callSucessCount);
-                            callFailCount.push(item.callFailCount);
-                        });
+                        if(data.data.data.charStaticApiList){
+                            data.data.data.charStaticApiList.forEach((item,index)=>{
+                                days.push(item.days);
+                                callSucessCount.push(item.callSucessCount);
+                                callFailCount.push(item.callFailCount);
+                            });
+                        }
                         let option = {
                             tooltip: {
                                 trigger: 'axis'
                             },
                             legend: {
-
-                                data: ['调用成功', '调用失败']
+                                data: ['调用成功','调用失败']
                             },
                             grid: {
                                 left: '3%',
@@ -291,7 +292,7 @@
                                 containLabel: true
                             },
                             toolbox: {
-                                x:'96%',
+                                x:'94%',
                                 feature: {
                                     saveAsImage: {
                                         show: true
@@ -314,16 +315,31 @@
                             },
                             series: [
                                 {
-                                    name: '调用成功',
-                                    type: 'line',
-                                    stack: '总量',
-                                    data: callSucessCount
-                                },
-                                {
                                     name: '调用失败',
                                     type: 'line',
                                     stack: '总量',
-                                    data: callFailCount
+                                    data: callFailCount,
+                                    itemStyle : {
+                                        normal : {
+                                            color:'#0097E9', //改变折线点的颜色
+                                            lineStyle:{
+                                                color:'#0097E9' //改变折线颜色
+                                            }
+                                        }
+                                    }
+                                },{
+                                    name: '调用成功',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: callSucessCount,
+                                    itemStyle : {
+                                        normal : {
+                                            color:'#FF4C68', //改变折线点的颜色
+                                            lineStyle:{
+                                                color:'#FF4C68' //改变折线颜色
+                                            }
+                                        }
+                                    }
                                 }
                             ]
                         };
