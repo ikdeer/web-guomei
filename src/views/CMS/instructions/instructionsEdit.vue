@@ -12,13 +12,7 @@
       <h4 class="api-TextH4">编辑接入须知</h4>
       <div class="api-center">
         <div class="api-quill">
-          <el-form :model="catalogText"
-                   :label-position="labelPosition"
-                   :rules="rules"
-                   size="small"
-                   ref="catalogText"
-                   label-width="130px"
-                   class="demo-dynamic">
+          <el-form :model="catalogText" :rules="rules" ref="catalogText" label-width="130px">
             <el-form-item label="标题" prop="Title">
               <div class="api-OneLevel">
                 <el-input v-model="catalogText.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
@@ -109,7 +103,7 @@
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
-        labelPosition:'right',//form对其方式
+        ImgUrl:process.env.BASE_URL,//图片地址
         editorOption: {
           theme: 'snow',  // or 'bubble'
           placeholder: '请填写要发布的公告版内容...',
@@ -191,7 +185,7 @@
               // 获取光标所在位置
               let length = quill.getSelection().index;
               // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
+              quill.insertEmbed(length, 'image', `${this.ImgUrl}${response.data.data.url}`);
               // 调整光标到最后
               quill.setSelection(length + 1);
               // loading动画消失

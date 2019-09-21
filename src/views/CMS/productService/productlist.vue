@@ -19,6 +19,7 @@
         <div class="productList-tableColumn">
           <el-table ref="multipleTable"
                     :data="tableData"
+                    v-loading="loading"
                     @selection-change="handleSelectionChange"
                     border
                     tooltip-effect="dark">
@@ -28,9 +29,9 @@
                 <span>{{scope.row.title}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="缩略图">
+            <el-table-column align="center" width="150" label="缩略图">
               <template slot-scope="scope">
-                <span>{{scope.row.imgUrl}}</span>
+                <img :src="scope.row.imgUrl" class="scope-img" alt="">
               </template>
             </el-table-column>
             <el-table-column align="center" label="简介">
@@ -43,7 +44,7 @@
                 <span>{{scope.row.urlAddress}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="排序">
+            <el-table-column align="center" width="55" label="排序">
               <template slot-scope="scope">
                 <span>{{scope.row.sort}}</span>
               </template>
@@ -91,6 +92,7 @@
                 },
                 tableData:[],
                 DeleteArr:[],//批量删除
+                loading:false,
                 page:{
                     pageNum:1,
                     pageSize:10,
@@ -149,12 +151,14 @@
             },
             //数据列表
             loadData() {
+                this.loading = true;
                 let params = {
                     ...this.formData,
                     page:this.page.pageNum,
                     pageSize: this.page.pageSize
                 };
                 getProductServiceShow(params).then(response=>{
+                    this.loading = false;
                     if(response.data.errorCode == 200){
                         this.tableData = response.data.data ? response.data.data.list : [];
                         this.page.total = response.data.pagerManager ? response.data.pagerManager.totalResults : 0;//总条数
@@ -201,6 +205,10 @@
         }
         .productList-tableColumn{
           padding-top: 0.2rem;
+        }
+        .scope-img{
+          width: 150px;
+          height: 100%;
         }
       }
       .productList-footer{

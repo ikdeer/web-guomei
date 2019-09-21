@@ -12,7 +12,7 @@
       <h4 class="api-TextH4">编辑解决方案</h4>
       <div class="api-center">
         <div class="api-quill">
-          <el-form :model="form" :rules="rules" size="small" ref="formItem" label-width="130px" class="demo-dynamic">
+          <el-form :model="form" :rules="rules" size="small" ref="formItem" label-width="130px">
             <el-form-item label="标题：" prop="Title">
               <div class="api-OneLevel">
                 <el-input v-model="form.Title" maxlength="20" placeholder="请输入标题名称"></el-input>
@@ -95,7 +95,7 @@
   </div>
 </template>
 <script>
-  import {SolutionModify,getSolutionDetail} from "../../../HttpApi/solution/solutionApi";
+  import {SolutionModify,getSolutionDetail,getImageUploadNormalImage} from "../../../HttpApi/solution/solutionApi";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -127,7 +127,7 @@
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
-        labelPosition:'right',//form对其方式
+        ImgUrl:process.env.BASE_URL,//图片地址
         editorOption: {
           theme: 'snow',
           placeholder: '请填写要发布的公告版内容...',
@@ -197,7 +197,7 @@
         this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
             if(response.data.errorCode == 200){
-              this.form.coverImg = response.data.data.url;
+              this.form.coverImg = `${this.ImgUrl}${response.data.data.url}`;
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -219,7 +219,7 @@
               // 获取光标所在位置
               let length = quill.getSelection().index;
               // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', resBase64Img);
+              quill.insertEmbed(length, 'image', `${this.ImgUrl}${response.data.data.url}`);
               // 调整光标到最后
               quill.setSelection(length + 1);
               // loading动画消失

@@ -16,7 +16,7 @@
           </router-link>
         </div>
         <div class="api-tableColumn">
-          <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
+          <el-table ref="multipleTable" v-loading="loading" :data="tableData" border tooltip-effect="dark">
             <el-table-column align="center" label="apiID">
               <template slot-scope="scope">
                 <span>{{ scope.row.id}}</span>
@@ -75,6 +75,7 @@
     data(){
       return {
         tableData:[],
+        loading:false,
         page:{
           currentPage:1,
           pageSize:10,
@@ -85,7 +86,9 @@
     methods:{
       //技术文档列表
       getTechDoc(){
+        this.loading = true;
         getTechDoc({page:this.page.currentPage,pageSize:this.page.pageSize}).then(response => {
+          this.loading = false;
           if(response.data.errorCode == 200){
             this.tableData = response.data.data.list;
             this.page.total = response.data.pagerManager.totalResults;//总条数

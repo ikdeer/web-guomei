@@ -29,11 +29,11 @@
           </div>
           <div class="product-List">
             <ul class="product-ListUl">
-              <li v-for="(item,index) in productList">
+              <li v-for="(item,index) in tableData">
                 <div class="ListUl-Pad">
-                  <img class="ListUl-PadImg" :src="item.productImg" alt="">
-                  <h4 class="ListUl-PadTitle">{{item.productTitle}}</h4>
-                  <p class="ListUl-PadText">{{item.productText}}</p>
+                  <img class="ListUl-PadImg" :src="item.imgUrl" alt="">
+                  <h4 class="ListUl-PadTitle">{{item.title}}</h4>
+                  <p class="ListUl-PadText">{{item.intro}}</p>
                   <el-button class="ListUl-PadButton" @click="ClickProduct(item)">了解详情</el-button>
                 </div>
               </li>
@@ -104,6 +104,7 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
+    import {getProductServiceShow} from "../../../HttpApi/home/homeApi";
     export default {
       name: "home",
       components:{Header_Nav, Footer_Nav},
@@ -192,9 +193,24 @@
               schemeId:6
             },
           ],
+          tableData:[],
+          page:{
+            pageNum:1,
+            pageSize:6,
+          }
         }
       },
       methods:{
+        //产品服务列表
+        getProductServiceShow(){
+          getProductServiceShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
+            if(response.data.errorCode == 200){
+              this.tableData = response.data.data ? response.data.data.list : [];
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
+        },
         //跳转应用创建页
         ClickApply(){
           let _this = this;
@@ -223,6 +239,7 @@
       mounted(){
         let userInfo = this.Cookies.get('userInfo') || '';
         this.groupID =userInfo ? JSON.parse(userInfo).groupID : '';
+        this.getProductServiceShow();
       }
     }
 </script>
@@ -345,11 +362,15 @@
               .ListUl-PadText{
                 font-size: 0.18rem;
                 color: #666666;
-                padding-top: 0.19rem;
-                padding-bottom: 0.3rem;
+                margin-top: 0.19rem;
+                margin-bottom: 0.3rem;
                 text-align: center;
                 height: 0.9rem;
                 line-height: 0.3rem;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+                overflow: hidden;
               }
               .ListUl-PadButton{
                 display: block;

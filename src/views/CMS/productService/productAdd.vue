@@ -13,7 +13,6 @@
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="catalogText"
-                   :label-position="labelPosition"
                    :rules="rules"
                    size="small"
                    ref="catalogText"
@@ -69,8 +68,6 @@
                 :show-file-list="false"
                 :auto-upload="false"
                 :on-change="getFile"
-                action=""
-                :on-success="handleAvatarSuccess2"
                 :before-upload="beforeUpload">
               </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
@@ -127,7 +124,7 @@
                     bbsContent:'',//文本内容
                     quillUpdateImg:'',//图片上传动画
                 },
-                labelPosition:'right',//form对其方式
+                ImgUrl:process.env.BASE_URL,//图片地址
                 editorOption: {
                     theme: 'snow',
                     placeholder: '请填写要发布的公告版内容...',
@@ -180,7 +177,7 @@
               this.getBase64(file.raw).then(resBase64Img => {
                 getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
                   if(response.data.errorCode == 200){
-                      this.catalogText.coverImg = response.data.data.url;
+                      this.catalogText.coverImg = `${this.ImgUrl}${response.data.data.url}`;
                   }else{
                     this.$message.error(response.data.errorInfo);
                   }
@@ -202,7 +199,7 @@
                             // 获取光标所在位置
                             let length = quill.getSelection().index;
                             // 插入图片  res.data为服务器返回的图片地址
-                            quill.insertEmbed(length, 'image', resBase64Img);
+                            quill.insertEmbed(length, 'image', `${this.ImgUrl}${response.data.data.url}`);
                             // 调整光标到最后
                             quill.setSelection(length + 1);
                             // loading动画消失
@@ -212,24 +209,6 @@
                         }
                     })
                 })
-            },
-            // 图片上传成功回调
-            handleAvatarSuccess2(res, file) {
-              if (res.success) {
-                let url = res.data.path
-                url = `${process.env.BASE_URL}/${url}`;
-                let quill = this.$refs.myQuillEditor.quill;
-                // 获取光标所在位置
-                let length = quill.getSelection().index;
-                // 插入图片  res.data为服务器返回的图片地址
-                quill.insertEmbed(length, 'image', url);
-                // 调整光标到最后
-                quill.setSelection(length + 1);
-                // loading动画消失
-                this.catalogText.quillUpdateImg = false;
-              }else{
-                this.$message.error(response.data.errorInfo);
-              }
             },
             //转换Base64
             getBase64(file) {

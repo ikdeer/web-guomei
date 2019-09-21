@@ -20,6 +20,7 @@
             <el-table ref="multipleTable"
                       :data="tableData"
                       border
+                      v-loading="loading"
                       @selection-change="handleSelectionChange"
                       tooltip-effect="dark">
               <el-table-column align="center"  width="55" type="selection"></el-table-column>
@@ -28,9 +29,9 @@
                   <span>{{scope.row.title}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="缩略图">
+              <el-table-column align="center" width="150" label="缩略图">
                 <template slot-scope="scope">
-                  <span>{{scope.row.imgUrl}}</span>
+                  <img :src="scope.row.imgUrl" class="scope-Img" alt="">
                 </template>
               </el-table-column>
               <el-table-column align="center" label="主要服务">
@@ -48,7 +49,7 @@
                   <span>{{scope.row.urlAddress}}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="排序">
+              <el-table-column align="center" width="55" label="排序">
                 <template slot-scope="scope">
                   <span>{{scope.row.sort}}</span>
                 </template>
@@ -91,6 +92,7 @@ export default {
      return {
        tableData:[],
        DeleteArr:[],//批量删除
+       loading:false,
        page:{
          pageSize:10,
          pageNum:1,
@@ -101,7 +103,9 @@ export default {
   methods:{
     //解决方案列表
     getSolutionShow(){
+      this.loading = true;
       getSolutionShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
+        this.loading = false;
         if(response.data.errorCode == 200){
           this.tableData = response.data.data ? response.data.data.list : [];
           this.page.total = response.data.pagerManager ? response.data.pagerManager.totalResults : 0;//总条数
@@ -199,6 +203,11 @@ export default {
       .solutionList-footer{
         margin-top: 10px;
         text-align: right;
+      }
+      .scope-Img{
+        width: 150px;
+        height:100%;
+        display: block;
       }
     }
   }

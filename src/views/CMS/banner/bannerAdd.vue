@@ -80,6 +80,7 @@
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
         },
+        ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
           TitleImg:[{ required: true, message: '请输入图片名称', trigger: 'blur'}],
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
@@ -95,7 +96,7 @@
         this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
             if(response.data.errorCode == 200){
-              this.form.coverImg = response.data.data.url;
+              this.form.coverImg = `${this.ImgUrl}${response.data.data.url}`;
             }else{
               this.$message.error(response.data.errorInfo);
             }

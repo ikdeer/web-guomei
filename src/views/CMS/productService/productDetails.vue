@@ -12,13 +12,7 @@
       <h4 class="api-TextH4">查看产品服务</h4>
       <div class="api-center">
         <div class="api-quill">
-          <el-form :model="catalogText"
-                   :label-position="labelPosition"
-                   :rules="rules"
-                   size="small"
-                   ref="catalogText"
-                   label-width="130px"
-                   class="demo-dynamic">
+          <el-form :model="catalogText" :rules="rules" ref="catalogText" label-width="130px">
             <el-form-item label="标题：" prop="Title">
               <div class="api-OneLevel">
                 <el-input v-model="catalogText.Title" disabled maxlength="20" placeholder="请输入标题名称"></el-input>
@@ -119,7 +113,7 @@
           bbsContent:'',//文本内容
           quillUpdateImg:'',//图片上传动画
         },
-        labelPosition:'right',//form对其方式
+
         editorOption: {
           theme: 'snow',
           placeholder: '请填写要发布的公告版内容...',
