@@ -435,7 +435,6 @@
             choosedCompany(index){
                 // 选中公司 部门
                 if(index == 1){
-                    console.log(this.companyList);
                     this.departmentList = this.companyList[this.formData.company].list;
                     this.formData.floor = '';
                     this.formData.department = '';
@@ -446,13 +445,20 @@
                 }
                 if(index == 2){
                     this.formData.floor = '';
-                    this.floorList = this.departmentList[this.formData.department].list;
-                    console.log(this.floorList);
+                    if(this.departmentList[this.formData.department].name == '国美电器'){
+                        this.floorList = [];
+                    }else{
+                        this.floorList = this.departmentList[this.formData.department].list;
+                    }
                     this.locateNames2 = this.departmentList[this.formData.department].name;
                     this.locateNames3 = '';
                 }
                 if(index == 3){
-                    this.locateNames3 = this.floorList[this.formData.floor].floorName;
+                    this.floorList.forEach((item)=>{
+                        if(item.id == this.formData.floor){
+                            this.locateNames3 = item.floorName;
+                        }
+                    });
                 }
             },
             closeDialog(){
@@ -498,7 +504,7 @@
 
             },
             searchList(){
-                if(this.formData.company == '' && this.formData.department == '' && this.formData.floor == '' && this.formData.type == '' && this.formData.online == '' && this.formData.no == '' && this.formData.name == ''){
+                if(this.formData.company === '' && this.formData.department === '' && this.formData.floor === '' && this.formData.type == '' && this.formData.online == '' && this.formData.no == '' && this.formData.name == ''){
                     this.$message.warning('请输入查询条件');
                     return;
                 }
@@ -558,7 +564,7 @@
             },
             reset(){
                 this.formData={
-                    belongComID:'',//公司
+                    company:'',//公司
                     department:'',//部门
                     floor:'',//楼层
                     type:'',//设备类型

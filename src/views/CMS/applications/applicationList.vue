@@ -484,7 +484,7 @@
                     }).then(({data})=>{
                         if(data.errorCode ==200){
                             this.$message.success('删除成功');
-                            this.search();
+                            this.search(1);
                             this.applicationTableDialog = false;
                         }else{
                             this.$message.warning(data.errorInfo)

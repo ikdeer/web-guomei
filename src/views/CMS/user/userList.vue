@@ -487,9 +487,9 @@
                 if(this.userListTableInfo.status===3){
                     removeUser({id:this.userListTableInfo.id}).then(({data})=>{
                         if(data.errorCode ==200){
-                            this.search();
                             this.$message.success('删除成功');
                             this.userListTableDialog = false;
+                            this.search(1);
                         }else{
                             this.$message.warning(data.errorInfo)
                         }
