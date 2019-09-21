@@ -14,10 +14,14 @@
           <router-link :to="{path:'/Index/productAdd'}">
             <el-button type="primary">新增</el-button>
           </router-link>
-          <el-button type="danger" class="gm-delete">删除</el-button>
+          <el-button type="danger" class="gm-delete" @click="ClickBatchDeLeTe">删除</el-button>
         </div>
         <div class="productList-tableColumn">
-          <el-table ref="multipleTable" :data="tableData" border tooltip-effect="dark">
+          <el-table ref="multipleTable"
+                    :data="tableData"
+                    @selection-change="handleSelectionChange"
+                    border
+                    tooltip-effect="dark">
             <el-table-column align="center" width="55" type="selection"></el-table-column>
             <el-table-column align="center" label="服务名称">
               <template slot-scope="scope">
@@ -47,7 +51,7 @@
                 <router-link :to="{path:'/Index/productEdit',query:{Id:scope.row.id}}">
                   <el-button type="text" style="color:#67c23a;">编辑</el-button>
                 </router-link>
-                <el-button type="text" style="color:#f56c6c;">删除</el-button>
+                <el-button type="text" style="color:#f56c6c;" @click="ClickDelete(scope.row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -70,7 +74,7 @@
 </template>
 
 <script>
-    import {getProductServiceShow} from "@/HttpApi/product/productApi";
+    import {getProductServiceShow,getDelete,getDelBatch} from "@/HttpApi/product/productApi";
     export default {
         name: "productList",
         data(){
@@ -81,6 +85,7 @@
                     dataTime:'',
                 },
                 tableData:[],
+                DeleteArr:[],//批量删除
                 page:{
                     pageNum:1,
                     pageSize:10,
@@ -90,24 +95,56 @@
         },
         methods:{
             //删除
-            ClickDelete(typeId){
+            ClickDelete(id){
                 this.$confirm('此操作将永久删除这条数据, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     customClass:'gm-configItem',
                     type: 'warning'
                 }).then(() => {
-
+                  getDelete({id:id}).then(response => {
+                    if(response.data.errorCode == 200){
+                      this.$message({message: '删除成功',type: 'success'});
+                      this.page.pageNum = 1;
+                      this.loadData();
+                    }else{
+                      this.$message.error(response.data.errorInfo);
+                    }
+                  })
                 }).catch(() => {});
             },
-            handleSizeChange(val){
-                this.page.pageSize = val;
-                this.loadData()
+            //批量删除
+            ClickBatchDeLeTe(){
+              if(this.DeleteArr.length != 0){
+                this.$confirm('此操作将永久删除数据, 是否继续?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  customClass:'gm-configItem',
+                  type: 'warning'
+                }).then(() => {
+                  getDelBatch({ids:this.DeleteArr}).then(response => {
+                    if(response.data.errorCode == 200){
+                      this.$message({message: '批量删除成功',type: 'success'});
+                      this.page.pageNum = 1;
+                      this.loadData();
+                    }else{
+                      this.$message.error(response.data.errorInfo);
+                    }
+                  })
+                }).catch(() => {});
+              }else{
+                this.$message.error('请选择你要删除的数据');
+              }
             },
-            handleCurrentChange(val){
-                this.page.pageNum = val;
-                this.loadData()
+            //全部批量选中数组ID
+            handleSelectionChange(val){
+              let arr = [];
+              for(let i =0; i < val.length; i++){
+                arr.push(val[i].id);
+              }
+              this.DeleteArr = arr;
             },
+            //数据列表
             loadData() {
                 let params = {
                     ...this.formData,
@@ -115,11 +152,23 @@
                     pageSize: this.page.pageSize
                 };
                 getProductServiceShow(params).then(response=>{
-                    if(response.data.success){
+                    if(response.data.errorCode == 200){
                         this.tableData = response.data.data ? response.data.data.list : [];
                         this.page.total = response.data.pagerManager ? response.data.pagerManager.totalResults : 0;//总条数
+                    }else{
+                      this.$message.error(response.data.errorInfo);
                     }
                 })
+            },
+            //分页
+            handleSizeChange(val){
+              this.page.pageSize = val;
+              this.loadData()
+            },
+            //分页
+            handleCurrentChange(val){
+              this.page.pageNum = val;
+              this.loadData()
             }
         },
         mounted(){

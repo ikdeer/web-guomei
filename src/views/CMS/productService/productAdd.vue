@@ -266,9 +266,9 @@
                             txt: this.catalogText.bbsContent
                         }).then(response => {
                             if(response.data.success){
-                                this.$message({message: '创建成功~~~',type: 'success'});
+                                this.$message({message: '创建成功',type: 'success'});
                                 setTimeout(()=>{
-                                    _this.$router.push({path:'/Index/productlist'})
+                                    _this.$router.push({path:'/Index/productList'})
                                 },300)
                             }else{
                                 this.$message.error(response.data.errorInfo);

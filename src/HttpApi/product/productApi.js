@@ -42,3 +42,36 @@ export const getDetail = (params) => {
     })
   })
 };
+
+/**
+* 产品服务详情
+**/
+export const getModify = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/productService/modify', params).then(response => {
+      resolve(response)
+    })
+  })
+};
+
+/**
+ * 产品服务删除
+ **/
+export const getDelete = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/productService/del', params).then(response => {
+      resolve(response)
+    })
+  })
+};
+
+/**
+ * 产品服务批量删除
+ **/
+export const getDelBatch = (params) => {
+  return new Promise(resolve => {
+    AxIos.post('/productService/delBatch', params).then(response => {
+      resolve(response)
+    })
+  })
+};

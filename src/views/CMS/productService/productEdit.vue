@@ -97,7 +97,7 @@
   </div>
 </template>
 <script>
-  import {getDetail} from "@/HttpApi/product/productApi";
+  import {getDetail,getModify,getImageUploadNormalImage} from "@/HttpApi/product/productApi";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -203,7 +203,6 @@
           })
         })
       },
-
       // 上传图片前
       beforeUpload(res,file) {
         //显示loading动画
@@ -212,6 +211,7 @@
       //图片上传
       getFile(file,fileList){
         let _this = this;
+        console.log(file);
         _this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
             if(response.data.success){
@@ -249,9 +249,26 @@
       },
       //保存并发布
       addDomain(){
+        let _this = this;
         this.$refs.catalogText.validate((valid) => {
           if(valid){
-
+            getModify({
+              id:this.$route.query.Id,
+              imgUrl:this.catalogText.coverImg,
+              intro:this.catalogText.introduceText,
+              urlAddress:this.catalogText.URL,
+              sort:this.catalogText.sortNum,
+              txt:this.catalogText.bbsContent,
+            }).then(response => {
+              if(response.data.errorCode == 200){
+                this.$message({message: '编辑成功',type: 'success'});
+                setTimeout(()=>{
+                  _this.$router.push({path:'/Index/productList'})
+                },300)
+              }else{
+                this.$message.error(response.data.errorInfo);
+              }
+            })
           }
         })
       },
