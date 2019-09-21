@@ -245,6 +245,7 @@ export default {
     },
     //重置
     cancel(){
+      this.catalogText.secondLevel = '';
       this.$refs.catalogText.resetFields();
     },
     //保存并发布
