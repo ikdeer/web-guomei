@@ -283,8 +283,7 @@
                                 trigger: 'axis'
                             },
                             legend: {
-
-                                data: ['调用成功', '调用失败']
+                                data: ['调用成功','调用失败']
                             },
                             grid: {
                                 left: '3%',
@@ -316,16 +315,31 @@
                             },
                             series: [
                                 {
-                                    name: '调用成功',
-                                    type: 'line',
-                                    stack: '总量',
-                                    data: callSucessCount
-                                },
-                                {
                                     name: '调用失败',
                                     type: 'line',
                                     stack: '总量',
-                                    data: callFailCount
+                                    data: callFailCount,
+                                    itemStyle : {
+                                        normal : {
+                                            color:'#0097E9', //改变折线点的颜色
+                                            lineStyle:{
+                                                color:'#0097E9' //改变折线颜色
+                                            }
+                                        }
+                                    }
+                                },{
+                                    name: '调用成功',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: callSucessCount,
+                                    itemStyle : {
+                                        normal : {
+                                            color:'#FF4C68', //改变折线点的颜色
+                                            lineStyle:{
+                                                color:'#FF4C68' //改变折线颜色
+                                            }
+                                        }
+                                    }
                                 }
                             ]
                         };
