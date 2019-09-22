@@ -502,6 +502,10 @@
                     }
                     if(this.auditInfo.radio === 1){
                         params.reviewState = 20;
+                        if(this.auditInfo.info.trim() == ''){
+                            this.$message.warning('请输入原因描述');
+                            return;
+                        }
                         params.rejectReason = this.auditInfo.info;
                     }
                     auditApplication(params).then(({data})=>{
