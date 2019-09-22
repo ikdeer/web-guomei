@@ -24,110 +24,11 @@
                   :class="{'solution-liBg':item.id == schemeId}"
                   :key="item.id"
                   @click.stop="ClickScheme(item)">
-                <span>{{item.name}}</span>
+                <span>{{item.title}}</span>
               </li>
             </ul>
           </div>
-          <div class="solution-right">
-            <!-- 方案介绍 -->
-            <div class="solution-GodaddyDeluxe">
-              <div class="GodaddyDeluxe-Text">
-                <h2 class="GodaddyDeluxe-TextH2">方案介绍</h2>
-                <span></span>
-              </div>
-              <div class="GodaddyDeluxe-center">
-                <p class="GodaddyDeluxe-centerText">将考勤功能集成到手机等移动设备中，以较低的成本实现刷脸考勤，员工随时、随地打卡，无需排队等待使用活体检测功能，有效抵御照片、视频等作弊手段</p>
-                <div class="GodaddyDeluxe-list">
-                  <div class="GodaddyDeluxe-listDiv">
-                    <div class="listDiv-pad">
-                      <h4 class="listDiv-padH4">注册人脸库</h4>
-                      <div class="listDiv-padDiv">
-                        <div class="listDiv-padButton">
-                          <p class="listDiv-padDiv_p">采集人脸图片创建待识别的人脸底库</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <span class="el-icon-right"></span>
-                  <div class="GodaddyDeluxe-listDiv">
-                    <div class="listDiv-pad">
-                      <h4 class="listDiv-padH4">刷脸考勤</h4>
-                      <div class="listDiv-padDiv">
-                        <div class="listDiv-padButton">
-                          <h5 class="listDiv-padDiv_h5">获取人脸</h5>
-                          <p class="listDiv-padDiv_p">现场获取用户人脸图片，进行人脸识别，判断考勤结果</p>
-                        </div>
-                        <div class="listDiv-padButton">
-                          <h5 class="listDiv-padDiv_h5">活体检测</h5>
-                          <p class="listDiv-padDiv_p">防止图片、视频、3D模具作弊，进行人脸识别，判断考勤结果</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <span class="el-icon-right"></span>
-                  <div class="GodaddyDeluxe-listDiv">
-                    <div class="listDiv-pad">
-                      <h4 class="listDiv-padH4">考勤记录</h4>
-                      <div class="listDiv-padDiv">
-                        <div class="listDiv-padButton">
-                          <p class="listDiv-padDiv_p">基于人脸识别结果，进行考勤记录，并将数据输出到考勤系统中，进行下一步的业务处理</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- 方案简介及产品构成 -->
-            <div class="solution-productComposition">
-              <div class="productComposition-Text">
-                <h2 class="productComposition-TextH2">方案简介及产品构成</h2>
-                <span></span>
-              </div>
-              <div class="productComposition-center">
-                <p class="productComposition-centerText">将考勤功能集成到手机等移动设备中，以较低的成本实现刷脸考勤，员工随时、随地打卡，无需排队等待。使用活体检测功能，有效抵御照片、视频等作弊手段</p>
-                <div class="productComposition-list">
-                  <ul class="productComposition-listUl">
-                    <li class="productComposition-listLi">
-                      移动考勤
-                      <span class="el-icon-caret-bottom gm-button"></span>
-                    </li>
-                    <li class="productComposition-listLi">摄像头无感知考勤</li>
-                    <li class="productComposition-listLi">考勤一体机</li>
-                  </ul>
-                  <div class="productComposition-listBottom">
-                    <div class="listBottom-div">
-                      <div class="listBottom-divPad">
-                        <h5 class="listBottom-H5">人脸采集SDK</h5>
-                        <p class="listBottom-p">离线调用人脸检测、人脸追踪、人脸采集等能力，快速获取人脸图片</p>
-                      </div>
-                    </div>
-                    <div class="listBottom-border"></div>
-                    <div class="listBottom-div">
-                      <div class="listBottom-divPad">
-                        <h5 class="listBottom-H5">人脸采集SDK</h5>
-                        <p class="listBottom-p">离线调用人脸检测、人脸追踪、人脸采集等能力，快速获取人脸图片</p>
-                      </div>
-                    </div>
-                    <div class="listBottom-border"></div>
-                    <div class="listBottom-div">
-                      <div class="listBottom-divPad">
-                        <h5 class="listBottom-H5">人脸采集SDK</h5>
-                        <p class="listBottom-p">离线调用人脸检测、人脸追踪、人脸采集等能力，快速获取人脸图片</p>
-                      </div>
-                    </div>
-                    <div class="listBottom-border"></div>
-                    <div class="listBottom-div">
-                      <div class="listBottom-divPad">
-                        <h5 class="listBottom-H5">人脸采集SDK</h5>
-                        <p class="listBottom-p">离线调用人脸检测、人脸追踪、人脸采集等能力，快速获取人脸图片</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="solution-right" v-html="schemeText"></div>
         </div>
       </div>
       <!-- footer底部导航组件 -->
@@ -138,21 +39,15 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
-    import {getProductServiceShow} from "../../../HttpApi/product/solutionApi";
+    import {getSolutionShow,getSolutionDetail} from "../../../HttpApi/solution/solutionApi";
+
     export default {
       name: "solution",
       components:{Header_Nav,Footer_Nav},
       data(){
         return {
-          schemeList:[
-            {id:1,flag:false,name:'人脸考勤'},
-            {id:2,flag:false,name:'刷脸门禁考勤'},
-            {id:3,flag:false,name:'安防监控'},
-            {id:4,flag:false,name:'人脸登陆'},
-            {id:5,flag:false,name:'人脸支付'},
-            {id:6,flag:false,name:'会员识别'},
-          ],//数据展示
-          schemeText:[],//右侧内容数据
+          schemeList:[],//数据展示
+          schemeText:'',//右侧内容数据
           groupID:'',//登录人员身份
           schemeId:0,//标识ID
         }
@@ -174,15 +69,23 @@
             },300)
           }
         },
-        //产品服务列表
-        getProductServiceShow(){
-          getProductServiceShow().then(response => {
+        //解决方案列表
+        getSolutionShow(){
+          getSolutionShow().then(response => {
             if(response.data.errorCode == 200){
-              response.data.data.list.forEach((item) => {
-                item.flag = false;
-              });
-              response.data.data.list[0].flag = true;
               this.schemeList = response.data.data.list;
+              this.schemeId = this.$route.query.schemeId || this.schemeList[0].id;
+              this.getSolutionDetail(this.schemeId);
+            }else{
+              this.$message.error(response.data.pagerManager);
+            }
+          })
+        },
+        //解决方案详情
+        getSolutionDetail(id){
+          getSolutionDetail({id:id}).then(response => {
+            if(response.data.errorCode == 200){
+                this.schemeText = response.data.data.txt;
             }else{
               this.$message.error(response.data.pagerManager);
             }
@@ -190,16 +93,14 @@
         },
         //点击列表
         ClickScheme(item){
-          for(let i =0; i < this.schemeList.length; i++){
-            this.schemeList[i].flag = false;
-          }
           this.schemeId = item.id;
+          this.getSolutionDetail(this.schemeId);
         }
       },
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
         this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
-        this.schemeId = this.$route.query.schemeId || 1;
+        this.getSolutionShow();
       }
     }
 </script>
@@ -273,14 +174,14 @@
       display: flex;
       display: -webkit-flex;
       justify-content: space-between;
+      padding-bottom: 0.8rem;
       .solution-left{
-        width: 2.54rem;
         padding-top: 0.36rem;
         .solution-ul{
           width: 100%;
           border: 1px solid #EEEEEE;
           li{
-            width: 100%;
+            padding-right: 0.2rem;
             height: 0.66rem;
             display: flex;
             display: -webkit-flex;
