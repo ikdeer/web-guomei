@@ -23,6 +23,7 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  accept="image/jpg,image/jpeg,image/png"
                   :auto-upload="false"
                   :show-file-list="false"
                   :on-change="coverUpDataImg">
@@ -33,7 +34,7 @@
             </el-form-item>
             <el-form-item label="主要服务：" prop="serviceText">
               <div class="api-OneLevel">
-                <el-input v-model="form.serviceText" placeholder="请输入标题名称"></el-input>
+                <el-input v-model="form.serviceText" placeholder="请输入服务名称"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="简介：" prop="introduceText">
@@ -64,6 +65,7 @@
               <el-upload
                 class="avatar-uploaderImg"
                 action=""
+                accept="image/jpg,image/jpeg,image/png"
                 :show-file-list="false"
                 :auto-upload="false"
                 :before-upload="beforeUpload"
@@ -166,7 +168,7 @@
           coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
           serviceText:[{ required: true, message: '请输入服务名称', trigger: 'blur' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
-          URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
+          URL:[{ required: true, message: '请输入URL', trigger: 'blur' }],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
           bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
         }
@@ -175,6 +177,16 @@
     methods:{
       //封面上传
       coverUpDataImg(file,fileList){
+        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
+          return;
+        }
+        if (!isLt5M) {
+          this.$message.error('上传图片大小不能超过 5MB!');
+          return;
+        }
         this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
             if(response.data.errorCode == 200){
@@ -192,6 +204,16 @@
       },
       //图片上传
       getFile(file,fileList){
+        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
+          return;
+        }
+        if (!isLt5M) {
+          this.$message.error('上传图片大小不能超过 5MB!');
+          return;
+        }
         let _this = this;
         _this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
