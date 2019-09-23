@@ -47,6 +47,9 @@
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="catalogText.URL"></el-input>
               </div>
+              <p class="api-danger">如果要跳转本站产品详情页URL请复制或填写
+                <span>/Company/product</span>
+              </p>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
@@ -336,6 +339,12 @@
             display: -webkit-flex;
             align-items: center;
             justify-content: center;
+          }
+          .api-danger{
+            margin-top: 0.1rem;
+            span{
+              color:red;
+            }
           }
         }
       }
