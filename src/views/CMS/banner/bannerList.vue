@@ -34,6 +34,13 @@
                 <img :src="scope.row.imgUrl" class="scope-Img" alt="">
               </template>
             </el-table-column>
+            <el-table-column align="center" width="150" label="Banner区域">
+              <template slot-scope="scope">
+                <span v-if="scope.row.differentiate == '1'">首页Banner轮播</span>
+                <span v-if="scope.row.differentiate == '2'">产品服务</span>
+                <span v-if="scope.row.differentiate == '3'">解决方案</span>
+              </template>
+            </el-table-column>
             <el-table-column align="center" label="按钮1地址">
               <template slot-scope="scope">
                 <span>{{scope.row.url1}}</span>
