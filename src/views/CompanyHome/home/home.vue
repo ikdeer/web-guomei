@@ -364,6 +364,8 @@
                 width: 3.62rem;
                 height: 3.62rem;
                 display: block;
+                border-radius: 50%;
+                overflow: hidden;
               }
               .ListUl-PadTitle{
                 font-size:0.22rem;
