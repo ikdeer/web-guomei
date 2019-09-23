@@ -52,10 +52,13 @@
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="catalogText.URL"></el-input>
               </div>
+              <p class="api-danger">如果要跳转本站产品详情页URL请复制或填写
+                <span>/Company/product</span>
+              </p>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.sortNum" oninput="value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="catalogText.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item  label="内容：" prop="bbsContent">
@@ -112,6 +115,15 @@
     export default {
         name: "productAdd",
         data(){
+          var sortNum = (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请输排序'));
+            } else if(/[^\d]/g.test(value)){
+              callback(new Error('只能输入数字'));
+            } else {
+              callback();
+            }
+          };
             return {
                 catalogText:{
                     Title:'',//标题
@@ -164,7 +176,7 @@
                     coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
                     introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
                     URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-                    sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
+                    sortNum:[{ validator: sortNum, trigger: 'blur' }],
                     bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
                 },
             }
@@ -327,6 +339,12 @@
             display: -webkit-flex;
             align-items: center;
             justify-content: center;
+          }
+          .api-danger{
+            margin-top: 0.1rem;
+            span{
+              color:red;
+            }
           }
         }
       }
