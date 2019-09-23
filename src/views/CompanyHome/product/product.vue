@@ -169,8 +169,8 @@
       }
     }
     .product-action{
-      padding-left: 0.91rem;
-      padding-right: 2.13rem;
+      padding-left: 0.9rem;
+      padding-right: 0.9rem;
       display: flex;
       display: -webkit-flex;
       justify-content: space-between;
@@ -178,10 +178,10 @@
       .action-left{
         padding-top: 0.36rem;
         .action-ul{
-          width: 100%;
+          width: 2.54rem;
           border: 1px solid #EEEEEE;
           li{
-            padding-right:0.2rem;
+            width: 100%;
             height: 0.66rem;
             display: flex;
             display: -webkit-flex;
@@ -193,6 +193,9 @@
               font-size: 0.2rem;
               font-weight: 400;
               margin-left: 0.18rem;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
             }
           }
           li:last-child{
@@ -213,43 +216,10 @@
         }
       }
       .action-right{
-        width: 70%;
+        width: 80%;
         padding-top: 0.7rem;
         padding-bottom: 0.48rem;
-        overflow: hidden;
-        /*.action-introduce{
-          .introduce-Text{
-            position: relative;
-            .introduce-TextH2{
-              font-size: 0.48rem;
-              color:#252525;
-              font-weight: 600;
-              text-align: center;
-              letter-spacing: 2px;
-            }
-            span{
-              width: 0.88rem;
-              height: 0.04rem;
-              border-radius:0.02rem;
-              background: #036FE2;
-              display: block;
-              position: absolute;
-              bottom: -0.2rem;
-              left: 50%;
-              -webkit-transform: translate(-50%);
-              -ms-transform: translate(-50%);
-              transform: translate(-50%);
-            }
-          }
-          .introduce-content{
-            padding-top: 0.65rem;
-            p{
-              font-size: 0.18rem;
-              color: #666666;
-              line-height: 0.3rem;
-            }
-          }
-        }*/
+        word-wrap: break-word;
         .action-demonstration{
           padding-top: 0.9rem;
           .demonstration-Text{

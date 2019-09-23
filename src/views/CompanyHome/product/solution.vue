@@ -180,11 +180,10 @@
       .solution-left{
         padding-top: 0.36rem;
         .solution-ul{
-          width: 100%;
+          width: 2.54rem;
           border: 1px solid #EEEEEE;
           li{
-            width: 2.54rem;
-            padding-right: 0.2rem;
+            width:100%;
             height: 0.66rem;
             display: flex;
             display: -webkit-flex;
