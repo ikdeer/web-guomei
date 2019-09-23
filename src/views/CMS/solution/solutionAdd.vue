@@ -50,9 +50,7 @@
             </el-form-item>
             <el-form-item label="URL地址：" prop="URL">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" v-model="form.URL"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
