@@ -82,6 +82,7 @@
         form:{
           TitleImg:'',//图片名称
           coverImg:'',//图标
+          differentiate:'',
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
