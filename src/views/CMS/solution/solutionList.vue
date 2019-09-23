@@ -41,7 +41,7 @@
               </el-table-column>
               <el-table-column align="center" label="简介">
                 <template slot-scope="scope">
-                  <span>{{scope.row.intro}}</span>
+                  <span class="api-omit">{{scope.row.intro}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="URL">
@@ -209,6 +209,12 @@ export default {
         width: 150px;
         height:100%;
         display: block;
+      }
+      .api-omit{
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
       }
     }
   }

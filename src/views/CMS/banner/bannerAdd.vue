@@ -91,8 +91,8 @@
           TitleImg:[{ required: true, message: '请输入图片名称', trigger: 'blur'}],
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
           differentiate:[{ required: true, message: '选择banner位置', trigger: 'blur,change' }],
-          URL1:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
-          URL2:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
+          URL1:[{ required: true, message: '请输入URL1', trigger: 'blur' }],
+          URL2:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur'  }],
         }
       }

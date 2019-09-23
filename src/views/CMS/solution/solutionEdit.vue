@@ -170,7 +170,7 @@
           coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
           serviceText:[{ required: true, message: '请输入服务名称', trigger: 'blur' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
-          URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
+          URL:[{ required: true, message: '请输入URL', trigger: 'blur' }],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
           bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
         }
