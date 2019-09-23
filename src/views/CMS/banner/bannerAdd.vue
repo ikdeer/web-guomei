@@ -36,24 +36,23 @@
                 </el-upload>
               </div>
             </el-form-item>
-            <el-form-item label="活动区域" prop="differentiate">
-              <el-select v-model="form.differentiate" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
+            <el-form-item label="Banner添加位置" prop="differentiate">
+              <div class="api-OneLevel">
+                <el-select v-model="form.differentiate" placeholder="请选择Banner添加位置">
+                  <el-option label="首页banner轮播" value="1"></el-option>
+                  <el-option label="产品服务" value="2"></el-option>
+                  <el-option label="解决方案" value="3"></el-option>
+                </el-select>
+              </div>
             </el-form-item>
             <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL1">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="按钮2跳转地址：" prop="URL2">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL2">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
@@ -91,6 +90,7 @@
         rules:{
           TitleImg:[{ required: true, message: '请输入图片名称', trigger: 'blur'}],
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
+          differentiate:[{ required: true, message: '选择banner位置', trigger: 'blur,change' }],
           URL1:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
           URL2:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
@@ -139,6 +139,7 @@
             getBannerCreate({
               title:this.form.TitleImg,
               imgUrl:this.form.coverImg,
+              differentiate:this.form.differentiate,
               url1:this.form.URL1,
               url2:this.form.URL2,
               sort:this.form.sortNum,

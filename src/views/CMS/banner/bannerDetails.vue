@@ -30,18 +30,23 @@
                 </el-upload>
               </div>
             </el-form-item>
+            <el-form-item label="Banner添加位置" prop="differentiate">
+              <div class="api-OneLevel">
+                <el-select v-model="form.differentiate" disabled placeholder="请选择Banner添加位置">
+                  <el-option label="首页banner轮播" value="1"></el-option>
+                  <el-option label="产品服务" value="2"></el-option>
+                  <el-option label="解决方案" value="3"></el-option>
+                </el-select>
+              </div>
+            </el-form-item>
             <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" disabled v-model="form.URL1">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="按钮2跳转地址：" prop="URL2">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" disabled v-model="form.URL2">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" disabled v-model="form.URL2"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
@@ -64,6 +69,7 @@
         form:{
           TitleImg:'',//图片名称
           coverImg:'',//图标
+          differentiate:'',//添加banner位置
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
@@ -87,6 +93,7 @@
             this.form.URL1 = response.data.data.url1;
             this.form.URL2 = response.data.data.url2;
             this.form.sortNum = response.data.data.sort;
+            this.form.differentiate = response.data.data.differentiate;
           }else{
             this.$message.error(response.data.errorInfo);
           }

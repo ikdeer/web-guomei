@@ -205,7 +205,7 @@
           text-align: right;
         }
         .scope-Img{
-          width: 150px;
+          width: 130px;
           height: 100%;
           display: block;
         }
