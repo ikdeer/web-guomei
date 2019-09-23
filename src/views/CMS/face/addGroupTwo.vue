@@ -363,7 +363,6 @@
                         pageSize:10,
                         total:0
                     };
-                    this.faceListBirge = [];
                 }
                 let params = {
                     ...this.dataDialogForm,
