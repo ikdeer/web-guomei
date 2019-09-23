@@ -53,7 +53,7 @@
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="catalogText.sortNum"  maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="catalogText.sortNum"  oninput = "value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item  label="内容：" prop="bbsContent">
@@ -113,15 +113,6 @@
   export default {
     name: "productEdit",
     data(){
-      var sortNum = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输排序'));
-        } else if(/[^\d]/g.test(value)){
-          callback(new Error('只能输入数字'));
-        } else {
-          callback();
-        }
-      };
       return {
         catalogText:{
           Title:'',//标题
@@ -173,8 +164,8 @@
           Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
           coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
-          URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-          sortNum:[{ validator: sortNum, trigger: 'blur' }],
+          URL:[{ required: true, message: '请输入URL', trigger: 'blur' }],
+          sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
           bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
         }
       }

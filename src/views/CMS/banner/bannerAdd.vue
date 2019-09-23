@@ -57,7 +57,7 @@
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="form.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="form.sortNum"  oninput = "value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item>
@@ -77,15 +77,6 @@
   export default {
     name: "bannerAdd",
     data(){
-      let sortNum = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输排序'));
-        } else if(/[^\d]/g.test(value)){
-          callback(new Error('只能输入数字'));
-        } else {
-          callback();
-        }
-      };
       return {
         form:{
           TitleImg:'',//图片名称
@@ -102,7 +93,7 @@
           differentiate:[{ required: true, message: '选择banner位置', trigger: 'blur,change' }],
           URL1:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
           URL2:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
-          sortNum:[{ validator: sortNum, trigger: 'blur' }],
+          sortNum:[{ required: true, message: '请输入排序', trigger: 'blur'  }],
         }
       }
     },

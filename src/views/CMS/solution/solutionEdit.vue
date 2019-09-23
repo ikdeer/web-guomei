@@ -117,15 +117,6 @@
   export default {
     name: "solutionEdit",
     data(){
-      let sortNum = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输排序'));
-        } else if(/[^\d]/g.test(value)){
-          callback(new Error('只能输入数字'));
-        } else {
-          callback();
-        }
-      };
       return {
         form:{
           Title:'',//标题
@@ -180,7 +171,7 @@
           serviceText:[{ required: true, message: '请输入服务名称', trigger: 'blur' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
           URL:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
-          sortNum:[{ validator: sortNum, trigger: 'blur' }],
+          sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
           bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
         }
       }
