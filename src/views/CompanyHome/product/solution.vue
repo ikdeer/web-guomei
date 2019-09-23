@@ -28,7 +28,9 @@
               </li>
             </ul>
           </div>
-          <div class="solution-right" v-html="schemeText"></div>
+          <div class="solution-right">
+            <div v-html="schemeText"></div>
+          </div>
         </div>
       </div>
       <!-- footer底部导航组件 -->
@@ -169,8 +171,8 @@
       }
     }
     .solution-center{
-      padding-left: 0.91rem;
-      padding-right: 2.13rem;
+      padding-left: 0.9rem;
+      padding-right: 0.9rem;
       display: flex;
       display: -webkit-flex;
       justify-content: space-between;
@@ -181,6 +183,7 @@
           width: 100%;
           border: 1px solid #EEEEEE;
           li{
+            width: 2.54rem;
             padding-right: 0.2rem;
             height: 0.66rem;
             display: flex;
@@ -193,6 +196,9 @@
               font-size: 0.2rem;
               font-weight: 400;
               margin-left: 0.18rem;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
             }
           }
           li:last-child{
@@ -213,7 +219,7 @@
         }
       }
       .solution-right{
-        width: 70%;
+        width: 80%;
         padding-top: 0.7rem;
         padding-bottom: 0.24rem;
         .solution-GodaddyDeluxe{

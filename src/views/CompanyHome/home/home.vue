@@ -370,6 +370,9 @@
                 color: #252525;
                 font-weight: 700;
                 text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
               .ListUl-PadText{
                 font-size: 0.18rem;
@@ -482,6 +485,9 @@
                   color:#333333;
                   font-weight:600;
                   margin-left: 0.14rem;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
                 }
               }
               .listUl-Text{
@@ -491,10 +497,12 @@
                 margin-bottom: 0.41rem;
                 line-height: 0.3rem;
                 height: 0.9rem;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 3;
                 overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                word-break: break-all;
               }
               .listUl-title{
                 display: flex;
