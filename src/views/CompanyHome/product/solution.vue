@@ -222,6 +222,7 @@
         width: 80%;
         padding-top: 0.7rem;
         padding-bottom: 0.24rem;
+        word-wrap: break-word;
         .solution-GodaddyDeluxe{
           width: 100%;
           .GodaddyDeluxe-Text{
