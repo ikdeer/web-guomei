@@ -90,8 +90,8 @@
         getTechDoc({page:this.page.currentPage,pageSize:this.page.pageSize}).then(response => {
           this.loading = false;
           if(response.data.errorCode == 200){
-            this.tableData = response.data.data.list;
-            this.page.total = response.data.pagerManager.totalResults;//总条数
+            this.tableData = response.data.data ? response.data.data.list : [];
+            this.page.total = response.data ? response.data.pagerManager.totalResults : 0;//总条数
           }else{
             this.$message.warning(response.data.errorInfo);
           }

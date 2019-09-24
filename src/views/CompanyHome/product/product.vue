@@ -155,10 +155,11 @@
           color: #F20A59;
           font-size: 0.2rem;
           border-radius: 0.29rem;
-          padding: 0.16rem 0.5rem;
+          padding: 0.2rem 0.6rem;
           border: none;
           display: block;
           margin-right: 0.1rem;
+          opacity: 0;
         }
       }
     }
@@ -210,7 +211,7 @@
         }
       }
       .action-right{
-        width: 80%;
+        width: 75%;
         padding-top: 0.7rem;
         padding-bottom: 0.48rem;
         word-wrap: break-word;

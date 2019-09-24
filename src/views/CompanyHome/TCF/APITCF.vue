@@ -8,6 +8,24 @@
           <span class="menu-text">文档目录</span>
           <i class="el-icon-s-fold"></i>
         </div>
+        <!--<el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose">
+          <el-submenu index="1" v-for="(item,index) in dataList">
+            <template slot="title">
+              <span>{{item.text}}</span>
+            </template>
+            <el-menu-item-group index="1-3" v-for="(itemS,indexS) in item.DataText">
+              <el-menu-item index="1-3">{{itemS.text}}</el-menu-item>
+            </el-menu-item-group>
+            &lt;!&ndash;<el-submenu index="1-4">
+              <template slot="title">选项4</template>
+              <el-menu-item index="1-4-1">选项1</el-menu-item>
+            </el-submenu>&ndash;&gt;
+          </el-submenu>
+        </el-menu>-->
         <div class="menu-list" v-for="(item,index) in dataList">
           <!-- 一级目录 -->
           <div class="menu-gm" @click.stop="ClickMenu(item,index)">
@@ -35,12 +53,13 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
             <el-breadcrumb-item>技术文档</el-breadcrumb-item>
+            <el-breadcrumb-item>技术文档</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
         <div class="gm-contentPad">
           <h4 class="gm-contentPadText">{{bbsTopTitle}}</h4>
           <div class="gm-contentArea">
-            <div class="ql-editor contentArea-left" :style="contentStyleObj" v-html="bbsContent"></div>
+            <div class="ql-editor contentArea-left" v-html="bbsContent"></div>
           </div>
         </div>
       </div>
@@ -60,9 +79,7 @@
           bbsContent:'',//文本内容
           bbsTopTitle:'',//标题
           breadcrumb:[],
-          contentStyleObj:{
-            height:''
-          }
+          catalogList:[],
         }
       },
       created(){
@@ -100,6 +117,7 @@
                 this.getTechDocDetails(arrData[0].DataText[0].DataText[0].id);
               }
               this.dataList = arrData;
+              console.log(this.dataList);
             }else{
               this.$message.error(response.data.errorInfo);
             }

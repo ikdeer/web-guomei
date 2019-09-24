@@ -114,14 +114,14 @@
           bannerData:[],//banner图
           page:{
             pageNum:1,
-            pageSize:6,
+            pageSize:20,
           }
         }
       },
       methods:{
         //首页轮播
         getBannerShow(){
-          getBannerShow().then(response => {
+          getBannerShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
             if(response.data.errorCode == 200){
               this.bannerData = response.data.data ? response.data.data.list : [];
             }else{
@@ -222,9 +222,10 @@
           color: #F20A59;
           font-size: 0.2rem;
           border-radius: 0.29rem;
-          padding: 0.16rem 0.5rem;
+          padding: 0.2rem 0.6rem;
           border: none;
           display: block;
+          opacity:0;
         }
       }
     }

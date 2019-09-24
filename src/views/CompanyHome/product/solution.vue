@@ -4,7 +4,7 @@
       <Header_Nav></Header_Nav>
       <div class="solution-content">
         <header class="solution-header">
-          <img src="/static/images/meizhi.JPG" class="solution-ImgBg" alt="">
+          <img :src="bannerImg" class="solution-ImgBg" alt="">
           <div class="header-leftButton">
             <el-button @click.stop="ClickApply">立即申请</el-button>
             <el-button @click.stop="ClickApi">技术文档</el-button>
@@ -155,10 +155,11 @@
           color: #F20A59;
           font-size: 0.2rem;
           border-radius: 0.29rem;
-          padding: 0.16rem 0.5rem;
+          padding: 0.2rem 0.6rem;
           border: none;
           display: block;
           margin-right: 0.1rem;
+          opacity: 0;
         }
       }
     }
@@ -210,7 +211,7 @@
         }
       }
       .solution-right{
-        width: 80%;
+        width: 75%;
         padding-top: 0.7rem;
         padding-bottom: 0.24rem;
         word-wrap: break-word;
