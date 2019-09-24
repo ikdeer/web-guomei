@@ -1,7 +1,7 @@
 <template>
     <div class="Module">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="类目名称" prop="Title">
+        <el-form-item label="类目名称" required prop="Title">
           <div class="Module-fromPad">
             <el-input v-model="form.Title" maxlength="20" placeholder="请输入类目名称"></el-input>
           </div>

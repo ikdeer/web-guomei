@@ -1,7 +1,7 @@
 import AxIos from "../HttpApi";
 
 /**
-* 产品服务创建
+* 产品服务列表
 **/
 export const getProductServiceShow = (params) => {
   return new Promise(resolve => {
@@ -10,3 +10,14 @@ export const getProductServiceShow = (params) => {
     })
   })
 };
+
+/**
+* 解决方案列表
+**/
+export const getSolutionShow = (params) => {
+  return new Promise(resolve => {
+    AxIos.get('/solution/show', {params}).then(response => {
+      resolve(response)
+    })
+  })
+}

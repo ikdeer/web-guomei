@@ -109,11 +109,11 @@
                       this.$message({message: '登录成功', type: 'success'});
                       setTimeout(()=>{
                         if(_this.$route.query.redirect == 'overview'){
-                          _this.$router.push({path: '/Index/overview'});
+                          _this.$router.replace('/Index/overview');
                         }else if(_this.$route.query.redirect){
-                          _this.$router.push({path:_this.$route.query.redirect});
+                          _this.$router.replace(_this.$route.query.redirect);
                         }else{
-                          _this.$router.push({path: '/Company/CompanyHome'});
+                          _this.$router.replace('/Company/CompanyHome');
                         }
                       },500)
                     }else{

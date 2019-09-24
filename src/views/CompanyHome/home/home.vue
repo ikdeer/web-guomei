@@ -48,16 +48,16 @@
           </div>
           <div class="solution-List">
             <ul class="solution-ListUl">
-              <li class="ListUl-li" v-for="(item,index) in schemeList" :key="item.schemeId" @click="ClickSchemeURL(item,index)">
+              <li class="ListUl-li" v-for="(item,index) in schemeData" :key="item.id" @click="ClickSchemeURL(item,index)">
                 <div class="ListUl-pad">
                   <div class="listUl-header">
-                    <img :src="item.schemeImg" alt="">
-                    <span>{{item.schemeTitle}}</span>
+                    <img :src="item.imgUrl" alt="">
+                    <span>{{item.title}}</span>
                   </div>
-                  <p class="listUl-Text">{{item.schemeText}}</p>
+                  <p class="listUl-Text">{{item.intro}}</p>
                   <div class="listUl-title">
                     <span>主要服务：</span>
-                    <span>{{item.schemeType}}</span>
+                    <span>{{item.primaryService}}</span>
                   </div>
                 </div>
               </li>
@@ -104,7 +104,7 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
-    import {getProductServiceShow} from "../../../HttpApi/home/homeApi";
+    import {getProductServiceShow,getSolutionShow} from "../../../HttpApi/home/homeApi";
     export default {
       name: "home",
       components:{Header_Nav, Footer_Nav},
@@ -193,7 +193,8 @@
               schemeId:6
             },
           ],
-          tableData:[],
+          tableData:[],//产品服务
+          schemeData:[],//解决方案
           page:{
             pageNum:1,
             pageSize:6,
@@ -206,6 +207,16 @@
           getProductServiceShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
             if(response.data.errorCode == 200){
               this.tableData = response.data.data ? response.data.data.list : [];
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
+        },
+        //解决方案列表
+        getSolutionShow(){
+          getSolutionShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
+            if(response.data.errorCode == 200){
+              this.schemeData = response.data.data ? response.data.data.list : [];
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -229,17 +240,18 @@
         },
         //产品功能区域跳转
         ClickProduct(item){
-          this.$router.push({path:'/Company/product',query:{productId:item.productId}});
+          this.$router.push({path:'/Company/product',query:{productId:item.id}});
         },
         //解决方案区域跳转
         ClickSchemeURL(item){
-          this.$router.push({path:'/Company/solution',query:{schemeId:item.schemeId}});
+          this.$router.push({path:'/Company/solution',query:{schemeId:item.id}});
         }
       },
       mounted(){
         let userInfo = this.Cookies.get('userInfo') || '';
         this.groupID =userInfo ? JSON.parse(userInfo).groupID : '';
         this.getProductServiceShow();
+        this.getSolutionShow();
       }
     }
 </script>
@@ -352,12 +364,17 @@
                 width: 3.62rem;
                 height: 3.62rem;
                 display: block;
+                border-radius: 50%;
+                overflow: hidden;
               }
               .ListUl-PadTitle{
                 font-size:0.22rem;
                 color: #252525;
                 font-weight: 700;
                 text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
               .ListUl-PadText{
                 font-size: 0.18rem;
@@ -470,15 +487,24 @@
                   color:#333333;
                   font-weight:600;
                   margin-left: 0.14rem;
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
                 }
               }
               .listUl-Text{
                 font-size: 0.18rem;
                 color: #666666;
-                padding-top: 0.24rem;
-                padding-bottom: 0.41rem;
+                margin-top: 0.24rem;
+                margin-bottom: 0.41rem;
                 line-height: 0.3rem;
                 height: 0.9rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                word-break: break-all;
               }
               .listUl-title{
                 display: flex;
@@ -490,9 +516,14 @@
                   color: #252525;
                 }
                 span:last-child{
+                  width: 60%;
                   font-size: 0.2rem;
                   color: #036FE2;
                   margin-left:0.22rem;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+                  overflow: hidden;
                 }
               }
             }

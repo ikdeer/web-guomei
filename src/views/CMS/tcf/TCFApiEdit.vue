@@ -52,6 +52,7 @@
               <el-upload
                 class="avatar-uploader"
                 action=""
+                accept="image/jpg,image/jpeg,image/png"
                 :show-file-list="false"
                 :auto-upload="false"
                 :on-change="getFile"
@@ -212,6 +213,16 @@
       },
       //图片上传
       getFile(file,fileList){
+        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
+          return;
+        }
+        if (!isLt5M) {
+          this.$message.error('上传图片大小不能超过 5MB!');
+          return;
+        }
         let _this = this;
         _this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {

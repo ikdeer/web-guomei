@@ -284,6 +284,30 @@
                 };
                 this.faceList = [];
                 this.faceListBirge = [];
+                //获取图片来源
+                getPicList().then(({data})=>{
+                    if(data.errorCode ==200){
+                        this.picList = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取图片来源列表失败')
+                    }
+                });
+                //获取图片编号
+                getFaceNoType().then(({data})=>{
+                    if(data.errorCode ==200){
+                        this.faceNoType = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取图片编号列表失败')
+                    }
+                });
+                //获取类型
+                getFaceType().then(({data})=>{
+                    if(data.errorCode ==200){
+                        this.faceType = data.data?data.data.list:[];
+                    }else{
+                        this.$message.warning('获取类型列表失败')
+                    }
+                });
                 this.dialogSearch(1);
                 this.addGroupFace = true;
             },
@@ -473,30 +497,6 @@
                         this.groupOneList = []
                     }
                 });
-                //获取图片来源
-                getPicList().then(({data})=>{
-                    if(data.errorCode ==200){
-                        this.picList = data.data?data.data.list:[];
-                    }else{
-                        this.$message.warning('获取图片来源列表失败')
-                    }
-                });
-                //获取图片编号
-                getFaceNoType().then(({data})=>{
-                    if(data.errorCode ==200){
-                        this.faceNoType = data.data?data.data.list:[];
-                    }else{
-                        this.$message.warning('获取图片编号列表失败')
-                    }
-                });
-                //获取类型
-                getFaceType().then(({data})=>{
-                    if(data.errorCode ==200){
-                        this.faceType = data.data?data.data.list:[];
-                    }else{
-                        this.$message.warning('获取类型列表失败')
-                    }
-                })
             },
             //获取二级分组
             getGroupTwoList(){

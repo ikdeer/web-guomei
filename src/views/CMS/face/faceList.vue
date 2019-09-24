@@ -141,8 +141,8 @@
                         action=""
                         accept="image/jpg,image/jpeg,image/png,image/x-ms-bmp"
                         :show-file-list="false"
-                        :before-upload="beforeAvatarUpload"
-                        :on-progress="handleAvatarSuccess">
+                        :auto-upload="false"
+                        :on-change="handleAvatarSuccess">
                         <img v-if="imageUrl" :src="imageUrl" class="avatar">
                         <div v-else class="upload_info" >
                             <i class="el-icon-picture-outline"></i>
@@ -453,7 +453,18 @@
                 this.page.page = val;
                 this.search(2)
             },
-            handleAvatarSuccess(event, file, fileList) {
+            handleAvatarSuccess(file, fileList) {
+                const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png" || file.raw.type === "image/x-ms-bmp";
+                const isLt5M = file.size / 1024 / 1024 < 5;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG JPEG PNG BMP 格式!');
+                    return;
+                }
+                if (!isLt5M) {
+                    this.$message.error('上传头像图片大小不能超过 5MB!');
+                    return;
+                }
                 var that = this;
                 var imgurl = '';
                 var reader = new FileReader();
@@ -470,18 +481,6 @@
                         }
                     })
                 };
-            },
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpg' || file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/x-ms-bmp";
-                const isLt2M = file.size / 1024 / 1024 < 5;
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG JPEG PNG BMP 格式!');
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 5MB!');
-                }
-                return isJPG && isLt2M;
             },
             commitFaceImage(){
                 this.$refs['dataDialogForm'].validate((valid) => {

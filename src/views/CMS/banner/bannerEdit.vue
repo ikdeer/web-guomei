@@ -28,6 +28,7 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  accept="image/jpg,image/jpeg,image/png"
                   :on-change="BannerUpDataImg"
                   :auto-upload="false"
                   :show-file-list="false">
@@ -36,23 +37,28 @@
                 </el-upload>
               </div>
             </el-form-item>
+            <el-form-item label="Banner添加位置" prop="differentiate">
+              <div class="api-OneLevel">
+                <el-select v-model="form.differentiate" disabled placeholder="请选择Banner添加位置">
+                  <el-option label="首页banner轮播" value="1"></el-option>
+                  <el-option label="产品服务" value="2"></el-option>
+                  <el-option label="解决方案" value="3"></el-option>
+                </el-select>
+              </div>
+            </el-form-item>
             <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL1">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="按钮2跳转地址：" prop="URL2">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL2">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="form.sortNum" maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="form.sortNum" oninput = "value=value.replace(/[^\d]/g,'')" maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item>
@@ -79,6 +85,7 @@
         form:{
           TitleImg:'',//图片名称
           coverImg:'',//图标
+          differentiate:'',//添加banner位置
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
@@ -87,8 +94,9 @@
         rules:{
           TitleImg:[{ required: true, message: '请输入图片名称', trigger: 'blur' }],
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
-          URL1:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
-          URL2:[{ required: true, message: '请输入连接地址', trigger: 'blur' }],
+          differentiate:[{ required: true, message: '选择banner位置', trigger: 'blur,change' }],
+          URL1:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
+          URL2:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
         }
       }
@@ -103,6 +111,7 @@
             this.form.URL1 = response.data.data.url1;
             this.form.URL2 = response.data.data.url2;
             this.form.sortNum = response.data.data.sort;
+            this.form.differentiate = response.data.data.differentiate;
           }else{
             this.$message.error(response.data.errorInfo);
           }
@@ -110,6 +119,16 @@
       },
       //图片上传
       BannerUpDataImg(file,fileList){
+        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
+          return;
+        }
+        if (!isLt5M) {
+          this.$message.error('上传图片大小不能超过 5MB!');
+          return;
+        }
         this.getBase64(file.raw).then(resBase64Img => {
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
             if(response.data.errorCode == 200){
@@ -146,6 +165,7 @@
               id:this.$route.query.Id,
               title:this.form.TitleImg,
               imgUrl:this.form.coverImg,
+              differentiate:this.form.differentiate,
               url1:this.form.URL1,
               url2:this.form.URL2,
               sort:this.form.sortNum,

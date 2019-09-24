@@ -49,14 +49,12 @@
             </el-form-item>
             <el-form-item label="URL地址：" prop="URL">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" disabled v-model="form.URL">
-                  <template slot="prepend">Http://</template>
-                </el-input>
+                <el-input placeholder="请输入URL" disabled v-model="form.URL"></el-input>
               </div>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
-                <el-input v-model="form.sortNum" disabled maxlength="2" placeholder="请输入排序"></el-input>
+                <el-input v-model="form.sortNum" oninput="value=value.replace(/[^\d]/g,'')" disabled maxlength="2" placeholder="请输入排序"></el-input>
               </div>
             </el-form-item>
             <el-form-item  label="内容：" prop="bbsContent">

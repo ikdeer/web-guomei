@@ -41,7 +41,7 @@
               </el-table-column>
               <el-table-column align="center" label="简介">
                 <template slot-scope="scope">
-                  <span>{{scope.row.intro}}</span>
+                  <span class="api-omit">{{scope.row.intro}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="URL">
@@ -134,7 +134,8 @@ export default {
     },
     //批量删除
     ClickBatchDeLeTe(){
-      if(this.DeleteArr.length != 0){
+        console.log(this.DeleteArr);
+        if(this.DeleteArr.length != 0){
         this.$confirm('此操作将永久删除数据, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -209,6 +210,12 @@ export default {
         width: 150px;
         height:100%;
         display: block;
+      }
+      .api-omit{
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
       }
     }
   }
