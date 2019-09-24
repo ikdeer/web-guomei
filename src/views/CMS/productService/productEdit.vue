@@ -270,6 +270,7 @@
           if(valid){
             getModify({
               id:this.$route.query.Id,
+              title:this.catalogText.Title,
               imgUrl:this.catalogText.coverImg,
               intro:this.catalogText.introduceText,
               urlAddress:this.catalogText.URL,
