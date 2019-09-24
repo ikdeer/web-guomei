@@ -5,11 +5,11 @@
         <!-- 头部公用组件 -->
         <Header_Nav></Header_Nav>
         <el-carousel height="528px">
-          <el-carousel-item>
+          <el-carousel-item v-for="(item,index) in bannerData" v-if="item.differentiate == 1">
             <div class="header-IfoImg">
-              <img src="/static/images/meizhi.JPG" class="header-ImgBg" alt="">
+              <img :src="item.imgUrl" class="header-ImgBg" alt="">
               <div class="IfoImg-left">
-                <p class="IfoImg-Title">人脸对比</p>
+                <p class="IfoImg-Title">{{item.title}}</p>
                 <p class="IfoImg-Text">人脸识别（Face Recognition）基于图像或视频中的人脸检测、分析和比对技术，
                   提供人脸检测定位、人脸属性识别和人脸比对等独立服务模块。可以为开发者和
                   企业提供高性能的在线API服务，应用于人脸AR、人脸识别和认证、大规模人脸
@@ -107,7 +107,7 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
-    import {getProductServiceShow,getSolutionShow} from "../../../HttpApi/home/homeApi";
+    import {getProductServiceShow,getSolutionShow,getBannerShow} from "../../../HttpApi/home/homeApi";
     export default {
       name: "home",
       components:{Header_Nav, Footer_Nav},
@@ -198,6 +198,7 @@
           ],
           tableData:[],//产品服务
           schemeData:[],//解决方案
+          bannerData:[],//banner图
           page:{
             pageNum:1,
             pageSize:6,
@@ -205,6 +206,16 @@
         }
       },
       methods:{
+        //首页轮播
+        getBannerShow(){
+          getBannerShow().then(response => {
+            if(response.data.errorCode == 200){
+              this.bannerData = response.data.data ? response.data.data.list : [];
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
+        },
         //产品服务列表
         getProductServiceShow(){
           getProductServiceShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
@@ -253,6 +264,7 @@
       mounted(){
         let userInfo = this.Cookies.get('userInfo') || '';
         this.groupID =userInfo ? JSON.parse(userInfo).groupID : '';
+        this.getBannerShow();
         this.getProductServiceShow();
         this.getSolutionShow();
       }

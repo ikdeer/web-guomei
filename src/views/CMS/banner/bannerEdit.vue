@@ -55,6 +55,10 @@
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
+              <p class="api-danger">
+                如果要跳转本站技术文档页URL请复制或填写
+                <span>/Company/APITCF</span>
+              </p>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
@@ -257,6 +261,12 @@
           }
           .avatar-uploaderImg{
             display: none;
+          }
+          .api-danger{
+            margin-top: 0.1rem;
+            span{
+              color:red;
+            }
           }
         }
       }
