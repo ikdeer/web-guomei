@@ -52,7 +52,8 @@
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL"></el-input>
               </div>
-              <p class="api-danger">如果要跳转本站解决方案详情页URL请复制或填写
+              <p class="api-danger">
+                如果要跳转本站解决方案详情页URL请复制或填写
                 <span>/Company/solution</span>
               </p>
             </el-form-item>
@@ -120,12 +121,11 @@
         if (value === '') {
           callback(new Error('请输入URL'));
         } else if(!/(http|https):\/\/([\w.]+\/?)\S*/.test(value)){
-          if(value == '/Company/APITCF'){
+          if(value == '/Company/solution'){
             callback();
           }else{
             callback(new Error('URL地址缺少http://或https://'));
           }
-
         }else{
           callback();
         }

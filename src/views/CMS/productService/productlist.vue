@@ -207,7 +207,7 @@
           padding-top: 0.2rem;
         }
         .scope-img{
-          width: 150px;
+          width: 120px;
           height: 100%;
         }
         .api-omit{

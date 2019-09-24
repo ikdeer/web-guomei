@@ -53,7 +53,8 @@
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="catalogText.URL"></el-input>
               </div>
-              <p class="api-danger">如果要跳转本站产品详情页URL请复制或填写
+              <p class="api-danger">
+                如果要跳转本站产品详情页URL请复制或填写
                 <span>/Company/product</span>
               </p>
             </el-form-item>
