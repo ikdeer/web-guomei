@@ -4,17 +4,10 @@
       <Header_Nav></Header_Nav>
       <div class="product-center">
         <header class="product-header">
-          <div class="header-left">
-            <h4 class="header-leftTitle">人脸识别</h4>
-            <p class="header-leftText">基于深度学习的人脸识别方案，准确识别图片中的人脸信息，提供人脸属性识别、关键点定位、人脸1：1比对、人脸1：N识别、活体检测等能力</p>
-            <div class="header-leftButton">
-              <el-button @click.stop="ClickApply">立即申请</el-button>
-              <el-button>技术文档</el-button>
-            </div>
-            <p class="header-leftItem">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
-          </div>
-          <div class="header-right">
-            <img src="/static/images/product_banner_bg@2x.png" alt="">
+          <img :src="bannerImg" class="product-ImgBg" alt="">
+          <div class="header-leftButton">
+            <el-button @click.stop="ClickApply">立即申请</el-button>
+            <el-button @click.stop="ClickApi">技术文档</el-button>
           </div>
         </header>
         <div class="product-action">
@@ -39,12 +32,14 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
-    import {getProductServiceShow,getDetail} from "../../../HttpApi/product/productApi";
+    import {getProductServiceShow,getDetail,getBannerShow} from "../../../HttpApi/product/productApi";
     export default {
       name: "product",
       components:{Header_Nav,Footer_Nav},
       data(){
         return {
+          bannerURL:'',//banner跳转地址
+          bannerImg:'',//图片
           //数据展示
           SolutionList:[],
           //右侧内容数据
@@ -54,6 +49,23 @@
         }
       },
       methods:{
+        //banner图片
+        getBannerShow(){
+          getBannerShow().then(response => {
+            if(response.data.errorCode == 200){
+              let bannerList = response.data.data ? response.data.data.list : [];
+              for(let i =0; i < bannerList.length; i++){
+                if(bannerList[i].differentiate == 2){
+                  this.bannerImg = bannerList[i].imgUrl;
+                  this.bannerURL = bannerList[i].url2;
+                  break;
+                }
+              }
+            }else{
+              this.$message.error(response.data.pagerManager);
+            }
+          })
+        },
         //跳转应用创建页
         ClickApply(){
           let _this = this;
@@ -68,6 +80,14 @@
             setTimeout(()=>{
               _this.$router.push({path:'/Company/login'});
             },300)
+          }
+        },
+        //跳转技术文档
+        ClickApi(){
+          if(this.bannerURL == '/Company/APITCF'){
+            this.$router.push({path:this.bannerURL});
+          }else{
+            window.open(this.bannerURL);
           }
         },
         //解决方案列表
@@ -101,6 +121,7 @@
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
         this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
+        this.getBannerShow();
         this.getProductServiceShow();
       }
     }
@@ -113,58 +134,31 @@
     width: 100%;
     margin-top: 0.8rem;
     .product-header{
-      padding-left: 1.5rem;
-      padding-right: 2.34rem;
+      width: 100%;
       height: 5rem;
-      background:linear-gradient(225deg,rgba(1,109,229,1) 0%,rgba(13,27,56,1) 100%);
-      display: flex;
-      display: -webkit-flex;
-      align-items: center;
-      justify-content: space-between;
-      .header-left{
-        width: 7.6rem;
-        .header-leftTitle{
-          font-size: 0.68rem;
-          color: #ffffff;
-          font-weight: 600;
-          letter-spacing: 2px;
-        }
-        .header-leftText{
-          color: #ffffff;
-          padding-top:0.3rem;
-          padding-bottom: 0.5rem;
-          font-size: 0.22rem;
-          line-height: 0.37rem;
-        }
-        .header-leftButton{
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          padding-bottom: 0.38rem;
-          button{
-            background: #ffffff;
-            color: #F20A59;
-            font-size: 0.2rem;
-            border-radius: 0.29rem;
-            padding: 0.16rem 0.5rem;
-            border: none;
-            display: block;
-            margin-right: 0.1rem;
-          }
-        }
-        .header-leftItem{
-          font-size: 0.18rem;
-          color: #666666;
-          font-weight: 400;
-        }
+      position: relative;
+      .product-ImgBg{
+        width: 100%;
+        height: 5rem;
+        display: block;
+        overflow: hidden;
       }
-      .header-right{
-        width: 4.57rem;
-        height: 4.57rem;
-        img{
-          width: 100%;
-          height: 100%;
+      .header-leftButton{
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        position: absolute;
+        top: 3rem;
+        left: 1.5rem;
+        button{
+          background: #ffffff;
+          color: #F20A59;
+          font-size: 0.2rem;
+          border-radius: 0.29rem;
+          padding: 0.16rem 0.5rem;
+          border: none;
           display: block;
+          margin-right: 0.1rem;
         }
       }
     }

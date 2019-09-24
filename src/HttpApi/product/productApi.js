@@ -75,3 +75,14 @@ export const getDelBatch = (params) => {
     })
   })
 };
+
+/**
+ * banner列表页
+ **/
+export const getBannerShow = (params) => {
+  return new Promise(resolve => {
+    AxIos.get('/banner/show', {params}).then(response => {
+      resolve(response)
+    })
+  })
+};

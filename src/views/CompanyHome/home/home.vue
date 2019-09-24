@@ -4,6 +4,7 @@
       <header class="home-header">
         <!-- 头部公用组件 -->
         <Header_Nav></Header_Nav>
+        <!-- banner轮播 -->
         <el-carousel height="528px">
           <el-carousel-item v-for="(item,index) in bannerData" v-if="item.differentiate == 1">
             <div class="header-IfoImg">
@@ -12,7 +13,6 @@
             </div>
           </el-carousel-item>
         </el-carousel>
-
       </header>
       <!-- 主体内容区域 -->
       <main class="home-main">
@@ -246,11 +246,19 @@
         },
         //产品功能区域跳转
         ClickProduct(item){
-          this.$router.push({path:'/Company/product',query:{productId:item.id}});
+          if(item.urlAddress == '/Company/product'){
+            this.$router.push({path:item.urlAddress,query:{productId:item.id}});
+          }else{
+            window.open(item.urlAddress);
+          }
         },
         //解决方案区域跳转
         ClickSchemeURL(item){
-          this.$router.push({path:'/Company/solution',query:{schemeId:item.id}});
+          if(item.urlAddress == '/Company/solution'){
+            this.$router.push({path:item.urlAddress,query:{productId:item.id}});
+          }else{
+            window.open(item.urlAddress);
+          }
         }
       },
       mounted(){
