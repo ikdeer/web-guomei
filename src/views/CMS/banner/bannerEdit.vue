@@ -51,14 +51,9 @@
                 <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2">
+            <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2" required>
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL2">
-                  <el-select v-model="form.selectURL" class="gm-select" slot="prepend" placeholder="请选择">
-                    <el-option label="http://" value="http://"></el-option>
-                    <el-option label="https://" value="https://"></el-option>
-                  </el-select>
-                </el-input>
+                <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
               <p class="api-danger">
                 如果要跳转本站技术文档页URL请复制或填写
@@ -90,6 +85,20 @@
   export default {
     name: "bannerEdit",
     data(){
+      let URL2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入URL'));
+        } else if(!/(http|https):\/\/([\w.]+\/?)\S*/.test(value)){
+          if(value == '/Company/APITCF'){
+            callback();
+          }else{
+            callback(new Error('URL地址缺少http://或https://'));
+          }
+
+        }else{
+          callback();
+        }
+      };
       return {
         form:{
           TitleImg:'',//图片名称
@@ -107,7 +116,7 @@
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
           differentiate:[{ required: true, message: '选择banner位置', trigger: 'blur,change' }],
           URL1:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
-          URL2:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
+          URL2:[{ validator: URL2, trigger: 'blur'}],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
         }
       }

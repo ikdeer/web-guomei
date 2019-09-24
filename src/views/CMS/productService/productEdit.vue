@@ -115,6 +115,20 @@
   export default {
     name: "productEdit",
     data(){
+      let URL = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入URL'));
+        } else if(!/(http|https):\/\/([\w.]+\/?)\S*/.test(value)){
+          if(value == '/Company/product'){
+            callback();
+          }else{
+            callback(new Error('URL地址缺少http://或https://'));
+          }
+
+        }else{
+          callback();
+        }
+      };
       return {
         catalogText:{
           Title:'',//标题
@@ -166,7 +180,7 @@
           Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
           coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
-          URL:[{ required: true, message: '请输入URL', trigger: 'blur' }],
+          URL:[{ validator: URL, trigger: 'blur'}],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
           bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
         }
