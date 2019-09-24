@@ -4,20 +4,23 @@
       <header class="home-header">
         <!-- 头部公用组件 -->
         <Header_Nav></Header_Nav>
-        <div class="header-IfoImg">
-          <div class="IfoImg-left">
-            <p class="IfoImg-Title">人脸对比</p>
-            <p class="IfoImg-Text">人脸识别（Face Recognition）基于图像或视频中的人脸检测、分析和比对技术，
-              提供人脸检测定位、人脸属性识别和人脸比对等独立服务模块。可以为开发者和
-              企业提供高性能的在线API服务，应用于人脸AR、人脸识别和认证、大规模人脸
-              检索、照片管理等各种场景。</p>
-            <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
-            <p class="IfoImg-TextSmall">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
-          </div>
-          <div class="IfoImg-right">
-            <img src="/static/images/banner_bg@2x.png" alt="">
-          </div>
-        </div>
+        <el-carousel height="528px">
+          <el-carousel-item>
+            <div class="header-IfoImg">
+              <img src="/static/images/meizhi.JPG" class="header-ImgBg" alt="">
+              <div class="IfoImg-left">
+                <p class="IfoImg-Title">人脸对比</p>
+                <p class="IfoImg-Text">人脸识别（Face Recognition）基于图像或视频中的人脸检测、分析和比对技术，
+                  提供人脸检测定位、人脸属性识别和人脸比对等独立服务模块。可以为开发者和
+                  企业提供高性能的在线API服务，应用于人脸AR、人脸识别和认证、大规模人脸
+                  检索、照片管理等各种场景。</p>
+                <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
+                <p class="IfoImg-TextSmall">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
+              </div>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+
       </header>
       <!-- 主体内容区域 -->
       <main class="home-main">
@@ -264,15 +267,19 @@
     .header-IfoImg{
       width: auto;
       height: 5.8rem;
-      background:linear-gradient(225deg,rgba(0,192,249,1) 0%,rgba(2,101,228,1) 100%);
       display: flex;
-      display: -webkit-flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-left: 1.5rem;
-      padding-right: 2.12rem;
       margin-top: 0.8rem;
+      position: relative;
+      .header-ImgBg{
+        width: 100%;
+        height: 5.8rem;
+        display: block;
+        overflow: hidden;
+      }
       .IfoImg-left{
+        position: absolute;
+        top: 1rem;
+        left: 1.5rem;
         .IfoImg-Title{
           font-size: 0.68rem;
           color: #ffffff;
@@ -299,15 +306,6 @@
           padding-top: 0.38rem;
           font-size: 0.18rem;
           color: #999999;
-        }
-      }
-      .IfoImg-right{
-        width: 5rem;
-        height: 4.7rem;
-        >img{
-          width: 100%;
-          height: 100%;
-          display: block;
         }
       }
     }
