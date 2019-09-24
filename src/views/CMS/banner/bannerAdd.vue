@@ -46,12 +46,12 @@
                 </el-select>
               </div>
             </el-form-item>
-            <el-form-item label="按钮1跳转地址：" prop="URL1" v-if="form.isURL">
+            <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL1"></el-input>
+                <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" prop="URL2">
+            <el-form-item label="按钮2跳转地址：" prop="URL2" v-if="form.isURL">
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
@@ -83,10 +83,10 @@
           TitleImg:'',//图片名称
           coverImg:'',//图标
           differentiate:'',
-          URL1:'',//按钮一跳转地址
+          URL1:'/Index/addApplication',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          isURL:true,
+          isURL:false,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
