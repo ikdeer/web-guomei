@@ -39,7 +39,7 @@
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
-                <el-select v-model="form.differentiate" disabled placeholder="请选择Banner添加位置">
+                <el-select v-model="form.differentiate" @change="selectChange" placeholder="请选择Banner添加位置">
                   <el-option label="首页banner轮播" value="1"></el-option>
                   <el-option label="产品服务" value="2"></el-option>
                   <el-option label="解决方案" value="3"></el-option>
@@ -48,10 +48,10 @@
             </el-form-item>
             <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL1"></el-input>
+                <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" prop="URL2">
+            <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2">
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
@@ -89,6 +89,7 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
+          isURL:false,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -102,6 +103,13 @@
       }
     },
     methods:{
+      selectChange(){
+        if(this.form.differentiate == 1){
+          this.form.isURL = false;
+        }else{
+          this.form.isURL = true;
+        }
+      },
       //banner详情页面
       getBannerDetail(){
         getBannerDetail({id:this.$route.query.Id}).then(response => {
@@ -112,6 +120,7 @@
             this.form.URL2 = response.data.data.url2;
             this.form.sortNum = response.data.data.sort;
             this.form.differentiate = response.data.data.differentiate;
+            this.form.isURL =  this.form.differentiate == 1 ? false : true;
           }else{
             this.$message.error(response.data.errorInfo);
           }

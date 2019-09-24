@@ -44,7 +44,7 @@
                 <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" prop="URL2">
+            <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2">
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" disabled v-model="form.URL2"></el-input>
               </div>
@@ -73,6 +73,7 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
+          isURL:false,
         },
         rules:{
           TitleImg:[{ required: true, message: '请输入图片名称', trigger: 'blur' }],
@@ -94,6 +95,7 @@
             this.form.URL2 = response.data.data.url2;
             this.form.sortNum = response.data.data.sort;
             this.form.differentiate = response.data.data.differentiate;
+            this.form.isURL =  this.form.differentiate == 1 ? false : true;
           }else{
             this.$message.error(response.data.errorInfo);
           }
