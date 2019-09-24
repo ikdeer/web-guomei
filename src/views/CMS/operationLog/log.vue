@@ -144,11 +144,7 @@
         methods:{
             search(page){
                 if(page==1){
-                    this.page = {
-                        page: 1,
-                        pageSize: 10,
-                        total: 0
-                    }
+                    this.page.page = 1;
                 }
                 let params = {
                     ...this.formData,...this.page,
@@ -168,6 +164,7 @@
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
+                this.page.page = 1;
                 this.search()
             },
             handleCurrentChange(val){

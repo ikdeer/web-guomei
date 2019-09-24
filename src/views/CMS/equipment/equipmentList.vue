@@ -522,11 +522,7 @@
                     return;
                 }
                 if(page==1){
-                    this.page = {
-                        page:1,
-                        pageSize:10,
-                        total:0
-                    }
+                    this.page.page = 1;
                 }
                 let locateNames = [];
                 if(this.locateNames1 != ''){
@@ -660,6 +656,7 @@
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
+                this.page.page = 1;
                 this.search()
             },
             handleCurrentChange(val){

@@ -358,12 +358,7 @@
             dialogSearch(page){
                 //弹窗查询
                 if(page==1){
-                    this.facePage = {
-                        page:1,
-                        pageSize:10,
-                        total:0
-                    };
-                    this.faceListBirge = [];
+                    this.facePage.page = 1;
                 }
                 let params = {
                     ...this.dataDialogForm,
@@ -434,11 +429,7 @@
             },
             getFaceGroupShowList(page){
                 if(page == 1){
-                    this.page = {
-                        page:1,
-                        pageCount:10,
-                        total:0
-                    };
+                    this.page.page = 1;
                 }
                 let params = {
                     ...this.page,
@@ -457,6 +448,7 @@
             },
             handleSizeChange(val){
                 this.page.pageCount = val;
+                this.page.page = 1;
                 this.getFaceGroupShowList();
             },
             handleCurrentChange(val){
@@ -465,6 +457,7 @@
             },
             handleDialogSizeChange(val){
                 this.facePage.pageSize = val;
+                this.facePage.page = 1;
                 this.dialogSearch();
             },
             handleDialogCurrentChange(val){

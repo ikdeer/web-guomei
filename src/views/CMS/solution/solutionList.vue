@@ -165,6 +165,7 @@ export default {
     //分页
     handleSizeChange(val){
       this.page.pageSize = val;
+      this.page.pageNum = 1;
       this.getSolutionShow();
     },
     handleCurrentChange(val){
