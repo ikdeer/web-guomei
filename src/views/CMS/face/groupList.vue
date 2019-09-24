@@ -117,6 +117,7 @@
             },
             handleSizeChange(val){
                 this.page.pageSize = val;
+                this.page.page = 1;
                 this.search()
             },
             handleCurrentChange(val){

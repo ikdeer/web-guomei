@@ -93,6 +93,7 @@
       },
       handleSizeChange(val){
         this.page.pageSize = val;
+        this.page.pageNum = 1;
         this.getDownloadList()
       },
       handleCurrentChange(val){
