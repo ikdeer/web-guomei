@@ -9,7 +9,7 @@
             <p class="header-leftText">基于深度学习的人脸识别方案，准确识别图片中的人脸信息，提供人脸属性识别、关键点定位、人脸1：1比对、人脸1：N识别、活体检测等能力</p>
             <div class="header-leftButton">
               <el-button @click.stop="ClickApply">立即申请</el-button>
-              <router-link tag="button" class="el-button el-button--default el-button--small" :to="{path:'/Company/APITCF'}">技术文档</router-link>
+              <el-button>技术文档</el-button>
             </div>
             <p class="header-leftItem">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
           </div>
