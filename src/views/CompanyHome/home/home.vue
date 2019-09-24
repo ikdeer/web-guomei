@@ -72,8 +72,8 @@
                   <h4 class="service-Title">在线接口</h4>
                   <p class="service-text">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
                   <div class="service-buttom">
-                    <span>查看接口文档</span>
-                    <span>开发工具</span>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">查看接口文档</router-link>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">开发工具</router-link>
                   </div>
                 </div>
               </li>
@@ -82,8 +82,8 @@
                   <h4 class="service-Title">离线SDK</h4>
                   <p class="service-text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
                   <div class="service-buttom">
-                    <span>离线采集SDK</span>
-                    <span>离线识别SDK</span>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">离线采集SDK</router-link>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">离线识别SDK</router-link>
                   </div>
                 </div>
               </li>
@@ -106,88 +106,6 @@
       data(){
         return {
           groupID:'',//登录人员身份
-          productList:[
-            {
-              productImg:'/static/images/analysis_image@2x.png',
-              productTitle:'人脸检测与属性分析',
-              productText:'精准定位图中人脸，获得眼、口、鼻等关键点位置，分析性别、年龄、等多种人脸属性',
-              productId:1,
-            },
-            {
-              productImg:'/static/images/identify_image@2x.png',
-              productTitle:'人脸对比',
-              productText:'对比两张人脸的相似度，并给出相似度评分，从而判断是否同一人',
-              productId:2,
-            },
-            {
-              productImg:'/static/images/explore_image@2x.png',
-              productTitle:'人脸搜索',
-              productText:'针对一张人脸照片，在指定人脸集合中搜索，找出最相似的一张脸或多张人脸，并给出相似度分值',
-              productId:3,
-            },
-            {
-              productImg:'/static/images/detection_image@2x.png',
-              productTitle:'活体检测',
-              productText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
-              productId:4,
-            },
-            {
-              productImg:'/static/images/collect_image@2x.png',
-              productTitle:'视频流人脸采集',
-              productText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
-              productId:5,
-            },
-            {
-              productImg:'/static/images/contrast_image@2x.png',
-              productTitle:'离线识别SDK',
-              productText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
-              productId:6,
-            },
-          ],
-          schemeList:[
-            {
-              schemeImg:'/static/images/attendance_icon@ss2x.png',
-              schemeTitle:'人脸考勤',
-              schemeText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
-              schemeType:'人脸检测',
-              schemeId:1
-            },
-            {
-              schemeImg:'/static/images/abckdkd.png',
-              schemeTitle:'刷脸门禁考勤',
-              schemeText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
-              schemeType:'人脸搜索',
-              schemeId:2
-            },
-            {
-              schemeImg:'/static/images/Group@2x.png',
-              schemeTitle:'安防监控',
-              schemeText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
-              schemeType:'人脸搜索',
-              schemeId:3
-            },
-            {
-              schemeImg:'/static/images/login_icon@2x.png',
-              schemeTitle:'人脸登录',
-              schemeText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
-              schemeType:'人脸检测',
-              schemeId:4
-            },
-            {
-              schemeImg:'/static/images/pay_icon@2x.png',
-              schemeTitle:'人脸支付',
-              schemeText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
-              schemeType:'人脸搜索',
-              schemeId:5
-            },
-            {
-              schemeImg:'/static/images/member_icon@2x.png',
-              schemeTitle:'会员识别',
-              schemeText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
-              schemeType:'人脸搜索',
-              schemeId:6
-            },
-          ],
           tableData:[],//产品服务
           schemeData:[],//解决方案
           bannerData:[],//banner图
@@ -597,6 +515,7 @@
                 display: -webkit-flex;
                 align-items: center;
                 justify-content: space-between;
+                cursor: pointer;
                 span{
                   font-size: 0.2rem;
                   color: #F20A59;
