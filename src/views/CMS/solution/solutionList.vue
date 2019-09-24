@@ -145,7 +145,7 @@ export default {
             if(response.data.errorCode == 200){
               this.$message({message: '批量删除成功',type: 'success'});
               this.page.pageNum = 1;
-              this.getBannerShow();
+              this.getSolutionShow();
             }else{
               this.$message.error(response.data.errorInfo);
             }

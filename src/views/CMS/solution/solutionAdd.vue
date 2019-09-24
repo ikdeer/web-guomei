@@ -48,11 +48,12 @@
                   show-word-limit></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="URL地址：" prop="URL">
+            <el-form-item label="URL地址：" prop="URL" required>
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL"></el-input>
               </div>
-              <p class="api-danger">如果要跳转本站解决方案详情页URL请复制或填写
+              <p class="api-danger">
+                如果要跳转本站解决方案详情页URL请复制或填写
                 <span>/Company/solution</span>
               </p>
             </el-form-item>
@@ -116,6 +117,19 @@
   export default {
     name: "solutionAdd",
     data(){
+      let URL = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入URL'));
+        } else if(!/(http|https):\/\/([\w.]+\/?)\S*/.test(value)){
+          if(value == '/Company/solution'){
+            callback();
+          }else{
+            callback(new Error('URL地址缺少http://或https://'));
+          }
+        }else{
+          callback();
+        }
+      };
       return {
         form:{
           Title:'',//标题
@@ -169,7 +183,7 @@
           coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
           serviceText:[{ required: true, message: '请输入服务名称', trigger: 'blur' }],
           introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
-          URL:[{ required: true, message: '请输入URL', trigger: 'blur' }],
+          URL:[{ validator: URL, trigger: 'blur'}],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
           bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
         }

@@ -53,7 +53,8 @@
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="catalogText.URL"></el-input>
               </div>
-              <p class="api-danger">如果要跳转本站产品详情页URL请复制或填写
+              <p class="api-danger">
+                如果要跳转本站产品详情页URL请复制或填写
                 <span>/Company/product</span>
               </p>
             </el-form-item>
@@ -117,6 +118,20 @@
     export default {
         name: "productAdd",
         data(){
+          let URL = (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请输入URL'));
+            } else if(!/(http|https):\/\/([\w.]+\/?)\S*/.test(value)){
+              if(value == '/Company/product'){
+                callback();
+              }else{
+                callback(new Error('URL地址缺少http://或https://'));
+              }
+
+            }else{
+              callback();
+            }
+          };
             return {
                 catalogText:{
                     Title:'',//标题
@@ -168,7 +183,7 @@
                     Title:[{ required: true, message: '请输入标题名称', trigger: 'blur' }],
                     coverImg:[{ required: true, message: '请上传首页封面', trigger: 'blur,change' }],
                     introduceText:[{ required: true, message: '请输入介绍内容', trigger: 'blur,change' }],
-                    URL:[{ required: true, message: '请输入URL', trigger: 'blur' }],
+                    URL:[{ validator: URL, trigger: 'blur'}],
                     sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
                     bbsContent:[{ required: true, message: '请填写要发布的内容', trigger: 'blur,change' }]
                 },

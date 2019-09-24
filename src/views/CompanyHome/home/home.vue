@@ -4,20 +4,15 @@
       <header class="home-header">
         <!-- 头部公用组件 -->
         <Header_Nav></Header_Nav>
-        <div class="header-IfoImg">
-          <div class="IfoImg-left">
-            <p class="IfoImg-Title">人脸对比</p>
-            <p class="IfoImg-Text">人脸识别（Face Recognition）基于图像或视频中的人脸检测、分析和比对技术，
-              提供人脸检测定位、人脸属性识别和人脸比对等独立服务模块。可以为开发者和
-              企业提供高性能的在线API服务，应用于人脸AR、人脸识别和认证、大规模人脸
-              检索、照片管理等各种场景。</p>
-            <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
-            <p class="IfoImg-TextSmall">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
-          </div>
-          <div class="IfoImg-right">
-            <img src="/static/images/banner_bg@2x.png" alt="">
-          </div>
-        </div>
+        <!-- banner轮播 -->
+        <el-carousel height="528px">
+          <el-carousel-item v-for="(item,index) in bannerData" v-if="item.differentiate == 1">
+            <div class="header-IfoImg">
+              <img :src="item.imgUrl" class="header-ImgBg" alt="">
+              <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
       </header>
       <!-- 主体内容区域 -->
       <main class="home-main">
@@ -77,8 +72,8 @@
                   <h4 class="service-Title">在线接口</h4>
                   <p class="service-text">提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击</p>
                   <div class="service-buttom">
-                    <span>查看接口文档</span>
-                    <span>开发工具</span>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">查看接口文档</router-link>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">开发工具</router-link>
                   </div>
                 </div>
               </li>
@@ -87,8 +82,8 @@
                   <h4 class="service-Title">离线SDK</h4>
                   <p class="service-text">设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制</p>
                   <div class="service-buttom">
-                    <span>离线采集SDK</span>
-                    <span>离线识别SDK</span>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">离线采集SDK</router-link>
+                    <router-link tag="span" :to="{path:'/Company/APITCF'}">离线识别SDK</router-link>
                   </div>
                 </div>
               </li>
@@ -104,97 +99,16 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
-    import {getProductServiceShow,getSolutionShow} from "../../../HttpApi/home/homeApi";
+    import {getProductServiceShow,getSolutionShow,getBannerShow} from "../../../HttpApi/home/homeApi";
     export default {
       name: "home",
       components:{Header_Nav, Footer_Nav},
       data(){
         return {
           groupID:'',//登录人员身份
-          productList:[
-            {
-              productImg:'/static/images/analysis_image@2x.png',
-              productTitle:'人脸检测与属性分析',
-              productText:'精准定位图中人脸，获得眼、口、鼻等关键点位置，分析性别、年龄、等多种人脸属性',
-              productId:1,
-            },
-            {
-              productImg:'/static/images/identify_image@2x.png',
-              productTitle:'人脸对比',
-              productText:'对比两张人脸的相似度，并给出相似度评分，从而判断是否同一人',
-              productId:2,
-            },
-            {
-              productImg:'/static/images/explore_image@2x.png',
-              productTitle:'人脸搜索',
-              productText:'针对一张人脸照片，在指定人脸集合中搜索，找出最相似的一张脸或多张人脸，并给出相似度分值',
-              productId:3,
-            },
-            {
-              productImg:'/static/images/detection_image@2x.png',
-              productTitle:'活体检测',
-              productText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
-              productId:4,
-            },
-            {
-              productImg:'/static/images/collect_image@2x.png',
-              productTitle:'视频流人脸采集',
-              productText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
-              productId:5,
-            },
-            {
-              productImg:'/static/images/contrast_image@2x.png',
-              productTitle:'离线识别SDK',
-              productText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
-              productId:6,
-            },
-          ],
-          schemeList:[
-            {
-              schemeImg:'/static/images/attendance_icon@ss2x.png',
-              schemeTitle:'人脸考勤',
-              schemeText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
-              schemeType:'人脸检测',
-              schemeId:1
-            },
-            {
-              schemeImg:'/static/images/abckdkd.png',
-              schemeTitle:'刷脸门禁考勤',
-              schemeText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
-              schemeType:'人脸搜索',
-              schemeId:2
-            },
-            {
-              schemeImg:'/static/images/Group@2x.png',
-              schemeTitle:'安防监控',
-              schemeText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
-              schemeType:'人脸搜索',
-              schemeId:3
-            },
-            {
-              schemeImg:'/static/images/login_icon@2x.png',
-              schemeTitle:'人脸登录',
-              schemeText:'提供离线在线方式的活体检测能力，判断操作用户是否为真人，有效抵御照片、视频、模具等作弊攻击',
-              schemeType:'人脸检测',
-              schemeId:4
-            },
-            {
-              schemeImg:'/static/images/pay_icon@2x.png',
-              schemeTitle:'人脸支付',
-              schemeText:'设备端离线实时监测视频流中的人脸，同时支持处理静态或者视频流，输出人脸图片并进行图片质量控制',
-              schemeType:'人脸搜索',
-              schemeId:5
-            },
-            {
-              schemeImg:'/static/images/member_icon@2x.png',
-              schemeTitle:'会员识别',
-              schemeText:'提供设备端本地化的人脸采集、活体检测、人脸对比与识别能力，可在无网络环境下离线使用',
-              schemeType:'人脸搜索',
-              schemeId:6
-            },
-          ],
           tableData:[],//产品服务
           schemeData:[],//解决方案
+          bannerData:[],//banner图
           page:{
             pageNum:1,
             pageSize:6,
@@ -202,6 +116,16 @@
         }
       },
       methods:{
+        //首页轮播
+        getBannerShow(){
+          getBannerShow().then(response => {
+            if(response.data.errorCode == 200){
+              this.bannerData = response.data.data ? response.data.data.list : [];
+            }else{
+              this.$message.error(response.data.errorInfo);
+            }
+          })
+        },
         //产品服务列表
         getProductServiceShow(){
           getProductServiceShow({page:this.page.pageNum,pageSize:this.page.pageSize}).then(response => {
@@ -240,16 +164,25 @@
         },
         //产品功能区域跳转
         ClickProduct(item){
-          this.$router.push({path:'/Company/product',query:{productId:item.id}});
+          if(item.urlAddress == '/Company/product'){
+            this.$router.push({path:item.urlAddress,query:{productId:item.id}});
+          }else{
+            window.open(item.urlAddress);
+          }
         },
         //解决方案区域跳转
         ClickSchemeURL(item){
-          this.$router.push({path:'/Company/solution',query:{schemeId:item.id}});
+          if(item.urlAddress == '/Company/solution'){
+            this.$router.push({path:item.urlAddress,query:{productId:item.id}});
+          }else{
+            window.open(item.urlAddress);
+          }
         }
       },
       mounted(){
         let userInfo = this.Cookies.get('userInfo') || '';
         this.groupID =userInfo ? JSON.parse(userInfo).groupID : '';
+        this.getBannerShow();
         this.getProductServiceShow();
         this.getSolutionShow();
       }
@@ -264,51 +197,26 @@
     .header-IfoImg{
       width: auto;
       height: 5.8rem;
-      background:linear-gradient(225deg,rgba(0,192,249,1) 0%,rgba(2,101,228,1) 100%);
       display: flex;
-      display: -webkit-flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-left: 1.5rem;
-      padding-right: 2.12rem;
       margin-top: 0.8rem;
-      .IfoImg-left{
-        .IfoImg-Title{
-          font-size: 0.68rem;
-          color: #ffffff;
-          font-weight: 700;
-        }
-        .IfoImg-Text{
-          width: 7.95rem;
-          font-size: 0.22rem;
-          color: #ffffff;
-          font-weight: 400;
-          padding:0.3rem 0;
-          line-height: 0.37rem;
-        }
-        .IfoImg-button{
-          background: #ffffff;
-          color: #F20A59;
-          font-size: 0.2rem;
-          border-radius: 0.29rem;
-          padding: 0.16rem 0.5rem;
-          border: none;
-          display: block;
-        }
-        .IfoImg-TextSmall{
-          padding-top: 0.38rem;
-          font-size: 0.18rem;
-          color: #999999;
-        }
+      position: relative;
+      .header-ImgBg{
+        width: 100%;
+        height: 5.8rem;
+        display: block;
+        overflow: hidden;
       }
-      .IfoImg-right{
-        width: 5rem;
-        height: 4.7rem;
-        >img{
-          width: 100%;
-          height: 100%;
-          display: block;
-        }
+      .IfoImg-button{
+        background: #ffffff;
+        color: #F20A59;
+        font-size: 0.2rem;
+        border-radius: 0.29rem;
+        padding: 0.16rem 0.5rem;
+        border: none;
+        display: block;
+        position: absolute;
+        top: 3.64rem;
+        left: 1.5rem;
       }
     }
   }
@@ -607,6 +515,7 @@
                 display: -webkit-flex;
                 align-items: center;
                 justify-content: space-between;
+                cursor: pointer;
                 span{
                   font-size: 0.2rem;
                   color: #F20A59;

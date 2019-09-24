@@ -4,17 +4,10 @@
       <Header_Nav></Header_Nav>
       <div class="solution-content">
         <header class="solution-header">
-          <div class="header-left">
-            <h4 class="header-leftTitle">人脸考勤</h4>
-            <p class="header-leftText">利用高精度的人脸识别、对比能力，搭建考勤系统，提升考勤效率，提高防作弊能力</p>
-            <div class="header-leftButton">
-              <el-button @click.stop="ClickApply">立即申请</el-button>
-              <router-link tag="button" class="el-button el-button--default el-button--small" :to="{path:'/Company/APITCF'}">技术文档</router-link>
-            </div>
-            <p class="header-leftItem">国美家服务信息技术中心&nbsp;&nbsp;&nbsp;提供技术支持</p>
-          </div>
-          <div class="header-right">
-            <img src="/static/images/plan_banner_bg@2x.png" alt="">
+          <img src="/static/images/meizhi.JPG" class="solution-ImgBg" alt="">
+          <div class="header-leftButton">
+            <el-button @click.stop="ClickApply">立即申请</el-button>
+            <el-button @click.stop="ClickApi">技术文档</el-button>
           </div>
         </header>
         <div class="solution-center">
@@ -41,8 +34,7 @@
 <script>
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
-    import {getSolutionShow,getSolutionDetail} from "../../../HttpApi/solution/solutionApi";
-
+    import {getSolutionShow,getSolutionDetail,getBannerShow} from "../../../HttpApi/solution/solutionApi";
     export default {
       name: "solution",
       components:{Header_Nav,Footer_Nav},
@@ -50,11 +42,30 @@
         return {
           schemeList:[],//数据展示
           schemeText:'',//右侧内容数据
+          bannerURL:'',//bannerURL
+          bannerImg:'',//banner图片
           groupID:'',//登录人员身份
           schemeId:0,//标识ID
         }
       },
       methods:{
+        //banner图片
+        getBannerShow(){
+          getBannerShow().then(response => {
+            if(response.data.errorCode == 200){
+              let bannerList = response.data.data ? response.data.data.list : [];
+              for(let i =0; i < bannerList.length; i++){
+                if(bannerList[i].differentiate == 3){
+                  this.bannerImg = bannerList[i].imgUrl;
+                  this.bannerURL = bannerList[i].url2;
+                  break;
+                }
+              }
+            }else{
+              this.$message.error(response.data.pagerManager);
+            }
+          })
+        },
         //跳转应用创建页
         ClickApply(){
           let _this = this;
@@ -62,13 +73,21 @@
             if(this.groupID == '20'){
               _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
             }else{
-              this.$message({message: '亲！你暂时没有权限哦~~~~', type: 'warning'});
+              this.$message({message: '亲！你暂时没有权限哦', type: 'warning'});
             }
           }else{
             _this.$message.error('此功能需要登录过后才能查看');
             setTimeout(()=>{
               _this.$router.push({path:'/Company/login'});
             },300)
+          }
+        },
+        //跳转解决方案或者其他页面
+        ClickApi(){
+          if(this.bannerURL == '/Company/APITCF'){
+            this.$router.push({path:this.bannerURL});
+          }else{
+            window.open(this.bannerURL);
           }
         },
         //解决方案列表
@@ -102,6 +121,7 @@
       mounted(){
         let userInfo= this.Cookies.get('userInfo') || '';
         this.groupID = userInfo ? JSON.parse(userInfo).groupID : '';
+        this.getBannerShow();
         this.getSolutionShow();
       }
     }
@@ -114,59 +134,31 @@
     width: 100%;
     margin-top: 0.8rem;
     .solution-header{
-      padding-left: 1.5rem;
-      padding-right: 2.34rem;
+      width: 100%;
       height: 5rem;
-      background:linear-gradient(225deg,rgba(1,109,229,1) 0%,rgba(13,27,56,1) 100%);
-      display: flex;
-      display: -webkit-flex;
-      align-items: center;
-      justify-content: space-between;
-      .header-left{
-        width: 7.6rem;
-        .header-leftTitle{
-          font-size: 0.68rem;
-          color: #ffffff;
-          font-weight: 600;
-          letter-spacing: 2px;
-        }
-        .header-leftText{
-          font-size: 0.22rem;
-          color: #ffffff;
-          padding-top:0.3rem;
-          padding-bottom: 0.84rem;
-          font-weight: 400;
-          line-height: 0.37rem;
-        }
-        .header-leftButton{
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          padding-bottom: 0.38rem;
-          button{
-            background: #ffffff;
-            color: #F20A59;
-            font-size: 0.2rem;
-            border-radius: 0.29rem;
-            padding: 0.16rem 0.5rem;
-            border: none;
-            display: block;
-            margin-right: 0.1rem;
-          }
-        }
-        .header-leftItem{
-          font-size: 0.18rem;
-          color: #666666;
-          font-weight: 400;
-        }
+      position: relative;
+      .solution-ImgBg{
+        width: 100%;
+        height: 5rem;
+        display: block;
+        overflow: hidden;
       }
-      .header-right{
-        width: 4.57rem;
-        height: 4.57rem;
-        img{
-          width: 100%;
-          height: 100%;
+      .header-leftButton{
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        position: absolute;
+        top: 2.82rem;
+        left: 1.5rem;
+        button{
+          background: #ffffff;
+          color: #F20A59;
+          font-size: 0.2rem;
+          border-radius: 0.29rem;
+          padding: 0.16rem 0.5rem;
+          border: none;
           display: block;
+          margin-right: 0.1rem;
         }
       }
     }

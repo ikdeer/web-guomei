@@ -39,7 +39,7 @@
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
-                <el-select v-model="form.differentiate" disabled placeholder="请选择Banner添加位置">
+                <el-select v-model="form.differentiate" @change="selectChange" placeholder="请选择Banner添加位置">
                   <el-option label="首页banner轮播" value="1"></el-option>
                   <el-option label="产品服务" value="2"></el-option>
                   <el-option label="解决方案" value="3"></el-option>
@@ -48,13 +48,17 @@
             </el-form-item>
             <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL1"></el-input>
+                <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" prop="URL2">
+            <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2" required>
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
+              <p class="api-danger">
+                如果要跳转本站技术文档页URL请复制或填写
+                <span>/Company/APITCF</span>
+              </p>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
@@ -81,6 +85,20 @@
   export default {
     name: "bannerEdit",
     data(){
+      let URL2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入URL'));
+        } else if(!/(http|https):\/\/([\w.]+\/?)\S*/.test(value)){
+          if(value == '/Company/APITCF'){
+            callback();
+          }else{
+            callback(new Error('URL地址缺少http://或https://'));
+          }
+
+        }else{
+          callback();
+        }
+      };
       return {
         form:{
           TitleImg:'',//图片名称
@@ -89,6 +107,8 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
+          selectURL:'http://',
+          isURL:false,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -96,12 +116,19 @@
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
           differentiate:[{ required: true, message: '选择banner位置', trigger: 'blur,change' }],
           URL1:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
-          URL2:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
+          URL2:[{ validator: URL2, trigger: 'blur'}],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
         }
       }
     },
     methods:{
+      selectChange(){
+        if(this.form.differentiate == 1){
+          this.form.isURL = false;
+        }else{
+          this.form.isURL = true;
+        }
+      },
       //banner详情页面
       getBannerDetail(){
         getBannerDetail({id:this.$route.query.Id}).then(response => {
@@ -112,6 +139,7 @@
             this.form.URL2 = response.data.data.url2;
             this.form.sortNum = response.data.data.sort;
             this.form.differentiate = response.data.data.differentiate;
+            this.form.isURL =  this.form.differentiate == 1 ? false : true;
           }else{
             this.$message.error(response.data.errorInfo);
           }
@@ -167,7 +195,7 @@
               imgUrl:this.form.coverImg,
               differentiate:this.form.differentiate,
               url1:this.form.URL1,
-              url2:this.form.URL2,
+              url2:this.form.selectURL + this.form.URL2,
               sort:this.form.sortNum,
             }).then(response => {
               if(response.data.errorCode == 200){
@@ -218,6 +246,9 @@
               width: 100%;
               display: block;
             }
+            .gm-select{
+              width: 90px;
+            }
             .avatar-uploader{
               width: 100%;
               height: 160px;
@@ -248,6 +279,12 @@
           }
           .avatar-uploaderImg{
             display: none;
+          }
+          .api-danger{
+            margin-top: 0.1rem;
+            span{
+              color:red;
+            }
           }
         }
       }

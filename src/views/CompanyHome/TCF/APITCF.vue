@@ -199,6 +199,9 @@
         .menu-text{
           font-size: 0.16rem;
           color: #666666;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
         .el-icon-s-fold{
           font-size: 0.2rem;
@@ -221,6 +224,9 @@
             font-size: 0.16rem;
             color: #333333;
             font-weight: 600;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
           }
           .gm-sbc{
             font-size: 0.2rem;
@@ -253,6 +259,9 @@
               font-size: 0.16rem;
               color: #666666;
               font-weight: 500;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
             }
             .menu-textColor{
               font-size: 0.16rem;
@@ -288,12 +297,21 @@
               color: #666666;
               font-weight: 500;
               margin-left: 1.06rem;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
             }
             .menu-textBgColor{
               font-size: 0.16rem;
               color:#036FE2;
               font-weight: 500;
               margin-left: 1.06rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 1;
+              -webkit-box-orient: vertical;
+              word-break: break-all;
             }
           }
         }
