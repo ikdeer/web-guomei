@@ -46,12 +46,12 @@
                 </el-select>
               </div>
             </el-form-item>
-            <el-form-item label="按钮1跳转地址：" prop="URL1" v-if="form.isURL">
+            <el-form-item label="按钮1跳转地址：" prop="URL1">
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" prop="URL2" required>
+            <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2" required>
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
@@ -178,7 +178,7 @@
               imgUrl:this.form.coverImg,
               differentiate:this.form.differentiate,
               url1:this.form.URL1,
-              url2:this.form.URL2,
+              url2:this.form.URL2 ? this.form.URL2 : '12',
               sort:this.form.sortNum,
             }).then(response => {
               if(response.data.errorCode == 200){
