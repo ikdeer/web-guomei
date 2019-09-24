@@ -5,7 +5,7 @@
       <div class="footer-leftTop">
         <h4>技术文档</h4>
         <router-link tag="span" :to="{path:'/Company/APITCF'}">技术文档1</router-link>
-        <router-link tag="span" :to="{path:'/Company/APITCF'}">SDK下载</router-link>
+        <span @click.stop="ClickSdk">SDK下载</span>
       </div>
       <div class="footer-leftTop">
         <h4>接入须知</h4>
@@ -29,12 +29,23 @@
 
 <script>
     export default {
-        name: "FooterNav",
-        data(){
-          return {
+      name: "FooterNav",
+      data(){
+        return {
 
+        }
+      },
+      methods:{
+        //跳转SDK下载
+        ClickSdk(){
+          if(this.Cookies.get('token')){
+            this.$router.push({path: '/Index/SDKDownload'});
+          }else{
+            this.$message({message: '你还没有登录,请先登录', type: 'warning'});
+            this.$router.push({path: '/Company/login'});
           }
         }
+      }
     }
 </script>
 

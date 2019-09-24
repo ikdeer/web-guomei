@@ -11,14 +11,6 @@
                         v-for="(item,index) in stairList"
                         :to="{path:item.stairRouter}">
             <span class="One-LevelText">{{item.stairText}}</span>
-            <!--<div class="navCenter-divMenu" v-if="item.secondList.length != '0'">
-              <router-link  tag="div"
-                            class="second-level"
-                            v-for="(items,indexS) in item.secondList"
-                            :to="{path:''}">
-                <span class="second-levelText">{{items.secondText}}</span>
-              </router-link>
-            </div>-->
           </router-link>
         </div>
       </div>
@@ -101,7 +93,7 @@
           this.$router.push({path: '/Index/overview'});
         }else{
           this.$message({
-            message: '你还没有登录,请先登录~~~',
+            message: '你还没有登录,请先登录',
             type: 'warning'
           });
           this.$router.push({path: '/Company/login',query:{redirect:'overview'}});

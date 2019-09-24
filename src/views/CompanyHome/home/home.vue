@@ -9,7 +9,10 @@
           <el-carousel-item v-for="(item,index) in bannerData" v-if="item.differentiate == 1">
             <div class="header-IfoImg">
               <img :src="item.imgUrl" class="header-ImgBg" alt="">
-              <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
+              <div class="position-button">
+                <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
+                <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
+              </div>
             </div>
           </el-carousel-item>
         </el-carousel>
@@ -206,17 +209,23 @@
         display: block;
         overflow: hidden;
       }
-      .IfoImg-button{
-        background: #ffffff;
-        color: #F20A59;
-        font-size: 0.2rem;
-        border-radius: 0.29rem;
-        padding: 0.16rem 0.5rem;
-        border: none;
-        display: block;
+      .position-button{
         position: absolute;
         top: 3.64rem;
         left: 1.5rem;
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        justify-content: space-between;
+        .IfoImg-button{
+          background: #ffffff;
+          color: #F20A59;
+          font-size: 0.2rem;
+          border-radius: 0.29rem;
+          padding: 0.16rem 0.5rem;
+          border: none;
+          display: block;
+        }
       }
     }
   }

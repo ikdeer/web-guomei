@@ -4,12 +4,12 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{path:'/Index/bannerList'}">Banner位置管理</el-breadcrumb-item>
-        <el-breadcrumb-item>编辑Banner位置管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{path:'/Index/bannerList'}">banner位置管理</el-breadcrumb-item>
+        <el-breadcrumb-item>编辑banner位置管理</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
     <div class="bannerEdit-content">
-      <h4 class="api-TextH4">编辑Banner位置管理</h4>
+      <h4 class="api-TextH4">编辑banner位置管理</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="form"
@@ -39,24 +39,28 @@
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
-                <el-select v-model="form.differentiate" @change="selectChange" placeholder="请选择Banner添加位置">
+                <el-select v-model="form.differentiate" placeholder="请选择Banner添加位置">
                   <el-option label="首页banner轮播" value="1"></el-option>
                   <el-option label="产品服务" value="2"></el-option>
                   <el-option label="解决方案" value="3"></el-option>
                 </el-select>
               </div>
             </el-form-item>
-            <el-form-item label="按钮1跳转地址：" prop="URL1">
+            <el-form-item label="按钮1跳转地址：" prop="URL1" required>
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
+                <el-input placeholder="请输入URL"  v-model="form.URL1"></el-input>
               </div>
+              <p class="api-danger">
+                如果要跳转本站URL请复制
+                <span>/Index/addApplication</span>
+              </p>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2" required>
+            <el-form-item label="按钮2跳转地址："  prop="URL2" required>
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
               <p class="api-danger">
-                如果要跳转本站技术文档页URL请复制或填写
+                如果要跳转本站技术文档页URL请复制
                 <span>/Company/APITCF</span>
               </p>
             </el-form-item>
@@ -85,6 +89,20 @@
   export default {
     name: "bannerEdit",
     data(){
+
+      let URL1 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入URL'));
+        } else if(!/(http|https):\/\/([\w.]+\/?)\S*/.test(value)){
+          if(value == '/Index/addApplication'){
+            callback();
+          }else{
+            callback(new Error('URL地址缺少http://或https://'));
+          }
+        }else{
+          callback();
+        }
+      };
       let URL2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入URL'));
@@ -94,7 +112,6 @@
           }else{
             callback(new Error('URL地址缺少http://或https://'));
           }
-
         }else{
           callback();
         }
@@ -107,7 +124,6 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          selectURL:'http://',
           isURL:false,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
@@ -115,20 +131,13 @@
           TitleImg:[{ required: true, message: '请输入图片名称', trigger: 'blur' }],
           coverImg:[{ required: true, message: '请上传图片', trigger: 'blur,change' }],
           differentiate:[{ required: true, message: '选择banner位置', trigger: 'blur,change' }],
-          URL1:[{ required: true, message: '请输入URL2', trigger: 'blur' }],
+          URL1:[{ validator: URL1, trigger: 'blur'}],
           URL2:[{ validator: URL2, trigger: 'blur'}],
           sortNum:[{ required: true, message: '请输入排序', trigger: 'blur' }],
         }
       }
     },
     methods:{
-      selectChange(){
-        if(this.form.differentiate == 1){
-          this.form.isURL = false;
-        }else{
-          this.form.isURL = true;
-        }
-      },
       //banner详情页面
       getBannerDetail(){
         getBannerDetail({id:this.$route.query.Id}).then(response => {
@@ -147,7 +156,7 @@
       },
       //图片上传
       BannerUpDataImg(file,fileList){
-        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
           this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
@@ -195,7 +204,7 @@
               imgUrl:this.form.coverImg,
               differentiate:this.form.differentiate,
               url1:this.form.URL1,
-              url2:this.form.selectURL + this.form.URL2,
+              url2:this.form.URL2,
               sort:this.form.sortNum,
             }).then(response => {
               if(response.data.errorCode == 200){
