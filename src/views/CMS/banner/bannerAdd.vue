@@ -38,14 +38,14 @@
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
-                <el-select v-model="form.differentiate" placeholder="请选择Banner添加位置">
+                <el-select v-model="form.differentiate"  @change="selectChange" placeholder="请选择Banner添加位置">
                   <el-option label="首页banner轮播" value="1"></el-option>
                   <el-option label="产品服务" value="2"></el-option>
                   <el-option label="解决方案" value="3"></el-option>
                 </el-select>
               </div>
             </el-form-item>
-            <el-form-item label="按钮1跳转地址：" prop="URL1">
+            <el-form-item label="按钮1跳转地址：" prop="URL1" v-if="form.isURL">
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL1"></el-input>
               </div>
@@ -85,6 +85,7 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
+          isURL:true,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -98,6 +99,13 @@
       }
     },
     methods:{
+      selectChange(){
+        if(this.form.differentiate == 1){
+          this.form.isURL = false;
+        }else{
+          this.form.isURL = true;
+        }
+      },
       //图片上传
       BannerUpDataImg(file,fileList){
         this.getBase64(file.raw).then(resBase64Img => {
