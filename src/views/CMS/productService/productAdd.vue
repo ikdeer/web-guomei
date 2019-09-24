@@ -28,6 +28,7 @@
                 <el-upload
                   class="avatar-uploader"
                   action=""
+                  accept="image/jpg,image/jpeg,image/png"
                   :auto-upload="false"
                   :on-change="coverUpDataImg"
                   :show-file-list="false">
@@ -66,6 +67,7 @@
               <el-upload
                 class="avatar-uploaderImg"
                 action=""
+                accept="image/jpg,image/jpeg,image/png"
                 :show-file-list="false"
                 :auto-upload="false"
                 :on-change="getFile"
@@ -175,6 +177,16 @@
         methods:{
             //封面上传
             coverUpDataImg(file,fileList){
+              const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+              const isLt5M = file.size / 1024 / 1024 < 5;
+              if (!isJPG) {
+                this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
+                return;
+              }
+              if (!isLt5M) {
+                this.$message.error('上传图片大小不能超过 5MB!');
+                return;
+              }
               this.getBase64(file.raw).then(resBase64Img => {
                 getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
                   if(response.data.errorCode == 200){
@@ -192,24 +204,34 @@
             },
             //图片上传
             getFile(file,fileList){
-                let _this = this;
-                _this.getBase64(file.raw).then(resBase64Img => {
-                    getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-                        if(response.data.errorCode == 200){
-                            let quill = this.$refs.myQuillEditor.quill;
-                            // 获取光标所在位置
-                            let length = quill.getSelection().index;
-                            // 插入图片  res.data为服务器返回的图片地址
-                            quill.insertEmbed(length, 'image', `${this.ImgUrl}${response.data.data.url}`);
-                            // 调整光标到最后
-                            quill.setSelection(length + 1);
-                            // loading动画消失
-                            this.catalogText.quillUpdateImg = false;
-                        }else{
-                            this.$message.error(response.data.errorInfo);
-                        }
-                    })
+              const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
+              const isLt5M = file.size / 1024 / 1024 < 5;
+              if (!isJPG) {
+                this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
+                return;
+              }
+              if (!isLt5M) {
+                this.$message.error('上传图片大小不能超过 5MB!');
+                return;
+              }
+              let _this = this;
+              _this.getBase64(file.raw).then(resBase64Img => {
+                getImageUploadNormalImage({imageBase64: resBase64Img}).then(response => {
+                  if (response.data.errorCode == 200) {
+                    let quill = this.$refs.myQuillEditor.quill;
+                    // 获取光标所在位置
+                    let length = quill.getSelection().index;
+                    // 插入图片  res.data为服务器返回的图片地址
+                    quill.insertEmbed(length, 'image', `${this.ImgUrl}${response.data.data.url}`);
+                    // 调整光标到最后
+                    quill.setSelection(length + 1);
+                    // loading动画消失
+                    this.catalogText.quillUpdateImg = false;
+                  } else {
+                    this.$message.error(response.data.errorInfo);
+                  }
                 })
+              })
             },
             //转换Base64
             getBase64(file) {
