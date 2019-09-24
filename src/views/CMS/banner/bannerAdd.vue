@@ -46,19 +46,15 @@
                 </el-select>
               </div>
             </el-form-item>
-            <el-form-item label="按钮1跳转地址：" prop="URL1">
+            <el-form-item label="按钮1跳转地址：" prop="URL1" v-if="form.isURL">
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" disabled v-model="form.URL1"></el-input>
               </div>
             </el-form-item>
-            <el-form-item label="按钮2跳转地址：" prop="URL2" v-if="form.isURL">
+            <el-form-item label="按钮2跳转地址：" prop="URL2">
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
-              <p class="api-danger">
-                如果要跳转本站技术文档页URL请复制或填写
-                <span>/Company/APITCF</span>
-              </p>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
               <div class="api-OneLevel">
@@ -90,7 +86,7 @@
           URL1:'/Index/addApplication',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          isURL:false,
+          isURL:true,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -245,12 +241,6 @@
           }
           .avatar-uploaderImg{
             display: none;
-          }
-          .api-danger{
-            margin-top: 0.1rem;
-            span{
-              color:red;
-            }
           }
         }
       }

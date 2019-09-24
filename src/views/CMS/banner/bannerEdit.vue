@@ -53,7 +53,12 @@
             </el-form-item>
             <el-form-item label="按钮2跳转地址：" v-if="form.isURL" prop="URL2">
               <div class="api-OneLevel">
-                <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
+                <el-input placeholder="请输入URL" v-model="form.URL2">
+                  <el-select v-model="form.selectURL" class="gm-select" slot="prepend" placeholder="请选择">
+                    <el-option label="http://" value="http://"></el-option>
+                    <el-option label="https://" value="https://"></el-option>
+                  </el-select>
+                </el-input>
               </div>
               <p class="api-danger">
                 如果要跳转本站技术文档页URL请复制或填写
@@ -93,6 +98,7 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
+          selectURL:'http://',
           isURL:false,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
@@ -180,7 +186,7 @@
               imgUrl:this.form.coverImg,
               differentiate:this.form.differentiate,
               url1:this.form.URL1,
-              url2:this.form.URL2,
+              url2:this.form.selectURL + this.form.URL2,
               sort:this.form.sortNum,
             }).then(response => {
               if(response.data.errorCode == 200){
@@ -230,6 +236,9 @@
             .el-select{
               width: 100%;
               display: block;
+            }
+            .gm-select{
+              width: 90px;
             }
             .avatar-uploader{
               width: 100%;
