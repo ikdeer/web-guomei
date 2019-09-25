@@ -8,17 +8,16 @@
           <span class="menu-text">文档目录</span>
           <i class="el-icon-s-fold"></i>
         </div>
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo">
+        <el-menu default-active="2" class="el-menu-vertical-demo">
           <el-submenu :index="child.id" v-for="(child,index) in dataList" :key="child.id">
             <!-- 判断二级是否有数据 （没有数据）-->
             <el-menu-item :index="child1.id" v-for="(child1,index1) in child.DataText" :key="child1.id" v-if="!child1.isDataText">{{child1.text}}</el-menu-item>
+            <!-- 一级数据展示-->
             <template slot="title">
               <span>{{child.text}}</span>
             </template>
             <!-- 判断二级是否有数据 （有数据）-->
-            <el-submenu :index="child1.id" v-for="(child1,index1) in item.DataText" :key="child1.id" v-if="child1.isDataText">
+            <el-submenu :index="child1.id" v-for="(child1,index1) in child.DataText" :key="child1.id" v-if="child1.isDataText">
               <template slot="title">{{child1.text}}</template>
               <el-menu-item-group v-for="(child2,index2) in child1.DataText">
                 <el-menu-item :index="child2.id">{{child2.text}}</el-menu-item>
