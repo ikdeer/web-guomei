@@ -36,7 +36,7 @@
               </el-table-column>
               <el-table-column align="center" label="主要服务">
                 <template slot-scope="scope">
-                  <span>{{scope.row.primaryService}}</span>
+                  <span class="api-omit">{{scope.row.primaryService}}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="简介">
