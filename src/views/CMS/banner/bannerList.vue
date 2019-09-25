@@ -4,10 +4,10 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item>banner位置管理</el-breadcrumb-item>
+        <el-breadcrumb-item>banner位管理</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
-    <h3>banner位置管理</h3>
+    <h3>banner位管理</h3>
     <div class="bannerList-content">
       <div class="bannerList-table">
         <div class="bannerList-addButton">

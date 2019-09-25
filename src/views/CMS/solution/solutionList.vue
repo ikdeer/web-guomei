@@ -207,9 +207,11 @@ export default {
         text-align: right;
       }
       .scope-Img{
-        width: 150px;
+        width: 100px;
         height:100%;
         display: block;
+        margin-left: auto;
+        margin-right: auto;
       }
       .api-omit{
         display: -webkit-box;

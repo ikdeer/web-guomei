@@ -8,45 +8,45 @@
           <span class="menu-text">文档目录</span>
           <i class="el-icon-s-fold"></i>
         </div>
-        <!--<el-menu
+        <el-menu
           default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose">
-          <el-submenu index="1" v-for="(item,index) in dataList">
+          class="el-menu-vertical-demo">
+          <el-submenu :index="child.id" v-for="(child,index) in dataList" :key="child.id">
+            <!-- 判断二级是否有数据 （没有数据）-->
+            <el-menu-item :index="child1.id" v-for="(child1,index1) in child.DataText" :key="child1.id" v-if="!child1.isDataText">{{child1.text}}</el-menu-item>
             <template slot="title">
-              <span>{{item.text}}</span>
+              <span>{{child.text}}</span>
             </template>
-            <el-menu-item-group index="1-3" v-for="(itemS,indexS) in item.DataText">
-              <el-menu-item index="1-3">{{itemS.text}}</el-menu-item>
-            </el-menu-item-group>
-            &lt;!&ndash;<el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>&ndash;&gt;
+            <!-- 判断二级是否有数据 （有数据）-->
+            <el-submenu :index="child1.id" v-for="(child1,index1) in item.DataText" :key="child1.id" v-if="child1.isDataText">
+              <template slot="title">{{child1.text}}</template>
+              <el-menu-item-group v-for="(child2,index2) in child1.DataText">
+                <el-menu-item :index="child2.id">{{child2.text}}</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
           </el-submenu>
-        </el-menu>-->
-        <div class="menu-list" v-for="(item,index) in dataList">
-          <!-- 一级目录 -->
+        </el-menu>
+        <!--<div class="menu-list" v-for="(item,index) in dataList">
+          &lt;!&ndash; 一级目录 &ndash;&gt;
           <div class="menu-gm" @click.stop="ClickMenu(item,index)">
             <span class="menu-text">{{item.text}}</span>
             <i class="el-icon-arrow-down gm-sbc"></i>
           </div>
           <div :class="item.isText ? 'menu-levelShow menu-level' : 'menu-level'"
                v-for="(itemS,indexS) in item.DataText">
-            <!-- 二级目录 -->
+            &lt;!&ndash; 二级目录 &ndash;&gt;
             <div class="level-gm" @click.stop="ClickLevel(itemS)">
               <span :class="itemS.isText && !itemS.isDataText ? 'menu-textColor' : 'menu-text'">{{itemS.text}}</span>
               <i v-if="itemS.isDataText" class="el-icon-arrow-down gm-sbc"></i>
             </div>
-            <!-- 三级目录 -->
+            &lt;!&ndash; 三级目录 &ndash;&gt;
             <div :class="itemS.isText ? 'menu-itm menu-itmShow' : 'menu-itm'"
                  @click.stop="ClickThreeLevel(itemSS)"
                  v-for="(itemSS,indexSS) in itemS.DataText">
               <span :class="itemSS.isText ? 'menu-textBgColor' : 'menu-text'">{{itemSS.text}}</span>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="gm-content">
         <nav class="gm-nav">

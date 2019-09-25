@@ -4,12 +4,12 @@
     <nav class="nav-Type">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{path:'/Index/bannerList'}">banner位置管理</el-breadcrumb-item>
-        <el-breadcrumb-item>查看banner位置管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{path:'/Index/bannerList'}">banner位管理</el-breadcrumb-item>
+        <el-breadcrumb-item>查看banner位管理</el-breadcrumb-item>
       </el-breadcrumb>
     </nav>
     <div class="bannerDetails-content">
-      <h4 class="api-TextH4">查看banner位置管理</h4>
+      <h4 class="api-TextH4">查看banner位管理</h4>
       <div class="api-center">
         <div class="api-quill">
           <el-form :model="form" :rules="rules" size="small" ref="form" label-width="130px" class="demo-dynamic">
