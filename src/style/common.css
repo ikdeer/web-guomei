@@ -48,6 +48,10 @@ ol,li,ul,dl,dt,dd{
   color:#999999 !important;
   font-weight: 400 !important;
 }
+.gm-nav .bg-color .el-breadcrumb__inner{
+  color:#999999 !important;
+  font-weight: 400 !important;
+}
 /*富文本编辑框高度*/
 .ql-container{
   height:4.5rem;

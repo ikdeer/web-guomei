@@ -8,54 +8,42 @@
           <span class="menu-text">文档目录</span>
           <i class="el-icon-s-fold"></i>
         </div>
-        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo">
-          <el-submenu :index="child.id" v-for="(child,index) in dataList" :key="index">
-            <!-- 一级数据展示-->
+        <el-menu :default-active="activeIndex"
+                 @select="handSelect"
+                 :unique-opened="true"
+                 class="el-menu-vertical-demo">
+          <el-submenu index="1">
             <template slot="title">
-              <span>{{child.text}}</span>
+              <span>技术文档</span>
             </template>
-            <!-- 判断二级是否有数据 （没有数据）-->
-            <el-menu-item v-for="(child1,index1) in child.DataText" :index="child1.id" :key="index1" v-if="!child1.isDataText">{{child1.text}}</el-menu-item>
-            <!-- 判断二级是否有数据 （有数据）-->
-            <el-submenu :index="child1.id"
-                        v-for="(child1,index1) in child.DataText"
-                        :key="index1"
-                        v-if="child1.isDataText">
-              <template slot="title">{{child1.text}}</template>
-              <el-menu-item-group v-for="(child2,index2) in child1.DataText">
-                <el-menu-item :index="child2.id">{{child2.text}}</el-menu-item>
+            <!-- 判断一级是否有数据 （有数据）-->
+            <el-submenu v-for="(child,index) in dataList"
+                        :index="child.id"
+                        :key="index"
+                        v-if="child.isDataText">
+              <template slot="title">
+                <span>{{child.text}}</span>
+              </template>
+              <el-menu-item-group v-for="(child1,index1) in child.DataText">
+                <el-menu-item :index="child1.id">{{child1.text}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
+            <!-- 判断一级是否有数据 （没有数据）-->
+            <el-menu-item v-for="(child,index) in dataList" :index="child.id" :key="index" v-if="!child.isDataText">
+              <template slot="title">
+                <span>{{child.text}}</span>
+              </template>
+            </el-menu-item>
           </el-submenu>
         </el-menu>
-        <!--<div class="menu-list" v-for="(item,index) in dataList">
-          &lt;!&ndash; 一级目录 &ndash;&gt;
-          <div class="menu-gm" @click.stop="ClickMenu(item,index)">
-            <span class="menu-text">{{item.text}}</span>
-            <i class="el-icon-arrow-down gm-sbc"></i>
-          </div>
-          <div :class="item.isText ? 'menu-levelShow menu-level' : 'menu-level'"
-               v-for="(itemS,indexS) in item.DataText">
-            &lt;!&ndash; 二级目录 &ndash;&gt;
-            <div class="level-gm" @click.stop="ClickLevel(itemS)">
-              <span :class="itemS.isText && !itemS.isDataText ? 'menu-textColor' : 'menu-text'">{{itemS.text}}</span>
-              <i v-if="itemS.isDataText" class="el-icon-arrow-down gm-sbc"></i>
-            </div>
-            &lt;!&ndash; 三级目录 &ndash;&gt;
-            <div :class="itemS.isText ? 'menu-itm menu-itmShow' : 'menu-itm'"
-                 @click.stop="ClickThreeLevel(itemSS)"
-                 v-for="(itemSS,indexSS) in itemS.DataText">
-              <span :class="itemSS.isText ? 'menu-textBgColor' : 'menu-text'">{{itemSS.text}}</span>
-            </div>
-          </div>
-        </div>-->
       </div>
       <div class="gm-content">
         <nav class="gm-nav">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-            <el-breadcrumb-item>技术文档</el-breadcrumb-item>
-            <el-breadcrumb-item>技术文档</el-breadcrumb-item>
+            <el-breadcrumb-item
+              v-for="(item,index) in catalogList"
+              :class="{'bg-color':index != isLength}">{{item.name}}</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
         <div class="gm-contentPad">
@@ -83,10 +71,16 @@
           breadcrumb:[],
           catalogList:[],
           activeIndex:'',
+
         }
       },
       created(){
         this.getTechDocConTentShow();
+      },
+      computed:{
+        isLength(){
+          return this.catalogList.length-1;
+        }
       },
       methods:{
         //技术文档列表
@@ -94,9 +88,9 @@
           getTechDocConTentShow().then(response => {
             if(response.data.errorCode == 200){
               //数据拼接
-              let arrData = [{text:'技术文档',id:'1',DataText:[]}];
+              let arrData = [];
               for(let i = 0; i < response.data.data.list.length; i++){
-                arrData[0].DataText.push({
+                arrData.push({
                   id:response.data.data.list[i].id.toString(),
                   text:response.data.data.list[i].title1,
                   //判断二级目录是否有数据
@@ -104,14 +98,16 @@
                   DataText:[],
                 });
                 if(response.data.data.list[i].title2){
-                 arrData[0].DataText[i].DataText.push({
+                 arrData[i].DataText.push({
                     id:response.data.data.list[i].id.toString(),
                     text:response.data.data.list[i].title2,
                   })
                 }
               }
               this.dataList = arrData;
-              this.activeIndex = this.dataList[0].DataText[0].id;
+              this.activeIndex = this.dataList[0].id;
+              this.getTechDocDetails(this.activeIndex);
+              this.DataScreening(this.activeIndex);
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -127,7 +123,45 @@
               this.$message.error(response.data.errorInfo);
             }
           })
+        },
+        handSelect(key, keyPath){
+          this.activeIndex = key;
+          this.getTechDocDetails(this.activeIndex);
+          this.DataScreening(this.activeIndex);
+        },
+        //数据筛选
+        DataScreening(id){
+          let arrList = [];
+          for(let i = 0; i < this.dataList.length; i++){
+            if(this.dataList[i].isDataText){
+              if(this.dataList[i].id == id){
+                arrList.push({
+                  name:this.dataList[i].text,
+                  id:this.dataList[i].id,
+                })
+                for(let k = 0; k < this.dataList[i].DataText.length; k++){
+                  if(this.dataList[i].DataText[k].id == id){
+                    arrList.push({
+                      name:this.dataList[i].DataText[k].text,
+                      id:this.dataList[i].DataText[k].id,
+                    })
+                  }
+                }
+              }
+            }else{
+              if(this.dataList[i].id == id){
+                arrList.push({
+                  name:this.dataList[i].text,
+                  id:this.dataList[i].id,
+                })
+              }
+            }
+          }
+          this.catalogList = arrList;
         }
+      },
+      mounted(){
+
       }
     }
 </script>
