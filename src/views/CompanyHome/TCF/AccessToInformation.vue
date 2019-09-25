@@ -9,24 +9,32 @@
           <i class="el-icon-s-fold"></i>
         </div>
         <div class="menu-list">
-          <!-- 一级目录 -->
-          <div class="menu-gm" @click.stop="ClickMenu">
-            <span class="menu-text">接入须知</span>
-            <i class="el-icon-arrow-down gm-sbc"></i>
-          </div>
-          <div :class="isLevelShow ? 'menu-level menu-levelShow' : 'menu-level'">
-            <!-- 二级目录 -->
-            <div class="level-gm" v-for="(item,index) in dataList" @click.stop="ClickLevel(item)">
-              <span :class="item.isText ? 'menu-textColor' : 'menu-text'">{{item.Title}}</span>
-            </div>
-          </div>
+          <el-menu :default-active="activeIndex"
+                   @select="handSelect"
+                   :unique-opened="true"
+                   class="gm-menu-vertical-demo">
+            <el-submenu index="1">
+              <template slot="title">
+                <span class="gm-apiTcf">接入须知</span>
+              </template>
+              <!-- 判断一级是否有数据 （有数据）-->
+              <el-menu-item v-for="(child,index) in dataList"
+                          :index="child.id"
+                          :key="index">
+                <template slot="title">
+                  <span>{{child.Title}}</span>
+                </template>
+              </el-menu-item>
+            </el-submenu>
+          </el-menu>
         </div>
       </div>
       <div class="gm-content">
         <nav class="gm-nav">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{path:'/Company/CompanyHome'}">人脸识别服务</el-breadcrumb-item>
-            <el-breadcrumb-item>接入须知</el-breadcrumb-item>
+            <el-breadcrumb-item class="bg-color">接入须知</el-breadcrumb-item>
+            <el-breadcrumb-item>{{catalogText}}</el-breadcrumb-item>
           </el-breadcrumb>
         </nav>
         <div class="gm-contentPad">
@@ -53,7 +61,8 @@
         bbsContent:'',//文本内容
         bbsTopTitle:'',//标题
         breadcrumb:[],
-        isLevelShow:false,//二级目录显示
+        catalogText:'',
+        activeIndex:'',
       }
     },
     created(){
@@ -68,12 +77,12 @@
             let List = response.data.data.list || [];
             let arrData = [];
             for(let i = 0; i < List.length; i++){
-              arrData.push({isText:false,Title:List[i].title1,id:List[i].id});
+              arrData.push({Title:List[i].title1,id:List[i].id});
             }
-            arrData[0].isText = true;
-            this.isLevelShow = true;
-            this.getAccessNoteDetails(arrData[0].id);
             this.dataList = arrData;
+            this.activeIndex = this.dataList[0].id;
+            this.getAccessNoteDetails(this.activeIndex);
+            this.DataScreening(this.activeIndex);
           }else{
             this.$message.error(response.data.errorInfo);
           }
@@ -90,26 +99,19 @@
           }
         })
       },
-      //一级目录
-      ClickMenu(){
-        this.isLevelShow =! this.isLevelShow;
-        if(!this.isLevelShow){
-          for(let i =0; i < this.dataList.length; i++){
-            this.dataList[i].isText = false;
+      handSelect(key, keyPath){
+        this.activeIndex = key;
+        this.getAccessNoteDetails(this.activeIndex);
+        this.DataScreening(this.activeIndex);
+      },
+      //数据筛选
+      DataScreening(id){
+        for(let i = 0; i < this.dataList.length; i++){
+          if(this.dataList[i].id == id){
+            this.catalogText = this.dataList[i].Title;
           }
-        }else{
-          this.dataList[0].isText = true;
-          this.getAccessNoteDetails(this.dataList[0].id);
         }
-      },
-      //二级目录
-      ClickLevel(item){
-        for(let i =0; i < this.dataList.length; i++){
-          this.dataList[i].isText = false;
-        }
-        item.isText = true;
-        this.getAccessNoteDetails(item.id);
-      },
+      }
     }
   }
 </script>
