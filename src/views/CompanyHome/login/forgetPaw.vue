@@ -105,11 +105,8 @@
       //短信验证码
       UserMsgCode(){
         geUserResetPasswordPhoneMsg({'phoneNum':this.loginForm.phoneNum}).then(response => {
-          if(response.success){
-            this.$message({
-              message: '短信验证码发送成功',
-              type: 'success'
-            });
+          if(response.data.errorCode == 200){
+            this.$message({message: '短信验证码发送成功', type: 'success'});
           }else{
             this.$message.error('短信验证码发送失败');
           }
@@ -151,7 +148,7 @@
             }).then(response => {
               if(response.data.errorCode == '200'){
                 _this.$message({
-                  message: '密码修改成功~~~',
+                  message: '密码修改成功',
                   type: 'success'
                 });
                 setTimeout(()=>{

@@ -126,11 +126,8 @@
       //短信验证码
       UserMsgCode(){
         getUserMsgCode({'phoneNum':this.loginForm.phoneNum,'clientCode':''}).then(response => {
-          if(response.success){
-            this.$message({
-              message: '短信验证码发送成功',
-              type: 'success'
-            });
+          if(response.data.errorCode == 200){
+            this.$message({message: '短信验证码发送成功', type: 'success'});
           }else{
             this.$message.error('短信验证码发送失败');
           }
