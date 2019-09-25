@@ -52,6 +52,21 @@ ol,li,ul,dl,dt,dd{
   color:#999999 !important;
   font-weight: 400 !important;
 }
+.el-submenu .el-menu-item{
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  font-size: 0.16rem !important;
+}
+.el-submenu__title{
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  font-size: 0.16rem !important;
+}
+.gm-menu-vertical-demo .gm-apiTcf{
+  padding-left: 10px !important;
+}
 /*富文本编辑框高度*/
 .ql-container{
   height:4.5rem;

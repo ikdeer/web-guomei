@@ -11,10 +11,10 @@
         <el-menu :default-active="activeIndex"
                  @select="handSelect"
                  :unique-opened="true"
-                 class="el-menu-vertical-demo">
+                 class="gm-menu-vertical-demo">
           <el-submenu index="1">
             <template slot="title">
-              <span>技术文档</span>
+              <span class="gm-apiTcf">技术文档</span>
             </template>
             <!-- 判断一级是否有数据 （有数据）-->
             <el-submenu v-for="(child,index) in dataList"
