@@ -31,6 +31,7 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
+              <p class="gm-format">图片上传推荐格式宽：350px;高：350px</p>
             </el-form-item>
             <el-form-item label="简介：" prop="introduceText">
               <div class="api-OneLevel">
@@ -48,8 +49,8 @@
               <div class="api-OneLevel">
                 <el-input placeholder="请输入URL" v-model="catalogText.URL"></el-input>
               </div>
-              <p class="api-danger">如果要跳转本站产品详情页URL请复制或填写
-                <span>/Company/product</span>
+              <p class="api-danger">
+                如果要跳转本站产品详情页请复制<span>/Company/product</span>（注意!请勿复制空格）
               </p>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">

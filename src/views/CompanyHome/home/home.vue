@@ -10,8 +10,8 @@
             <div class="header-IfoImg">
               <img :src="item.imgUrl" class="header-ImgBg" alt="">
               <div class="position-button">
-                <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
-                <el-button class="IfoImg-button" @click.stop="ClickApply">立即申请</el-button>
+                <el-button class="IfoImg-button" @click.stop="ClickApply(item)">占位空格</el-button>
+                <el-button class="IfoImg-button" @click.stop="ClickApplyTow(item)">占位空格</el-button>
               </div>
             </div>
           </el-carousel-item>
@@ -103,6 +103,7 @@
     import Header_Nav from '@/views/CompanyHome/component/header/HeaderNav'
     import Footer_Nav from '@/views/CompanyHome/component/footer/FooterNav'
     import {getProductServiceShow,getSolutionShow,getBannerShow} from "../../../HttpApi/home/homeApi";
+    import {handleBrowsingItemLink} from "../../../lib/utils";
     export default {
       name: "home",
       components:{Header_Nav, Footer_Nav},
@@ -150,19 +151,30 @@
           })
         },
         //跳转应用创建页
-        ClickApply(){
+        ClickApply(item){
           let _this = this;
-          if(this.Cookies.get('token')){
-            if(this.groupID == '20'){
-              _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+          if(item.url1 == '/Index/addApplication'){
+            if(this.Cookies.get('token')){
+              if(this.groupID == '20'){
+                _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+              }else{
+                this.$message({message: '亲！你暂时没有权限哦~~~~', type: 'warning'});
+              }
             }else{
-              this.$message({message: '亲！你暂时没有权限哦~~~~', type: 'warning'});
+              _this.$message.error('此功能需要登录过后才能查看');
+              setTimeout(()=>{
+                _this.$router.push({path:'/Company/login'});
+              },300)
             }
           }else{
-            _this.$message.error('此功能需要登录过后才能查看');
-            setTimeout(()=>{
-              _this.$router.push({path:'/Company/login'});
-            },300)
+            window.open(handleBrowsingItemLink(item.url1),'_blank');
+          }
+        },
+        ClickApplyTow(item){
+          if(item.url2 == '/Company/APITCF'){
+            this.$router.push({path:item.url2});
+          }else{
+            window.open(handleBrowsingItemLink(item.url2),'_blank');
           }
         },
         //产品功能区域跳转
@@ -170,7 +182,7 @@
           if(item.urlAddress == '/Company/product'){
             this.$router.push({path:item.urlAddress,query:{productId:item.id}});
           }else{
-            window.open(item.urlAddress);
+            window.open(handleBrowsingItemLink(item.urlAddress),'_blank');
           }
         },
         //解决方案区域跳转
@@ -178,7 +190,7 @@
           if(item.urlAddress == '/Company/solution'){
             this.$router.push({path:item.urlAddress,query:{productId:item.id}});
           }else{
-            window.open(item.urlAddress);
+            window.open(handleBrowsingItemLink(item.urlAddress),'_blank');
           }
         }
       },

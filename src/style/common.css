@@ -52,6 +52,22 @@ ol,li,ul,dl,dt,dd{
   color:#999999 !important;
   font-weight: 400 !important;
 }
+.gm-format{
+  font-size: 0.14rem;
+  color: red;
+}
+.api-danger{
+  font-size: 0.14rem;
+  color: #333333;
+  margin: 0 !important;
+}
+.api-danger span{
+  font-size: 0.14rem;
+  color: red;
+}
+.el-menu{
+  border: none;
+}
 .el-submenu .el-menu-item{
   text-overflow: ellipsis;
   word-wrap: break-word;

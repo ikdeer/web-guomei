@@ -36,6 +36,7 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
+              <p class="gm-format">图片上传推荐格式宽：1920p;高：580px</p>
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
@@ -51,8 +52,7 @@
                 <el-input placeholder="请输入URL"  v-model="form.URL1"></el-input>
               </div>
               <p class="api-danger">
-                如果要跳转本站URL请复制
-                <span>/Index/addApplication</span>
+                如果要跳转本站应用页请复制<span>/Index/addApplication</span>（注意！请勿复制空格）
               </p>
             </el-form-item>
             <el-form-item label="按钮2跳转地址："  prop="URL2" required>
@@ -60,8 +60,7 @@
                 <el-input placeholder="请输入URL" v-model="form.URL2"></el-input>
               </div>
               <p class="api-danger">
-                如果要跳转本站技术文档页URL请复制
-                <span>/Company/APITCF</span>
+                如果要跳转本站技术文档页请复制<span>/Company/APITCF</span>（注意!请勿复制空格）
               </p>
             </el-form-item>
             <el-form-item label="排序：" prop="sortNum">
@@ -270,12 +269,6 @@
           }
           .avatar-uploaderImg{
             display: none;
-          }
-        }
-        .api-danger{
-          margin-top: 0.05rem;
-          span{
-            color:red;
           }
         }
       }

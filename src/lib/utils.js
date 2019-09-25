@@ -41,3 +41,18 @@ export const strlength = (str) => {
     }
     return len;
 };
+
+export  const handleBrowsingItemLink = (href) => {
+  if(!href) return;
+  let flag = false;
+  let browsingItemLinkHttp = href.substr(0, 7).toLowerCase();
+  let browsingItemLinkHttps = href.substr(0, 8).toLowerCase();
+  if(browsingItemLinkHttp === "http://" || browsingItemLinkHttps === "https://"){
+    flag = true;
+  }
+  if(!flag){
+    return `http://${href}`;
+  }else{
+    return href;
+  }
+}

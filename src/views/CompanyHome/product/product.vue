@@ -38,7 +38,8 @@
       components:{Header_Nav,Footer_Nav},
       data(){
         return {
-          bannerURL:'',//banner跳转地址
+          bannerURL1:'',//banner1跳转地址
+          bannerURL2:'',//banner2跳转地址
           bannerImg:'',//图片
           //数据展示
           SolutionList:[],
@@ -57,7 +58,8 @@
               for(let i =0; i < bannerList.length; i++){
                 if(bannerList[i].differentiate == 2){
                   this.bannerImg = bannerList[i].imgUrl;
-                  this.bannerURL = bannerList[i].url2;
+                  this.bannerURL1 = bannerList[i].url1;
+                  this.bannerURL2 = bannerList[i].url2;
                   break;
                 }
               }
@@ -69,25 +71,29 @@
         //跳转应用创建页
         ClickApply(){
           let _this = this;
-          if(this.Cookies.get('token')){
-            if(this.groupID == '20'){
-              _this.$router.push({path:'/Index/addApplication',query:{type:'add'}});
+          if(this.bannerURL1 == '/Index/addApplication'){
+            if(this.Cookies.get('token')){
+              if(this.groupID == '20'){
+                _this.$router.push({path:this.bannerURL1,query:{type:'add'}});
+              }else{
+                this.$message({message: '亲！你暂时没有权限哦~~~~', type: 'warning'});
+              }
             }else{
-              this.$message({message: '亲！你暂时没有权限哦', type: 'warning'});
+              _this.$message.error('此功能需要登录过后才能查看');
+              setTimeout(()=>{
+                _this.$router.push({path:'/Company/login'});
+              },300)
             }
           }else{
-            _this.$message.error('此功能需要登录过后才能查看');
-            setTimeout(()=>{
-              _this.$router.push({path:'/Company/login'});
-            },300)
+            window.open(handleBrowsingItemLink(this.bannerURL1),'_blank');
           }
         },
         //跳转技术文档
         ClickApi(){
-          if(this.bannerURL == '/Company/APITCF'){
-            this.$router.push({path:this.bannerURL});
+          if(this.bannerURL2 == '/Company/APITCF'){
+            this.$router.push({path:this.bannerURL2});
           }else{
-            window.open(this.bannerURL);
+            window.open(handleBrowsingItemLink(this.bannerURL2),'_blank');
           }
         },
         //解决方案列表
