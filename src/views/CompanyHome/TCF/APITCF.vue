@@ -8,16 +8,19 @@
           <span class="menu-text">文档目录</span>
           <i class="el-icon-s-fold"></i>
         </div>
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-submenu :index="child.id" v-for="(child,index) in dataList" :key="child.id">
-            <!-- 判断二级是否有数据 （没有数据）-->
-            <el-menu-item :index="child1.id" v-for="(child1,index1) in child.DataText" :key="child1.id" v-if="!child1.isDataText">{{child1.text}}</el-menu-item>
+        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo">
+          <el-submenu :index="child.id" v-for="(child,index) in dataList" :key="index">
             <!-- 一级数据展示-->
             <template slot="title">
               <span>{{child.text}}</span>
             </template>
+            <!-- 判断二级是否有数据 （没有数据）-->
+            <el-menu-item v-for="(child1,index1) in child.DataText" :index="child1.id" :key="index1" v-if="!child1.isDataText">{{child1.text}}</el-menu-item>
             <!-- 判断二级是否有数据 （有数据）-->
-            <el-submenu :index="child1.id" v-for="(child1,index1) in child.DataText" :key="child1.id" v-if="child1.isDataText">
+            <el-submenu :index="child1.id"
+                        v-for="(child1,index1) in child.DataText"
+                        :key="index1"
+                        v-if="child1.isDataText">
               <template slot="title">{{child1.text}}</template>
               <el-menu-item-group v-for="(child2,index2) in child1.DataText">
                 <el-menu-item :index="child2.id">{{child2.text}}</el-menu-item>
@@ -79,6 +82,7 @@
           bbsTopTitle:'',//标题
           breadcrumb:[],
           catalogList:[],
+          activeIndex:'',
         }
       },
       created(){
@@ -90,33 +94,24 @@
           getTechDocConTentShow().then(response => {
             if(response.data.errorCode == 200){
               //数据拼接
-              let arrData = [{text:'技术文档',isText:true,DataText:[]}];
+              let arrData = [{text:'技术文档',id:'1',DataText:[]}];
               for(let i = 0; i < response.data.data.list.length; i++){
                 arrData[0].DataText.push({
-                  id:response.data.data.list[i].id,
+                  id:response.data.data.list[i].id.toString(),
                   text:response.data.data.list[i].title1,
-                  isText:i == 0 ? true : false,
-                  isDataText:response.data.data.list[i].title2 ? true : false, //判断二级目录是否有数据
+                  //判断二级目录是否有数据
+                  isDataText:response.data.data.list[i].title2 ? true : false,
                   DataText:[],
                 });
                 if(response.data.data.list[i].title2){
                  arrData[0].DataText[i].DataText.push({
-                    id:response.data.data.list[i].id,
+                    id:response.data.data.list[i].id.toString(),
                     text:response.data.data.list[i].title2,
-                    isText:false,
                   })
                 }
               }
-              if(!arrData[0].DataText[0].DataText.length){
-                arrData[0].DataText[0].isText = true;
-                this.getTechDocDetails(arrData[0].DataText[0].id);
-              }else{
-                arrData[0].DataText[0].isText = true;
-                arrData[0].DataText[0].DataText[0].isText = true;
-                this.getTechDocDetails(arrData[0].DataText[0].DataText[0].id);
-              }
               this.dataList = arrData;
-              console.log(this.dataList);
+              this.activeIndex = this.dataList[0].DataText[0].id;
             }else{
               this.$message.error(response.data.errorInfo);
             }
@@ -132,54 +127,7 @@
               this.$message.error(response.data.errorInfo);
             }
           })
-        },
-        //一级目录
-        ClickMenu(item,index){
-          if(item.isText){
-            for(let i =0; i < this.dataList[index].DataText.length; i++){
-              this.dataList[index].DataText[i].isText = false;
-            }
-            item.isText = false;
-          }else{
-            for(let i =0; i < this.dataList.length; i++){
-              this.dataList[i].isText = false;
-            }
-            item.isText = true;
-          }
-        },
-        //二级目录
-        ClickLevel(items){
-          if(items.isText){
-            for(let i =0; i < this.dataList.length; i++){
-              for(let j =0; j < this.dataList[i].DataText.length; j++){
-                this.dataList[i].DataText[j].isText = false;
-              }
-            }
-            items.isText = false;
-          }else{
-            for(let i =0; i < this.dataList.length; i++){
-              for(let j =0; j < this.dataList[i].DataText.length; j++){
-                this.dataList[i].DataText[j].isText = false;
-              }
-            }
-            items.isText = true;
-          }
-          if(!items.DataText.length){
-            this.getTechDocDetails(items.id);
-          }
-        },
-        //三级目录
-        ClickThreeLevel(itemSS){
-          for(let i =0; i < this.dataList.length; i++){
-            for(let j =0; j < this.dataList[i].DataText.length; j++){
-              for(let k = 0; k < this.dataList[i].DataText[j].DataText.length; k++){
-                this.dataList[i].DataText[j].DataText[k].isText = false;
-              }
-            }
-          }
-          itemSS.isText = true;
-          this.getTechDocDetails(itemSS.id);
-        },
+        }
       }
     }
 </script>

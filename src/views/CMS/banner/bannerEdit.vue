@@ -156,7 +156,7 @@
       },
       //图片上传
       BannerUpDataImg(file,fileList){
-        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/png";
+        const isJPG = file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg' || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
           this.$message.error('上传图片只能是 JPG JPEG PNG 格式!');
