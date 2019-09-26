@@ -125,7 +125,7 @@
                 [{ 'font': fonts }],         //字体
                 [{ 'align': [] }],        //对齐方式
                 ['clean'],        //清除字体样式
-                ['image','video'] //上传图片、上传视频
+                ['image','video','link'] //上传图片、上传视频
               ],
               handlers:{
                 'image':function(value){
