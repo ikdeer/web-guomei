@@ -36,7 +36,7 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
-              <p class="gm-format">图片上传推荐格式宽：1920p;高：580px</p>
+              <p class="gm-format">图片上传推荐格式宽：1920px;高：580px</p>
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
