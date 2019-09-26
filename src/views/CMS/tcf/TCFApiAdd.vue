@@ -143,7 +143,7 @@ export default {
             loading: true,
             name: 'img',
             size: 5,  // 单位为M, 1M = 1024KB
-            action: 'www.baidu.com',
+            action: '',
             response: (res) => {
               return res.info
             },
