@@ -13,7 +13,6 @@
         <div class="api-center">
           <div class="api-quill">
             <el-form :model="catalogText"
-                     :label-position="labelPosition"
                      :rules="rules"
                      size="small"
                      ref="catalogText"
@@ -90,10 +89,12 @@
     getTechDocTitle2Show
   } from "../../../HttpApi/TCFApi/TCFApi";
   //引入编辑器
-  import * as Quill from 'quill';
+  import {quillEditor, Quill} from 'vue-quill-editor'
   import { ImageDrop } from 'quill-image-drop-module';
   //quill图片可拖拽改变大小
   import ImageResize from 'quill-image-resize-module';
+  //quill图片可复制上传
+  import {container,ImageExtend,QuillWatch} from 'quill-image-extend-module';
   //quill编辑器的字体
   var fonts = ['SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman','sans-serif'];
   var fontSize = ['10px', '12px', '14px', '16px', '20px', '24px', '36px'];
@@ -104,10 +105,12 @@
   fontSizeStyle.whitelist = fontSize;
   Quill.register(Font, true);
   Quill.register(fontSizeStyle, true);
+  Quill.register('modules/ImageExtend', ImageExtend);
   Quill.register('modules/imageDrop', ImageDrop);
   Quill.register('modules/imageResize', ImageResize);
 export default {
   name: "TCFApi",
+  components: {quillEditor},
   data(){
     let Title = (rule, value, callback) => {
       if(value){
@@ -135,6 +138,26 @@ export default {
         theme: 'snow',
         placeholder: '请填写要发布的公告版内容...',
         modules: {
+          imageResize: {},
+          ImageExtend: {
+            loading: true,
+            name: 'img',
+            size: 5,  // 单位为M, 1M = 1024KB
+            action: 'www.baidu.com',
+            response: (res) => {
+              return res.info
+            },
+            headers: (xhr) => {},  // 可选参数 设置请求头部
+            start: () => {
+              console.log('111');
+            },  // 可选参数 自定义开始上传触发事件
+            end: () => {},  // 可选参数 自定义上传结束触发的事件，无论成功或者失败
+            error: () => {},  // 可选参数 自定义网络错误触发的事件
+            //可选参数 选择图片触发，
+            change: (xhr, formData) => {
+              console.log(formData);
+            }
+          },
           toolbar: {
             // 工具栏
             container: [
@@ -151,7 +174,7 @@ export default {
               [{ 'font': fonts }],         //字体
               [{ 'align': [] }],        //对齐方式
               ['clean'],        //清除字体样式
-              ['image','video']        //上传图片、上传视频
+              ['image','video','link']        //上传图片、上传视频
             ],
             handlers:{
               'image':function(value){
@@ -163,8 +186,7 @@ export default {
                 }
               }
             }
-          },
-          imageResize: {}
+          }
         },
       },
       rules:{
