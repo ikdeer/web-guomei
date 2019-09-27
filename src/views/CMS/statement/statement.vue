@@ -347,9 +347,9 @@
                                 data: legend
                             },
                             grid: {
-                                left: '3%',
+                                left: '4%',
                                 right: '4%',
-                                bottom: '3%',
+                                bottom: '4%',
                                 containLabel: true
                             },
                             toolbox: {
