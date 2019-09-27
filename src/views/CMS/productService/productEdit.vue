@@ -19,7 +19,7 @@
               </div>
             </el-form-item>
             <el-form-item label="首页封面：" prop="coverImg">
-              <div class="api-OneLevel">
+              <div class="api-OneLevel" v-loading="catalogText.quillUpdateImg">
                 <el-upload
                   class="avatar-uploader"
                   action=""
@@ -205,6 +205,8 @@
       },
       //封面上传
       coverUpDataImg(file,fileList){
+        //显示loading动画
+        this.catalogText.quillUpdateImg = true;
         const _this = this;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
@@ -218,6 +220,7 @@
         }
         base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.catalogText.quillUpdateImg = false;
             if(response.data.errorCode == 200){
               _this.catalogText.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{

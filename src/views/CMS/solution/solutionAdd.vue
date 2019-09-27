@@ -19,7 +19,7 @@
               </div>
             </el-form-item>
             <el-form-item label="图标：" prop="coverImg">
-              <div class="api-OneLevel">
+              <div class="api-OneLevel" v-loading="form.quillUpdateImg">
                 <el-upload
                   class="avatar-uploader"
                   action=""
@@ -192,6 +192,8 @@
     methods:{
       //封面上传
       coverUpDataImg(file,fileList){
+        //图片上传动画
+        this.form.quillUpdateImg = true;
         const _this = this;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
@@ -205,6 +207,7 @@
         }
         base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.form.quillUpdateImg = false;
             if(response.data.errorCode == 200){
               _this.form.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{
@@ -230,7 +233,6 @@
         let _this = this;
         base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64: resBase64Img}).then(response => {
-            // loading动画消失
             _this.form.quillUpdateImg = false;
             if (response.data.errorCode == 200) {
               let quill = _this.$refs.myQuillEditor.quill;

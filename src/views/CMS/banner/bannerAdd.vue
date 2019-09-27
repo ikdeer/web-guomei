@@ -24,7 +24,7 @@
               </div>
             </el-form-item>
             <el-form-item label="上传图片：" prop="coverImg">
-              <div class="api-OneLevel">
+              <div class="api-OneLevel" v-loading="form.ImgFlag">
                 <el-upload
                   class="avatar-uploader"
                   action=""
@@ -33,7 +33,7 @@
                   :on-change="BannerUpDataImg"
                   :show-file-list="false">
                   <img v-if="form.coverImg" :src="form.coverImg" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  <i v-if="!form.coverImg" class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
               <p class="gm-format">图片上传推荐格式宽：1920px;高：580px</p>
@@ -122,7 +122,8 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          isURL:true,
+          ImgFlag:false,
+          videoUploadPercent:'',//图片上传动画
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -139,6 +140,8 @@
       //图片上传
       BannerUpDataImg(file,fileList){
         const _this = this;
+        //图片上传动画
+        this.form.ImgFlag = true;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg' || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -151,6 +154,7 @@
         }
         base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.form.ImgFlag = false;
             if(response.data.errorCode == 200){
               _this.form.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{

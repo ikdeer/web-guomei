@@ -24,7 +24,7 @@
               </div>
             </el-form-item>
             <el-form-item label="上传图片：" prop="coverImg">
-              <div class="api-OneLevel">
+              <div class="api-OneLevel" v-loading="form.ImgFlag">
                 <el-upload
                   class="avatar-uploader"
                   action=""
@@ -124,7 +124,7 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          isURL:false,
+          ImgFlag:false,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -156,6 +156,8 @@
       },
       //图片上传
       BannerUpDataImg(file,fileList){
+        //图片上传动画
+        this.form.ImgFlag = true;
         const _this = this;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg' || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
@@ -169,6 +171,7 @@
         }
         base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.form.ImgFlag = false;
             if(response.data.errorCode == 200){
               _this.form.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{
