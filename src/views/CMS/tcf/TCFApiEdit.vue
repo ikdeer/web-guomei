@@ -55,8 +55,7 @@
                 accept="image/jpg,image/jpeg,image/png"
                 :show-file-list="false"
                 :auto-upload="false"
-                :on-change="getFile"
-                :before-upload="beforeUpload">
+                :on-change="getFile">
               </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
@@ -121,7 +120,7 @@
           secondLevel:'',//二级目录
           secondLevelData:[],
           bbsContent:'',//文本内容
-          quillUpdateImg:'',//图片上传动画
+          quillUpdateImg:false,//图片上传动画
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         editorOption: {
@@ -207,13 +206,9 @@
           }
         })
       },
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
       //图片上传
       getFile(file,fileList){
+        this.catalogText.quillUpdateImg = true;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -227,6 +222,7 @@
         let _this = this;
         base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.catalogText.quillUpdateImg = false;
             if(response.data.success){
               let quill = _this.$refs.myQuillEditor.quill;
               // 获取光标所在位置

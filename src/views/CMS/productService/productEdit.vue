@@ -66,8 +66,7 @@
                 accept="image/jpg,image/jpeg,image/png"
                 :show-file-list="false"
                 :auto-upload="false"
-                :on-change="getFile"
-                :before-upload="beforeUpload">
+                :on-change="getFile">
               </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
@@ -139,7 +138,7 @@
           URL:'',//跳转地址
           sortNum:'',//排序
           bbsContent:'',//文本内容
-          quillUpdateImg:'',//图片上传动画
+          quillUpdateImg:false,//图片上传动画
         },
         ImgUrl:process.env.BASE_URL,
         editorOption: {
@@ -227,13 +226,10 @@
           })
         })
       },
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
       //图片上传
       getFile(file,fileList){
+        //显示loading动画
+        this.catalogText.quillUpdateImg = true;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -247,6 +243,7 @@
         let _this = this;
         base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64: resBase64Img}).then(response => {
+            _this.catalogText.quillUpdateImg = false;
             if (response.data.errorCode == 200) {
               let quill = _this.$refs.myQuillEditor.quill;
               // 获取光标所在位置
@@ -255,8 +252,6 @@
               quill.insertEmbed(length, 'image', `${_this.ImgUrl}${response.data.data.url}`);
               // 调整光标到最后
               quill.setSelection(length + 1);
-              // loading动画消失
-              _this.catalogText.quillUpdateImg = false;
             } else {
               _this.$message.error(response.data.errorInfo);
             }
