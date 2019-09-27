@@ -274,12 +274,77 @@
                                 callFailCount.push(item.callFailCount);
                             });
                         }
+                        var legend = [],series = [];
+                        if(this.formData.monitor.length == 2 || this.formData.monitor.length == 0){
+                            legend = ['调用成功','调用失败'];
+                            series = [{
+                                name: '调用失败',
+                                type: 'line',
+                                stack: '总量',
+                                data: callFailCount,
+                                itemStyle : {
+                                    normal : {
+                                        color:'#0097E9', //改变折线点的颜色
+                                        lineStyle:{
+                                            color:'#0097E9' //改变折线颜色
+                                        }
+                                    }
+                                }
+                            },{
+                                name: '调用成功',
+                                type: 'line',
+                                stack: '总量',
+                                data: callSucessCount,
+                                itemStyle : {
+                                    normal : {
+                                        color:'#FF4C68', //改变折线点的颜色
+                                        lineStyle:{
+                                            color:'#FF4C68' //改变折线颜色
+                                        }
+                                    }
+                                }
+                            }]
+                        }else{
+                            if(this.formData.monitor[0]==1){
+                                legend = ['调用成功'];
+                                series = [{
+                                    name: '调用成功',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: callSucessCount,
+                                    itemStyle : {
+                                        normal : {
+                                            color:'#FF4C68', //改变折线点的颜色
+                                            lineStyle:{
+                                                color:'#FF4C68' //改变折线颜色
+                                            }
+                                        }
+                                    }
+                                }]
+                            }else{
+                                legend = ['调用失败'];
+                                series = [{
+                                    name: '调用失败',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: callFailCount,
+                                    itemStyle : {
+                                        normal : {
+                                            color:'#0097E9', //改变折线点的颜色
+                                            lineStyle:{
+                                                color:'#0097E9' //改变折线颜色
+                                            }
+                                        }
+                                    }
+                                }]
+                            }
+                        }
                         let option = {
                             tooltip: {
                                 trigger: 'axis'
                             },
                             legend: {
-                                data: ['调用成功','调用失败']
+                                data: legend
                             },
                             grid: {
                                 left: '3%',
@@ -309,35 +374,7 @@
                                     padding: [6, 50, 0, 0],
                                 }
                             },
-                            series: [
-                                {
-                                    name: '调用失败',
-                                    type: 'line',
-                                    stack: '总量',
-                                    data: callFailCount,
-                                    itemStyle : {
-                                        normal : {
-                                            color:'#0097E9', //改变折线点的颜色
-                                            lineStyle:{
-                                                color:'#0097E9' //改变折线颜色
-                                            }
-                                        }
-                                    }
-                                },{
-                                    name: '调用成功',
-                                    type: 'line',
-                                    stack: '总量',
-                                    data: callSucessCount,
-                                    itemStyle : {
-                                        normal : {
-                                            color:'#FF4C68', //改变折线点的颜色
-                                            lineStyle:{
-                                                color:'#FF4C68' //改变折线颜色
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
+                            series: series
                         };
                         this.lineCharts.clear();
                         this.lineCharts.setOption(option);
