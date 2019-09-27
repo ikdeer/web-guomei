@@ -77,6 +77,7 @@
     getImageUploadNormalImage,
     getAccessNoteDetails
   } from "../../../HttpApi/instructions/instructionsListAPi";
+  import {base64} from "@/lib/utils";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -189,40 +190,23 @@
           return;
         }
         let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
+        base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
             if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
+              let quill = _this.$refs.myQuillEditor.quill;
               // 获取光标所在位置
               let length = quill.getSelection().index;
               // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', `${this.ImgUrl}${response.data.data.url}`);
+              quill.insertEmbed(length, 'image', `${_this.ImgUrl}${response.data.data.url}`);
               // 调整光标到最后
               quill.setSelection(length + 1);
               // loading动画消失
-              this.catalogText.quillUpdateImg = false;
+              _this.catalogText.quillUpdateImg = false;
             }else{
-              this.$message.error(response.data.errorInfo);
+              _this.$message.error(response.data.errorInfo);
             }
           })
         })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
       },
       //保存并发布
       addDomain(){

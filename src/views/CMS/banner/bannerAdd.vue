@@ -82,6 +82,7 @@
 </template>
 <script>
   import {getBannerCreate,getImageUploadNormalImage} from "@/HttpApi/banner/bannerApi";
+  import {base64} from "@/lib/utils";
   export default {
     name: "bannerAdd",
     data(){
@@ -137,6 +138,7 @@
     methods:{
       //图片上传
       BannerUpDataImg(file,fileList){
+        const _this = this;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg' || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -147,32 +149,15 @@
           this.$message.error('上传图片大小不能超过 5MB!');
           return;
         }
-        this.getBase64(file.raw).then(resBase64Img => {
+        base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
             if(response.data.errorCode == 200){
-              this.form.coverImg = `${this.ImgUrl}${response.data.data.url}`;
+              _this.form.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{
-              this.$message.error(response.data.errorInfo);
+              _this.$message.error(response.data.errorInfo);
             }
           })
         })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
       },
       //重置
       cancel(){
