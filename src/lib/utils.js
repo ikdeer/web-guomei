@@ -1,4 +1,4 @@
-
+import EXIF from 'exif-js'
 export const formatTimes = (param, noNeedTime) => {
     if (!param) {
         return '';
@@ -55,4 +55,103 @@ export  const handleBrowsingItemLink = (href) => {
   }else{
     return href;
   }
-}
+};
+
+//base64方法
+export const base64 = (file,callback) =>{
+    EXIF.getData(file, function () {
+        var Orientation = EXIF.getTag(this, "Orientation");
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+            if (Orientation == 1) {
+                console.log("图片无需处理");
+            } else {
+                var uploadBase64 = new Image();
+                uploadBase64.src = e.target.result;
+
+                uploadBase64.onload = function() {
+                    //修正旋转图片
+                    var expectWidth = uploadBase64.width;
+                    var expectHeight = uploadBase64.height;
+
+                    var canvas = document.createElement("canvas"),
+                        ctx = canvas.getContext("2d");
+                    canvas.width = expectWidth;
+                    canvas.height = expectHeight;
+
+                    ctx.drawImage(uploadBase64, 0, 0, expectWidth, expectHeight);
+                    var base64 = null;
+
+                    if (Orientation !== "" && Orientation != 1) {
+                        switch (Orientation) {
+                            case 6:
+                                console.log("顺时针旋转270度");
+                                rotateImg(uploadBase64, "left", canvas);
+                                break;
+                            case 8:
+                                console.log("顺时针旋转90度");
+                                rotateImg(uploadBase64, "right", canvas);
+                                break;
+                            case 3:
+                                console.log("顺时针旋转180度");
+                                rotateImg(uploadBase64, "horizen", canvas);
+                                break;
+                        }
+                        //输出转换后的base64图片
+                        base64 = canvas.toDataURL(file.type, 1);
+                        callback(base64);
+                    }
+                };
+            }
+        };
+    });
+    //对图片旋转处理
+    const rotateImg = (img, direction, canvas) => {
+        console.log("开始旋转图片");
+        //图片旋转4次后回到原方向
+        if (img != null){
+            var height = img.height;
+            var width = img.width;
+            var step = 2;
+
+            if (direction == "right") {
+                step++;
+            } else if (direction == "left") {
+                step--;
+            } else if (direction == "horizen") {
+                step = 2; //不处理
+            }
+            //旋转角度以弧度值为参数
+            var degree = step * 90 * Math.PI / 180;
+            var ctx = canvas.getContext("2d");
+            switch (step) {
+                case 0:
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0);
+                    break;
+                case 1:
+                    canvas.width = height;
+                    canvas.height = width;
+                    ctx.rotate(degree);
+                    ctx.drawImage(img, 0, -height);
+                    break;
+                case 2:
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.rotate(degree);
+                    ctx.drawImage(img, -width, -height);
+                    break;
+                case 3:
+                    canvas.width = height;
+                    canvas.height = width;
+                    ctx.rotate(degree);
+                    ctx.drawImage(img, -width, 0);
+                    break;
+            }
+            console.log("结束旋转图片");
+        }
+    }
+};
+

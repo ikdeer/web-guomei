@@ -181,7 +181,7 @@
 </template>
 
 <script>
-    import {textLen,formatTimes} from '@/lib/utils'
+    import {textLen,formatTimes,base64} from '@/lib/utils';
     import { getFaceList,uploadFaceImage,getFaceNoType,getFaceType,getPicList,getGroupChildremTwo,uploadUrl,createFace } from '@/HttpApi/face/face'
     export default {
         name: "userList",
@@ -466,13 +466,10 @@
                     return;
                 }
                 var that = this;
-                var imgurl = '';
-                var reader = new FileReader();
-                reader.readAsDataURL(file.raw);
-                reader.onload = function(e){
-                    this.result; // base64编码
-                    imgurl = this.result;
-                    uploadFaceImage({imageBase64:this.result}).then(({data})=>{
+                base64(file.raw,function (imgurl) {
+                    that.imageUrl = '';
+                    console.log(imgurl);
+                    uploadFaceImage({imageBase64:imgurl}).then(({data})=>{
                         if(data.errorCode ==200){
                             that.imageUrl = imgurl;
                         }else{
@@ -480,7 +477,7 @@
                             that.$message.warning(data.errorInfo)
                         }
                     })
-                };
+                })
             },
             commitFaceImage(){
                 this.$refs['dataDialogForm'].validate((valid) => {
