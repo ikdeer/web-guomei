@@ -56,12 +56,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <!--<el-form-item label="统计项">
-                        <el-radio-group v-model="formData.radio">
-                            <el-radio :label="1">调用量</el-radio>
-                            <el-radio :label="2">QPS</el-radio>
-                        </el-radio-group>
-                    </el-form-item>-->
                     <el-form-item label="监控项">
                         <el-checkbox-group v-model="formData.monitor">
                             <el-checkbox label="1">调用成功</el-checkbox>
@@ -114,7 +108,7 @@
                     </el-table-column>
                     <el-table-column
                         align="center"
-                        prop="appType"
+                        prop="appTypeName"
                         label="应用类型">
                     </el-table-column>
                     <el-table-column
