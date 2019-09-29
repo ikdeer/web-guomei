@@ -456,6 +456,7 @@ export default {
             width: 100%;
             height: 3.35rem;
             .tableHead{
+              height: 100%;
               font-weight: 700;
               color: #666666;
               th{
