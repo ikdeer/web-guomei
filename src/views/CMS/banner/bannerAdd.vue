@@ -24,7 +24,7 @@
               </div>
             </el-form-item>
             <el-form-item label="上传图片：" prop="coverImg">
-              <div class="api-OneLevel">
+              <div class="api-OneLevel" v-loading="form.ImgFlag">
                 <el-upload
                   class="avatar-uploader"
                   action=""
@@ -33,10 +33,10 @@
                   :on-change="BannerUpDataImg"
                   :show-file-list="false">
                   <img v-if="form.coverImg" :src="form.coverImg" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  <i v-if="!form.coverImg" class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
-              <p class="gm-format">图片上传推荐格式宽：1920p;高：580px</p>
+              <p class="gm-format">图片上传推荐格式宽：1920px;高：580px</p>
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
@@ -82,6 +82,7 @@
 </template>
 <script>
   import {getBannerCreate,getImageUploadNormalImage} from "@/HttpApi/banner/bannerApi";
+  import {base64} from "@/lib/utils";
   export default {
     name: "bannerAdd",
     data(){
@@ -121,7 +122,8 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          isURL:true,
+          ImgFlag:false,
+          videoUploadPercent:'',//图片上传动画
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -137,6 +139,9 @@
     methods:{
       //图片上传
       BannerUpDataImg(file,fileList){
+        const _this = this;
+        //图片上传动画
+        this.form.ImgFlag = true;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg' || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -147,32 +152,16 @@
           this.$message.error('上传图片大小不能超过 5MB!');
           return;
         }
-        this.getBase64(file.raw).then(resBase64Img => {
+        base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.form.ImgFlag = false;
             if(response.data.errorCode == 200){
-              this.form.coverImg = `${this.ImgUrl}${response.data.data.url}`;
+              _this.form.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{
-              this.$message.error(response.data.errorInfo);
+              _this.$message.error(response.data.errorInfo);
             }
           })
         })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
       },
       //重置
       cancel(){
