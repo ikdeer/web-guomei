@@ -24,7 +24,7 @@
               </div>
             </el-form-item>
             <el-form-item label="上传图片：" prop="coverImg">
-              <div class="api-OneLevel">
+              <div class="api-OneLevel" v-loading="form.ImgFlag">
                 <el-upload
                   class="avatar-uploader"
                   action=""
@@ -36,7 +36,7 @@
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </div>
-              <p class="gm-format">图片上传推荐格式宽：1920p;高：580px</p>
+              <p class="gm-format">图片上传推荐格式宽：1920px;高：580px</p>
             </el-form-item>
             <el-form-item label="Banner添加位置" prop="differentiate">
               <div class="api-OneLevel">
@@ -85,6 +85,7 @@
 </template>
 <script>
   import {getBannerDetail,getBannerModify,getImageUploadNormalImage} from "@/HttpApi/banner/bannerApi";
+  import {base64} from "@/lib/utils";
   export default {
     name: "bannerEdit",
     data(){
@@ -123,7 +124,7 @@
           URL1:'',//按钮一跳转地址
           URL2:'',//按钮二跳转地址
           sortNum:'',//排序
-          isURL:false,
+          ImgFlag:false,
         },
         ImgUrl:process.env.BASE_URL,//图片地址
         rules:{
@@ -155,6 +156,9 @@
       },
       //图片上传
       BannerUpDataImg(file,fileList){
+        //图片上传动画
+        this.form.ImgFlag = true;
+        const _this = this;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg' || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -165,32 +169,16 @@
           this.$message.error('上传图片大小不能超过 5MB!');
           return;
         }
-        this.getBase64(file.raw).then(resBase64Img => {
+        base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.form.ImgFlag = false;
             if(response.data.errorCode == 200){
-              this.form.coverImg = `${this.ImgUrl}${response.data.data.url}`;
+              _this.form.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{
-              this.$message.error(response.data.errorInfo);
+              _this.$message.error(response.data.errorInfo);
             }
           })
         })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
       },
       //保存并发布
       addDomain(){

@@ -66,7 +66,7 @@
 
                   <el-table-column label="API"  align="center">
                     <template slot-scope="scope">
-                      <span>{{scope.row.name}}</span>
+                      <span class="overIew-span">{{scope.row.name}}</span>
                     </template>
                   </el-table-column>
                   <el-table-column label="调用量" align="center" width="110">
@@ -464,6 +464,11 @@ export default {
               td{
                 font-weight: 500 !important;
                 padding: 4px 0 !important;
+              }
+              .overIew-span{
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
               }
             }
           }

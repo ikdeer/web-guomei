@@ -53,7 +53,7 @@
       methods:{
         //banner图片
         getBannerShow(){
-          getBannerShow().then(response => {
+          getBannerShow({page:1,pageSize:100}).then(response => {
             if(response.data.errorCode == 200){
               let bannerList = response.data.data ? response.data.data.list : [];
               for(let i =0; i < bannerList.length; i++){
@@ -99,7 +99,7 @@
         },
         //解决方案列表
         getSolutionShow(){
-          getSolutionShow().then(response => {
+          getSolutionShow({page:1,pageSize:100}).then(response => {
             if(response.data.errorCode == 200){
               this.schemeList = response.data.data.list;
               this.schemeId = this.$route.query.schemeId || this.schemeList[0].id;

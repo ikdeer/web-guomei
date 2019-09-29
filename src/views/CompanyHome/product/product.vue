@@ -52,7 +52,7 @@
       methods:{
         //banner图片
         getBannerShow(){
-          getBannerShow().then(response => {
+          getBannerShow({page:1,pageSize:100}).then(response => {
             if(response.data.errorCode == 200){
               let bannerList = response.data.data ? response.data.data.list : [];
               for(let i =0; i < bannerList.length; i++){
@@ -98,7 +98,7 @@
         },
         //解决方案列表
         getProductServiceShow(){
-          getProductServiceShow().then(response => {
+          getProductServiceShow({page:1,pageSize:100}).then(response => {
             if(response.data.errorCode == 200){
               this.SolutionList = response.data.data ? response.data.data.list : [];
               this.productId = this.$route.query.productId || this.SolutionList[0].id;

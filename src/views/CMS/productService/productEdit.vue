@@ -19,7 +19,7 @@
               </div>
             </el-form-item>
             <el-form-item label="首页封面：" prop="coverImg">
-              <div class="api-OneLevel">
+              <div class="api-OneLevel" v-loading="catalogText.quillUpdateImg">
                 <el-upload
                   class="avatar-uploader"
                   action=""
@@ -66,8 +66,7 @@
                 accept="image/jpg,image/jpeg,image/png"
                 :show-file-list="false"
                 :auto-upload="false"
-                :on-change="getFile"
-                :before-upload="beforeUpload">
+                :on-change="getFile">
               </el-upload>
               <el-row v-loading="catalogText.quillUpdateImg">
                 <el-col :span="24">
@@ -96,6 +95,7 @@
 </template>
 <script>
   import {getDetail,getModify,getImageUploadNormalImage} from "@/HttpApi/product/productApi";
+  import {base64} from "@/lib/utils";
   //引入编辑器
   import * as Quill from 'quill';
   import { ImageDrop } from 'quill-image-drop-module';
@@ -138,7 +138,7 @@
           URL:'',//跳转地址
           sortNum:'',//排序
           bbsContent:'',//文本内容
-          quillUpdateImg:'',//图片上传动画
+          quillUpdateImg:false,//图片上传动画
         },
         ImgUrl:process.env.BASE_URL,
         editorOption: {
@@ -205,6 +205,9 @@
       },
       //封面上传
       coverUpDataImg(file,fileList){
+        //显示loading动画
+        this.catalogText.quillUpdateImg = true;
+        const _this = this;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -215,23 +218,21 @@
           this.$message.error('上传图片大小不能超过 5MB!');
           return;
         }
-        this.getBase64(file.raw).then(resBase64Img => {
+        base64(file.raw,function(resBase64Img){
           getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
+            _this.catalogText.quillUpdateImg = false;
             if(response.data.errorCode == 200){
-              this.catalogText.coverImg = `${this.ImgUrl}${response.data.data.url}`;
+              _this.catalogText.coverImg = `${_this.ImgUrl}${response.data.data.url}`;
             }else{
-              this.$message.error(response.data.errorInfo);
+              _this.$message.error(response.data.errorInfo);
             }
           })
         })
       },
-      // 上传图片前
-      beforeUpload(res,file) {
-        //显示loading动画
-        this.catalogText.quillUpdateImg = true;
-      },
       //图片上传
       getFile(file,fileList){
+        //显示loading动画
+        this.catalogText.quillUpdateImg = true;
         const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png";
         const isLt5M = file.size / 1024 / 1024 < 5;
         if (!isJPG) {
@@ -243,40 +244,22 @@
           return;
         }
         let _this = this;
-        _this.getBase64(file.raw).then(resBase64Img => {
-          getImageUploadNormalImage({imageBase64:resBase64Img}).then(response => {
-            if(response.data.success){
-              let quill = this.$refs.myQuillEditor.quill;
+        base64(file.raw,function(resBase64Img){
+          getImageUploadNormalImage({imageBase64: resBase64Img}).then(response => {
+            _this.catalogText.quillUpdateImg = false;
+            if (response.data.errorCode == 200) {
+              let quill = _this.$refs.myQuillEditor.quill;
               // 获取光标所在位置
               let length = quill.getSelection().index;
               // 插入图片  res.data为服务器返回的图片地址
-              quill.insertEmbed(length, 'image', `${this.ImgUrl}${response.data.data.url}`);
+              quill.insertEmbed(length, 'image', `${_this.ImgUrl}${response.data.data.url}`);
               // 调整光标到最后
               quill.setSelection(length + 1);
-              // loading动画消失
-              this.catalogText.quillUpdateImg = false;
-            }else{
-              this.$message.error(response.data.errorInfo);
+            } else {
+              _this.$message.error(response.data.errorInfo);
             }
           })
         })
-      },
-      //转换Base64
-      getBase64(file) {
-        return new Promise(function(resolve, reject) {
-          let reader = new FileReader();
-          let imgResult = "";
-          reader.readAsDataURL(file);
-          reader.onload = function() {
-            imgResult = reader.result;
-          };
-          reader.onerror = function(error) {
-            reject(error);
-          };
-          reader.onloadend = function() {
-            resolve(imgResult);
-          };
-        });
       },
       //保存并发布
       addDomain(){
