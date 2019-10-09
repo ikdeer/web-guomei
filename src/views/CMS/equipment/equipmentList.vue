@@ -61,7 +61,6 @@
                     <el-form-item label="设备编号">
                         <el-input :maxlength="400" v-model="formData.no" placeholder="请输入设备编号"></el-input>
                     </el-form-item>
-                    </el-form-item>
                     <el-form-item label="设备名称">
                         <el-input :maxlength="400" v-model="formData.name" placeholder="请输入设备名称"></el-input>
                     </el-form-item>
@@ -501,7 +500,6 @@
                     isEdit:false,
                     btnInfo:'保存并下一步'
                 };
-
             },
             searchList(){
                 if(this.formData.company === '' && this.formData.department === '' && this.formData.floor === '' && this.formData.type == '' && this.formData.online == '' && this.formData.no == '' && this.formData.name == ''){
@@ -572,10 +570,12 @@
                     no:'',//设备编号
                     name:''//设备名称
                 };
+                this.departmentList = [];
+                this.floorList = [];
                 this.locateNames1 = '';
                 this.locateNames2 = '';
                 this.locateNames3 = '';
-                this.search(1)
+                this.search(1);
             },
             see(row) {
                 //查看操作

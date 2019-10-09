@@ -148,7 +148,7 @@
                             <i class="el-icon-picture-outline"></i>
                             <p class="btn">点此添加图片</p>
                             <p>请上传用户正面，无遮挡照片</p>
-                            <p>仅支持PNG、JPG、JPEG、BMP格式，像素4000*3000以内</p>
+                            <p>仅支持PNG、JPG、JPEG、BMP格式，大小5M，像素4000*3000以内</p>
                             <p>注册图片暂不支持多张人脸</p>
                         </div>
                     </el-upload>
@@ -456,7 +456,6 @@
             handleAvatarSuccess(file, fileList) {
                 const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png" || file.raw.type === "image/x-ms-bmp";
                 const isLt5M = file.size / 1024 / 1024 < 5;
-
                 if (!isJPG) {
                     this.$message.error('上传头像图片只能是 JPG JPEG PNG BMP 格式!');
                     return;
