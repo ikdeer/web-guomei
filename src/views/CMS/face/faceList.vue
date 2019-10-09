@@ -148,8 +148,8 @@
                             <i class="el-icon-picture-outline"></i>
                             <p class="btn">点此添加图片</p>
                             <p>请上传用户正面，无遮挡照片</p>
-                            <p>仅支持PNG、JPG、JPEG、BMP格式，大小5M以内</p>
-                            <p>若包含多张人脸，则只注册图片中"可检测到的最大脸"</p>
+                            <p>仅支持PNG、JPG、JPEG、BMP格式，像素4000*3000以内</p>
+                            <p>注册图片暂不支持多张人脸</p>
                         </div>
                     </el-upload>
                 </div>
