@@ -63,7 +63,6 @@
                   <template slot="empty">
                     <span>您还没有可用的API，请先创建应用</span>
                   </template>
-
                   <el-table-column label="API"  align="center">
                     <template slot-scope="scope">
                       <span class="overIew-span">{{scope.row.name}}</span>
