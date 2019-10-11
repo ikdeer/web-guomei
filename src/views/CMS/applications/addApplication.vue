@@ -270,7 +270,7 @@
                             typeID:data.data.data.typeID,
                             apiIds:apiArray
                         };
-                        this.getInterface(data.data.data.typeID,apiArray)
+                        this.getInterface(apiArray)
                     }else{
                         this.$message.warning(data.errorInfo)
                     }
@@ -282,38 +282,67 @@
                     this.applicationTypes = data.data.list;
                 })
             },
-            getInterface(id,ArrayId){
+            getInterface(ArrayId){
                 /*getApplicationTypesInterface({baseApiGroupID:id}).then(({data})=>{
                     console.log(data);  又改令人头大
                 });*/
-                getApplicationTypesInterfaceList().then(({data})=>{
+                let params = {};
+                if(this.type){
+                    params.appId = this.$route.query.id;
+                    params.appTypeId = 0;
+                }else{
+                    params.appTypeId = this.dataForm.typeID;
+                    params.appId = 0
+                }
+                getApplicationTypesInterfaceList(params).then(({data})=>{
                     if(data.data){
-                        /*给外层一个默认值 内层一个外层index备用，为什么这么搞，后面我自己也看不懂了*/
                         data.data.list.forEach((item,index)=>{
                             item.isShow = true;
-                            item.index = index;
                             if(item.apisList){
-                                if(item.appType == id){
+                                /*if(item.appType == id){
                                     item.apisList.forEach((ins,ind)=>{
                                         ins.checkd = true;
                                         ins.disabled = true;
                                         ins.index = index;
                                     });
-                                }else{
-                                    item.apisList.forEach((ins,ind)=>{
-                                        if(ArrayId){
-                                            if(ArrayId.indexOf(ins.id) < 0 ){
-                                                ins.checkd = false;
-                                            }else {
+                                }else{*/
+                                /*if(ArrayId){
+                                        if(ArrayId.indexOf(ins.id) < 0 ){
+                                            ins.checkd = false;
+                                        }else {
+                                            ins.checkd = true;
+                                        }
+                                    }else{
+                                        ins.checkd = false;
+                                    }
+                                    ins.disabled = false;
+                                    ins.index = index;*/
+                                /*}*/
+                                item.apisList.forEach((ins,ind)=>{
+                                    ins.disabled = false;
+                                    ins.checkd = false;
+                                    if(ArrayId){
+                                        if(ArrayId.indexOf(ins.id) < 0 ){
+                                            ins.checkd = false;
+                                            if(ins.select == 2) {
+                                                ins.disabled = true;
                                                 ins.checkd = true;
                                             }
-                                        }else{
-                                            ins.checkd = false;
+                                        }else {
+                                            ins.checkd = true;
+                                            if(ins.select == 2){
+                                                ins.disabled = true;
+                                            }
                                         }
-                                        ins.disabled = false;
-                                        ins.index = index;
-                                    });
-                                }
+                                    }else{
+                                        if(ins.select == 2){
+                                            ins.disabled = true;
+                                            ins.checkd = true;
+                                        }else if(ins.select == 1){
+                                            ins.checkd = true;
+                                        }
+                                    }
+                                });
                             }
                         });
                         this.InterfaceApi = data.data.list;
