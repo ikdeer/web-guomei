@@ -82,14 +82,14 @@ export const getApplicationTypesInterfaceList = () => AxIos({
 
 
 //新增应用
-export const createApplication = ({ amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }) => AxIos({
+export const createApplication = ({ amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds,submit }) => AxIos({
     url: '/app/create',
     method: 'post',
-    data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }
+    data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds,submit }
 });
 //编辑应用
-export const editApplication = ({ amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }) => AxIos({
+export const editApplication = ({ amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds,submit }) => AxIos({
     url: '/app/modify',
     method: 'post',
-    data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds }
+    data: { amountLimit,createrID, introduction, name, qpsLimit, typeID, id, apiIds,submit }
 });
