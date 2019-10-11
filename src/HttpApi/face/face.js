@@ -162,3 +162,6 @@ export const getGroupChildremTwo = ({ id }) => AxIos({
 
 //文件上传
 export const uploadUrl = `${HttpApi}/image/uploadImageFaces2`;
+
+//文件上传批量查询
+export const batchQuery = `${HttpApi}/face/batchQuery`;

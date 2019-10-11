@@ -18,18 +18,30 @@
         name: "layout",
         data(){
           return {
-            dataIcon:[]
+            dataIcon:[],
+            groupID:'',
           }
         },
         methods:{
           //路径跳转
           clickRouter(item){
-            this.$router.push({path:item.iconRouter});
+            //判断普通用户点击跳转到首页技术文档和接入须知
+            if(this.groupID == 20){
+              if(item.code == 7){
+                this.$router.push({path:'/Company/APITCF'});
+              }else if(item.code == 8){
+                this.$router.push({path:'/Company/AccessToInformation'});
+              }else{
+                this.$router.push({path:item.iconRouter});
+              }
+            }else{
+              this.$router.push({path:item.iconRouter});
+            }
           },
           MenuList(){
             let arr = [];
             getMenuList().then(response => {
-              if(response.data.success){
+              if(response.data.errorCode == 200){
                 let list = response.data.data || [];
                 for(let i = 0; i < layout.length; i++){
                   for(let j = 0; j < list.length; j++){
@@ -44,6 +56,8 @@
           },
         },
         mounted(){
+          let userInfo = this.Cookies.get('userInfo') || '';
+          this.groupID =userInfo ? JSON.parse(userInfo).groupID : '';
           this.MenuList();
         }
     }

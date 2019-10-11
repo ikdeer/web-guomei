@@ -268,18 +268,18 @@ export default {
       this.$refs.catalogText.validate((valid) => {
         if(valid){
           getTechDocCreate({
-            name:this.catalogText.Title,
-            title1:this.catalogText.OneLevel,
-            title2:this.catalogText.secondLevel,
-            txt:this.catalogText.bbsContent,
+            name:_this.catalogText.Title,
+            title1:_this.catalogText.OneLevel,
+            title2:_this.catalogText.secondLevel,
+            txt:_this.catalogText.bbsContent,
           }).then(response => {
             if(response.data.success){
-              this.$message({message: '创建成功~~~',type: 'success'});
+              _this.$message({message: '创建成功~~~',type: 'success'});
               setTimeout(()=>{
                 _this.$router.push({path:'/Index/TCFApiList'})
               },300)
             }else{
-              this.$message.error(response.data.errorInfo);
+              _this.$message.error(response.data.errorInfo);
             }
           })
         }

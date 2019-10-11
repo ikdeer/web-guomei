@@ -56,8 +56,9 @@
                               autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="create">{{type?'修改':'立即创建'}}</el-button>
+                    <el-button type="primary" @click="create(0)">{{type?'修改':'保存'}}</el-button>
                     <el-button @click="onback">取消</el-button>
+                    <el-button type="primary" @click="create(1)">提交审核</el-button>
                 </el-form-item>
             </el-form>
 
@@ -160,7 +161,7 @@
             }
         },
         methods: {
-            create() {
+            create(audit) {
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
                         let ids = [];
@@ -175,6 +176,7 @@
                         });
                         let params = {
                             ...this.dataForm,
+                            submit:audit,
                             createrID:this.info.uid,
                             apiIds:ids.join()
                         };
@@ -204,11 +206,14 @@
                                 this.$message.warning('无修改，请勿重复提交');
                                 return;
                             }
-                            console.log(params,this.birgeObject)
                             params.id = this.$route.query.id;
                             editApplication(params).then(({data})=>{
                                 if(data.errorCode ==200){
-                                    this.$message.success('修改成功');
+                                    if(audit==1){
+                                      this.$message.success('提交成功');
+                                    }else{
+                                      this.$message.success('修改成功');
+                                    }
                                     this.onback()
                                 }else{
                                     this.$message.warning(data.errorInfo)
@@ -217,7 +222,11 @@
                         }else{
                             createApplication(params).then(({data})=>{
                                 if(data.errorCode ==200){
-                                    this.$message.success('创建成功');
+                                    if(audit==1){
+                                      this.$message.success('提交成功');
+                                    }else{
+                                      this.$message.success('创建成功');
+                                    }
                                     this.onback()
                                 }else{
                                     this.$message.warning(data.errorInfo)

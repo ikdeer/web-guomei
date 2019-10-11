@@ -63,7 +63,6 @@
                   <template slot="empty">
                     <span>您还没有可用的API，请先创建应用</span>
                   </template>
-
                   <el-table-column label="API"  align="center">
                     <template slot-scope="scope">
                       <span class="overIew-span">{{scope.row.name}}</span>
@@ -454,8 +453,8 @@ export default {
           }
           .overIew-right_pad{
             width: 100%;
-            height: 3.35rem;
             .tableHead{
+              height: 3.1rem;
               font-weight: 700;
               color: #666666;
               th{
@@ -463,7 +462,8 @@ export default {
               }
               td{
                 font-weight: 500 !important;
-                padding: 4px 0 !important;
+                padding: 0 !important;
+                height:0.53rem;
               }
               .overIew-span{
                 text-overflow: ellipsis;

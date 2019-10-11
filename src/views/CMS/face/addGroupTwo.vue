@@ -102,7 +102,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="编号">
+                        <el-form-item label="编号" required>
                             <el-select v-model="dataDialogForm.noType" placeholder="请选择编号系统">
                                 <el-option v-for="item in faceNoType"
                                            :label="item.name"
@@ -131,9 +131,9 @@
                                 <el-option label="未知" value="0"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="PersonID">
+                        <!--<el-form-item label="PersonID">
                             <el-input :maxlength="200" v-model="dataDialogForm.ids" placeholder="请输入PersonID"></el-input>
-                        </el-form-item>
+                        </el-form-item>-->
                     </el-form>
                 </div>
                 <div class="btn">
@@ -141,16 +141,17 @@
                         <el-upload
                             class="upload_footer"
                             :disabled="uploadLoading"
-                            :action="uploadUrl"
+                            :action="batchQuery"
                             :headers="headers"
                             :show-file-list="false"
                             :on-success="uploadFillSuccess"
                             :on-error="uploadFillError"
                             :before-upload="allhandleChange">
-                            <el-button type="primary" :loading="uploadLoading">批量添加</el-button>
+                            <el-button type="primary" :loading="uploadLoading">批量查询</el-button>
                         </el-upload>
-                        <a href="/static/fill/face.zip" download="" title="下载">
-                            <el-button type="text">下载批量添加模板</el-button>
+                        <el-button type="primary" @click="downloadSearchList">结果下载</el-button>
+                        <a href="/static/fill/search.xlsx" download="" title="下载">
+                            <el-button type="text">下载批量查询模板</el-button>
                         </a>
                     </div>
                     <div>
@@ -184,8 +185,9 @@
                             <span>入库时间：{{item.createTime}}</span>
                         </div>
                     </div>
+                    <div class="content_info" v-show="!faceList.length">暂无数据</div>
                 </div>
-                <div class="page">
+                <div class="page" v-show="facePage.flag">
                     <el-pagination
                         @size-change="handleDialogSizeChange"
                         @current-change="handleDialogCurrentChange"
@@ -208,7 +210,7 @@
 </template>
 
 <script>
-    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl } from '@/HttpApi/face/face'
+    import { getGroupOne,getGroupTwo,getFaceShow,addFace,getFaceGroupShow,deleteFaceGroup,getPicList,getFaceNoType,getFaceType,uploadUrl,batchQuery } from '@/HttpApi/face/face'
     export default {
         name: "addGroupTwo",
         data(){
@@ -243,13 +245,16 @@
                 facePage:{
                     page:1,
                     pageSize:10,
-                    total:0
+                    total:0,
+                    flag:true
                 },
                 picList:[],//图片来源
                 faceType:[],//人脸类型
                 faceNoType:[],//编号系统
                 uploadUrl:uploadUrl,
+                batchQuery:batchQuery,
                 uploadLoading:false,
+                downloadSearchUrl:''//下载url
             }
         },
         computed:{
@@ -308,7 +313,7 @@
                         this.$message.warning('获取类型列表失败')
                     }
                 });
-                this.dialogSearch(1);
+                // this.dialogSearch(1);
                 this.addGroupFace = true;
             },
             handleSelectionChange(val){
@@ -373,10 +378,19 @@
                 this.$router.push({path:'/Index/faceList'})
             },
             dialogSearchList(){
-                if(this.dataDialogForm.names == '' && this.dataDialogForm.ids == '' && this.dataDialogForm.nos == '' && this.dataDialogForm.noType == '' && this.dataDialogForm.picFromIDs == '' && this.dataDialogForm.sex == '' && this.dataDialogForm.types == ''){
+                /*if(this.dataDialogForm.names == '' && this.dataDialogForm.ids == '' && this.dataDialogForm.nos == '' && this.dataDialogForm.noType == '' && this.dataDialogForm.picFromIDs == '' && this.dataDialogForm.sex == '' && this.dataDialogForm.types == ''){
                     this.$message.warning('请输入查询条件');
                     return;
+                }*/
+                if(this.dataDialogForm.noType == ''){
+                  this.$message.warning('请选择编号类型');
+                  return;
                 }
+                if(this.dataDialogForm.nos == ''){
+                  this.$message.warning('请填写编号');
+                  return;
+                }
+                this.facePage.flag = true;
                 this.dialogSearch(1);
             },
             dialogSearch(page){
@@ -517,15 +531,42 @@
             },
             uploadFillSuccess(res,file,fileList){
                 this.uploadLoading = false;
-                if(res.success){
-                    this.$message.success('上传成功');
-                    this.dialogSearch(1);
+                console.log(res);
+                if(res.errorCode ==200){
+                    if(res.data){
+                        res.data.list.forEach((item)=>{
+                            item.checked = true;
+                            if (this.faceListBirge.indexOf(item.id) < 0 ) {
+                                this.faceListBirge.push(item.id);
+                            }
+                        });
+                        this.downloadSearchUrl = process.env.BASE_URL + res.data.url;
+                        this.faceList = res.data.list;
+                        this.facePage.flag = false;
+                    }else{
+                        this.faceList = [];
+                        this.faceListBirge = [];
+                        this.downloadSearchUrl = '';
+                        this.facePage.flag = false;
+                    }
                 }else{
+                    this.faceList = [];
+                    this.faceListBirge = [];
+                    this.downloadSearchUrl = '';
                     this.$message.warning(res.errorInfo)
                 }
+
             },
             uploadFillError(){
                 this.uploadLoading = false;
+            },
+            downloadSearchList(){
+              //下载结果
+              if(this.downloadSearchUrl!=''){
+                window.open(this.downloadSearchUrl)
+              }else{
+                this.$message.warning('暂无下载结果')
+              }
             }
         },
         mounted(){
@@ -713,6 +754,14 @@
                     height: .3rem;
                     font-size: .14rem;
                 }
+            }
+
+            .content_info{
+              height: 60px;
+              line-height: 80px;
+              width: 100%;
+              text-align: center;
+              color: #909399;
             }
         }
 

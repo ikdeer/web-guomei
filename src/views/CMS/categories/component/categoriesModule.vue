@@ -113,7 +113,7 @@
             getTechDocCreate(objectList).then(response => {
               if(response.data.success){
                 this.$message({
-                  message: '目录!创建成功~~~',
+                  message: '技术文档目录,创建成功!',
                   type: 'success'
                 });
                 this.form.Title = '';
