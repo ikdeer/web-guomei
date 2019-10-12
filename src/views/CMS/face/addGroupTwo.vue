@@ -71,7 +71,7 @@
                             @current-change="handleCurrentChange"
                             :current-page="page.page"
                             :page-sizes="[10, 20, 30, 50, 100]"
-                            :page-size="page.pageCount"
+                            :page-size="page.pageSize"
                             background
                             layout="total, sizes, prev, pager, next, jumper"
                             :total="page.total">
@@ -142,6 +142,7 @@
                             class="upload_footer"
                             :disabled="uploadLoading"
                             :action="batchQuery"
+                            :data= "{sub2:stepTwoForm.two}"
                             :headers="headers"
                             :show-file-list="false"
                             :on-success="uploadFillSuccess"
@@ -227,7 +228,7 @@
                 selectionData:[],//全选值
                 page:{
                     page:1,
-                    pageCount:10,
+                    pageSize:10,
                     total:0
                 },
                 addGroupFace:false,
@@ -485,7 +486,7 @@
                 })
             },
             handleSizeChange(val){
-                this.page.pageCount = val;
+                this.page.pageSize = val;
                 this.page.page = 1;
                 this.getFaceGroupShowList();
             },
@@ -563,7 +564,7 @@
             downloadSearchList(){
               //下载结果
               if(this.downloadSearchUrl!=''){
-                window.open(this.downloadSearchUrl)
+                window.location.href = this.downloadSearchUrl;
               }else{
                 this.$message.warning('暂无下载结果')
               }
