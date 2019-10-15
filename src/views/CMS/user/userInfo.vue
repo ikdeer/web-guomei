@@ -371,9 +371,10 @@
                 display: flex;
                 display: -webkit-flex;
                 align-items: center;
+                font-size: 16px;
                 img{
-                    width: 60px;
-                    height: 60px;
+                    width: 80px;
+                    height: 80px;
                     margin-right: 15px;
                     display: inline-block;
                     -webkit-border-radius: 100%;
@@ -385,6 +386,7 @@
                 color: #333333;
                 height: 50px;
                 line-height: 50px;
+                font-size: 14px;
                 border-bottom:1px solid rgba(238,238,238,1);
                 position: relative;
                 .info_list_inp{

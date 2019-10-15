@@ -325,9 +325,9 @@ export default {
     width:auto;
     .overIew-use{
       .overIew-userTitle{
-        font-size: 0.16rem;
+        font-size: 22px;
         color: #333333;
-        line-height: 0.5rem;
+        line-height: 60px;
         font-weight: 600;
       }
       .overIew-userCenter{
@@ -346,7 +346,7 @@ export default {
           width:7rem;
           position: relative;
           .overIew-use_text{
-            font-size: 0.16rem;
+            font-size: 20px;
             color: #333333;
             font-weight: 600;
             margin: 0;
@@ -360,7 +360,7 @@ export default {
             display: flex;
             display: -webkit-flex;
             align-items: center;
-            justify-content: center;
+            /*justify-content: center;*/
             .use-contentPad{
               width: 6rem;
               height: 3.65rem;
@@ -372,6 +372,7 @@ export default {
               background-size: cover;
               .user-TextNum{
                 margin-top: 0.8rem;
+                height: 1rem;
                 .user-contentNum{
                   font-size: 0.24rem;
                   color: #666666;
@@ -431,7 +432,7 @@ export default {
             padding-top: 0.05rem;
             padding-bottom: 0.3rem;
             span{
-              font-size: 0.16rem;
+              font-size: 20px;
               color: #333333;
               font-weight: 600;
             }
@@ -440,7 +441,7 @@ export default {
               display: -webkit-flex;
               align-items: center;
               >span{
-                font-size: 0.14rem;
+                font-size: 14px;
                 color: #333333;
                 font-weight: 500;
                 padding-right: 0.2rem;
@@ -478,9 +479,9 @@ export default {
     .overIew-basics{
       width: auto;
       .basics-topText{
-        font-size: 0.16rem;
+        font-size: 20px;
         color: #333333;
-        line-height: 0.6rem;
+        line-height: 60px;
         margin: 0;
         font-weight: 600;
       }
@@ -515,7 +516,7 @@ export default {
             margin-left: 0.2rem;
             h4{
               margin: 0;
-              font-size:0.16rem;
+              font-size:0.2rem;
               font-weight: 600;
               color: #333333;
             }
@@ -535,9 +536,9 @@ export default {
         display: -webkit-flex;
         align-items: center;
         justify-content: space-between;
-        height: 0.6rem;
+        height: 60px;
         .scene-topText{
-          font-size: 0.16rem;
+          font-size: 20px;
           color:#333333;
           font-weight: 600;
           margin: 0;
@@ -586,7 +587,7 @@ export default {
               display: block;
             }
             .scene-Title{
-              font-size:0.16rem;
+              font-size:0.2rem;
               font-weight: 600;
               color:#333333;
               margin:0;

@@ -16,7 +16,7 @@
             </div>
             <div class="stepone">
                 <div class="set_group">
-                    <h3>设置分组</h3>
+                    <div class="set_group_title">设置分组</div>
                     <div class="set_group_inp">
                         <el-form :inline="true" :disabled="isSee" label-width="100px">
                             <el-form-item label="分组名称" required>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="set_child_group">
                     <div class="child_top">
-                        <h3>设置子分组 <span>请注意一级子分组不可添加图片</span></h3>
+                        <div class="set_group_title">设置子分组 <span>请注意一级子分组不可添加图片</span></div>
                         <div>
                             <el-button type="primary" size="mini" :disabled="groupData.id==''" @click="goChildren">查看子分组</el-button>
                         </div>
@@ -495,6 +495,18 @@
             }
         }
         .stepone{
+            .set_group_title{
+                height: 70px;
+                line-height: 70px;
+                font-size: 16px;
+                font-weight: 600;
+                span{
+                    font-size: 14px;
+                    color: #F56C6C;
+                    font-weight: normal;
+                    margin-left: 10px;
+                }
+            }
             .set_group{
                 .el-form{
                     border-top: 1px solid #EEEEEE;
@@ -516,13 +528,6 @@
                     justify-content: space-between;
                     align-items: center;
                     border-bottom: 1px solid #eeeeee;
-                    h3{
-                        span{
-                            font-size: 12px;
-                            color: #F56C6C;
-                            margin-left: 10px;
-                        }
-                    }
                 }
                 .el-form{
                     padding:10px;
@@ -576,7 +581,7 @@
                 }
             }
             .add_group_footer{
-                margin: 20px 0 0 30px;
+                margin: 20px 0 0 0;
             }
         }
     }

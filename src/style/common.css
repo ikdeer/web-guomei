@@ -39,7 +39,7 @@ ol,li,ul,dl,dt,dd{
   font-weight: 400 !important;
 }
 .gm-nav .el-breadcrumb__inner{
-  font-size: 0.16rem !important;
+  font-size: 16px !important;
   font-weight: 600!important;
   color: #036FE2 !important;
   cursor: pointer;
@@ -90,9 +90,9 @@ ol,li,ul,dl,dt,dd{
 h3{
     color: #333333;
     font-weight: 600;
-    font-size: 16px;
-    height: 50px;
-    line-height: 50px;
+    font-size: 22px;
+    height: 60px;
+    line-height: 60px;
 }
 .overflow {
   overflow:hidden;
@@ -163,6 +163,7 @@ h3{
 
 .el-form-item__label{
     color: #666666;
+    font-size: 14px;
 }
 .el-upload{
     width: 100%;
@@ -175,7 +176,12 @@ h3{
 .el-table th {
     background-color: #F1F1F1;
     color: #666666;
-    font-size: 13px;
+  height: 60px;
+    font-size: 14px;
+}
+.el-table td{
+  font-size: 14px;
+  color: #666666;
 }
 .el-tooltip__popper{
     max-width: 200px;
