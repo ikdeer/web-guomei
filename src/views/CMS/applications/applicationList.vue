@@ -22,7 +22,7 @@
         <h3>应用列表</h3>
         <div class="application_list_content">
             <div class="application_list_form">
-                <el-form :inline="true" label-width="80px" label-position="left">
+                <el-form :inline="true">
                     <el-form-item label="应用名称">
                         <el-input :maxlength="400" v-model="formData.name" placeholder="请输入应用名称"></el-input>
                     </el-form-item>
