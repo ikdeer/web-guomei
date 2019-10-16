@@ -182,7 +182,7 @@ h3{
 .el-table th {
     background-color: #F1F1F1;
     color: #666666;
-  height: 60px;
+    height: 60px;
     font-size: 14px;
 }
 .el-table td{
@@ -191,6 +191,9 @@ h3{
 }
 .el-tooltip__popper{
     max-width: 200px;
+}
+.el-link{
+  margin-right: 8px;
 }
 /*禁止textarea拖动*/
 .el-textarea .el-textarea__inner{

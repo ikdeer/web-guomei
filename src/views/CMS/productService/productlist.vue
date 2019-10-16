@@ -51,10 +51,10 @@
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
-                <router-link :to="{path:'/Index/productDetails',query:{Id:scope.row.id}}">
+                <router-link class="el-link" :to="{path:'/Index/productDetails',query:{Id:scope.row.id}}">
                   <el-button type="text" style="color:#409eff;">查看</el-button>
                 </router-link>
-                <router-link :to="{path:'/Index/productEdit',query:{Id:scope.row.id}}">
+                <router-link class="el-link" :to="{path:'/Index/productEdit',query:{Id:scope.row.id}}">
                   <el-button type="text" style="color:#67c23a;">编辑</el-button>
                 </router-link>
                 <el-button type="text" style="color:#f56c6c;" @click="ClickDelete(scope.row.id)">删除</el-button>
@@ -197,9 +197,9 @@
       .productList-table{
         width: 100%;
         .productList-addButton{
-          button{
+          /*button{
             padding: 0.08rem 0.25rem;
-          }
+          }*/
           .gm-delete{
             margin-left: 10px;
           }

@@ -175,7 +175,7 @@
                     appIds:'',//app ID
                     statisItems:'',//统计项 1-调用量 2-qps
                     monitor:['1'],//监控项
-                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],
+                    dataTime:null,
                     appList:[],
                     apiList:[]
                 },

@@ -232,7 +232,7 @@
                     name:'',
                     id:'',
                     createrName:'',
-                    dataTime:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],
+                    dataTime:null,
                 },
                 pickerOptions: {
                     shortcuts: [

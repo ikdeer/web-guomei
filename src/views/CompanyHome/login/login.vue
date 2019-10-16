@@ -142,7 +142,7 @@
     height: 7.28rem;
     position: absolute;
     left:1.08rem;
-    top: 0.52rem;
+    top: 0.62rem;
     img{
       width: 100%;
       height: 100%;

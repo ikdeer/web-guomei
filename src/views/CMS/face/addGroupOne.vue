@@ -18,7 +18,7 @@
                 <div class="set_group">
                     <div class="set_group_title">设置分组</div>
                     <div class="set_group_inp">
-                        <el-form :inline="true" :disabled="isSee" label-width="100px">
+                        <el-form :inline="true" :disabled="isSee" label-width="110px">
                             <el-form-item label="分组名称" required>
                                 <el-input :maxlength="40" v-model="groupData.name" placeholder="20汉字以内"></el-input>
                                 <el-button type="primary" :disabled="groupData.name==''" v-if="!isSee" @click="createGroup">保存</el-button>
@@ -510,7 +510,7 @@
             .set_group{
                 .el-form{
                     border-top: 1px solid #EEEEEE;
-                    padding: .3rem;
+                    padding: 20px;
                     .el-form-item{
                         width: 48%;
                     }
@@ -530,7 +530,7 @@
                     border-bottom: 1px solid #eeeeee;
                 }
                 .el-form{
-                    padding:10px;
+                    padding: 20px;
                     .el-form-item{
                         width: 48%;
                     }
@@ -541,17 +541,16 @@
                 .group_list{
                     display: flex;
                     display: -webkit-flex;
-
                     .group_item_list{
                         -webkit-box-sizing: border-box;
                         -moz-box-sizing: border-box;
                         box-sizing: border-box;
                         width: 50%;
                         &:first-child{
-                            margin-left: 120px;
+                            padding-left: 130px;
                         }
                         &:last-child{
-                            margin-left: 80px;
+                          padding-left: 100px;
                         }
                         .item{
                             width: 4rem;

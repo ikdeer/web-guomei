@@ -196,7 +196,7 @@ export default {
               ]
           },
         TimeData:{
-          TimeDate:[formatTimes(new Date(),true)+' 00:00:00',formatTimes(new Date(),true)+' 23:59:59'],//时间获取
+          TimeDate:null,//时间获取
           timeStart:'',//创建开始时间
           timeEnd:'',//创建结束时间
           top:5,//用量数量条数
@@ -477,11 +477,12 @@ export default {
               color: #666666;
               th{
                 background: #F1F1F1;
+                height: 0.53rem;
               }
               td{
                 font-weight: 500 !important;
                 padding: 0 !important;
-                height:0.53rem;
+                height:0.52rem;
               }
               .overIew-span{
                 text-overflow: ellipsis;

@@ -1043,6 +1043,7 @@
     .equipment_list_dialog{
         .equipment_list_steps{
             height: 40px;
+            padding-left: 15px;
             margin-bottom: 10px;
             span{
                 width: 180px;
