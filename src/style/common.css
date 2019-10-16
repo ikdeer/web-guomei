@@ -74,6 +74,12 @@ ol,li,ul,dl,dt,dd{
   overflow: hidden;
   font-size: 0.16rem !important;
 }
+.el-submenu .is-active{
+  background: #F8F8F8;
+}
+.el-submenu .is-opened{
+  background: none;
+}
 .el-submenu__title{
   text-overflow: ellipsis;
   word-wrap: break-word;

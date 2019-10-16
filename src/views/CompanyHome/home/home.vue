@@ -381,7 +381,7 @@
         }
       }
       .solution-List{
-        padding:0 1.21rem;
+        padding:0 1.69rem;
         .solution-ListUl{
           width: 100%;
           display: flex;
@@ -440,7 +440,7 @@
                 display: flex;
                 display: -webkit-flex;
                 align-items: center;
-                font-weight: 700;
+                /*font-weight: 700;*/
                 span:first-child{
                   font-size: 0.2rem;
                   color: #252525;

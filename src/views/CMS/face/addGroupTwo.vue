@@ -43,6 +43,7 @@
                         ref="multipleTable"
                         :data="tableData"
                         tooltip-effect="dark"
+                        size="medium"
                         style="width: 100%"
                         @selection-change="handleSelectionChange">
                         <!-- //暂无数据提示 -->
@@ -177,7 +178,7 @@
                             <span>类型：{{item.typeName}}</span>
                         </div>
                         <div class="list_info">
-                            <span>编号：{{item.noType}}&emsp;{{item.no}}</span>
+                            <span>编号：<!--{{item.noType}}&emsp;-->{{item.no}}</span>
                         </div>
                         <div class="list_info">
                             <span>图片来源：{{item.picFromName}}</span>
@@ -721,7 +722,7 @@
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
-
+                background:rgba(241,249,255,1);
                 /*border: 1px solid transparent;*/
                 border: 1px solid #409EFF;
                 transition: 500ms ease-out;
@@ -752,8 +753,9 @@
                     display: -webkit-flex;
                     justify-content: space-between;
                     align-items: center;
+                  color: #333333;
                     height: .3rem;
-                    font-size: .14rem;
+                    font-size: .16rem;
                 }
             }
 
