@@ -139,7 +139,7 @@
                     <el-upload
                         class="avatar-uploader"
                         action=""
-                        accept="image/jpg,image/jpeg,image/png,image/x-ms-bmp"
+                        accept="image/jpg,image/jpeg,image/png,image/bmp"
                         :show-file-list="false"
                         :auto-upload="false"
                         :on-change="handleAvatarSuccess">
@@ -454,7 +454,8 @@
                 this.search(2)
             },
             handleAvatarSuccess(file, fileList) {
-                const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png" || file.raw.type === "image/x-ms-bmp";
+              console.log(file.raw);
+              const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png" || file.raw.type === "image/bmp";
                 const isLt5M = file.size / 1024 / 1024 < 5;
                 if (!isJPG) {
                     this.$message.error('上传头像图片只能是 JPG JPEG PNG BMP 格式!');
