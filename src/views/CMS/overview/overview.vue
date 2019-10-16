@@ -28,11 +28,11 @@
                     </p>
                   </div>
                   <div class="use-contentButton">
-                    <router-link :to="{path:'/Index/applicationList',query:{NavType:'overview'}}">
-                      <el-button class="button-bluer" type="primary">管理应用</el-button>
+                    <router-link class="alink button-bluer" :to="{path:'/Index/applicationList',query:{NavType:'overview'}}">
+                      <span>管理应用</span>
                     </router-link>
-                    <router-link v-if="groupID == 20" :to="{path:'/Index/addApplication',query:{type:'add',NavType:'overview'}}">
-                      <el-button class="button-red">创建应用</el-button>
+                    <router-link v-if="groupID == 20" class="alink button-red" :to="{path:'/Index/addApplication',query:{type:'add',NavType:'overview'}}">
+                      <span>创建应用</span>
                     </router-link>
                   </div>
                 </div>
@@ -391,6 +391,23 @@ export default {
                 align-items: center;
                 justify-content: space-between;
                 flex-direction: column;
+                .alink{
+                  width: 1.3rem;
+                  height: 0.4rem;
+                  font-size: 0.16rem;
+                  font-weight: 500;
+                  background:#FE023F;
+                  text-align: center;
+                  line-height: 0.4rem;
+                  text-decoration: none;
+                  color: #ffffff;
+                  border-color:#FE023F;
+                  margin-left:0;
+                  margin-bottom: 0.1rem;
+                  -webkit-border-radius: 4px;
+                  -moz-border-radius: 4px;
+                  border-radius: 4px;
+                }
                 button{
                   font-size: 0.16rem;
                   width: 1.3rem;
