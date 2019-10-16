@@ -47,7 +47,7 @@
     .content-right{
       width: auto;
       box-sizing: border-box;
-      margin-left: 250px;
+      margin-left: 260px;
       padding-left: 0.25rem;
       padding-right: 0.25rem;
       padding-bottom: 0.25rem;

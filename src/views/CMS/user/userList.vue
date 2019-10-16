@@ -117,8 +117,9 @@
             title="创建用户"
             class="user_list_add_dialog"
             :visible.sync="userListAddDialog"
+            top="13%"
             width="460px">
-            <el-form :model="dataDialogForm"  :rules="addDialogRules" ref="dataDialogForm" label-width="80px">
+            <el-form :model="dataDialogForm" size="medium" :rules="addDialogRules" ref="dataDialogForm" label-width="80px">
                 <el-form-item label="用户名" prop="username" required>
                     <el-input type="text" v-model="dataDialogForm.username" :maxlength="20" placeholder="请输入用户名(6-20位字母数字)" autocomplete="off"></el-input>
                 </el-form-item>

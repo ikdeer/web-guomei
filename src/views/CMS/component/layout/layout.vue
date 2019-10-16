@@ -65,7 +65,7 @@
 
 <style lang="scss">
 .sider{
-  width: 250px;
+  width: 260px;
   height: calc(100% - 0.6rem);
   box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
   z-index: 10;
@@ -92,7 +92,7 @@
       }
       span{
         width: 120px;
-        font-size:16px;
+        font-size:18px;
         color:#666666;
         display: block;
         text-align: left;
@@ -100,6 +100,7 @@
     }
     .sider-li{
       background:#F8F8F8;
+      font-weight: 600;
       border-left: 4px solid #FE023F;
       span{
         color: #FE023F;

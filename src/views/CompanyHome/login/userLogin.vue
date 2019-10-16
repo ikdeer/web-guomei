@@ -8,7 +8,7 @@
     <div class="login-center">
       <div class="login-input">
         <p class="login-text">注册</p>
-        <el-form :model="loginForm" :rules="rules2" ref="loginForm" label-width="20px">
+        <el-form :model="loginForm" size="medium" :rules="rules2" ref="loginForm" label-width="20px">
           <div class="loginUser-input">
             <el-form-item prop="username" label=" ">
               <el-input placeholder="用户名(6-20位字母数字)" maxlength="20" v-model="loginForm.username"></el-input>
@@ -198,8 +198,8 @@
     background:linear-gradient(289deg,rgba(26,85,164,1) 0%,rgba(2,25,68,1) 100%);
     position: absolute;
     .login-bgImg{
-      width: 8.68rem;
-      height: 7.28rem;
+      width: 9.68rem;
+      height: 8.28rem;
       position: absolute;
       left:1.08rem;
       top: 0.52rem;
@@ -210,11 +210,11 @@
       }
     }
     .login-center{
-      width: 4.8rem;
+      width: 5.6rem;
       background: #ffffff;
       border-radius: 0.1rem;
       position: absolute;
-      right: 3rem;
+      right: 1.8rem;
       top: 1.5rem;
       display: flex;
       display: -webkit-flex;
@@ -223,7 +223,7 @@
       padding-top: 0.3rem;
       padding-bottom: 0.2rem;
       .login-input{
-        width: 3.6rem;
+        width: 4.2rem;
         .login-text{
           font-size: 0.26rem;
           color: #666666;
@@ -238,12 +238,12 @@
           .el-form-item{
             width: 100%;
             margin-bottom: 0.23rem;
-            div{
+            /*div{
               input{
                 height: 0.43rem !important;
                 font-size: 0.14rem !important;
               }
-            }
+            }*/
             .el-form-item__label{
               color:#F56C6C;
             }

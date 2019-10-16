@@ -101,9 +101,9 @@
 <style lang="scss">
 .header{
   width:100%;
-  height: 0.6rem;
+  height: 60px;
   background: #1B1B1B;
-  box-shadow:0 0.02rem 0.04rem 0 rgba(0,0,0,0.11);
+  box-shadow:0 2px 4px 0 rgba(0,0,0,0.11);
   display: flex;
   display: -webkit-flex;
   align-items: center;
@@ -113,23 +113,23 @@
     display: flex;
     display: -webkit-flex;
     align-items: center;
-    margin-left: 0.3rem;
+    margin-left: 30px;
     img{
-      width: 0.9rem;
-      height: 0.3rem;
+      width: 90px;
+      height: 30px;
       display: block;
       cursor: pointer;
     }
     >span{
       width: 2px;
-      height: 0.2rem;
+      height: 20px;
       display: block;
       background: #ffffff;
-      margin-left: 0.16rem;
-      margin-right: 0.16rem;
+      margin-left: 16px;
+      margin-right: 16px;
     }
     >p{
-      font-size: 0.16rem;
+      font-size: 18px;
       color: #ffffff;
       font-weight: 600;
     }
@@ -138,7 +138,7 @@
     display: flex;
     display: -webkit-flex;
     align-items: center;
-    margin-right: 0.3rem;
+    margin-right:30px;
     cursor: pointer;
     position: relative;
     .el-dropdown{
@@ -147,8 +147,8 @@
       align-items: center;
     }
     .header-issue{
-      width: 0.2rem;
-      height: 0.2rem;
+      width: 20px;
+      height: 20px;
       display: block;
     }
     .header-name{
@@ -156,74 +156,74 @@
       display: -webkit-flex;
       align-items: center;
       justify-content: center;
-      margin-left: 0.2rem;
-      margin-right: 0.1rem;
+      margin-left: 20px;
+      margin-right: 10px;
       img{
-        width: 0.3rem;
-        height: 0.3rem;
+        width: 30px;
+        height: 30px;
         border-radius: 50%;
         overflow: hidden;
         display: block;
       }
       >span{
-        font-size: 0.16rem;
+        font-size: 14px;
         color: #999999;
-        margin-left: 0.2rem;
+        margin-left: 20px;
       }
     }
     .header-Badge{
-      width: 0.14rem;
-      height: 0.08rem;
+      width: 14px;
+      height: 8px;
       display: block;
     }
     .gm-sbc{
       color: #ffffff;
       display: block;
-      font-size:0.18rem;
+      font-size:18px;
     }
     .gm-sbc:hover + .gm-popUp{
       display: block;
     }
     .gm-popUp{
-      width: 1.6rem;
+      width: 160px;
       position: absolute;
-      top: 0.46rem;
-      right: -0.3rem;
+      top: 46px;
+      right: -30px;
       background: #1B1B1B;
       z-index: 100;
       display: none;
       .gm-user{
-        margin-left: 0.2rem;
-        height: 0.5rem;
+        margin-left: 20px;
+        height: 50px;
         display: flex;
         display: -webkit-flex;
         align-items: center;
         .el-icon-user{
-          font-size:0.18rem;
+          font-size:18px;
           color: #ffffff;
-          margin-right: 0.15rem;
+          margin-right: 15px;
         }
         button{
-          font-size: 0.14rem;
+          font-size: 14px;
           color: #999999;
-          margin-left: 0.15rem;
+          margin-left: 15px;
         }
       }
       .gm-quit{
-        margin-left: 0.2rem;
-        height: 0.5rem;
+        margin-left: 20px;
+        height: 50px;
         display: flex;
         display: -webkit-flex;
         align-items: center;
         .el-icon-switch-button{
-          font-size:0.18rem;
+          font-size:18px;
           color: #ffffff;
-          margin-right: 0.15rem;
+          margin-right: 15px;
         }
         button{
-          font-size: 0.14rem;
+          font-size: 14px;
           color: #999999;
-          margin-left: 0.15rem;
+          margin-left: 15px;
         }
       }
     }

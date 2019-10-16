@@ -178,7 +178,7 @@
     width: 100%;
     background:#F8F8F8;
     .gm-menu{
-      width: 2.6rem;
+      width: 260px;
       height: 100%;
       background: #ffffff;
       position: absolute;
@@ -321,7 +321,7 @@
       width: 86%;
       position: absolute;
       right: 0;
-      left: 2.6rem;
+      left: 260px;
       background: #F8F8F8;
       padding-bottom: 0.3rem;
       .gm-nav{

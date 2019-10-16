@@ -90,10 +90,10 @@
             title="添加人像"
             class="add_group_face_dialog"
             :visible.sync="addGroupFace"
-            width="1000px">
+            width="1400px">
             <div>
                 <div class="from">
-                    <el-form :inline="true" ref="dataDialogForm" label-width="80px">
+                    <el-form :inline="true" size="medium" ref="dataDialogForm" label-width="80px">
                         <el-form-item label="图片来源">
                             <el-select v-model="dataDialogForm.picFromIDs" placeholder="请选择图片来源">
                                 <el-option v-for="item in picList"
@@ -315,7 +315,7 @@
                         this.$message.warning('获取类型列表失败')
                     }
                 });
-                // this.dialogSearch(1);
+                this.dialogSearch(1);
                 this.addGroupFace = true;
             },
             handleSelectionChange(val){
@@ -579,7 +579,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .add_group_two{
     font-size: 0.16rem;
     .add_group_content {
@@ -685,6 +685,9 @@
 
     }
     .add_group_face_dialog {
+        .el-dialog__body{
+          padding: 30px 40px 0 40px;
+        }
         .el-form {
             .el-select {
                 width: 150px;
@@ -713,12 +716,12 @@
             flex-wrap: wrap;
 
             .list{
-                width: 19%;
-                margin: .1rem 0.5%;
+                width: 240px;
+                margin: 10px 12px;
                 -webkit-border-radius: 4px;
                 -moz-border-radius: 4px;
                 border-radius: 4px;
-                padding: 10px;
+                padding: 20px 20px 10px 20px;
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
@@ -734,13 +737,14 @@
                 }
                 .list_img{
                     position: relative;
-                    width: 160px;
-                    height: 160px;
+                    width: 200px;
+                    height: 200px;
+                    margin-bottom: 18px;
                     .checkbox{
                         position: absolute;
-                        /*width: 0.2rem;*/
-                        /*height: 0.2rem;*/
-                        top: -3px;
+                        width: 20px;
+                        height: 20px;
+                        top: -1px;
                         left: 0;
                     }
                     img{
@@ -753,9 +757,10 @@
                     display: -webkit-flex;
                     justify-content: space-between;
                     align-items: center;
-                  color: #333333;
-                    height: .3rem;
-                    font-size: .16rem;
+                    color: #333333;
+                    /*height: 24px;*/
+                    line-height: 24px;
+                    font-size: 14px;
                 }
             }
 

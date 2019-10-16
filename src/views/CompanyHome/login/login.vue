@@ -8,7 +8,7 @@
       <div class="login-center">
         <div class="login-input">
           <p class="login-text">登 录</p>
-          <el-form :model="loginForm" :rules="rules2" ref="loginForm">
+          <el-form :model="loginForm" size="medium" :rules="rules2" ref="loginForm">
             <div class="login-form">
               <el-form-item prop="username">
                 <el-input placeholder="用户名(6-20位字母数字)/手机号/邮箱" v-model="loginForm.username"></el-input>
@@ -138,11 +138,11 @@
   background:linear-gradient(289deg,rgba(26,85,164,1) 0%,rgba(2,25,68,1) 100%);
   position: absolute;
   .login-bgImg{
-    width: 8.68rem;
-    height: 7.28rem;
+    width: 9.68rem;
+    height: 8.28rem;
     position: absolute;
     left:1.08rem;
-    top: 0.62rem;
+    top: 0.52rem;
     img{
       width: 100%;
       height: 100%;
@@ -150,11 +150,11 @@
     }
   }
   .login-center{
-    width: 4.8rem;
+    width: 5.6rem;
     background: #ffffff;
     border-radius: 0.1rem;
     position: absolute;
-    right: 3rem;
+    right: 1.8rem;
     top: 2rem;
     display: flex;
     display: -webkit-flex;
@@ -163,7 +163,7 @@
     padding-top: 0.35rem;
     padding-bottom: 0.5rem;
     .login-input{
-      width: 3.6rem;
+      width: 4.2rem;
       .login-text{
         font-size: 0.26rem;
         color: #666666;
@@ -178,12 +178,12 @@
         margin-top: 0.25rem;
         .el-form-item{
           width: 100%;
-          height: 0.45rem !important;
-          div{
+          height: 0.5rem !important;
+          /*div{
             input{
               height: 0.45rem !important;
             }
-          }
+          }*/
         }
         .login-code{
           display: flex;
@@ -191,7 +191,7 @@
           align-items: center;
           position: relative;
           img{
-            height: 32px;
+            height: 36px;
             position: absolute;
             bottom: 0;
             border-bottom-right-radius: 4px;
@@ -201,7 +201,7 @@
         }
       }
       .login-itemText{
-        width: 3.28rem;
+        width: 4rem;
         display: flex;
         display: -webkit-flex;
         align-items: center;
@@ -212,7 +212,7 @@
           color: #BABABA;
         }
         span:last-child{
-          font-size: 0.14rem;
+          font-size: 0.18rem;
           color:#036FE2;
           text-decoration: underline;
           cursor: pointer;

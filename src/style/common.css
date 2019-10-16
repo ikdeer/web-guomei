@@ -67,15 +67,18 @@ ol,li,ul,dl,dt,dd{
 }
 .el-menu{
   border: none;
+  overflow: hidden;
 }
 .el-submenu .el-menu-item{
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
-  font-size: 0.16rem !important;
+  color: #666666;
+  font-size: 16px !important;
 }
 .el-submenu .is-active{
   background: #F8F8F8;
+  color: #036FE2;
 }
 .el-submenu .is-opened{
   background: none;
@@ -84,7 +87,9 @@ ol,li,ul,dl,dt,dd{
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
-  font-size: 0.16rem !important;
+  color: #333333;
+  font-weight: 600;
+  font-size: 16px !important;
 }
 .gm-menu-vertical-demo .gm-apiTcf{
   padding-left: 10px !important;

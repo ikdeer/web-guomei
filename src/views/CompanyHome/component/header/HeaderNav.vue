@@ -195,7 +195,7 @@
             position: relative;
             cursor: pointer;
             .One-LevelText{
-              font-size: 0.16rem;
+              font-size: 0.2rem;
               text-decoration: none;
               color: #ffffff;
             }
@@ -263,7 +263,7 @@
           overflow: hidden;
         }
         span{
-          font-size: 0.14rem;
+          font-size: 0.18rem;
           color: #ffffff;
           margin-left: 0.13rem;
         }
@@ -273,11 +273,11 @@
         }
       }
       .button-login{
-        font-size: 0.16rem;
+        font-size: 0.2rem;
         color: #ffffff;
       }
       .button-register{
-        font-size: 0.16rem;
+        font-size: 0.2rem;
         color: #ffffff;
         margin-left: 0.36rem;
         margin-right: 0.3rem;
@@ -285,7 +285,7 @@
       .button-console{
         padding: 0.1rem 0.4rem;
         border-radius: 0.18rem;
-        font-size: 0.16rem;
+        font-size: 0.2rem;
         color: #ffffff;
         background:#F20A59;
         border: none;
