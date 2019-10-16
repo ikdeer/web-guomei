@@ -138,7 +138,7 @@
                     </el-form>
                 </div>
                 <div class="btn">
-                    <div>
+                    <div class="btn_top">
                         <el-upload
                             class="upload_footer"
                             :disabled="uploadLoading"
@@ -152,9 +152,7 @@
                             <el-button type="primary" :loading="uploadLoading">批量查询</el-button>
                         </el-upload>
                         <el-button type="primary" @click="downloadSearchList">结果下载</el-button>
-                        <a href="/static/fill/search.xlsx" download="" title="下载">
-                            <el-button type="text">下载批量查询模板</el-button>
-                        </a>
+                        <a href="/static/fill/search.xlsx" download="" title="下载">下载批量查询模板</a>
                     </div>
                     <div>
                         <el-button type="primary" @click="dialogSearchList">查询</el-button>
@@ -595,7 +593,7 @@
             div{
                 position: relative;
                 background: #EFEDED;
-                width: 48%;
+                width: 50%;
                 color: #666666;
                 font-size: 14px;
                 display: flex;
@@ -697,16 +695,26 @@
             }
         }
         .btn{
-            height: 50px;
-            line-height: 50px;
+            height: 80px;
+            line-height: 80px;
             display: flex;
             display: -webkit-flex;
             justify-content: space-between;
             border-top: 1px solid #EEEEEE;
-            .upload_footer{
-                display: inline-block;
-                width: 90px;
+            .btn_top{
+                a{
+                    margin-left: 6px;
+                    font-size: 16px;
+                    text-decoration: none;
+                    color: #409EFF;
+                }
+                .upload_footer{
+                    margin-right: 15px;
+                    display: inline-block;
+                    width: 90px;
+                }
             }
+            
         }
 
         .content{

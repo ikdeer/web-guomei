@@ -588,8 +588,8 @@
                     order-bottom: 1px solid #eeeeee;
                 }
                 .application_list_btn {
-                    height: 50px;
-                    line-height: 50px;
+                    height: 80px;
+                    line-height: 80px;
                     display: flex;
                     display: -webkit-flex;
                     justify-content: space-between;

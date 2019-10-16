@@ -24,19 +24,21 @@
                             <el-option label="已停用" value="0"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="创建时间">
-                        <el-date-picker
-                            class="user_list_form_time"
-                            v-model="formData.dataTime"
-                            type="daterange"
-                            :picker-options="pickerOptions"
-                            range-separator="至"
-                            value-format="yyyy-MM-dd HH:mm:ss"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            :default-time="['00:00:00', '23:59:59']">
-                        </el-date-picker>
-                    </el-form-item>
+                    <div class="right">
+                        <el-form-item label="创建时间">
+                            <el-date-picker
+                                class="user_list_form_time"
+                                v-model="formData.dataTime"
+                                type="daterange"
+                                :picker-options="pickerOptions"
+                                range-separator="至"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                :default-time="['00:00:00', '23:59:59']">
+                            </el-date-picker>
+                        </el-form-item>
+                    </div>
                 </el-form>
                 <div class="user_list_btn">
                     <div>
@@ -534,6 +536,10 @@
             box-sizing: border-box;
             .user_list_form{
                 .el-form{
+                    .right{
+                        display: inline-block;
+                        float: right;
+                    }
                     border-bottom: 1px solid #eeeeee;
                     .user_list_form_status{
                         width: 120px;
@@ -541,10 +547,11 @@
                     .user_list_form_time{
                         width: 300px;
                     }
+                    padding-bottom: 10px;
                 }
                 .user_list_btn{
-                  height: 50px;
-                  line-height: 50px;
+                  height: 80px;
+                  line-height: 80px;
                   display: flex;
                   display: -webkit-flex;
                   justify-content: space-between;

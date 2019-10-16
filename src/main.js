@@ -28,9 +28,7 @@ Vue.prototype.$echarts = echarts;
 
 Vue.use(VueQuillEditor);
 
-Vue.use(ElementUI,{
-    size:'small'
-});
+Vue.use(ElementUI);
 
 //注册全局组件
 Vue.component('layout-Header',Header)

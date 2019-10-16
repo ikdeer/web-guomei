@@ -1019,7 +1019,7 @@
                     border-bottom: 1px solid #eeeeee;
                 }
                 .equipment_form_btn{
-                    height: 50px;
+                    height: 80px;
                     display: flex;
                     display: -webkit-flex;
                     justify-content: space-between;

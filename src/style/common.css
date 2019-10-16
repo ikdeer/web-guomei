@@ -3,6 +3,7 @@ html,body{
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family:PingFangSC-Semibold,PingFangSC;
   font: 14px -apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,Helvetica,PingFangSC-Regular,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
   -webkit-font-smoothing: antialiased;
 }
