@@ -418,7 +418,7 @@
         background:rgba(255,255,255,1);
         box-shadow:0 2px 4px 1px rgba(0,0,0,0.1);
         border-radius:10px;
-        padding: 30px;
+        padding: 30px 17px 60px 30px;
         box-sizing: border-box;
 
         .addgroup_top{
@@ -428,7 +428,7 @@
             div{
                 position: relative;
                 background: #EFEDED;
-                width: 48%;
+                width: 50%;
                 color: #666666;
                 font-size: 14px;
                 display: flex;
@@ -530,7 +530,7 @@
                     border-bottom: 1px solid #eeeeee;
                 }
                 .el-form{
-                    padding: 20px;
+                    padding: 20px 0;
                     .el-form-item{
                         width: 48%;
                     }
@@ -545,12 +545,12 @@
                         -webkit-box-sizing: border-box;
                         -moz-box-sizing: border-box;
                         box-sizing: border-box;
-                        width: 50%;
+                        width: 48%;
                         &:first-child{
-                            padding-left: 130px;
+                            padding-left: 110px;
                         }
                         &:last-child{
-                          padding-left: 100px;
+                          padding-left: 126px;
                         }
                         .item{
                             width: 4rem;
