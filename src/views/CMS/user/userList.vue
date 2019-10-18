@@ -186,14 +186,13 @@
                     if(!/^(13|14|15|16|17|18|19)\d{9}$/.test(value)){
                         return callback(new Error('手机号不符合规则'));
                     }else{
-                        phoneNumCheck({phoneNum:value}).then(({data})=>{
-                            if(data.errorCode ==200){
+                        /*phoneNumCheck({phoneNum:value}).then(({data})=>{
+                            if(data.errorCode ==200){*/
                                 return callback()
-                            }else{
+                            /*}else{
                                 return callback(new Error(data.errorInfo));
                             }
-                        });
-
+                        });*/
                     }
                 }else{
                     return callback(new Error('请输入手机号'))

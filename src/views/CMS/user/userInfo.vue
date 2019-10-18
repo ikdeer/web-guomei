@@ -39,7 +39,7 @@
             </div>
             <div class="info_list">账号状态：{{info.status | status }}</div>
         </div>
-        <h3>联系人</h3>
+        <h3>联系人 <span style="font-size: 12px;">若遇到突发问题，平台可通过您填写的人员信息联系处理</span></h3>
         <div class="user_table">
             <div class="user_table_btn">
                 <el-button type="primary" v-if="userInfo.groupID==1 || isActiveUser" size="small" @click="adduser"> 新增 </el-button>
