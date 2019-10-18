@@ -57,13 +57,13 @@
                 </el-form-item>
                 <el-form-item label="调用量" prop="amountLimit" required>
                     <el-select v-model="dataForm.amountLimit" placeholder="请选择调用量">
-                        <el-option label="100000/天" value="100000" :disabled="type"></el-option>
-                    </el-select>
+                        <el-option label="100000" value="100000" :disabled="type"></el-option>
+                    </el-select>&emsp;/ 天
                 </el-form-item>
                 <el-form-item label="QPS限制" prop="qpsLimit" required>
                     <el-select v-model="dataForm.qpsLimit" placeholder="请选择QPS限制">
-                        <el-option label="200/s" value="200" :disabled="type"></el-option>
-                    </el-select>
+                        <el-option label="200" value="200" :disabled="type"></el-option>
+                    </el-select>&emsp;/ 秒
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="create(0)">{{type?'修改':'保存'}}</el-button>
