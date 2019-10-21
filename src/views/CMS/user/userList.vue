@@ -24,7 +24,7 @@
                             <el-option label="已停用" value="0"></el-option>
                         </el-select>
                     </el-form-item>
-                    <div class="right">
+                    <!--<div class="right">-->
                         <el-form-item label="创建时间">
                             <el-date-picker
                                 class="user_list_form_time"
@@ -38,7 +38,7 @@
                                 :default-time="['00:00:00', '23:59:59']">
                             </el-date-picker>
                         </el-form-item>
-                    </div>
+                    <!--</div>-->
                 </el-form>
                 <div class="user_list_btn">
                     <div>
@@ -537,10 +537,10 @@
             box-sizing: border-box;
             .user_list_form{
                 .el-form{
-                    .right{
+                    /*.right{
                         display: inline-block;
                         float: right;
-                    }
+                    }*/
                     border-bottom: 1px solid #eeeeee;
                     .user_list_form_status{
                         width: 120px;
