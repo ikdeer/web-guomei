@@ -71,17 +71,19 @@
                     </el-table-column>
                     <el-table-column
                         align="center"
+                        prop="regTime"
                         label="创建时间">
-                        <template slot-scope="scope">
+                       <!-- <template slot-scope="scope">
                             {{formatTimes(scope.row.regTime)}}
-                        </template>
+                        </template>-->
                     </el-table-column>
                     <el-table-column
                         align="center"
+                        prop="originalLastLoginTime"
                         label="最近一次登录">
-                        <template slot-scope="scope">
-                            {{formatTimes(scope.row.lastLoginTime)}}
-                        </template>
+                        <!--<template slot-scope="scope">
+                            {{formatTimes(scope.row.originalLastLoginTime)}}
+                        </template>-->
                     </el-table-column>
                     <el-table-column
                         align="center"
