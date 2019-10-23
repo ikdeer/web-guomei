@@ -114,7 +114,7 @@
                     </el-select>
                     <el-input :maxlength="20" v-model="dataDialogForm.no" placeholder="请输入编号"></el-input>
                 </el-form-item>
-                <el-form-item label="类型"  prop="type" required>
+                <el-form-item label="类型" required>
                     <el-select v-model="dataDialogForm.type" disabled placeholder="请选择类型">
                         <el-option v-for="item in faceType"
                                    :label="item.name"
@@ -123,10 +123,10 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="姓名" prop="name" required>
+                <el-form-item label="姓名" required>
                     <el-input :maxlength="6" disabled v-model="dataDialogForm.name" placeholder="请输入姓名"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" prop="sex" required>
+                <el-form-item label="性别" required>
                     <el-select disabled v-model="dataDialogForm.sex" placeholder="请选择性别">
                         <el-option label="男" value="1"></el-option>
                         <el-option label="女" value="2"></el-option>
@@ -454,7 +454,6 @@
                 this.search(2)
             },
             handleAvatarSuccess(file, fileList) {
-              console.log(file.raw);
               const isJPG = file.raw.type === 'image/jpg' || file.raw.type === "image/jpeg" || file.raw.type === "image/png" || file.raw.type === "image/bmp";
                 const isLt5M = file.size / 1024 / 1024 < 5;
                 if (!isJPG) {
